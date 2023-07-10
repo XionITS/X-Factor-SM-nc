@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <style>
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      grid-gap: 10px;
+      height: 600px;
+    }
+
+    .card {
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      resize: both;
+      overflow: auto;
+    }
+
+    /* 예시 카드 스타일 */
+    .card.card1 { grid-area: 1 / 1 / 2 / 2; }
+    .card.card2 { grid-area: 1 / 2 / 2 / 4; }
+    .card.card3 { grid-area: 1 / 4 / 2 / 9; }
+    .card.card4 { grid-area: 2 / 1 / 5 / 4; }
+    .card.card5 { grid-area: 2 / 4 / 5 / 6; }
+    .card.card6 { grid-area: 2 / 6 / 5 / 9; }
+    .card.card7 { grid-area: 5 / 1 / 7 / 5; }
+    .card.card8 { grid-area: 5 / 5 / 7 / 9; }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+  </div>
+
+  <script>
+    var dashboard = document.querySelector('.dashboard');
+    var gridItems = [];
+
+    for (var i = 1; i <= 8; i++) {
+      for (var j = 1; j <= 6; j++) {
+        var gridItem = document.createElement('div');
+        gridItem.classList.add('card');
+        gridItem.setAttribute('data-col', i);
+        gridItem.setAttribute('data-row', j);
+        gridItem.textContent = 'Card ' + (gridItems.length + 1) + ' (' + i + ', ' + j + ')';
+
+        gridItem.addEventListener('click', function(e) {
+          var col = parseInt(this.getAttribute('data-col'));
+          var row = parseInt(this.getAttribute('data-row'));
+
+          var card = document.createElement('div');
+          card.classList.add('card');
+          card.classList.add('resizable');
+          card.textContent = 'New Card (' + col + ', ' + row + ')';
+
+          card.style.gridColumn = col + ' / span 1';
+          card.style.gridRow = row + ' / span 1';
+
+          dashboard.appendChild(card);
+        });
+
+        gridItems.push(gridItem);
+        dashboard.appendChild(gridItem);
+      }
+    }
+
+    // 카드 크기 조절 가능하도록 설정
+    var resizableCards = document.querySelectorAll('.resizable');
+    for (var i = 0; i < resizableCards.length; i++) {
+      resizableCards[i].addEventListener('mousedown', function(e) {
+        e.stopPropagation();
+        var card = this;
+        var initialWidth = card.offsetWidth;
+        var initialHeight = card.offsetHeight;
+        var startX = e.clientX;
+        var startY = e.clientY;
+        var resizing = true;
+
+        document.addEventListener('mousemove', resizeCard);
+        document.addEventListener('mouseup', stopResizing);
+
+        function resizeCard(e) {
+          if (!resizing) return;
+
+          var offsetX = e.clientX - startX;
+          var offsetY = e.clientY - startY;
+
+          var newWidth = initialWidth + offsetX;
+          var newHeight = initialHeight + offsetY;
+
+          // 최소 크기 설정 (여기서는 1x1로 설정)
+          newWidth = Math.max(newWidth, 1);
+          newHeight = Math.max(newHeight, 1);
+
+          card.style.width = newWidth + 'px';
+          card.style.height = newHeight + 'px';
+
+          e.preventDefault();
+        }
+
+        function stopResizing() {
+          resizing = false;
+          document.removeEventListener('mousemove', resizeCard);
+          document.removeEventListener('mouseup', stopResizing);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
