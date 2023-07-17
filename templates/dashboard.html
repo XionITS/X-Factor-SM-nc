@@ -14,23 +14,23 @@
 <div id="content" class="app-content">
     <!-- BEGIN row -->
     <div class="row">
-        <!-- BEGIN col-3 -->
-        <div class="col-xl-2 col-lg-2">
+        <!-- BEGIN col-4 -->
+        <div class="col-xl-4 col-lg-4">
             <!-- BEGIN card -->
             <div class="card mb-3">
                 <!-- BEGIN card-body -->
-                <div class="card-body h-220px">
+                <div class="card-body h-240px">
                     <!-- BEGIN title -->
 <!--                    <button type="button" class="btn btn-outline-link btn-sm btn-moreInfo osVersion-moreInfo"><i class="fas fa-ellipsis-h"></i></button>-->
                     <div class="d-flex fw-bold fs-12px">
-                        <div class="flex-grow-1">DISK 사용률 초과 서버</div>
+                        <div class="flex-grow-1">유형별 자산 수</div>
                     </div>
                     <!-- END title -->
                     <!-- BEGIN stat-lg -->
                     <div class="h-200px d-flex flex-row align-items-center justify-content-sm-between">
 
                         <div class="col-12">
-                            <div class="mt-n3 mb-n2 h-150px" id="om_disk_chart"></div>
+                            <div class="mt-n3 mb-n2 h-150px" id="hs_asset"></div>
                         </div>
                     </div>
                     <!-- END stat-lg -->
@@ -48,24 +48,24 @@
             </div>
             <!-- END card -->
         </div>
-        <!-- END col-3 -->
-        <!-- BEGIN col-3 -->
-        <div class="col-xl-2 col-lg-2">
+        <!-- END col-4 -->
+        <!-- BEGIN col-4 -->
+        <div class="col-xl-4 col-lg-4">
             <!-- BEGIN card -->
             <div class="card mb-3">
                 <!-- BEGIN card-body -->
-                <div class="card-body h-220px">
+                <div class="card-body h-240px">
                     <!-- BEGIN title -->
 <!--                    <button type="button" class="btn btn-outline-link btn-sm btn-moreInfo osVersion-moreInfo"><i class="fas fa-ellipsis-h"></i></button>-->
                     <div class="d-flex fw-bold fs-12px">
-                        <div class="flex-grow-1">MEMORY 사용률 초과 서버</div>
+                        <div class="flex-grow-1">OS별 자산 수</div>
                     </div>
                     <!-- END title -->
                     <!-- BEGIN stat-lg -->
                     <div class="h-200px d-flex flex-row align-items-center justify-content-sm-between">
 
                         <div class="col-12">
-                            <div class="mt-n3 mb-n2 h-150px" id="om_mem_chart"></div>
+                            <div class="mt-n3 mb-n2 h-150px" id="os_asset"></div>
                         </div>
                     </div>
                     <!-- END stat-lg -->
@@ -83,24 +83,24 @@
             </div>
             <!-- END card -->
         </div>
-        <!-- END col-3 -->
-        <!-- BEGIN col-3 -->
-        <div class="col-xl-2 col-lg-2">
+        <!-- END col-4 -->
+        <!-- BEGIN col-4 -->
+        <div class="col-xl-4 col-lg-4">
             <!-- BEGIN card -->
             <div class="card mb-3">
                 <!-- BEGIN card-body -->
-                <div class="card-body h-220px">
+                <div class="card-body h-240px">
                     <!-- BEGIN title -->
 <!--                    <button type="button" class="btn btn-outline-link btn-sm btn-moreInfo osVersion-moreInfo"><i class="fas fa-ellipsis-h"></i></button>-->
                     <div class="d-flex fw-bold fs-12px">
-                        <div class="flex-grow-1">OS 설치현황</div>
+                        <div class="flex-grow-1">대역별 자산 수</div>
                     </div>
                     <!-- END title -->
                     <!-- BEGIN stat-lg -->
                     <div class="h-200px d-flex flex-row align-items-center justify-content-sm-between">
 
                         <div class="col-12">
-                            <div class="mt-n3 mb-n2 h-150px" id="om_os_chart"></div>
+                            <div class="mt-n3 mb-n2 h-150px" id="ip_asset"></div>
                         </div>
                     </div>
                     <!-- END stat-lg -->
@@ -118,77 +118,8 @@
             </div>
             <!-- END card -->
         </div>
-        <!-- END col-3 -->
-        <!-- BEGIN col-3 -->
-        <div class="col-xl-2 col-lg-2">
-            <!-- BEGIN card -->
-            <div class="card mb-3">
-                <!-- BEGIN card-body -->
-                <div class="card-body h-220px">
-                    <!-- BEGIN title -->
-<!--                    <button type="button" class="btn btn-outline-link btn-sm btn-moreInfo osVersion-moreInfo"><i class="fas fa-ellipsis-h"></i></button>-->
-                    <div class="d-flex fw-bold fs-12px">
-                        <div class="flex-grow-1">유/무선 연결 현황</div>
-                    </div>
-                    <!-- END title -->
-                    <!-- BEGIN stat-lg -->
-                    <div class="h-200px d-flex flex-row align-items-center justify-content-sm-between">
+        <!-- END col-4 -->
 
-                        <div class="col-12">
-                            <div class="mt-n3 mb-n2 h-150px" id="om_wire_chart"></div>
-                        </div>
-                    </div>
-                    <!-- END stat-lg -->
-                </div>
-                <!-- END card-body -->
-
-                <!-- BEGIN card-arrow -->
-                <div class="card-arrow">
-                    <div class="card-arrow-top-left"></div>
-                    <div class="card-arrow-top-right"></div>
-                    <div class="card-arrow-bottom-left"></div>
-                    <div class="card-arrow-bottom-right"></div>
-                </div>
-                <!-- END card-arrow -->
-            </div>
-            <!-- END card -->
-        </div>
-        <!-- END col-3 -->
-        <!-- BEGIN col-3 -->
-        <div class="col-xl-2 col-lg-2">
-            <!-- BEGIN card -->
-            <div class="card mb-3">
-                <!-- BEGIN card-body -->
-                <div class="card-body h-220px">
-                    <!-- BEGIN title -->
-<!--                    <button type="button" class="btn btn-outline-link btn-sm btn-moreInfo osVersion-moreInfo"><i class="fas fa-ellipsis-h"></i></button>-->
-                    <div class="d-flex fw-bold fs-12px">
-                        <div class="flex-grow-1">물리/가상 자산 현황</div>
-                    </div>
-                    <!-- END title -->
-                    <!-- BEGIN stat-lg -->
-                    <div class="h-200px d-flex flex-row align-items-center justify-content-sm-between">
-
-                        <div class="col-12">
-                            <div class="mt-n3 mb-n2 h-150px" id="om_vp_chart"></div>
-                        </div>
-                    </div>
-                    <!-- END stat-lg -->
-                </div>
-                <!-- END card-body -->
-
-                <!-- BEGIN card-arrow -->
-                <div class="card-arrow">
-                    <div class="card-arrow-top-left"></div>
-                    <div class="card-arrow-top-right"></div>
-                    <div class="card-arrow-bottom-left"></div>
-                    <div class="card-arrow-bottom-right"></div>
-                </div>
-                <!-- END card-arrow -->
-            </div>
-            <!-- END card -->
-        </div>
-        <!-- END col-3 -->
 
 <!--        -->
 <!--        &lt;!&ndash; BEGIN col-3 &ndash;&gt;-->
@@ -281,16 +212,16 @@
         <div class="om-r">
             <div class="d-flex">
                 <!-- BEGIN card -->
-                <div class="col-xl-6 col-lg-6" style="padding-right: 0.5rem;">
+                <div class="col-xl-12 col-lg-12">
                     <div class="card mb-3 ">
-                        <div class="card-body h-205px">
+                        <div class="card-body" style="height:280px">
                             <div class="d-flex fw-bold fs-12px mb-2">
-                                <div class="flex-grow-1">관리 자산</div>
+                                <div class="flex-grow-1">Windows 버전별 자산 수</div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="h-145px">
                                     <div class="col-12">
-                                        <div class="h-145px" id="om_m_chart"></div>
+                                        <div class="h-145px" id="ver_asset_win"></div>
                                     </div>
                                 </div>
                                 <!-- END chart -->
@@ -311,87 +242,30 @@
                 </div>
 
                 <!-- END card -->
-                <!-- BEGIN card -->
-                <div class="col-xl-6 col-lg-6" style="padding-left: 0.5rem;">
-                    <div class="card mb-3">
-                        <!-- BEGIN card-body -->
-                        <div class="card-body h-205px">
-                            <div class="d-flex fw-bold fs-12px mb-2">
-                                <div class="flex-grow-1">미관리 자산</div>
-                            </div>
-                            <!-- END title -->
 
-                            <!--<div class="col-12" style="padding-right: 5px;">-->
-                            <!-- BEGIN chart -->
-                            <!--<div class="mt-nd h-145px"  id="om_um_chart"></div>-->
-                            <!-- END chart -->
-                            <!-- BEGIN row -->
-                            <!-- END row -->
-                            <!--</div> -->
-
-                            <div class="row align-items-center">
-                                <div class="h-145px">
-                                    <div class="col-12">
-                                        <div class="h-145px" id="om_um_chart"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <!-- END card-body -->
-                        <!-- BEGIN card-arrow -->
-                        <div class="card-arrow">
-                            <div class="card-arrow-top-left"></div>
-                            <div class="card-arrow-top-right"></div>
-                            <div class="card-arrow-bottom-left"></div>
-                            <div class="card-arrow-bottom-right"></div>
-                        </div>
-                        <!-- END card-arrow -->
-                    </div>
-                </div>
-                <!-- END card -->
             </div>
 
 
             <div class="d-flex">
-                <div class="col-xl-6 col-l-6" style="padding-right: 0.5rem;">
+                <div class="col-xl-12 col-l-12">
                     <!-- BEGIN 인증서 card -->
-                    <div class="card" style="height:440px">
+                    <div class="card" style="height:280px">
 
                         <div class="card-body">
                             <!-- title --><button type="button" class="btn btn-outline-link btn-sm btn-moreInfo certificate_more"><i class="fas fa-ellipsis-h"></i></button>
                             <div class="d-flex fw-bold fs-12px mb-2">
-                                <div class="flex-grow-1">인증서 관리</div>
+                                <div class="flex-grow-1">Windows 업데이트별 자산 수</div>
                             </div>
-                            <!-- BEGIN #datatable -->
-                            <table class="table table-report text-nowrap " width="100%" style="border-collapse: separate; border-spacing : 0 10px">
-                                <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>발급 인증서</th>
-                                    <th style="text-align:center">만료 일자</th>
-                                    <th style="text-align:center">개수</th>
-                                </tr>
-                                </thead>
-                                <tbody class="fw-bold fs-12px mb-2">
-                                {% for data in dataList.cert_listData %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td class="ellipsis">
-                                        {{ data.name }}
-                                    </td>
-                                    <td>
-                                        {{ data.date }}
-                                    </td>
-                                    <td>
-                                        {{ data.count }}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-
-                                </tbody>
-                            </table>
+                            <div class="row align-items-center">
+                                <div class="h-145px">
+                                    <div class="col-12">
+                                        <div class="h-145px" id="up_asset_win"></div>
+                                    </div>
+                                </div>
+                                <!-- END chart -->
+                                <!-- BEGIN row -->
+                                <!-- END row -->
+                            </div>
                             <!-- END #datatable -->
                         </div>
                         <div class="card-arrow">
@@ -403,88 +277,7 @@
                     </div>
                 <!-- END 인증서 card -->
                 </div>
-            <!--새로운 칸-->
-                <div class="col-xl-6 col-l-6" style="padding-left: 0.5rem;">
-                    <!-- BEGIN 인증서 card -->
-                    <div class="card" style="height:440px">
 
-                        <div class="card-body">
-                            <!-- title -->
-                            <div class="d-flex fw-bold fs-12px mb-2">
-                                <div class="flex-grow-1">알람 발송 관리</div>
-                            </div>
-                            <!-- BEGIN #datatable -->
-                            <table class="table table-report text-nowrap " width="100%" style="border-collapse: separate; border-spacing : 0 10px" >
-                                <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>발송 알람 내용</th>
-                                    <th style="text-align:center">발송 건수</th>
-
-                                </tr>
-                                </thead>
-                                <tbody class="fw-bold fs-12px mb-2">
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        DISK Usage Exceed Alarm
-                                    </td>
-                                    <td>35</td>
-
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>
-                                        System Crash Event
-                                    </td>
-                                    <td>28</td>
-
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>
-                                        CPU Usage Exceed Alarm
-                                    </td>
-                                    <td>13</td>
-
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>
-                                       MEMORY Usage Exceed Alarm
-                                    </td>
-                                    <td>10</td>
-
-                                </tr>
-                                <tr>
-                                    <td>5</td>
-                                    <td>
-                                        Application Crash Event
-                                    </td>
-                                    <td>9</td>
-                                </tr>
-                                <tr>
-                                    <td>6</td>
-                                    <td>
-                                        Unmanaged Device Detected
-                                    </td>
-                                    <td>5</td>
-                                </tr>
-                                </tbody>
-                            </table>
-
-                            <!-- END #datatable -->
-                        </div>
-                        <div class="card-arrow">
-                            <div class="card-arrow-top-left"></div>
-                            <div class="card-arrow-top-right"></div>
-                            <div class="card-arrow-bottom-left"></div>
-                            <div class="card-arrow-bottom-right"></div>
-                        </div>
-                    </div>
-                <!-- END 인증서 card -->
-                </div>
-            <!-- d-flex end-->
             </div>
         </div>
 
@@ -495,16 +288,16 @@
             <div>
                 <!-- BEGIN card -->
                 <div class="card">
-                <div class="card-body h-205px">
+                <div class="card-body" style="height:280px">
                     <div class="d-flex fw-bold fs-12px mb-2">
-                        <div class="flex-grow-1">예상 유휴 자산</div>
+                        <div class="flex-grow-1">Mac 버전별 자산 수</div>
                         <div class="d-flex fw-bold fs-17px mb-2"></div>
                     </div>
                     <!-- END title -->
                     <div class="row align-items-center">
                         <div class="h-145px">
                             <div class="col-12">
-                                <div class="h-145px" id="idle_chart"></div>
+                                <div class="h-145px" id="ver_asset_mac"></div>
                             </div>
                         </div>
                     </div>
@@ -523,118 +316,22 @@
             <!-- END 간격용 div-->
                 <!-- BEGIN card -->
             <div>
-                <div class="card" style="height:440px;">
+                <div class="card" style="height:280px;">
                     <div class="card-body">
                     <!-- title -->
                     <div class="d-flex fw-bold fs-12px mb-2">
-                        <div class="flex-grow-1">기간별 자산 리포트</div>
+                        <div class="flex-grow-1">필수프로그램 설치 유/무별 자산 수</div>
                     </div>
                     <!-- BEGIN #datatable -->
-                    <div style="display: flex; gap: 10%; width: 100%;">
-                        <div class="input-group" id="daterange" style="width:50%;">
-                            <input type="text" name="daterange" class="form-control" value="" placeholder="날짜를 선택해주세요" autocomplete="off">
-                            <input type="hidden" name="startDate" value="">
-                            <input type="hidden" name="endDate" value="">
-                            <span class="input-group-text">
-                                <i class="fa fa-calendar"></i>
-                            </span>
+                    <div class="row align-items-center">
+                        <div class="h-145px">
+                            <div class="col-12">
+                                <div class="h-145px" id="ep_asset"></div>
+                            </div>
                         </div>
-                        <button class="btn btn-outline-warning" type="button">미리보기</button>
-                    </div>
-                        <br>
-                    <!-- END #datatable -->
-                        <table class="table table-report text-nowrap" width="100%">
-                            <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>리포트 이름</th>
-                                <th>생성 일자</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    <a href="../reportPagedaily">
-                                        일간 자산 리포트
-                                    </a>
-                                </td>
-                                <td>2023-04-21</td>
-                                <td>
-                                    <a href="http://localhost:8000/reportPagedaily/"download="230421 일간 리포트">
-                                        <button type="button" class="btn btn-outline-warning" value="print">
-                                            다운로드
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>
-                                    <a href="../reportPagedaily1">
-                                        일간 자산 리포트
-                                    </a>
-                                </td>
-                                <td>2023-04-20</td>
-                                <td>
-                                    <a href="http://localhost:8000/reportPagedaily1/"download="230420 일간 리포트">
-                                        <button type="button" class="btn btn-outline-warning" value="print">
-                                            다운로드
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>
-                                    <a href="../reportPagedaily2">
-                                        일간 자산 리포트
-                                    </a>
-                                </td>
-                                <td>2023-04-19</td>
-                                <td>
-                                    <a href="http://localhost:8000/reportPagedaily2/"download="230419 일간 리포트">
-                                        <button type="button" class="btn btn-outline-warning" value="print">
-                                            다운로드
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>
-                                    <a href="../reportPagedaily3">
-                                        일간 자산 리포트
-                                    </a>
-                                </td>
-                                <td>2023-04-18</td>
-                                <td>
-                                    <a href="http://localhost:8000/reportPagedaily3/"download="230418 일간 리포트">
-                                        <button type="button" class="btn btn-outline-warning" value="print">
-                                            다운로드
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>
-                                    <a href="../reportPagedaily4">
-                                        일간 자산 리포트
-                                    </a>
-                                </td>
-                                <td>2023-04-17</td>
-                                <td>
-                                    <a href="http://localhost:8000/reportPagedaily4/"download="230417 일간 리포트">
-                                        <button type="button" class="btn btn-outline-warning" value="print">
-                                            다운로드
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <!-- END chart -->
+                        <!-- BEGIN row -->
+                        <!-- END row -->
                     </div>
                 <div class="card-arrow">
                     <div class="card-arrow-top-left"></div>

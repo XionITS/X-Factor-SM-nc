@@ -30829,3 +30829,45 @@ input:checked+labl::before{
     text-align : left;
     width : 150px;
 }
+
+.search-dropdown{
+    display: flex;
+    float : right;
+}
+
+.search-dropdown .dropdown-menu{
+    transform: translate(0px, 37px) !important;
+}
+
+.search-dropdown .input-group {
+    width : 300px;
+}
+
+.hsbutton{
+    width : 80px;
+    font-size : 20px;
+    sposition: -webkit-sticky;
+    position: sticky;
+    height:30px;
+    background-color: #fffff;
+    border:none;
+}
+
+.hsbutton:hover {
+  background-color: #f39c12;
+}
+
+.hsbutton:focus {
+  background-color: #f39c12;
+}
+.hsbutton.active {
+  background-color: #f39c12;
+}
+#search-button {
+  background-color: #f39c12;
+}
+
+#column-dropdown{
+  background-color: #f39c12;
+}
+

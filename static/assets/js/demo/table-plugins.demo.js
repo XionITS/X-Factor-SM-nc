@@ -1463,9 +1463,238 @@ var user_list_popup = function () {
 			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
 			"infoPostFix": "",
             },
+    });
+};
+
+var hw_asset_list = function () {
+	var hs_asset_list_Data = $('#hs_asset_list').DataTable({
+		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
+		lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+
+		responsive: true,
+		searching: true,
+		ordering: false,
+		serverSide: true,
+		displayLength: false,
+
+
+		ajax: {
+			url: 'hwpaging/',
+			type: "POST",
+            data: function (data) {
+                var column = $('#column-dropdown').data('column');
+                data.filter = {
+                    column: column,
+                    value : $('#search-input').val(),
+                    value2 : $('#hs_asset_list_filter input[type="search"]').val(),
+                    regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
+                };
+
+            },
+			dataSrc: function (res) {
+				var data = res.user_list;
+				return data;
+			}
+		},
+
+		columns: [
+			{ data: 'chasisstype', title: 'Chasisstype', searchable: true },
+			{ data: 'computer_name', title: 'Computer Name', searchable: true },
+			{ data: 'user_name', title: 'User Name' , searchable: true},
+            { data: 'ip_address', title: 'IP Address' , searchable: true},
+			{ data: 'hw_list', title: 'HW List', searchable: true },
+			{ data: 'memo', title: 'Memo', searchable: true },
+		],
+//        columnDefs: [
+//		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
+//		    {targets: 1, width: "20%", className: 'text-start text-truncate'},
+//		    {targets: 2, width: "10%", className: 'text-start text-truncate'},
+//            {targets: 3, width: "10%", className: 'text-start text-truncate'},
+//		    {targets: 4, width: "40%", className: 'text-start text-truncate'},
+//		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
+//		],
+		columnDefs: [
+		    {targets: 0, width: "7%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.chasisstype+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 1, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "7%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.user_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "50%", className: 'text-start text-truncate', render: function(data, type, row) {return '<span title="'+row.hw_list+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		],
+		language: {
+			"decimal": "",
+			"info": "전체 _TOTAL_건",
+			"infoEmpty": "데이터가 없습니다.",
+			"emptyTable": "데이터가 없습니다.",
+			"thousands": ",",
+			"lengthMenu": "페이지당 _MENU_ 개씩 보기",
+			"loadingRecords": "로딩 중입니다.",
+			"processing": "",
+			"zeroRecords": "검색 결과 없음",
+			"paginate": {
+				"first": "처음",
+				"last": "끝",
+				"next": "다음",
+				"previous": "이전"
+			},
+			"search": "검색:",
+			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
+			"infoPostFix": "",
+            },
+
+});
+      // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
+      $('.dropdown-menu a').click(function() {
+        var column = $(this).data('column');
+        $('#column-dropdown').text($(this).text());
+        $('#column-dropdown').data('column', column);
+      });
+
+      // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
+      $('#search-button').click(function() {
+        var column = $('#column-dropdown').data('column');
+        var searchValue = $('#search-input').val();
+        hs_asset_list_Data.columns().search('').draw(); // 이전 검색 초기화
+        hs_asset_list_Data.column(column).search(searchValue).draw();
+      });
+	$(document).on('click', '#nexts, #after', function() {
+        var current_page = hs_asset_list_Data.page();
+        var total_pages = hs_asset_list_Data.page.info().pages;
+        if ($(this).attr('id') == 'nexts') {
+                if (current_page + 10 < total_pages) {
+                    hs_asset_list_Data.page(current_page + 10).draw('page');
+                } else {
+                    hs_asset_list_Data.page(total_pages - 1).draw('page');
+                }
+                } else {
+                    hs_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
+                }
 });
 };
 
+
+var sw_asset_list = function () {
+	var sw_asset_list_Data = $('#hs_asset_list').DataTable({
+		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
+		lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+
+		responsive: true,
+		searching: true,
+		ordering: false,
+		serverSide: true,
+		displayLength: false,
+
+
+		ajax: {
+			url: 'swpaging/',
+			type: "POST",
+            data: function (data) {
+                var column = $('#column-dropdown').data('column');
+                data.filter = {
+                    column: column,
+                    value : $('#search-input').val(),
+                    value2 : $('#hs_asset_list_filter input[type="search"]').val(),
+                    regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
+                };
+
+            },
+			dataSrc: function (res) {
+				var data = res.user_list;
+				return data;
+			}
+		},
+
+		columns: [
+			{ data: 'chasisstype', title: 'Chasisstype', searchable: true },
+			{ data: 'computer_name', title: 'Computer Name', searchable: true },
+			{ data: 'user_name', title: 'User Name' , searchable: true},
+            { data: 'ip_address', title: 'IP Address' , searchable: true},
+			{ data: 'sw_list', title: 'SW List', searchable: true },
+			{ data: 'memo', title: 'Memo', searchable: true },
+		],
+//        columnDefs: [
+//		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
+//		    {targets: 1, width: "20%", className: 'text-start text-truncate'},
+//		    {targets: 2, width: "10%", className: 'text-start text-truncate'},
+//            {targets: 3, width: "10%", className: 'text-start text-truncate'},
+//		    {targets: 4, width: "40%", className: 'text-start text-truncate'},
+//		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
+//		],
+		columnDefs: [
+		    {targets: 0, width: "7%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.chasisstype+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 1, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "7%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.user_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "50%", className: 'text-start text-truncate', render: function(data, type, row) {return '<span title="'+row.hw_list+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		],
+		language: {
+			"decimal": "",
+			"info": "전체 _TOTAL_건",
+			"infoEmpty": "데이터가 없습니다.",
+			"emptyTable": "데이터가 없습니다.",
+			"thousands": ",",
+			"lengthMenu": "페이지당 _MENU_ 개씩 보기",
+			"loadingRecords": "로딩 중입니다.",
+			"processing": "",
+			"zeroRecords": "검색 결과 없음",
+			"paginate": {
+				"first": "처음",
+				"last": "끝",
+				"next": "다음",
+				"previous": "이전"
+			},
+			"search": "검색:",
+			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
+			"infoPostFix": "",
+            },
+
+});
+      // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
+      $('.dropdown-menu a').click(function() {
+        var column = $(this).data('column');
+        $('#column-dropdown').text($(this).text());
+        $('#column-dropdown').data('column', column);
+      });
+
+      // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
+      $('#search-button').click(function() {
+        var column = $('#column-dropdown').data('column');
+        var searchValue = $('#search-input').val();
+        hs_asset_list_Data.columns().search('').draw(); // 이전 검색 초기화
+        hs_asset_list_Data.column(column).search(searchValue).draw();
+      });
+	$(document).on('click', '#nexts, #after', function() {
+        var current_page = hs_asset_list_Data.page();
+        var total_pages = hs_asset_list_Data.page.info().pages;
+        if ($(this).attr('id') == 'nexts') {
+                if (current_page + 10 < total_pages) {
+                    hs_asset_list_Data.page(current_page + 10).draw('page');
+                } else {
+                    hs_asset_list_Data.page(total_pages - 1).draw('page');
+                }
+                } else {
+                    hs_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
+                }
+});
+};
+function hwbutton(btn) {
+    $('#hs_asset_list').DataTable().destroy();
+    hw_asset_list();
+    $(btn).addClass('active');
+    $('.hsbutton').not(btn).removeClass('active');
+}
+
+function swbutton(btn) {
+    $('#hs_asset_list').DataTable().destroy();
+    sw_asset_list();
+    $(btn).addClass('active');
+    $('.hsbutton').not(btn).removeClass('active');
+}
+
+
 $(document).ready(function () {
     user_list_popup();
+    hw_asset_list();
 });
+

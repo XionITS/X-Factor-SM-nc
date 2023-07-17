@@ -11,92 +11,94 @@
                     <span class="menu-icon">
                         <i class="bi bi-collection"></i>
                     </span>
-                    <span class="menu-text">대시보드</span>
+                    <span class="menu-text">Dashboard</span>
                     <span class="menu-caret"><b class="caret"></b></span>
                 </a>
                 <div class="menu-submenu">
-                {% if menu_list %}
-                {% for menu in menu_list %}
-                    {% if menu.auth_id == "HS_asset" %}
+                    {% if menu_list %}
+                        {% for menu in menu_list|dictsort:'xfactor_auth.auth_num'  %}
+                            {% if menu.auth_id == "HS_asset" %}
+                                <div class="menu-item">
+                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
+                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    </a>
+                                </div>
+                            {% elif menu.auth_id == "OS_asset" %}
+                                <div class="menu-item">
+                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
+                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    </a>
+                                </div>
+                            {% elif menu.auth_id == "VER_asset" %}
+                                <div class="menu-item">
+                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
+                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    </a>
+                                </div>
+                            {% elif menu.auth_id == "UP_asset" %}
+                                <div class="menu-item">
+                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
+                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    </a>
+                                </div>
+                            {% elif menu.auth_id == "EP_asset" %}
+                                <div class="menu-item">
+                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
+                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div> <!-- menu-submenu 닫는 태그 추가 -->
+            </div>
+            {% for menu2 in menu_list|dictsort:'xfactor_auth.auth_num' %}
+                {% if menu2.auth_id == "USER_asset" %}
                     <div class="menu-item">
-                        <a href="../{{menu.auth_url}}" class="menu-link">
-                            <span class="menu-text">{{ menu.auth_name }}</span>
+                        <a href="../{{menu2.xfactor_auth.auth_url}}" class="menu-link">
+                            <span class="menu-icon"><i class="bi bi-collection"></i></span>
+                            <span class="menu-text">Asset</span>
                         </a>
                     </div>
-
-                    {% elif menu.auth_id == "OS_asset" %}
+                {% elif menu2.auth_id == "History" %}
                     <div class="menu-item">
-                        <a href="../{{menu.auth_url}}" class="menu-link">
-                            <span class="menu-text">{{ menu.auth_name }}</span>
+                        <a href="../{{menu2.xfactor_auth.auth_url}}" class="menu-link">
+                            <span class="menu-icon"><i class="bi bi-collection"></i></span>
+                            <span class="menu-text">History</span>
                         </a>
                     </div>
-
-                    {% elif menu.auth_id == "VER_asset" %}
-                    <div class="menu-item">
-                        <a href="../{{menu.auth_url}}" class="menu-link">
-                            <span class="menu-text">{{ menu.auth_name }}</span>
+                {% elif menu2.auth_id == "settings" %}
+                    <div class="menu-item has-sub active">
+                        <a href="#" class="menu-link">
+                            <span class="menu-icon">
+                                <i class="bi bi-collection"></i>
+                            </span>
+                            <span class="menu-text">Settings</span>
+                            <span class="menu-caret"><b class="caret"></b></span>
                         </a>
+                        <div class="menu-submenu">
+                            <div class="menu-item">
+                                <a href="#" class="menu-link">
+                                    <span class="menu-text">사용자/권한 관리</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="#" class="menu-link">
+                                    <span class="menu-text">그룹 관리</span>
+                                </a>
+                            </div>
+                            <div class="menu-item">
+                                <a href="#" class="menu-link">
+                                    <span class="menu-text">로그</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-
-                    {% elif menu.auth_id == "UP_asset" %}
-                    <div class="menu-item">
-                        <a href="../{{menu.auth_url}}" class="menu-link">
-                            <span class="menu-text">{{ menu.auth_name }}</span>
-                        </a>
-                    </div>
-
-                    {% elif menu.auth_id == "EP_asset" %}
-                    <div class="menu-item">
-                        <a href="../{{menu.auth_url}}" class="menu-link">
-                            <span class="menu-text">{{ menu.auth_name }}</span>
-                        </a>
-                    </div>
-                </div>
                 {% endif %}
-                {% endfor %}
-            </div>
-            {% for menu2 in menu_list %}
-            {% if menu2.auth_id == "USER_asset" %}
-            <div class="menu-item">
-            <a href="../{{menu.auth_url}}" class="menu-link">
-                <span class="menu-icon"><i class="bi bi-collection"></i></span>
-                <span class="menu-text">{{ menu2.auth_name }}</span>
-            </a>
-            </div>
-            {% elif menu2.auth_id == "settings" %}
-            <div class="menu-item has-sub active">
-            <a href="#" class="menu-link">
-                <span class="menu-icon">
-                    <i class="bi bi-collection"></i>
-                </span>
-                <span class="menu-text">{{ menu2.auth_name }}</span>
-                <span class="menu-caret"><b class="caret"></b></span>
-            </a>
-            <div class="menu-submenu">
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <span class="menu-text">사용자/권한 관리</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <span class="menu-text">그룹 관리</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <span class="menu-text">로그</span>
-                    </a>
-                </div>
-            </div>
-            </div>
-        </div>
-            {% endif %}
             {% endfor %}
+        </div>
     </div>
-            {% endif %}
 </div>
-        <!-- BEGIN mobile-sidebar-backdrop -->
-        <button class="app-sidebar-mobile-backdrop" data-toggle-target=".app" data-toggle-class="app-sidebar-mobile-toggled"></button>
-        <!-- END mobile-sidebar-backdrop -->
-
+<!-- BEGIN mobile-sidebar-backdrop -->
+<button class="app-sidebar-mobile-backdrop" data-toggle-target=".app" data-toggle-class="app-sidebar-mobile-toggled"></button>
+<!-- END mobile-sidebar-backdrop -->

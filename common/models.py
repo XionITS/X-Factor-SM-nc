@@ -20,19 +20,31 @@ class XFactor_User(models.Model):
     sw_list = models.TextField()
     hotfix = models.CharField(max_length=150, null=True)
     hotfix_date = models.DateTimeField(null=True)
+    memo = models.TextField(null=True)
     user_date = models.DateTimeField(auto_now=True)
+
+class XFactor_Nano(models.Model):
+    user_name = models.CharField(max_length=50, null=True)
+    user_email = models.CharField(max_length=150, null=True)
+    user_dep = models.CharField(max_length=50, null=True)
+    domain_id = models.CharField(max_length=150, null=True)
+    open_id = models.CharField(max_length=150, null=True)
+    memo = models.TextField(null=True)
+    xfactor_user = models.ForeignKey(XFactor_User, on_delete=models.CASCADE)
+
 
 class XFactor_Auth(models.Model):
     auth_id = models.CharField(max_length=150, primary_key=True)
     auth_name = models.CharField(max_length=150)
     auth_url = models.CharField(max_length=150)
+    auth_num = models.IntegerField()
 
 class XFactor_UserAuth(models.Model):
     computer_id = models.CharField(max_length=150)
     auth_id = models.CharField(max_length=150)
     auth_use = models.CharField(max_length=150)
-    xfactor_user = models.ForeignKey(XFactor_User, on_delete=models.CASCADE)
-    xfactor_auth = models.ForeignKey(XFactor_Auth, on_delete=models.CASCADE)
+    xfactor_user = models.ForeignKey(XFactor_User, on_delete=models.CASCADE, related_name='user')
+    xfactor_auth = models.ForeignKey(XFactor_Auth, on_delete=models.CASCADE, related_name='auth')
 
 class XFactor_Group(models.Model):
     group_id = models.CharField(max_length=150, primary_key=True)
@@ -52,13 +64,12 @@ class XFactor_Deploy(models.Model):
     xfactor_group = models.ForeignKey(XFactor_Group, on_delete=models.CASCADE)
 
 class XFactor_Log(models.Model):
-    log_num = models.CharField(max_length=150, primary_key=True)
-    group_id = models.CharField(max_length=150)
-    deploy_name = models.CharField(max_length=150)
-    deploy_time = models.DateTimeField()
-    deploy_result = models.CharField(max_length=150)
-    xfactor_roup = models.ForeignKey(XFactor_Group, on_delete=models.CASCADE)
-    xfactor_deploy = models.ForeignKey(XFactor_Deploy, on_delete=models.CASCADE)
+    log_num = models.IntegerField(primary_key=True)
+    log_func = models.CharField(max_length=150)
+    log_item = models.CharField(max_length=150)
+    log_result = models.CharField(max_length=150)
+    log_user = models.CharField(max_length=100)
+    log_time = models.DateTimeField()
 
 class XFactor_Program(models.Model):
     program_id = models.CharField(max_length=150, primary_key=True)
@@ -70,3 +81,11 @@ class XFactor_ProgramUser(models.Model):
     program_installed = models.CharField(max_length=150)
     xfactor_user = models.ForeignKey(XFactor_User, on_delete=models.CASCADE)
     xfactor_program = models.ForeignKey(XFactor_Program, on_delete=models.CASCADE)
+
+
+class Daily_Statistics(models.Model):
+    daily_statistics_num = models.IntegerField(primary_key=True)
+    classification = models.CharField(max_length=100)
+    item = models.TextField()
+    item_count = models.CharField(max_length=100)
+    statistics_collection_date = models.DateTimeField()

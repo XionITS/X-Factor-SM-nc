@@ -8,4 +8,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', views.index),
     path('index/paging/', views.index_paging),
+    path('hs_asset/', views.hs_asset),
+    path('hs_asset/hwpaging/', views.hs_asset_paginghw),
+    path('hs_asset/swpaging/', views.hs_asset_pagingsw),
 ]
