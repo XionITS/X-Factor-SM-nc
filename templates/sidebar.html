@@ -17,31 +17,31 @@
                 <div class="menu-submenu">
                     {% if menu_list %}
                         {% for menu in menu_list|dictsort:'xfactor_auth.auth_num'  %}
-                            {% if menu.auth_id == "HS_asset" %}
+                            {% if menu.xfactor_auth.auth_id == "HS_asset" %}
                                 <div class="menu-item">
                                     <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
                                         <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
                                     </a>
                                 </div>
-                            {% elif menu.auth_id == "OS_asset" %}
+                            {% elif menu.xfactor_auth.auth_id == "OS_asset" %}
                                 <div class="menu-item">
                                     <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
                                         <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
                                     </a>
                                 </div>
-                            {% elif menu.auth_id == "VER_asset" %}
+                            {% elif menu.xfactor_auth.auth_id == "VER_asset" %}
                                 <div class="menu-item">
                                     <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
                                         <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
                                     </a>
                                 </div>
-                            {% elif menu.auth_id == "UP_asset" %}
+                            {% elif menu.xfactor_auth.auth_id == "UP_asset" %}
                                 <div class="menu-item">
                                     <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
                                         <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
                                     </a>
                                 </div>
-                            {% elif menu.auth_id == "EP_asset" %}
+                            {% elif menu.xfactor_auth.auth_id == "EP_asset" %}
                                 <div class="menu-item">
                                     <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
                                         <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
@@ -53,21 +53,21 @@
                 </div> <!-- menu-submenu 닫는 태그 추가 -->
             </div>
             {% for menu2 in menu_list|dictsort:'xfactor_auth.auth_num' %}
-                {% if menu2.auth_id == "USER_asset" %}
+                {% if menu2.xfactor_auth.auth_id == "USER_asset" %}
                     <div class="menu-item">
                         <a href="../{{menu2.xfactor_auth.auth_url}}" class="menu-link">
                             <span class="menu-icon"><i class="bi bi-collection"></i></span>
                             <span class="menu-text">Asset</span>
                         </a>
                     </div>
-                {% elif menu2.auth_id == "History" %}
+                {% elif menu2.xfactor_auth.auth_id == "History" %}
                     <div class="menu-item">
                         <a href="../{{menu2.xfactor_auth.auth_url}}" class="menu-link">
                             <span class="menu-icon"><i class="bi bi-collection"></i></span>
                             <span class="menu-text">History</span>
                         </a>
                     </div>
-                {% elif menu2.auth_id == "settings" %}
+                {% elif menu2.xfactor_auth.auth_id == "settings" %}
                     <div class="menu-item has-sub active">
                         <a href="#" class="menu-link">
                             <span class="menu-icon">
@@ -100,5 +100,9 @@
     </div>
 </div>
 <!-- BEGIN mobile-sidebar-backdrop -->
+
 <button class="app-sidebar-mobile-backdrop" data-toggle-target=".app" data-toggle-class="app-sidebar-mobile-toggled"></button>
 <!-- END mobile-sidebar-backdrop -->
+
+<script>
+</script>

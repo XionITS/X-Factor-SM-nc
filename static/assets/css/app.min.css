@@ -7771,7 +7771,7 @@ fieldset:disabled .btn {
 
 .modal {
     --bs-modal-zindex: 1055;
-    --bs-modal-width: 500px;
+    --bs-modal-width: 800px;
     --bs-modal-padding: 1rem;
     --bs-modal-margin: 0.5rem;
     --bs-modal-bg: none;
@@ -7806,6 +7806,7 @@ fieldset:disabled .btn {
     width: auto;
     margin: var(--bs-modal-margin);
     pointer-events: none
+    padding : 10px;
 }
 
 .modal.fade .modal-dialog {
@@ -7863,7 +7864,7 @@ fieldset:disabled .btn {
 .modal-backdrop {
     --bs-backdrop-zindex: 1050;
     --bs-backdrop-bg: #1d2835;
-    --bs-backdrop-opacity: 0.95;
+    --bs-backdrop-opacity: 0.35;
     position: fixed;
     top: 0;
     left: 0;
@@ -23743,7 +23744,7 @@ body:not(.app-init) * {
 .app-content {
     padding: 2rem;
     flex: 1;
-    margin-left: 16.875rem
+    margin-left: 18.875rem
 }
 
 @media(max-width:767.98px) {
@@ -23795,7 +23796,7 @@ body:not(.app-init) * {
     border-top: 1px solid rgba(255, 255, 255, .3);
     font-weight: 600;
     color: rgba(255, 255, 255, .5);
-    margin-left: 18.875rem;
+    margin-left: 19.875rem;
     margin-right: 2rem
 }
 
@@ -24094,13 +24095,13 @@ height: 2rem;*/
 }
 
 .app-sidebar {
-    width: 16.875rem;
+    width: 18.875rem;
     bottom: 0;
     position: fixed;
     top: 3.25rem;
     z-index: 1010;
     left: 0;
-    background: rgba(31, 42, 55, 0.7);
+    background: rgba(31, 42, 55, 1);
 }
 
 .app-sidebarBg {
@@ -24112,7 +24113,7 @@ height: 2rem;*/
         top: 0;
         z-index: 1030;
         background: rgba(38, 51, 66, .95);
-        left: -16.875rem
+        left: -18.875rem
     }
 }
 
@@ -24723,7 +24724,7 @@ height: 2rem;*/
     }
 
     to {
-        margin-left: -16.875rem;
+        margin-left: -18.875rem;
         opacity: 0
     }
 }
@@ -24735,14 +24736,14 @@ height: 2rem;*/
     }
 
     to {
-        margin-left: -16.875rem;
+        margin-left: -18.875rem;
         opacity: 0
     }
 }
 
 @-webkit-keyframes appContentCollapse {
     from {
-        margin-left: 16.875rem
+        margin-left: 18.875rem
     }
 
     to {
@@ -24752,7 +24753,7 @@ height: 2rem;*/
 
 @keyframes appContentCollapse {
     from {
-        margin-left: 16.875rem
+        margin-left: 18.875rem
     }
 
     to {
@@ -24762,7 +24763,7 @@ height: 2rem;*/
 
 @-webkit-keyframes appFooterCollapse {
     from {
-        margin-left: 16.875rem
+        margin-left: 18.875rem
     }
 
     to {
@@ -24772,7 +24773,7 @@ height: 2rem;*/
 
 @keyframes appFooterCollapse {
     from {
-        margin-left: 16.875rem
+        margin-left: 18.875rem
     }
 
     to {
@@ -24785,13 +24786,13 @@ height: 2rem;*/
         opacity: 0;
         -webkit-animation: appSidebarCollapse 0.15s both cubic-bezier(0.7, 0, 0.3, 1);
         animation: appSidebarCollapse 0.15s both cubic-bezier(0.7, 0, 0.3, 1);
-        margin-left: -16.875rem
+        margin-left: -18.875rem
     }
 
     .app-sidebar-collapsed .app-content {
         -webkit-animation: appContentCollapse 0.15s both cubic-bezier(0.7, 0, 0.3, 1);
         animation: appContentCollapse 0.15s both cubic-bezier(0.7, 0, 0.3, 1);
-        margin-left: 0
+        margin-left: 18.875rem
     }
 
     .app-sidebar-collapsed .app-footer {
@@ -24803,7 +24804,7 @@ height: 2rem;*/
 
 @-webkit-keyframes appSidebarMobileSlideInLeft {
     from {
-        left: -16.875rem
+        left: -18.875rem
     }
 
     to {
@@ -24813,7 +24814,7 @@ height: 2rem;*/
 
 @keyframes appSidebarMobileSlideInLeft {
     from {
-        left: -16.875rem
+        left: -18.875rem
     }
 
     to {
@@ -24858,7 +24859,7 @@ height: 2rem;*/
 
 @-webkit-keyframes appSidebarExpand {
     from {
-        margin-left: -16.875rem
+        margin-left: -18.875rem
     }
 
     to {
@@ -24868,7 +24869,7 @@ height: 2rem;*/
 
 @keyframes appSidebarExpand {
     from {
-        margin-left: -16.875rem
+        margin-left: -18.875rem
     }
 
     to {
@@ -24882,7 +24883,7 @@ height: 2rem;*/
     }
 
     to {
-        margin-left: 16.875rem
+        margin-left: 18.875rem
     }
 }
 
@@ -24892,7 +24893,7 @@ height: 2rem;*/
     }
 
     to {
-        margin-left: 16.875rem
+        margin-left: 18.875rem
     }
 }
 
@@ -24902,7 +24903,7 @@ height: 2rem;*/
     }
 
     to {
-        margin-left: 18.875rem
+        margin-left: 19.875rem
     }
 }
 
@@ -24912,7 +24913,7 @@ height: 2rem;*/
     }
 
     to {
-        margin-left: 18.875rem
+        margin-left: 19.875rem
     }
 }
 
@@ -24926,13 +24927,13 @@ height: 2rem;*/
     .app-sidebar-toggled .app-content {
         -webkit-animation: appContentExpand 0.15s both cubic-bezier(0.7, 0, 0.3, 1);
         animation: appContentExpand 0.15s both cubic-bezier(0.7, 0, 0.3, 1);
-        margin-left: 16.875rem
+        margin-left: 18.875rem
     }
 
     .app-sidebar-toggled .app-footer {
         -webkit-animation: appFooterExpand 0.15s both cubic-bezier(0.7, 0, 0.3, 1);
         animation: appFooterExpand 0.15s both cubic-bezier(0.7, 0, 0.3, 1);
-        margin-left: 18.875rem
+        margin-left: 19.875rem
     }
 }
 
@@ -27479,7 +27480,7 @@ body .sp-container .sp-picker-container .sp-choose:hover {
 
     .note-editor.note-airframe.fullscreen,
     .note-editor.note-frame.fullscreen {
-        left: 16.875rem !important
+        left: 18.875rem !important
     }
 }
 
@@ -30863,11 +30864,84 @@ input:checked+labl::before{
 .hsbutton.active {
   background-color: #f39c12;
 }
-#search-button {
-  background-color: #f39c12;
+
+
+
+.table.fs-14px.mb-0.text-center.text-white.text-opacity-60.m-auto{
+    width:100%
+
 }
 
-#column-dropdown{
-  background-color: #f39c12;
+.dashboard-content {
+    padding: 2rem;
+    flex: 1;
+}
+
+.dash{
+    margin-left: 18.875rem;
+}
+
+.column_hidden{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#bottom_asset{
+    padding: 1rem;
+    font-size : 18px;
+}
+
+.export{
+    width : 150px;
+    float : right;
+    height : 40px;
+    align : center;
+}
+
+.swmore-font{
+    color : #f39c12;
+    font-weight : bold;
+    font-family: ChakraPetch-Regular;
+    text-decoration: underline
+}
+.hstable{
+    width: 100%;
+}
+
+.hsthead{
+    text-align:center;
+}
+
+/* Input 상자에 해당하는 값들을 노란색으로 처리하는 CSS 스타일 */
+.highlight {
+    color: yellow !important;
+    font-weight: bold;
+}
+
+.nav.nav-tabs2.nav-tabs-v2>.nav-item>.nav-link {
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 1rem 0;
+    font-size : 20px;
+    color : #fff;
+}
+
+.nav.nav-tabs2.nav-tabs-v2>.nav-item>.nav-link.active,
+.nav.nav-tabs2.nav-tabs-v2>.nav-item>.nav-link:hover {
+    color: #f39c12;
+    border-bottom-color: var(--bs-theme)
+}
+
+
+
+.nav.nav-tabs2.nav-tabs-v2>.nav-item>.nav-link.disabled {
+    color: #fff !important;
+}
+
+.groupdeploy{
+    width : 200px;
+    height: 40px;
+    font-size : 15px;
 }
 

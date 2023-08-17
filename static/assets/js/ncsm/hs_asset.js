@@ -1408,103 +1408,65 @@
 //        };
 //});
 
-
-var user_list_popup = function () {
-	var user_list_popupData = $('#user_list_popupTable').DataTable({
-		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
-		lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-
-		responsive: true,
-		searching: true,
-		ordering: false,
-		serverSide: true,
-		displayLength: false,
-
-		ajax: {
-			url: 'paging/',
-			type: "POST",
-			dataSrc: function (res) {
-				var data = res.item;
-				return data;
-			}
-		},
-		columns: [
-			{data: 'group_id'},
-			{data: 'group_name'},
-			{data: 'group_note'},
-		],
-        columnDefs: [
-		    {targets: 0, width: "30%", className: 'text-start text-truncate'},
-		    {targets: 1, width: "30%", className: 'text-start text-truncate'},
-		    {targets: 2, width: "40%", className: 'text-start text-truncate'},
-		],
-//		columnDefs: [
-//		    {targets: 0, width: "70%", className: 'text-start text-truncate', render: function(data, type, row) {return '<span title="'+row.group_id+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 1, width: "70%", className: 'text-start text-truncate', render: function(data, type, row) {return '<span title="'+row.group_name+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 2, width: "70%", className: 'text-start text-truncate', render: function(data, type, row) {return '<span title="'+row.group_note+'" data-toggle="tooltip">'+data+'</span>'}},
-//		],
-		language: {
-			"decimal": "",
-			"info": "전체 _TOTAL_건",
-			"infoEmpty": "데이터가 없습니다.",
-			"emptyTable": "데이터가 없습니다.",
-			"thousands": ",",
-			"lengthMenu": "페이지당 _MENU_ 개씩 보기",
-			"loadingRecords": "로딩 중입니다.",
-			"processing": "",
-			"zeroRecords": "검색 결과 없음",
-			"paginate": {
-				"first": "처음",
-				"last": "끝",
-				"next": "다음",
-				"previous": "이전"
-			},
-			"search": "검색:",
-			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
-			"infoPostFix": "",
-            },
-    });
-};
-
 var hw_asset_list = function () {
 	var hs_asset_list_Data = $('#hs_asset_list').DataTable({
-		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
-		lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-
-		responsive: true,
+		dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
+		lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+		pageLength: 5,
+		responsive: false,
 		searching: true,
-		ordering: false,
+		ordering: true,
 		serverSide: true,
 		displayLength: false,
-
 
 		ajax: {
 			url: 'hwpaging/',
 			type: "POST",
             data: function (data) {
                 var column = $('#column-dropdown').data('column');
+                var orderColumn = data.order[0].column;
+                var orderDir = data.order[0].dir;
+                var columnMap = {
+
+                            1: 'chasisstype',
+                            2: 'computer_name',
+                            3: 'ip_address',
+                            4: 'hw_list',
+                            5: 'memo'
+
+                        };
                 data.filter = {
                     column: column,
+                    columnmap: columnMap[orderColumn],
+                    direction: orderDir,
                     value : $('#search-input').val(),
                     value2 : $('#hs_asset_list_filter input[type="search"]').val(),
                     regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
-
+                data.page = (data.start / data.length) + 1;
+                data.page_length = data.length;
             },
 			dataSrc: function (res) {
-				var data = res.user_list;
+				var data = res.data;
 				return data;
 			}
 		},
 
 		columns: [
-			{ data: 'chasisstype', title: 'Chasisstype', searchable: true },
-			{ data: 'computer_name', title: 'Computer Name', searchable: true },
-			{ data: 'user_name', title: 'User Name' , searchable: true},
-            { data: 'ip_address', title: 'IP Address' , searchable: true},
-			{ data: 'hw_list', title: 'HW List', searchable: true },
-			{ data: 'memo', title: 'Memo', searchable: true },
+            { data: 'computer_name', title: 'No', searchable: true },
+			{ data: 'chasisstype', title: '구분', searchable: true },
+			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
+            { data: 'ip_address', title: 'IPv4' , searchable: true},
+			{ data: 'hw_list', title: '하드웨어 목록', searchable: true },
+			{ data: 'memo', title: '메모', searchable: true },
 		],
+		rowCallback: function (row, data, index) {
+            var api = this.api();
+            var page = api.page.info().page;
+            var pageLength = api.page.info().length;
+            var index = (page * pageLength) + (index + 1);
+            $('td:eq(0)', row).html(index);
+        },
 //        columnDefs: [
 //		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
 //		    {targets: 1, width: "20%", className: 'text-start text-truncate'},
@@ -1514,12 +1476,12 @@ var hw_asset_list = function () {
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
 		columnDefs: [
-		    {targets: 0, width: "7%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.chasisstype+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 1, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "7%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.user_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "50%", className: 'text-start text-truncate', render: function(data, type, row) {return '<span title="'+row.hw_list+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 0, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 1, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chasisstype+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "55%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		],
 		language: {
 			"decimal": "",
@@ -1543,6 +1505,7 @@ var hw_asset_list = function () {
             },
 
 });
+
       // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
       $('.dropdown-menu a').click(function() {
         var column = $(this).data('column');
@@ -1550,25 +1513,33 @@ var hw_asset_list = function () {
         $('#column-dropdown').data('column', column);
       });
 
-      // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-      $('#search-button').click(function() {
-        var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val();
-        hs_asset_list_Data.columns().search('').draw(); // 이전 검색 초기화
+  // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
+$('#search-button').click(function() {
+    var column = $('#column-dropdown').data('column');
+    var searchValue = $('#search-input').val().trim();
+
+    if (searchValue !== '') {
+        // If the search value is not empty, perform the new search
+        hs_asset_list_Data.columns().search('').draw();
         hs_asset_list_Data.column(column).search(searchValue).draw();
-      });
-	$(document).on('click', '#nexts, #after', function() {
-        var current_page = hs_asset_list_Data.page();
-        var total_pages = hs_asset_list_Data.page.info().pages;
-        if ($(this).attr('id') == 'nexts') {
-                if (current_page + 10 < total_pages) {
-                    hs_asset_list_Data.page(current_page + 10).draw('page');
-                } else {
-                    hs_asset_list_Data.page(total_pages - 1).draw('page');
-                }
-                } else {
-                    hs_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
-                }
+    } else {
+
+        initializeDataTable();
+    }
+});
+
+$(document).on('click', '#nexts, #after', function() {
+    var current_page = hs_asset_list_Data.page();
+    var total_pages = hs_asset_list_Data.page.info().pages;
+    if ($(this).attr('id') == 'nexts') {
+            if (current_page + 10 < total_pages) {
+                hs_asset_list_Data.page(current_page + 10).draw('page');
+            } else {
+                hs_asset_list_Data.page(total_pages - 1).draw('page');
+            }
+            } else {
+                hs_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
+            }
 });
 };
 
@@ -1576,11 +1547,11 @@ var hw_asset_list = function () {
 var sw_asset_list = function () {
 	var sw_asset_list_Data = $('#hs_asset_list').DataTable({
 		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
-		lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-
-		responsive: true,
+		lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+        pageLength: 5,
+		responsive: false,
 		searching: true,
-		ordering: false,
+		ordering: true,
 		serverSide: true,
 		displayLength: false,
 
@@ -1590,28 +1561,48 @@ var sw_asset_list = function () {
 			type: "POST",
             data: function (data) {
                 var column = $('#column-dropdown').data('column');
+                var orderColumn = data.order[0].column;
+                var orderDir = data.order[0].dir;
+                var columnMap = {
+
+                            1: 'chasisstype',
+                            2: 'computer_name',
+                            3: 'ip_address',
+                            4: 'sw_list',
+                            5: 'memo'
+
+                        };
                 data.filter = {
                     column: column,
                     value : $('#search-input').val(),
                     value2 : $('#hs_asset_list_filter input[type="search"]').val(),
                     regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
-
+                data.page = (data.start / data.length) + 1;
+                data.page_length = data.length;
             },
 			dataSrc: function (res) {
-				var data = res.user_list;
+				var data = res.data;
 				return data;
 			}
 		},
 
 		columns: [
-			{ data: 'chasisstype', title: 'Chasisstype', searchable: true },
-			{ data: 'computer_name', title: 'Computer Name', searchable: true },
-			{ data: 'user_name', title: 'User Name' , searchable: true},
-            { data: 'ip_address', title: 'IP Address' , searchable: true},
-			{ data: 'sw_list', title: 'SW List', searchable: true },
-			{ data: 'memo', title: 'Memo', searchable: true },
+		    { data: 'computer_name', title: 'No', searchable: true },
+			{ data: 'chasisstype', title: '구분', searchable: true },
+			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
+            { data: 'ip_address', title: 'IPv4' , searchable: true},
+			{ data: 'sw_list', title: '소프트웨어 목록', searchable: true },
+			{ data: 'memo', title: '메모', searchable: true },
+
 		],
+		rowCallback: function (row, data, index) {
+            var api = this.api();
+            var page = api.page.info().page;
+            var pageLength = api.page.info().length;
+            var index = (page * pageLength) + (index + 1);
+            $('td:eq(0)', row).html(index);
+        },
 //        columnDefs: [
 //		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
 //		    {targets: 1, width: "20%", className: 'text-start text-truncate'},
@@ -1621,12 +1612,16 @@ var sw_asset_list = function () {
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
 		columnDefs: [
-		    {targets: 0, width: "7%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.chasisstype+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 1, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "7%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.user_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "50%", className: 'text-start text-truncate', render: function(data, type, row) {return '<span title="'+row.hw_list+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "12%", className: 'text-center text-truncate', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 0, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 1, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chasisstype+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "55%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {
+		        const computer_name = row.computer_name;
+		        const swList = row.sw_list;
+                const swVer = row.sw_ver_list;
+		        return '<span data-toggle="tooltip">' + swList.split('<br>')[0]+'<br>'+swList.split('<br>')[1]+'<br>'+swList.split('<br>')[2]+'<br>'+swList.split('<br>')[3]+ '</span><br><div class="swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
+		    {targets: 5, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		],
 		language: {
 			"decimal": "",
@@ -1658,12 +1653,19 @@ var sw_asset_list = function () {
       });
 
       // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-      $('#search-button').click(function() {
+    $('#search-button').click(function() {
         var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val();
-        hs_asset_list_Data.columns().search('').draw(); // 이전 검색 초기화
-        hs_asset_list_Data.column(column).search(searchValue).draw();
-      });
+        var searchValue = $('#search-input').val().trim();
+
+        if (searchValue !== '') {
+            // If the search value is not empty, perform the new search
+            sw_asset_list_Data.columns().search('').draw();
+            sw_asset_list_Data.column(column).search(searchValue).draw();
+        } else {
+
+            initializeDataTable();
+        }
+    });
 	$(document).on('click', '#nexts, #after', function() {
         var current_page = hs_asset_list_Data.page();
         var total_pages = hs_asset_list_Data.page.info().pages;
@@ -1692,9 +1694,72 @@ function swbutton(btn) {
     $('.hsbutton').not(btn).removeClass('active');
 }
 
-
 $(document).ready(function () {
     user_list_popup();
     hw_asset_list();
+    //sidebar();
+    //initEvent();
+
+    //initializeDataTable();
+});
+
+
+
+
+
+
+//$('html').click(function(e){
+//const appElement = document.getElementById('app');
+//        var sidebar = $('#sidebar');
+//        var app = $('#app');
+//    	if(!$(e.target).hasClass('app-sidebar-content') && !$(e.target).hasClass('menu-toggler') && !$(e.target).hasClass('app-sidebar')){
+//            sidebar.css({'display':'none'});
+//            app.removeClass("app-sidebar-toggled");
+//            app.addClass("app-sidebar-collapsed");
+//        }
+//        else{
+//            sidebar.css({'display':'block'});
+//        }
+//    });
+
+$(document).on("click",".swmore", function (e){
+    const computer_name = $(this).data("computer_name");
+    const swList = $(this).data("swlist");
+    const swVer = $(this).data("swver");
+    swList2 = swList.split('<br>')
+    swVer2 = swVer.split('<br>')
+//    const swListHTML = "<ul>" + swList2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
+//    const swVerHTML = "<ul>" + swVer2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
+    const combinedData = swList2.map((item, index) => [item, swVer2[index]]);
+
+    // Generate the table HTML
+    const tableHTML = combinedData.map(([item, version]) => `
+        <tr>
+            <td scope="row">${item}</td>
+            <td>${version}</td>
+        </tr>
+    `).join('');
+
+
+
+    //console.log(swVer[1]);
+    // Assuming you have a modal with the ID "swListModal" to display the detailed sw_list
+    $("#swListModal .modal-title").html(computer_name+"의 소프트웨어 및 버전");
+    $("#swListModal .hstbody").html(tableHTML);
+    //$("#swListModal .modal-body-2").html(swVerHTML);
+    $("#swListModal").modal("show");
+
+     // Input 상자 값에 따라 해당 값을 노란색으로 처리
+    $("#searchInput").on("input", function () {
+        const searchValue = $(this).val().trim().toLowerCase();
+        $("#swListModal .hstbody tr").each(function () {
+            const rowData = $(this).text().toLowerCase();
+            if (rowData.includes(searchValue)) {
+                $(this).addClass("highlight");
+            } else {
+                $(this).removeClass("highlight");
+            }
+        });
+    });
 });
 

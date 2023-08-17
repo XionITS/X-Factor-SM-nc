@@ -1,0 +1,61 @@
+{
+  "PROJECT" : {
+    "CORE" : "Tanium",
+    "LOGIN" : "WEB",
+    "CUSTOMER" : "Xfactor",
+    "TYPE" : "System",
+    "LOG" : {
+      "directory" : "log/",
+      "fileName" : "log_",
+      "fileFormat" : ".log"
+    }
+  },
+   "API" : {
+     "apiUrl": "https://192.168.5.100",
+     "ContentType": "application/json",
+     "PATH": {
+       "SessionKey": "/api/v2/session/login",
+       "Sensor": "/api/v2/result_data/saved_question/",
+       "Questions": {
+         "Saved": "/api/v2/saved_questions"
+       }
+     },
+     "defaultGroupID" : "4",
+     "packageID" : "27083",
+     "username": "administrator",
+     "password": "xion123!"
+   },
+  "DB" : {
+    "DBHost" : "localhost",
+    "DBPort" : "5432",
+    "DBName" : "ncsm",
+    "DBUser" : "postgres",
+    "DBPwd" : "psql",
+    "DBSelectTime" : 11,
+    "AssetTNM" : "daily_asset",
+    "StatisticsTNM" : "daily_statistics",
+    "MenuTNM": "web_menusetting",
+    "UserTNM": "common_xfactor_xuser"
+  },
+
+  "FILE" : {
+    "asset": {
+      "Storage" : "data/asset/daily/",
+      "FileName" : "Asset_",
+      "FileType" : ".json"
+    },
+    "statistics" : {
+      "Storage" : "data/statistics/daily/",
+      "FileName" : "Statistics_",
+      "FileType" : ".json"
+    },
+    "RunningService_Except" : {
+      "USE" : "true",
+      "Location" : "/running services.xlsx"
+    }
+  },
+  "EMAIL" : {
+    "EMAIL_ID" : "djlee@xionits.com",
+    "EMAIL_PWD" : "xion123!"
+  }
+}

@@ -2269,9 +2269,9 @@ ip_asset.render();
 /* Controller
 ------------------------------------------------ */
 $(document).ready(function () {
-hs_asset();
-os_asset();
-ip_asset();
+//hs_asset();
+//os_asset();
+//ip_asset();
 //handleRenderChartNC();
 //worldMap(worldMapData);
 //koreaMap(worldMapData);
