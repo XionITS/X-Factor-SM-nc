@@ -140,6 +140,7 @@ def hs_asset_paginghw(request):
 
 
     user = user.exclude(ip_address='unconfirmed')
+    # user = user.exclude(hw_list='unconfirmed')
     user = user.exclude(os_total='unconfirmed')
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))

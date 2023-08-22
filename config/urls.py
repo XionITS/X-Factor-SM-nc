@@ -4,6 +4,7 @@ from django.urls import path
 from common import views_user
 from common import views_main_hs
 from common import views_os_ver
+from common import views_up
 
 from common import views_export
 from common import views_group
@@ -31,4 +32,12 @@ urlpatterns = [
     path('ver_asset/paging/', views_os_ver.ver_asset_paging),
     path('ver_asset/create/', views_group.create),
     path('export/<str:model>/', views_export.export, name='export'),
+
+
+    path('os_asset/', views_os_ver.os_asset),
+    path('os_asset/paging/', views_os_ver.os_asset_paging),
+
+    path('up_asset/', views_up.up_asset),
+    path('up_asset/paging/', views_up.up_asset_paging),
 ]
+

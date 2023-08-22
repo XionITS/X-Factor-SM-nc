@@ -96,7 +96,7 @@ var all_asset_list = function () {
 		columnDefs: [
 		    {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer_id;
-		        return '<input type="checkbox" class="form-check-input" name="'+computer_id+'" id="'+computer_id+'">'
+		        return '<input type="checkbox" class="form-check-input" name="'+row.computer_name+'" id="'+computer_id+'" data-computer-id="'+ computer_id +'">'
 		                +'<input type="hidden" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_name+'">'
 		        }},
             {targets: 1, width: "3%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
@@ -134,7 +134,7 @@ var all_asset_list = function () {
     dropdown_text();
 
     // row 선택시 체크박스 체크 및 해제
-    checkbox_check();
+    // checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
     $('#search-button').click(function() {
@@ -295,7 +295,7 @@ var win_asset_list = function () {
     dropdown_text();
 
     // row 선택시 체크박스 체크 및 해제
-    checkbox_check();
+    // checkbox_check();
 
       // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
     $('#search-button').click(function() {
@@ -447,7 +447,7 @@ var mac_asset_list = function () {
     dropdown_text();
 
     // row 선택시 체크박스 체크 및 해제
-    checkbox_check();
+    // checkbox_check();
 
       // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
     $('#search-button').click(function() {
@@ -599,7 +599,7 @@ var other_asset_list = function () {
     dropdown_text();
 
     // row 선택시 체크박스 체크 및 해제
-    checkbox_check();
+    // checkbox_check();
 
       // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
     $('#search-button').click(function() {
@@ -667,21 +667,22 @@ function otherbutton(btn) {
     checkedNames= {};
 }
 
-function checkbox_check(){
-    $('#ver_asset_list tbody').off('click', 'tr');
-    $('#ver_asset_list tbody').on('click', 'tr', function () {
-        var checkbox = $(this).find('input[type="checkbox"]');
-        var hidden = $(this).find('input[type="hidden"]');
-        var computer_id = checkbox.attr('id');
-        var computer_name = hidden.attr("id");
-        checkbox.prop('checked', !checkbox.prop('checked'));
-        if (checkbox.prop('checked')) {
-            checkedItems[computer_id] = computer_name;
-        } else {
-            delete checkedItems[computer_id];
-        }
-    });
-}
+// function checkbox_check(){
+//     $('#ver_asset_list tbody').off('click', 'tr');
+//     $('#ver_asset_list tbody').on('click', 'tr', function () {
+//         var checkbox = $(this).find('input[type="checkbox"]');
+//         var hidden = $(this).find('input[type="hidden"]');
+//         var computer_id = checkbox.attr('id');
+//         console.log(computer_id)
+//         var computer_name = hidden.attr("id");
+//         checkbox.prop('checked', !checkbox.prop('checked'));
+//         if (checkbox.prop('checked')) {
+//             checkedItems[computer_id] = computer_name;
+//         } else {
+//             delete checkedItems[computer_id];
+//         }
+//     });
+// }
 
 // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
 function dropdown_text(){
@@ -697,7 +698,7 @@ $(document).ready(function () {
     all_asset_list();
     //sidebar();
     //initEvent();
-
+    checkbox_check($('#ver_asset_list tbody'))
 
     //initializeDataTable();
 });

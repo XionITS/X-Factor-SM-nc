@@ -72,4 +72,45 @@ function user_list_popup() {
 //        });
 //}
 
+//     console.log($tbody +"_checkbox_check() called");
+//     $tbody.off('click', 'tr');
+//     $tbody.on('click', 'tr', function () {
+//         var checkbox = $(this).find('input[type="checkbox"]');
+//         var hidden = $(this).find('input[type="hidden"]');
+//         var computer_id = checkbox.attr('id');
+//         console.log(computer_id)
+//         var computer_name = checkbox.attr("name");
+//         checkbox.prop('checked', !checkbox.prop('checked'));
+//         if (checkbox.prop('checked')) {
+//             checkedItems[computer_id] = computer_name;
+//         } else {
+//             delete checkedItems[computer_id];
+//         }
+//     });
+// -----------------------------------------check box -----------------------------------------
+//
 
+function checkbox_check($tbody){
+    $tbody.on('click', 'input[type="checkbox"]', function (event) {
+        event.stopPropagation(); // Prevent the row click event from firing when clicking the checkbox
+        var computer_id = $(this).data('computer-id');
+        var computer_name = $(this).data('computer-name');
+        console.log("Clicked checkbox for computer ID:", computer_id);
+        console.log(computer_id)
+
+        if ($(this).prop('checked')) {
+            checkedItems[computer_id] = computer_name;
+        } else {
+            delete checkedItems[computer_id];
+        }
+    });
+}
+
+$(document).ready(function () {
+    var $tbody_os = $('#os_asset_list tbody');
+    console.log($tbody_os)
+//     var $tbody_ver = $('#ver_asset_list tbody');
+//
+//     checkbox_check($tbody_os);
+//     checkbox_check($tbody_ver);
+});
