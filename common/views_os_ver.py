@@ -4,7 +4,7 @@ import operator
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from django.utils import timezone
+#from django.utils import timezone
 from django.db.models import Q
 from functools import reduce
 from datetime import datetime, timedelta
@@ -12,8 +12,8 @@ from django.core.serializers import serialize
 from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
-
-today_collect_date = timezone.now() - timedelta(hours=24, minutes=30)
+import pytz
+#today_collect_date = timezone.now() - timedelta(hours=24, minutes=30)
 
 @csrf_exempt
 def ver_asset(request):
@@ -21,7 +21,17 @@ def ver_asset(request):
     xuser_auths = XFactor_XUserAuth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = UserAuthSerializer(xuser_auths, many=True)
     #테이블아래 자산현황
-    asset = Daily_Statistics.objects.filter(statistics_collection_date__gt=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
+
+    # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
+    local_tz = pytz.timezone('Asia/Seoul')
+    # UTC 시간대를 사용하여 현재 시간을 얻음
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    # 현재 시간대로 시간 변환
+    local_now = utc_now.astimezone(local_tz)
+    # 24시간 30분 이전의 시간 계산
+    today_collect_date = local_now - timedelta(hours=24, minutes=30)
+
+    asset = Daily_Statistics.objects.filter(statistics_collection_date__gt=today_collect_date, classification='os_simple').values('item', 'item_count').order_by('-item_count')[:5]
     total_item_count = sum(asset.values_list('item_count', flat=True))
 
     context = {'menu_list': menu.data, 'asset': asset, 'total_item_count': total_item_count}
@@ -34,12 +44,19 @@ def ver_asset_paging(request):
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
     user = XFactor_User.objects.filter(os_total__icontains=default_os).exclude(os_total='unconfirmed').exclude(ip_address='unconfirmed')
-
+    # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
+    local_tz = pytz.timezone('Asia/Seoul')
+    # UTC 시간대를 사용하여 현재 시간을 얻음
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    # 현재 시간대로 시간 변환
+    local_now = utc_now.astimezone(local_tz)
+    # 24시간 30분 이전의 시간 계산
+    today_collect_date = local_now - timedelta(hours=24, minutes=30)
 
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
-        user = user.objects.filter(user_date__gt=today_collect_date)
-        user = user.objects.filter(query)
+        user = user.filter(user_date__gt=today_collect_date)
+        user = user.filter(query)
         #user = XFactor_User.objects.filter(query)
         if filter_value:
             if ' and ' in filter_value:
