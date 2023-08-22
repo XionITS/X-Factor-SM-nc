@@ -69,7 +69,7 @@ def hs_asset_paginghw(request):
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
         user = XFactor_User.objects.filter(user_date__gt=today_collect_date)
-        user = user.objects.filter(query)
+        user = user.filter(query)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -124,7 +124,8 @@ def hs_asset_paginghw(request):
 
 
     user = user.exclude(ip_address='unconfirmed')
-    user = user.exclude(hw_list='unconfirmed')
+    # user = user.exclude(hw_list='unconfirmed')
+    user = user.exclude(os_total='unconfirmed')
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
@@ -200,7 +201,7 @@ def hs_asset_pagingsw(request):
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
         user = XFactor_User.objects.filter(user_date__gt=today_collect_date)
-        user = user.objects.filter(query)
+        user = user.filter(query)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
