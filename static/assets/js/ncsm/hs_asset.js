@@ -1412,7 +1412,7 @@ var hw_asset_list = function () {
 	var hs_asset_list_Data = $('#hs_asset_list').DataTable({
 		dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
 		lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
-		pageLength: 5,
+		pageLength: 10,
 		responsive: false,
 		searching: true,
 		ordering: true,
@@ -1427,12 +1427,15 @@ var hw_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-
-                            1: 'chasisstype',
+                            1: 'chassistype',
                             2: 'computer_name',
                             3: 'ip_address',
-                            4: 'hw_list',
-                            5: 'memo'
+                            4: 'hw_cpu',
+                            5: 'hw_mb',
+                            6: 'hw_ram',
+                            7: 'hw_disk',
+                            8: 'hw_gpu',
+                            9: 'memo'
 
                         };
                 data.filter = {
@@ -1454,10 +1457,14 @@ var hw_asset_list = function () {
 
 		columns: [
             { data: 'computer_name', title: 'No', searchable: true },
-			{ data: 'chasisstype', title: '구분', searchable: true },
+			{ data: 'chassistype', title: '구분', searchable: true },
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
-			{ data: 'hw_list', title: '하드웨어 목록', searchable: true },
+			{ data: 'hw_cpu', title: 'hw_cpu', searchable: true },
+			{ data: 'hw_mb', title: 'Mainboard', searchable: true },
+			{ data: 'hw_ram', title: 'RAM', searchable: true },
+			{ data: 'hw_disk', title: 'DISK', searchable: true },
+			{ data: 'hw_gpu', title: 'VGA', searchable: true },
 			{ data: 'memo', title: '메모', searchable: true },
 		],
 		rowCallback: function (row, data, index) {
@@ -1476,12 +1483,16 @@ var hw_asset_list = function () {
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
 		columnDefs: [
-            {targets: 0, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 1, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chasisstype+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 0, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 1, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 2, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "55%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "10%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_cpu+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_mb+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "3%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_ram+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_disk+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 8, width: "10%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_gpu+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		],
 		language: {
 			"decimal": "",
@@ -1546,7 +1557,7 @@ $(document).on('click', '#nexts, #after', function() {
 
 var sw_asset_list = function () {
 	var sw_asset_list_Data = $('#hs_asset_list').DataTable({
-		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
+		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><''p>>",
 		lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
         pageLength: 5,
 		responsive: false,
@@ -1565,7 +1576,7 @@ var sw_asset_list = function () {
                 var orderDir = data.order[0].dir;
                 var columnMap = {
 
-                            1: 'chasisstype',
+                            1: 'chassistype',
                             2: 'computer_name',
                             3: 'ip_address',
                             4: 'sw_list',
@@ -1589,7 +1600,7 @@ var sw_asset_list = function () {
 
 		columns: [
 		    { data: 'computer_name', title: 'No', searchable: true },
-			{ data: 'chasisstype', title: '구분', searchable: true },
+			{ data: 'chassistype', title: '구분', searchable: true },
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
 			{ data: 'sw_list', title: '소프트웨어 목록', searchable: true },
@@ -1613,7 +1624,7 @@ var sw_asset_list = function () {
 //		],
 		columnDefs: [
 		    {targets: 0, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 1, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chasisstype+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 1, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 3, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 4, width: "55%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {
@@ -1680,18 +1691,29 @@ var sw_asset_list = function () {
                 }
 });
 };
+
+
+
 function hwbutton(btn) {
+    let newTableContent = '';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>hw_cpu</th><th>hw_mb</th><th>hw_ram</th><th>hw_disk</th><th>hw_vga</th><th>memo</th></tr></thead><tbody></tbody>';
     $('#hs_asset_list').DataTable().destroy();
+    $('#hs_asset_list').html(newTableContent);
     hw_asset_list();
     $(btn).addClass('active');
     $('.hsbutton').not(btn).removeClass('active');
+
 }
 
 function swbutton(btn) {
+    let newTableContent = '';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>소프트웨어 목록</th><th>memo</th></tr></thead><tbody></tbody>';
     $('#hs_asset_list').DataTable().destroy();
+    $('#hs_asset_list').html(newTableContent);
     sw_asset_list();
     $(btn).addClass('active');
     $('.hsbutton').not(btn).removeClass('active');
+
 }
 
 $(document).ready(function () {

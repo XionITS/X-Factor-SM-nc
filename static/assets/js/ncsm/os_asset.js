@@ -50,12 +50,12 @@ var os_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                        1: 'computer_name',
-                        2: 'os_simple',
-                        3: 'os_version',
-                        4: 'ip_address',
-                        5: 'mac_address',
-                        6: 'memo'
+                        2: 'computer_name',
+                        3: 'os_simple',
+                        4: 'os_version',
+                        5: 'ip_address',
+                        6: 'mac_address',
+                        7: 'memo'
                         };
                 data.filter = {
                     defaultColumn : defaultColumn,

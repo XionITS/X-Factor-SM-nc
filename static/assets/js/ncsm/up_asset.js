@@ -50,13 +50,13 @@ var up_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                        1: 'chasisstype',
-                        2: 'computer_name',
-                        3: 'mac_address',
-                        4: 'ip_address',
-                        5: 'hotfix',
-                        6: 'hotfix_date',
-                        7: 'memo'
+                        2: 'chassistype',
+                        3: 'computer_name',
+                        4: 'mac_address',
+                        5: 'ip_address',
+                        6: 'hotfix',
+                        7: 'hotfix_date',
+                        8: 'memo'
                         };
                 data.filter = {
                     defaultColumn : defaultColumn,
@@ -79,7 +79,7 @@ var up_asset_list = function () {
 		columns: [
 		    { data: '', title: '선택', searchable: false },
             { data: '', title: 'No', searchable: true },
-			{ data: 'chasisstype', title: '구분', searchable: true },
+			{ data: 'chassistype', title: '구분', searchable: true },
             { data: 'computer_name', title: '컴퓨터 이름', searchable: true },
 			{ data: 'mac_address', title: 'Mac주소', searchable: true },
 			{ data: 'ip_address', title: 'IPv4', searchable: true },
@@ -100,7 +100,7 @@ var up_asset_list = function () {
 		        return '<input type="checkbox" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_id+'" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer_name + '">'
 		        }},
             {targets: 1, width: "3%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chasisstype+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 3, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 4, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 5, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},

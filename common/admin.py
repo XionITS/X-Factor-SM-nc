@@ -1,16 +1,16 @@
 from django.contrib import admin
-from .models import XFactor_User
-from .models import XFactor_Group
-from .models import XFactor_Auth
-from .models import XFactor_XUserAuth
+from .models import Xfactor_Common
+from .models import Xfactor_Group
+from .models import Xfactor_Auth
+from .models import Xfactor_Xuser_Auth
 
-class Search_XFactor_User(admin.ModelAdmin):
+class Search_Xfactor_Common(admin.ModelAdmin):
     search_fields = ['User name']
 
-admin.site.register(XFactor_User, Search_XFactor_User)
-admin.site.register(XFactor_Group)
-admin.site.register(XFactor_Auth)
-admin.site.register(XFactor_XUserAuth)
+admin.site.register(Xfactor_Common, Search_Xfactor_Common)
+admin.site.register(Xfactor_Group)
+admin.site.register(Xfactor_Auth)
+admin.site.register(Xfactor_Xuser_Auth)
 
 
 

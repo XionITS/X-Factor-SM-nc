@@ -51,12 +51,12 @@ var all_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                        1: 'computer_name',
-                        2: 'ip_address',
-                        3: 'os_total',
-                        4: 'os_version',
-                        5: 'os_build',
-                        6: 'memo'
+                        2: 'computer_name',
+                        3: 'ip_address',
+                        4: 'os_total',
+                        5: 'os_version',
+                        6: 'os_build',
+                        7: 'memo'
                         };
                 data.filter = {
                     defaultColumn : defaultColumn,
@@ -94,17 +94,17 @@ var all_asset_list = function () {
             $('td:eq(1)', row).html(index);
         },
 		columnDefs: [
-		    {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+		    {targets: 0, width: "4%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer_id;
 		        return '<input type="checkbox" class="form-check-input" name="'+row.computer_name+'" id="'+computer_id+'" data-computer-id="'+ computer_id +'">'
 		                +'<input type="hidden" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_name+'">'
 		        }},
-            {targets: 1, width: "3%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "15%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "25%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_total+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "15%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.os_version+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "15%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_build+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 1, width: "4%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "13%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "8%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "22%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_total+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "17%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.os_version+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "22%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_build+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		    		],
 		language: {
@@ -211,12 +211,12 @@ var win_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                        1: 'computer_name',
-                        2: 'ip_address',
-                        3: 'os_total',
-                        4: 'os_version',
-                        5: 'os_build',
-                        6: 'memo'
+                        2: 'computer_name',
+                        3: 'ip_address',
+                        4: 'os_total',
+                        5: 'os_version',
+                        6: 'os_build',
+                        7: 'memo'
                         };
                 data.filter = {
                     defaultColumn : defaultColumn,
@@ -255,17 +255,17 @@ var win_asset_list = function () {
             $('td:eq(1)', row).html(index);
         },
 		columnDefs: [
-		    {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+		    {targets: 0, width: "4%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer_id;
 		        return '<input type="checkbox" class="form-check-input" name="'+computer_id+'" id="'+computer_id+'">'
 		                +'<input type="hidden" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_name+'">'
 		        }},
-            {targets: 1, width: "3%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "15%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "25%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_total+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "15%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.os_version+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "15%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_build+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 1, width: "4%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "13%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "8%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "22%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_total+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "17%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.os_version+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "22%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_build+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		    		],
 		language: {
@@ -366,12 +366,12 @@ var mac_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                        1: 'computer_name',
-                        2: 'ip_address',
-                        3: 'os_total',
-                        4: 'os_version',
-                        5: 'os_build',
-                        6: 'memo'
+                        2: 'computer_name',
+                        3: 'ip_address',
+                        4: 'os_total',
+                        5: 'os_version',
+                        6: 'os_build',
+                        7: 'memo'
                         };
                 data.filter = {
                     defaultColumn : defaultColumn,
@@ -407,17 +407,17 @@ var mac_asset_list = function () {
             $('td:eq(1)', row).html(index);
         },
 		columnDefs: [
-		    {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+		    {targets: 0, width: "4%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer_id;
 		        return '<input type="checkbox" class="form-check-input" name="'+computer_id+'" id="'+computer_id+'">'
 		                +'<input type="hidden" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_name+'">'
 		        }},
-            {targets: 1, width: "3%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "15%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "25%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_total+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "15%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.os_version+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "15%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_build+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 1, width: "4%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "13%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "8%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "22%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_total+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "17%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.os_version+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "22%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_build+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		    		],
 		language: {
@@ -518,12 +518,12 @@ var other_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                        1: 'computer_name',
-                        2: 'ip_address',
-                        3: 'os_total',
-                        4: 'os_version',
-                        5: 'os_build',
-                        6: 'memo'
+                        2: 'computer_name',
+                        3: 'ip_address',
+                        4: 'os_total',
+                        5: 'os_version',
+                        6: 'os_build',
+                        7: 'memo'
                         };
                 data.filter = {
                     defaultColumn : defaultColumn,
@@ -559,17 +559,17 @@ var other_asset_list = function () {
             $('td:eq(1)', row).html(index);
         },
 		columnDefs: [
-		    {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+		    {targets: 0, width: "4%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer_id;
 		        return '<input type="checkbox" class="form-check-input" name="'+computer_id+'" id="'+computer_id+'">'
 		                +'<input type="hidden" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_name+'">'
 		        }},
-            {targets: 1, width: "3%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "15%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "25%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_total+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "15%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.os_version+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "15%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_build+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 1, width: "4%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "13%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "8%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "22%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_total+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "17%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.os_version+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "22%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_build+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		    		],
 		language: {

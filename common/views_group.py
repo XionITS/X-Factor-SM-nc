@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from django.http import JsonResponse,HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import XFactor_Group
+from .models import Xfactor_Group
 import requests
 import json
 import math
@@ -63,7 +63,7 @@ def create(request):
         CGID = str(CCG.json()['data']['id'])
 
         #DB넣기
-        group_insert = XFactor_Group()
+        group_insert = Xfactor_Group()
         group_insert.group_id = CGID
         group_insert.group_name = group_name
         group_insert.group_note = group_description
