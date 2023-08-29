@@ -43,6 +43,8 @@ urlpatterns = [
 
     path('group/list/', views_deploy.group),
     path('package/list/', views_deploy.package),
-    path('deploy_action/', views_deploy.deploy_action)
+    path('deploy_action/', views_deploy.deploy_action),
+    path('member/list/', views_deploy.group_list),
+
 ]
 

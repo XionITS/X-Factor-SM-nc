@@ -51,9 +51,8 @@ def group(request):
     GURL = apiUrl + '/api/v2/management_rights_groups'
     responseGroup = requests.get(GURL, headers=PSQ, verify=False)
     dataG = responseGroup.json()
-    ik = []
     for i in range(len(dataG['data']) - 1):
-        groupsList.append({'Name': dataG['data'][i]['name'], 'Content_set': dataG['data'][i]['content_set']['name'], 'Expression': dataG['data'][i]['text']})
+        groupsList.append({'Name': dataG['data'][i]['name'], 'id': dataG['data'][i]['id']})
         # if con_set == 'all':
         #     if dataG['data'][i]['name'].startswith(search) or dataG['data'][i]['content_set']['name'].startswith(search) or dataG['data'][i]['text'].startswith(search):
         #         groupsList.append({'Name': dataG['data'][i]['name'], 'Content_set': dataG['data'][i]['content_set']['name'], 'Expression': dataG['data'][i]['text']})
@@ -92,8 +91,7 @@ def package(request):
     packageList = []
     # print(con_set)
     for i in range(len(dataP['data']) - 1):
-        packageList.append({'Name': dataP['data'][i]['name'], 'Content_set': dataP['data'][i]['content_set']['name'],
-                            'Command': dataP['data'][i]['command']})
+        packageList.append({'Name': dataP['data'][i]['name'], 'id': dataP['data'][i]['id']})
         # if con_set == 'all':
         #     if dataP['data'][i]['name'].startswith(search) or dataP['data'][i]['content_set']['name'].startswith(search) or dataP['data'][i]['command'].startswith(search):
         #         packageList.append({'Name': dataP['data'][i]['name'], 'Content_set': dataP['data'][i]['content_set']['name'],
@@ -115,8 +113,8 @@ def package(request):
 
 @csrf_exempt
 def deploy_action(request):
-    comName = request.POST.get('selectedGroup')
-    packName = request.POST.get('selectedPackage')
+    comId = request.POST.get('selectedGroup')
+    packID = request.POST.get('selectedPackage')
     SKH = '{"username": "' + APIUNM + '", "domain": "", "password": "' + APIPWD + '"}'
     SKURL = apiUrl + SessionKeyPath
     SKR = requests.post(SKURL, data=SKH, verify=False)
@@ -124,16 +122,6 @@ def deploy_action(request):
     SKRJ = json.loads(SKRT)
     SK = SKRJ['data']['session']
     PSQ = {'session': SK, 'Content-Type': 'application/json'}
-    CURL = apiUrl + '/api/v2/groups/by-name/' + comName
-    PURL = apiUrl + '/api/v2/packages/by-name/' + packName
-
-    CSR = requests.get(CURL, headers=PSQ, verify=False)
-    PSR = requests.get(PURL, headers=PSQ, verify=False)
-
-    PSRT = PSR.content.decode('utf-8', errors='ignore')
-    CSRT = CSR.content.decode('utf-8', errors='ignore')
-    PSRJ = json.loads(PSRT)
-    CSRJ = json.loads(CSRT)
 
     AURL = apiUrl + '/api/v2/actions'
     body = {
@@ -141,21 +129,33 @@ def deploy_action(request):
             "id": 4
         },
         "package_spec": {
-            "id": PSRJ['data']['id']
+            "id": packID
         },
         "name": "Sample Action",
         "expire_seconds": 3600,
         "target_group": {
-            "id": CSRJ['data']['id']
+            "id": comId
         }
     }
     CAQ = requests.post(AURL, headers=PSQ, json=body, verify=False)
-    print(CAQ.status_code)
-    RD = {}
+    if CAQ.status_code == 200:
+        RD = {'result': 'success'}
+    else:
+        RD = {'result': 'fail'}
     return JsonResponse(RD)
 
 
 @csrf_exempt
-def computer_group_sel(request):
+def group_list(request):
+    group_id = request.POST.get('id')
+    group = Xfactor_Group.objects.get(group_id=group_id)
+    group_data = {
+        'group_id': group.group_id,
+        'group_name': group.group_name,
+        'group_note': group.group_note,
+        'computer_id_list': group.computer_id_list,
+        'computer_name_list': group.computer_name_list
+    }
+    RD = {'group': group_data}
 
-    return JsonResponse()
+    return JsonResponse(RD)

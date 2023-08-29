@@ -67,8 +67,8 @@ def create(request):
         group_insert.group_id = CGID
         group_insert.group_name = group_name
         group_insert.group_note = group_description
-        group_insert.computer_id = computerIds
-        group_insert.computer_name = computerNames
+        group_insert.computer_id_list = computerIds
+        group_insert.computer_name_list = computerNames
         group_insert.save()
         message_code = "success"
         message = "Group이 생성되었습니다. \n 그룹이름 : " +group_name+"\n 그룹번호 : " +CGID

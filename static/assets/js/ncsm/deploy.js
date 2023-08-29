@@ -11,7 +11,8 @@ $(document).on("click","#createdeploy", function (e) {
                 var data = res.item;
                 $.each(data, function(index, group) {
                     computerGroupSelect.append($('<option>', {
-                        text: group.Name
+                        text: group.Name,
+                        value: group.id
                     }));
                 });
         }
@@ -25,18 +26,25 @@ $(document).on("click","#createdeploy", function (e) {
                 var data = res.item;
                 $.each(data, function(index, package) {
                     packageSelect.append($('<option>', {
-                        text: package.Name
+                        text: package.Name,
+                        value: package.id
                     }));
                 });
 
         }
     });
-    console.log(packageData)
     // 셀렉트 박스 값이 변경되었을 때 이벤트 리스너 추가
     $('#computerGroupData').on('change', function() {
         selectedGroup = $(this).val();
         $.ajax({
-
+            url: '../member/list/',
+            method: 'POST',
+            data: {
+                id: selectedGroup
+            },
+            success: function (res) {
+                console.log(res.group)
+            }
         })
         console.log('Selected Group ID:', selectedGroup);
     });
@@ -49,6 +57,17 @@ $(document).on("click","#createdeploy", function (e) {
     $("#deployModal").modal("show");
 
     $(document).on("click","#deployCreate", function(event) {
+        if (selectedGroup === '' || selectedPackage === '') {
+            alert('Select a group or package...')
+            return;
+        } else {
+            if (confirm("배포하시겠습니까?") == true){
+               //true는 확인버튼을 눌렀을 때 코드 작성
+            }else {
+                event.preventDefault();
+                return;
+            }
+        }
         $.ajax({
             url: '../deploy_action/',
             method: 'POST',
@@ -57,12 +76,14 @@ $(document).on("click","#createdeploy", function (e) {
                 selectedPackage: selectedPackage
             },
             success: function(res) {
-                console.log(res)
+                if (res.result === 'success') {
+                    $('#deployModal').modal('hide');
+                } else if (res.result === 'fail') {
+                    $('#deployModal').modal('hide');
+                    alert('deploy fail...')
+                }
             }
         });
-        let computerIds = []
-        let computerNames = []
-        const computerElements = $('#deployModal .form-check').find('.form-check-input');
     });
 });
 
