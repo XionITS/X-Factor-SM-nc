@@ -143,7 +143,6 @@ var up_asset_list = function () {
 $(document).on("click",".upmore", function (e){
     const computer_name = $(this).data("computer_name");
     const swList = $(this).data("hotfix");
-    console.log(swList)
     const swVer = $(this).data("date");
     swList2 = swList.split('<br>')
     swVer2 = swVer.split('<br>')

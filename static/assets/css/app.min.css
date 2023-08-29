@@ -30945,3 +30945,11 @@ input:checked+labl::before{
     font-size : 15px;
 }
 
+#computerGroupData option {
+    background-color: #1D2835;
+    color: #9A9FA5;
+}
+#packageData option {
+    background-color: #1D2835;
+    color: #9A9FA5;
+}

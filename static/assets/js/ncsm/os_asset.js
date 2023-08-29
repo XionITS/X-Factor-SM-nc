@@ -210,8 +210,6 @@ function dropdown_text(){
 $(document).ready(function () {
     user_list_popup();
     os_asset_list();
-    console.log('111111')
-    console.log('122222222222')
     //sidebar();
     //initEvent();
     checkbox_check($('#os_asset_list tbody'))

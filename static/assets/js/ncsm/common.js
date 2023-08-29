@@ -1,4 +1,5 @@
 
+// ----------------------------------------- user_list_popup start -----------------------------------------
 function user_list_popup() {
     var user_list_popup = function () {
         var user_list_popupData = $('#user_list_popupTable').DataTable({
@@ -56,6 +57,12 @@ function user_list_popup() {
         });
     };
 }
+// ----------------------------------------- user_list_popup end -----------------------------------------
+
+// ----------------------------------------- delploy_popup end -----------------------------------------
+
+
+
 //function sidebar() {
 //    const appElement = document.getElementById('app');
 //    $('html').click(function(e){
@@ -87,16 +94,14 @@ function user_list_popup() {
 //             delete checkedItems[computer_id];
 //         }
 //     });
-// -----------------------------------------check box -----------------------------------------
-//
 
+// ----------------------------------------- check box start -----------------------------------------
 function checkbox_check($tbody){
     $tbody.on('click', 'input[type="checkbox"]', function (event) {
         event.stopPropagation(); // Prevent the row click event from firing when clicking the checkbox
         var computer_id = $(this).data('computer-id');
         var computer_name = $(this).data('computer-name');
         console.log("Clicked checkbox for computer ID:", computer_id);
-        console.log(computer_id)
 
         if ($(this).prop('checked')) {
             checkedItems[computer_id] = computer_name;
@@ -106,11 +111,11 @@ function checkbox_check($tbody){
     });
 }
 
-$(document).ready(function () {
-    var $tbody_os = $('#os_asset_list tbody');
-    console.log($tbody_os)
+// $(document).ready(function () {
+//     var $tbody_os = $('#os_asset_list tbody');
 //     var $tbody_ver = $('#ver_asset_list tbody');
 //
 //     checkbox_check($tbody_os);
 //     checkbox_check($tbody_ver);
-});
+// });
+// ----------------------------------------- check box end -----------------------------------------

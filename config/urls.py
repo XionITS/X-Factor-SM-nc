@@ -5,6 +5,7 @@ from common import views_user
 from common import views_main_hs
 from common import views_os_ver
 from common import views_up
+from common import views_deploy
 
 from common import views_export
 from common import views_group
@@ -39,5 +40,9 @@ urlpatterns = [
 
     path('up_asset/', views_up.up_asset),
     path('up_asset/paging/', views_up.up_asset_paging),
+
+    path('group/list/', views_deploy.group),
+    path('package/list/', views_deploy.package),
+    path('deploy_action/', views_deploy.deploy_action)
 ]
 
