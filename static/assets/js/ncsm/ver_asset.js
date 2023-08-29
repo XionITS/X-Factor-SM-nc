@@ -96,8 +96,7 @@ var all_asset_list = function () {
 		columnDefs: [
 		    {targets: 0, width: "4%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer_id;
-		        return '<input type="checkbox" class="form-check-input" name="'+row.computer_name+'" id="'+computer_id+'" data-computer-id="'+ computer_id +'">'
-		                +'<input type="hidden" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_name+'">'
+		        return '<input type="checkbox" class="form-check-input" name="'+row.computer_name+'" id="'+computer_id+'" data-computer-id="'+ computer_id +'" data-computer-name="' + row.computer_name + '">'
 		        }},
             {targets: 1, width: "4%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 2, width: "13%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
@@ -257,8 +256,7 @@ var win_asset_list = function () {
 		columnDefs: [
 		    {targets: 0, width: "4%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer_id;
-		        return '<input type="checkbox" class="form-check-input" name="'+computer_id+'" id="'+computer_id+'">'
-		                +'<input type="hidden" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_name+'">'
+		        return '<input type="checkbox" class="form-check-input" name="'+computer_id+'" id="'+computer_id+'" data-computer-id="' + row.computer_id + '" data-computer-name="' + row.computer_name + '">'
 		        }},
             {targets: 1, width: "4%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 2, width: "13%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
@@ -409,8 +407,7 @@ var mac_asset_list = function () {
 		columnDefs: [
 		    {targets: 0, width: "4%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer_id;
-		        return '<input type="checkbox" class="form-check-input" name="'+computer_id+'" id="'+computer_id+'">'
-		                +'<input type="hidden" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_name+'">'
+		        return '<input type="checkbox" class="form-check-input" name="'+computer_id+'" id="'+computer_id+'" data-computer-id="' + row.computer_id + '" data-computer-name="' + row.computer_name + '">'
 		        }},
             {targets: 1, width: "4%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 2, width: "13%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
@@ -561,8 +558,7 @@ var other_asset_list = function () {
 		columnDefs: [
 		    {targets: 0, width: "4%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer_id;
-		        return '<input type="checkbox" class="form-check-input" name="'+computer_id+'" id="'+computer_id+'">'
-		                +'<input type="hidden" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_name+'">'
+		        return '<input type="checkbox" class="form-check-input" name="'+computer_id+'" id="'+computer_id+'" data-computer-id="' + row.computer_id + '" data-computer-name="' + row.computer_name + '">'
 		        }},
             {targets: 1, width: "4%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 2, width: "13%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},

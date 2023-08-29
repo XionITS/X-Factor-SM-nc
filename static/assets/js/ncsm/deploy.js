@@ -49,22 +49,17 @@ $(document).on("click","#createdeploy", function (e) {
     $("#deployModal").modal("show");
 
     $(document).on("click","#deployCreate", function(event) {
-        event.preventDefault(); // 기본 제출 동작을 막습니다.
-        // 폼 데이터를 가져옵니다.
-        var form = document.getElementById("GroupCreateForm");
-        var group_name = form.elements.groupName.value;
-        var group_description = form.elements.groupDescription.value;
-        var aaa = selectedPackage
         $.ajax({
             url: '../deploy_action/',
             method: 'POST',
-            data: function (aaa) {
-                console.log("aaa")
-                console.log(aaa)
-                return aaa
+            data: {
+                selectedGroup: selectedGroup,
+                selectedPackage: selectedPackage
+            },
+            success: function(res) {
+                console.log(res)
             }
-
-        })
+        });
         let computerIds = []
         let computerNames = []
         const computerElements = $('#deployModal .form-check').find('.form-check-input');

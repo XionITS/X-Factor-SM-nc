@@ -53,9 +53,6 @@ def group(request):
     dataG = responseGroup.json()
     ik = []
     for i in range(len(dataG['data']) - 1):
-        if dataG['data'][i]['name'] == 'ikchoi_test':
-            ik = dataG['data'][i]
-            continue
         groupsList.append({'Name': dataG['data'][i]['name'], 'Content_set': dataG['data'][i]['content_set']['name'], 'Expression': dataG['data'][i]['text']})
         # if con_set == 'all':
         #     if dataG['data'][i]['name'].startswith(search) or dataG['data'][i]['content_set']['name'].startswith(search) or dataG['data'][i]['text'].startswith(search):
@@ -118,7 +115,42 @@ def package(request):
 
 @csrf_exempt
 def deploy_action(request):
-    print(request.POST.get('aaa'))
+    comName = request.POST.get('selectedGroup')
+    packName = request.POST.get('selectedPackage')
+    SKH = '{"username": "' + APIUNM + '", "domain": "", "password": "' + APIPWD + '"}'
+    SKURL = apiUrl + SessionKeyPath
+    SKR = requests.post(SKURL, data=SKH, verify=False)
+    SKRT = SKR.content.decode('utf-8', errors='ignore')
+    SKRJ = json.loads(SKRT)
+    SK = SKRJ['data']['session']
+    PSQ = {'session': SK, 'Content-Type': 'application/json'}
+    CURL = apiUrl + '/api/v2/groups/by-name/' + comName
+    PURL = apiUrl + '/api/v2/packages/by-name/' + packName
+
+    CSR = requests.get(CURL, headers=PSQ, verify=False)
+    PSR = requests.get(PURL, headers=PSQ, verify=False)
+
+    PSRT = PSR.content.decode('utf-8', errors='ignore')
+    CSRT = CSR.content.decode('utf-8', errors='ignore')
+    PSRJ = json.loads(PSRT)
+    CSRJ = json.loads(CSRT)
+
+    AURL = apiUrl + '/api/v2/actions'
+    body = {
+        "action_group": {
+            "id": 4
+        },
+        "package_spec": {
+            "id": PSRJ['data']['id']
+        },
+        "name": "Sample Action",
+        "expire_seconds": 3600,
+        "target_group": {
+            "id": CSRJ['data']['id']
+        }
+    }
+    CAQ = requests.post(AURL, headers=PSQ, json=body, verify=False)
+    print(CAQ.status_code)
     RD = {}
     return JsonResponse(RD)
 
