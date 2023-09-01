@@ -70,9 +70,11 @@ def hs_asset(request):
 
     context = {'menu_list' : menu.data, 'asset' : asset, 'total_item_count' : total_item_count}
     return render(request, 'hs_asset.html', context)
+
 @csrf_exempt
 def hs_asset_paginghw(request):
     filter_column = request.POST.get('filter[column]')
+    print(filter_column)
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
     # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
@@ -164,9 +166,9 @@ def hs_asset_paginghw(request):
 
 
 
-    user = user.exclude(ip_address='unconfirmed')
+    # user = user.exclude(ip_address='unconfirmed')
     # user = user.exclude(hw_list='unconfirmed')
-    user = user.exclude(os_total='unconfirmed')
+    # user = user.exclude(os_total='unconfirmed')
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
@@ -241,6 +243,7 @@ def hs_asset_paginghw(request):
 @csrf_exempt
 def hs_asset_pagingsw(request):
     filter_column = request.POST.get('filter[column]')
+    print(filter_column)
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
     # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
@@ -254,6 +257,8 @@ def hs_asset_pagingsw(request):
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
         user = Xfactor_Common.objects.filter(user_date__gt=today_collect_date)
+        # service = Xfactor_Service.objects.filter(computer=user.computer_id)
+        # print(service.essential1)
         user = user.filter(query)
         if filter_value:
             if ' and ' in filter_value:
@@ -281,6 +286,7 @@ def hs_asset_pagingsw(request):
             user = user.filter(query)
     else:
         user = Xfactor_Common.objects.filter(user_date__gt=today_collect_date)
+        # print(user.values_list('computer_id', flat=True))
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -306,8 +312,8 @@ def hs_asset_pagingsw(request):
                          Q(memo__icontains=filter_value))
             user = user.filter(query)
 
-    user = user.exclude(ip_address='unconfirmed')
-    user = user.exclude(os_total='unconfirmed')
+    # user = user.exclude(ip_address='unconfirmed')
+    # user = user.exclude(os_total='unconfirmed')
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')

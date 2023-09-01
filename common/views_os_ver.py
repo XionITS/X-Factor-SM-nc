@@ -43,7 +43,7 @@ def ver_asset_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(os_total='unconfirmed').exclude(ip_address='unconfirmed')
+    user = Xfactor_Common.objects.filter(os_total__icontains=default_os)
     # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
     local_tz = pytz.timezone('Asia/Seoul')
     # UTC 시간대를 사용하여 현재 시간을 얻음

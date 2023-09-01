@@ -119,3 +119,15 @@ function checkbox_check($tbody){
 //     checkbox_check($tbody_ver);
 // });
 // ----------------------------------------- check box end -----------------------------------------
+
+
+// 검색 버튼 클릭, 엔터 키로 선택한 컬럼과 검색어로 검색 수행
+function performSearch(column, searchValue, list_Data) {
+    console.log(column)
+    console.log(searchValue)
+    if (searchValue !== ''){
+        list_Data.columns().search('').draw();
+        list_Data.column(column).search(searchValue).draw();
+    }
+}
+//////////////////////////////////////////////////////////////////

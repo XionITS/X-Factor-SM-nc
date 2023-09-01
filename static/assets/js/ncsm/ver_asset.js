@@ -63,7 +63,7 @@ var all_asset_list = function () {
                     column: column,
                     columnmap: columnMap[orderColumn],
                     direction: orderDir,
-                    value : $('#search-input').val(),
+                    value : $('#search-input-ver').val(),
                     value2 : $('#ver_asset_list_filter input[type="search"]').val(),
                     regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
@@ -138,18 +138,20 @@ var all_asset_list = function () {
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
     $('#search-button').click(function() {
         var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val().trim();
+        var searchValue = $('#search-input-ver').val().trim();
 
-        if (searchValue !== '') {
-            // If the search value is not empty, perform the new search
-            all_asset_list_Data.columns().search('').draw();
-            all_asset_list_Data.column(column).search(searchValue).draw();
-        } else {
-
-            initializeDataTable();
-        }
+        performSearch(column, searchValue, all_asset_list_Data);
     });
 
+    // 검색창 enter 작동
+    $('#search-input-ver').on('keyup', function(event) {
+        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var column = $('#column-dropdown').data('column');
+            var searchValue = $('#search-input-ver').val().trim();
+
+            performSearch(column, searchValue, all_asset_list_Data);
+        }
+    });
 
 	$(document).on('click', '#nexts, #after', function() {
         var current_page = all_asset_list_Data.page();
@@ -222,7 +224,7 @@ var win_asset_list = function () {
                     column: column,
                     columnmap: columnMap[orderColumn],
                     direction: orderDir,
-                    value : $('#search-input').val(),
+                    value : $('#search-input-ver').val(),
                     value2 : $('#ver_asset_list_filter input[type="search"]').val(),
                     regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
@@ -295,20 +297,24 @@ var win_asset_list = function () {
     // row 선택시 체크박스 체크 및 해제
     // checkbox_check();
 
-      // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
+    // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
     $('#search-button').click(function() {
         var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val().trim();
+        var searchValue = $('#search-input-ver').val().trim();
 
-        if (searchValue !== '') {
-            // If the search value is not empty, perform the new search
-            win_asset_list_Data.columns().search('').draw();
-            win_asset_list_Data.column(column).search(searchValue).draw();
-        } else {
+        performSearch(column, searchValue, win_asset_list_Data);
+    });
 
-            initializeDataTable();
+    // 검색창 enter 작동
+    $('#search-input-ver').on('keyup', function(event) {
+        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var column = $('#column-dropdown').data('column');
+            var searchValue = $('#search-input-ver').val().trim();
+
+            performSearch(column, searchValue, win_asset_list_Data);
         }
     });
+
 	$(document).on('click', '#nexts, #after', function() {
         var current_page = win_asset_list_Data.page();
         var total_pages = win_asset_list_Data.page.info().pages;
@@ -374,7 +380,7 @@ var mac_asset_list = function () {
                 data.filter = {
                     defaultColumn : defaultColumn,
                     column: column,
-                    value : $('#search-input').val(),
+                    value : $('#search-input-ver').val(),
                     value2 : $('#ver_asset_list_filter input[type="search"]').val(),
                     regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
@@ -449,17 +455,21 @@ var mac_asset_list = function () {
       // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
     $('#search-button').click(function() {
         var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val().trim();
+        var searchValue = $('#search-input-ver').val().trim();
 
-        if (searchValue !== '') {
-            // If the search value is not empty, perform the new search
-            mac_asset_list_Data.columns().search('').draw();
-            mac_asset_list_Data.column(column).search(searchValue).draw();
-        } else {
+        performSearch(column, searchValue, mac_asset_list_Data);
+    });
 
-            initializeDataTable();
+    // 검색창 enter 작동
+    $('#search-input-ver').on('keydown', function(event) {
+        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var column = $('#column-dropdown').data('column');
+            var searchValue = $('#search-input-ver').val().trim();
+
+            performSearch(column, searchValue, mac_asset_list_Data);
         }
     });
+
 	$(document).on('click', '#nexts, #after', function() {
         var current_page = mac_asset_list_Data.page();
         var total_pages = mac_asset_list_Data.page.info().pages;
@@ -525,7 +535,7 @@ var other_asset_list = function () {
                 data.filter = {
                     defaultColumn : defaultColumn,
                     column: column,
-                    value : $('#search-input').val(),
+                    value : $('#search-input-ver').val(),
                     value2 : $('#ver_asset_list_filter input[type="search"]').val(),
                     regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
@@ -598,19 +608,20 @@ var other_asset_list = function () {
     // checkbox_check();
 
       // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button').click(function() {
         var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val().trim();
+        var searchValue = $('#search-input-ver').val().trim();
+    $('#search-button-ver').click(function() {
 
-        if (searchValue !== '') {
-            // If the search value is not empty, perform the new search
-            other_asset_list_Data.columns().search('').draw();
-            other_asset_list_Data.column(column).search(searchValue).draw();
-        } else {
+        performSearch(column, searchValue, other_asset_list_Data);
+    });
 
-            initializeDataTable();
+    $('#search-input-ver').on('keyup', function(event) {
+        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+
+            performSearch(column, searchValue, other_asset_list_Data);
         }
     });
+
 	$(document).on('click', '#nexts, #after', function() {
         var current_page = other_asset_list_Data.page();
         var total_pages = other_asset_list_Data.page.info().pages;
