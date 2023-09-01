@@ -1442,7 +1442,7 @@ var hw_asset_list = function () {
                     column: column,
                     columnmap: columnMap[orderColumn],
                     direction: orderDir,
-                    value : $('#search-input').val(),
+                    value : $('#search-input-hs').val(),
                     value2 : $('#hs_asset_list_filter input[type="search"]').val(),
                     regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
@@ -1456,7 +1456,7 @@ var hw_asset_list = function () {
 		},
 
 		columns: [
-            { data: 'computer_name', title: 'No', searchable: true },
+            { data: '', title: 'No', searchable: true },
 			{ data: 'chassistype', title: '구분', searchable: true },
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
@@ -1525,19 +1525,21 @@ var hw_asset_list = function () {
       });
 
   // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-$('#search-button').click(function() {
+$('#search-button-hs').click(function() {
     var column = $('#column-dropdown').data('column');
-    var searchValue = $('#search-input').val().trim();
+    var searchValue = $('#search-input-hs').val().trim();
 
-    if (searchValue !== '') {
-        // If the search value is not empty, perform the new search
-        hs_asset_list_Data.columns().search('').draw();
-        hs_asset_list_Data.column(column).search(searchValue).draw();
-    } else {
-
-        initializeDataTable();
-    }
+    performSearch(column, searchValue, hs_asset_list_Data)
 });
+
+$('#search-input-hs').on('keyup', function(event) {
+        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var column = $('#column-dropdown').data('column');
+            var searchValue = $('#search-input-hs').val().trim();
+
+            performSearch(column, searchValue, hs_asset_list_Data);
+        }
+    });
 
 $(document).on('click', '#nexts, #after', function() {
     var current_page = hs_asset_list_Data.page();
@@ -1576,8 +1578,8 @@ var sw_asset_list = function () {
                 var orderDir = data.order[0].dir;
                 var columnMap = {
 
-                            1: 'chassistype',
-                            2: 'computer_name',
+                            1: 'computer_name',
+                            2: 'chassistype',
                             3: 'ip_address',
                             4: 'sw_list',
                             5: 'memo'
@@ -1585,7 +1587,7 @@ var sw_asset_list = function () {
                         };
                 data.filter = {
                     column: column,
-                    value : $('#search-input').val(),
+                    value : $('#search-input-hs').val(),
                     value2 : $('#hs_asset_list_filter input[type="search"]').val(),
                     regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
@@ -1599,7 +1601,7 @@ var sw_asset_list = function () {
 		},
 
 		columns: [
-		    { data: 'computer_name', title: 'No', searchable: true },
+		    { data: '', title: 'No', searchable: true },
 			{ data: 'chassistype', title: '구분', searchable: true },
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
@@ -1664,19 +1666,22 @@ var sw_asset_list = function () {
       });
 
       // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button').click(function() {
-        var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val().trim();
+    $('#search-button-hs').click(function() {
+    var column = $('#column-dropdown').data('column');
+    var searchValue = $('#search-input-hs').val().trim();
 
-        if (searchValue !== '') {
-            // If the search value is not empty, perform the new search
-            sw_asset_list_Data.columns().search('').draw();
-            sw_asset_list_Data.column(column).search(searchValue).draw();
-        } else {
+    performSearch(column, searchValue, sw_asset_list_Data)
+});
 
-            initializeDataTable();
+    $('#search-input-hs').on('keyup', function(event) {
+        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var column = $('#column-dropdown').data('column');
+            var searchValue = $('#search-input-hs').val().trim();
+
+            performSearch(column, searchValue, sw_asset_list_Data);
         }
     });
+
 	$(document).on('click', '#nexts, #after', function() {
         var current_page = hs_asset_list_Data.page();
         var total_pages = hs_asset_list_Data.page.info().pages;

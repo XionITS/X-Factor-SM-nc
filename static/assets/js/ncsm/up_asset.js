@@ -190,20 +190,22 @@ $(document).on("click",".upmore", function (e){
     // os_checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button').click(function() {
+    $('#search-button-up').click(function() {
         var column = $('#column-dropdown').data('column');
         var searchValue = $('#search-input').val().trim();
 
-        if (searchValue !== '') {
-            // If the search value is not empty, perform the new search
-            up_asset_list_Data.columns().search('').draw();
-            up_asset_list_Data.column(column).search(searchValue).draw();
-        } else {
-
-            initializeDataTable();
-        }
+        performSearch(column, searchValue, up_asset_list_Data);
     });
 
+    // 검색창 enter 작동
+    $('#search-input').on('keyup', function(event) {
+        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var column = $('#column-dropdown').data('column');
+            var searchValue = $('#search-input').val().trim();
+
+            performSearch(column, searchValue, up_asset_list_Data);
+        }
+    });
 
 	$(document).on('click', '#nexts, #after', function() {
         var current_page = up_asset_list_Data.page();

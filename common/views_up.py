@@ -24,7 +24,7 @@ def up_asset(request):
     asset = Daily_Statistics.objects.filter(statistics_collection_date__gt=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(asset.values_list('item_count', flat=True))
 
-    context = {'menu_list': menu.data, 'asset': asset, 'total_item_count': total_item_count}
+    context = {'menu_list': menu.data}
     return render(request, 'up_asset.html', context)
 
 @csrf_exempt
@@ -34,7 +34,7 @@ def up_asset_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(hotfix="not apply").exclude(hotfix="unconfirmed").exclude(ip_address='unconfirmed')
+    user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(os_simple='Linux')
     hotfix_dates = user.values_list('hotfix_date', flat=True)
     # user = user.datetime.strptime(user.hotfix_date, '%m/%d/%Y %H:%M:%S')
     if filter_text and filter_column:

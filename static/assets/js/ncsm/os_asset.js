@@ -134,20 +134,13 @@ var os_asset_list = function () {
     // row 선택시 체크박스 체크 및 해제
     // os_checkbox_check();
 
-    // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button').click(function() {
-        var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val().trim();
-
-        if (searchValue !== '') {
-            // If the search value is not empty, perform the new search
-            os_asset_list_Data.columns().search('').draw();
-            os_asset_list_Data.column(column).search(searchValue).draw();
-        } else {
-
-            initializeDataTable();
-        }
-    });
+    // var column = $('#column-dropdown').data('column');
+    // var searchValue = $('#search-input').val().trim();
+    // // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
+    // $('#search-button').click(function() {
+    //
+    //     performSearch(column, searchValue, os_asset_list_Data);
+    // });
 
 
 	$(document).on('click', '#nexts, #after', function() {
