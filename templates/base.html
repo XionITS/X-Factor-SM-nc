@@ -180,23 +180,31 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content" style="background-color:#1d2835;">
             <div class="modal-header">
-                <h5 class="modal-title">Deploy</h5>
+                <h5 class="modal-title">배포하기 팝업창</h5>
             </div>
             <form id="DeployCreateForm" class="d-flex">
                 <div class="modal-body col-md-4">
                     <div class="form-group mb-3">
-                        <div class="form-label">Groups</div>
+                        <label class="form-label">Groups</label>
                         <select class="form-select form-control-lg mb-1" id="computerGroupData" name="comgroupName">
                             <option value="default" selected disabled hidden>Select computer group...</option>
                         </select>
                     </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="groupList">Group list</label>
+                        <textarea class="deploy-list form-control" id="groupList" type="text" placeholder="Readonly input here..." readonly></textarea>
+                    </div>
                 </div>
                 <div class="modal-body col-md-4">
                     <div class="form-group mb-3">
-                        <div class="form-label">Packages</div>
+                        <label class="form-label">Packages</label>
                         <select class="form-select form-control-lg mb-1" id="packageData" name="packageName">
                             <option value="default" selected disabled hidden>Select package...</option>
                         </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="groupDesc">Group Description</label>
+                        <textarea class="deploy-list form-control" id="groupDesc" type="text" placeholder="Readonly input here..." readonly></textarea>
                     </div>
                 </div>
 

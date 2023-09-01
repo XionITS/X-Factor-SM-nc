@@ -119,3 +119,70 @@ function checkbox_check($tbody){
 //     checkbox_check($tbody_ver);
 // });
 // ----------------------------------------- check box end -----------------------------------------
+// ------------------------------------------ create group start ------------------------------------------
+
+$(document).on("click","#creategroup", function (e){
+    $("#groupName").val("");
+    $("#groupDescription").val("");
+    const check_id = [];
+    const check_name = [];
+    var modalbody = "";
+    for (const computer_id in checkedItems) {
+        const computer_name = checkedItems[computer_id];
+        //modalbody += '<div><input type="hidden" name="'+computer_id+'" id="'+computer_id+'" value="'+computer_id+'">'+computer_name+'</div>'
+        //modalbody += '<input type="hidden" name="'+computer_name+'" id="'+computer_name+'" value="'+computer_name+'">'
+        //modalbody += '컴퓨터아이디'+computer_id + '<br/>';
+        //modalbody += '컴퓨터이름'+computer_name + '<br/>';
+        modalbody += '<input class="form-check-input" type="checkbox" value="'+computer_id+'" id="'+computer_id+'" computer-name="' + computer_name +'" checked><label class="form-check-label" for="'+computer_id+'">'+computer_name+'</label><br>'
+    }
+    $("#groupModal .modal-title").html("그룹 생성 팝업창");
+    $("#groupModal .form-check").html(modalbody);
+    $("#groupModal").modal("show");
+});
+
+
+$(document).on("click","#groupCreate", function(event) {
+    event.preventDefault(); // 기본 제출 동작을 막습니다.
+    // 폼 데이터를 가져옵니다.
+    var form = document.getElementById("GroupCreateForm");
+    var group_name = form.elements.groupName.value;
+    var group_description = form.elements.groupDescription.value;
+    let computerIds = []
+    let computerNames = []
+    const computerElements = $('#groupModal .form-check').find('.form-check-input');
+
+    computerElements.each(function () {
+        const computer_id = $(this).attr("id");
+        const computer_name = $(this).attr('computer-name');
+        computerIds.push(computer_id);
+        computerNames.push(computer_name);
+    });
+
+    $.ajax({
+    url: '../create/', // views.py 파일의 URL을 여기에 넣으세요.
+    type: 'POST',
+    dataType: 'json',
+    data:  {
+         'group_name' : group_name,
+         'group_description' : group_description,
+         'computerIds' : JSON.stringify(computerIds),
+         'computerNames' : JSON.stringify(computerNames),
+    },
+    data:  {
+         'group_name' : group_name,
+         'group_description' : group_description,
+         'computerIds' : JSON.stringify(computerIds),
+         'computerNames' : JSON.stringify(computerNames),
+    },
+    success: function (response) {
+    // response에 따른 처리 - 예: 경고창 띄우기
+        if (response.success == "success") {
+            alert(response.message);
+            $('#groupModal').modal('hide');
+        } else {
+            alert('실패 : ' + response.message);
+        }
+    }
+    });
+});
+// ------------------------------------------ create group end ------------------------------------------

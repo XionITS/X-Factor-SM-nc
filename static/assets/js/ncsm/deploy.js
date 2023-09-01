@@ -9,6 +9,7 @@ $(document).on("click","#createdeploy", function (e) {
         method: 'POST',
         success: function (res) {
                 var data = res.item;
+                computerGroupSelect.empty();
                 $.each(data, function(index, group) {
                     computerGroupSelect.append($('<option>', {
                         text: group.Name,
@@ -43,7 +44,21 @@ $(document).on("click","#createdeploy", function (e) {
                 id: selectedGroup
             },
             success: function (res) {
-                console.log(res.group)
+                //그룹 리스트 가져오기
+                var groupList = $('#groupList');
+                var computerNameList = res.group.computer_name_list.replace("[", "").replace("]", "").split(",");
+                groupList.val("");  // 기존 값 초기화
+                for (var i = 0; i < computerNameList.length; i++) {
+                    var computerName = computerNameList[i].trim().slice(1, -1);
+                    groupList.val(groupList.val() + computerName +"\n");
+                }
+                //console.log(groupList.val())
+                groupList.val(groupList.val());
+
+                //그룹 설명 가져오기
+                var groupDesc = $('#groupDesc');
+                groupDesc.val("");
+                groupDesc.val(res.group.group_note);
             }
         })
         console.log('Selected Group ID:', selectedGroup);

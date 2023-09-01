@@ -7,6 +7,11 @@ from common import views_os_ver
 from common import views_up
 from common import views_deploy
 
+from common import views_asset
+from common import views_history
+from common import views_user_management
+from common import views_group_management
+from common import views_log_management
 from common import views_export
 from common import views_group
 
@@ -31,7 +36,6 @@ urlpatterns = [
 
     path('ver_asset/', views_os_ver.ver_asset),
     path('ver_asset/paging/', views_os_ver.ver_asset_paging),
-    path('ver_asset/create/', views_group.create),
     path('export/<str:model>/', views_export.export, name='export'),
 
 
@@ -41,10 +45,23 @@ urlpatterns = [
     path('up_asset/', views_up.up_asset),
     path('up_asset/paging/', views_up.up_asset_paging),
 
+
+    path('create/', views_group.create),
     path('group/list/', views_deploy.group),
     path('package/list/', views_deploy.package),
     path('deploy_action/', views_deploy.deploy_action),
     path('member/list/', views_deploy.group_list),
 
+    #Asset 페이지
+    path('asset', views_asset.asset),
+
+    #history 페이지
+    path('history', views_history.history),
+
+
+    #Setting 페이지
+    path('user_management', views_user_management.user),
+    path('group_management', views_group_management.group),
+    path('log_management', views_log_management.log),
 ]
 

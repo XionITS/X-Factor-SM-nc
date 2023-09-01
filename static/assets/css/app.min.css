@@ -30953,3 +30953,8 @@ input:checked+labl::before{
     background-color: #1D2835;
     color: #9A9FA5;
 }
+
+.deploy-list {
+    height : 200px;
+    line-height: 2;
+}

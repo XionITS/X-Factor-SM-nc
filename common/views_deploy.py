@@ -3,6 +3,7 @@ import psycopg2
 from django.shortcuts import render, redirect
 
 from django.http import JsonResponse,HttpResponse
+from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from .models import Xfactor_Group
 import requests
@@ -43,7 +44,7 @@ def group(request):
     SKRJ = json.loads(SKRT)
     SK = SKRJ['data']['session']
 
-    print("SessionKey 불러오기 성공")
+    #print("SessionKey 불러오기 성공")
 
     PSQ = {'session': SK, 'Content-Type': 'application/json'}
     groupsList = []
@@ -148,14 +149,24 @@ def deploy_action(request):
 @csrf_exempt
 def group_list(request):
     group_id = request.POST.get('id')
-    group = Xfactor_Group.objects.get(group_id=group_id)
-    group_data = {
-        'group_id': group.group_id,
-        'group_name': group.group_name,
-        'group_note': group.group_note,
-        'computer_id_list': group.computer_id_list,
-        'computer_name_list': group.computer_name_list
-    }
+    try:
+        group = Xfactor_Group.objects.get(group_id=group_id)
+        group_data = {
+            'group_id': group.group_id,
+            'group_name': group.group_name,
+            'group_note': group.group_note,
+            'computer_id_list': group.computer_id_list,
+            'computer_name_list': group.computer_name_list
+        }
+    except ObjectDoesNotExist:
+        # 그룹 데이터가 존재하지 않을 경우, 값들을 공백 또는 빈 문자열로 처리
+        group_data = {
+            'group_id': group_id,
+            'group_name': '',
+            'group_note': '값이 없습니다. ',
+            'computer_id_list': '',
+            'computer_name_list': '-기존 Group입니다.-'
+        }
     RD = {'group': group_data}
-
+    print(RD)
     return JsonResponse(RD)

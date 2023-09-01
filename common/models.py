@@ -10,13 +10,13 @@ class Xfactor_Common(models.Model):
     chassistype = models.CharField(max_length=100)
     os_simple = models.CharField(max_length=100)
     os_total = models.CharField(max_length=100)
-    os_version = models.CharField(max_length=150)
-    os_build = models.CharField(max_length=150)
-    hw_cpu = models.CharField(max_length=150)
-    hw_ram = models.CharField(max_length=150)
-    hw_mb = models.CharField(max_length=150)
-    hw_disk = models.CharField(max_length=150)
-    hw_gpu = models.CharField(max_length=150)
+    os_version = models.CharField(max_length=500)
+    os_build = models.CharField(max_length=500)
+    hw_cpu = models.CharField(max_length=500)
+    hw_ram = models.CharField(max_length=500)
+    hw_mb = models.CharField(max_length=500)
+    hw_disk = models.CharField(max_length=500)
+    hw_gpu = models.CharField(max_length=500)
     sw_list = models.TextField()
     sw_ver_list = models.TextField()
     sw_install = models.TextField(null=True)
@@ -38,13 +38,13 @@ class Xfactor_Common_log(models.Model):
     chassistype = models.CharField(max_length=100)
     os_simple = models.CharField(max_length=100)
     os_total = models.CharField(max_length=100)
-    os_version = models.CharField(max_length=150)
-    os_build = models.CharField(max_length=150)
-    hw_cpu = models.CharField(max_length=150)
-    hw_ram = models.CharField(max_length=150)
-    hw_mb = models.CharField(max_length=150)
-    hw_disk = models.CharField(max_length=150)
-    hw_gpu = models.CharField(max_length=150)
+    os_version = models.CharField(max_length=500)
+    os_build = models.CharField(max_length=500)
+    hw_cpu = models.CharField(max_length=500)
+    hw_ram = models.CharField(max_length=500)
+    hw_mb = models.CharField(max_length=500)
+    hw_disk = models.CharField(max_length=500)
+    hw_gpu = models.CharField(max_length=500)
     sw_list = models.TextField()
     sw_ver_list = models.TextField()
     sw_install = models.TextField(null=True)
@@ -106,7 +106,7 @@ class Xfactor_Security(models.Model):
     security3_ver = models.CharField(max_length=100)
     security4_ver = models.CharField(max_length=100)
     security5_ver = models.CharField(max_length=100)
-    uuid = models.CharField(max_length=150)
+    uuid = models.CharField(max_length=500)
     multi_boot = models.TextField()
     first_network = models.TextField()
     last_boot = models.TextField()
@@ -131,7 +131,7 @@ class Xfactor_Security_log(models.Model):
     security3_ver = models.CharField(max_length=100)
     security4_ver = models.CharField(max_length=100)
     security5_ver = models.CharField(max_length=100)
-    uuid = models.CharField(max_length=150)
+    uuid = models.CharField(max_length=500)
     multi_boot = models.TextField()
     first_network = models.TextField()
     last_boot = models.TextField()
@@ -156,29 +156,29 @@ class Xfactor_Nano(models.Model):
     location = models.CharField(max_length=100, null=True)
 
 class Xfactor_Xuser(models.Model):
-    x_id = models.CharField(max_length=150, primary_key=True)
-    x_pw = models.CharField(max_length=150)
+    x_id = models.CharField(max_length=500, primary_key=True)
+    x_pw = models.CharField(max_length=500)
     x_name = models.CharField(max_length=50)
-    x_email = models.CharField(max_length=150, null=True)
-    x_auth = models.CharField(max_length=150, null=True)
+    x_email = models.CharField(max_length=500, null=True)
+    x_auth = models.CharField(max_length=500, null=True)
 
 
 class Xfactor_Auth(models.Model):
-    auth_id = models.CharField(max_length=150, primary_key=True)
-    auth_name = models.CharField(max_length=150)
-    auth_url = models.CharField(max_length=150)
+    auth_id = models.CharField(max_length=500, primary_key=True)
+    auth_name = models.CharField(max_length=500)
+    auth_url = models.CharField(max_length=500)
     auth_num = models.IntegerField()
 
 
 class Xfactor_Xuser_Auth(models.Model):
-    auth_use = models.CharField(max_length=150)
+    auth_use = models.CharField(max_length=500)
     xfactor_xuser = models.ForeignKey(Xfactor_Xuser, on_delete=models.CASCADE, related_name='xuser', to_field='x_id')
     xfactor_auth = models.ForeignKey(Xfactor_Auth, on_delete=models.CASCADE, related_name='auth', to_field='auth_id')
 
 
 class Daily_Statistics(models.Model):
     daily_statistics_num = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
-    classification = models.CharField(max_length=150)
+    classification = models.CharField(max_length=500)
     item = models.TextField()
     item_count = models.IntegerField()
     statistics_collection_date = models.DateTimeField(auto_now=True)
@@ -186,29 +186,29 @@ class Daily_Statistics(models.Model):
 
 class Daily_Statistics_log(models.Model):
     daily_statistics_num = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
-    classification = models.CharField(max_length=150)
+    classification = models.CharField(max_length=500)
     item = models.TextField()
     item_count = models.IntegerField()
     statistics_collection_date = models.DateTimeField(auto_now=True)
 
 
 class Xfactor_Group(models.Model):
-    group_id = models.CharField(max_length=150, primary_key=True)
-    group_name = models.CharField(max_length=150)
+    group_id = models.CharField(max_length=500, primary_key=True)
+    group_name = models.CharField(max_length=500)
     group_note = models.TextField(null=True)
     computer_id_list = models.TextField(null=True)
     computer_name_list = models.TextField(null=True)
 
 
 class Xfactor_Deploy(models.Model):
-    deploy_id = models.CharField(max_length=150, primary_key=True)
+    deploy_id = models.CharField(max_length=500, primary_key=True)
     group_id = models.ForeignKey(Xfactor_Group, on_delete=models.CASCADE)
-    deploy_name = models.CharField(max_length=150)
+    deploy_name = models.CharField(max_length=500)
 
 
 class Xfactor_Report(models.Model):
     report_num = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
-    classification = models.CharField(max_length=150)
+    classification = models.CharField(max_length=500)
     item = models.TextField()
     item_count = models.IntegerField()
     report_collection_date = models.DateTimeField(auto_now_add=True)
