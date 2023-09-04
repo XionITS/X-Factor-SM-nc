@@ -10,8 +10,8 @@ Author: Sean Ngu
 // 전역 변수로 체크박스 값을 저장할 객체를 생성합니다.
 var checkedItems = {};
 
-var up_asset_list = function () {
-    var up_asset_list_Data = $('#up_asset_list').DataTable({
+var sec_asset_list = function () {
+    var sec_asset_list_Data = $('#sec_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
 		lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
 		pageLength: 10,
@@ -50,21 +50,22 @@ var up_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                        2: 'chassistype',
-                        3: 'computer_name',
-                        4: 'mac_address',
-                        5: 'ip_address',
-                        6: 'hotfix',
-                        7: 'hotfix_date',
-                        8: 'memo'
+                        2: 'computer.os_simple',
+                        3: 'computer.computer_name',
+                        4: 'security1',
+                        5: 'security2',
+                        6: 'security3',
+                        7: 'security4',
+                        8: 'security5',
+                        9: 'computer.memo'
                         };
                 data.filter = {
                     defaultColumn : defaultColumn,
                     column: column,
                     columnmap: columnMap[orderColumn],
                     direction: orderDir,
-                    value : $('#search-input').val(),
-                    value2 : $('#up_asset_list_filter input[type="search"]').val(),
+                    value : $('#search-input-sec').val(),
+                    value2 : $('#sec_asset_list_filter input[type="search"]').val(),
                     regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
                 data.page = (data.start / data.length) + 1;
@@ -79,13 +80,14 @@ var up_asset_list = function () {
 		columns: [
 		    { data: '', title: '선택', searchable: false },
             { data: '', title: 'No', searchable: true },
-			{ data: 'chassistype', title: '구분', searchable: true },
-            { data: 'computer_name', title: '컴퓨터 이름', searchable: true },
-			{ data: 'mac_address', title: 'Mac주소', searchable: true },
-			{ data: 'ip_address', title: 'IPv4', searchable: true },
-            { data: 'hotfix', title: 'hotfix' , searchable: true},
-            { data: 'hotfix_date', title: '업데이트 날짜' , searchable: true},
-			{ data: 'memo', title: '메모', searchable: true },
+			{ data: 'computer.os_simple', title: '구분', searchable: true },
+            { data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true },
+			{ data: 'security1', title: 'Cososys', searchable: true },
+			{ data: 'security2', title: 'Symantec', searchable: true },
+            { data: 'security3', title: 'CarbonBlack CBR' , searchable: true},
+            { data: 'security4', title: 'CarbonBlack CBC' , searchable: true},
+            { data: 'security5', title: 'McAfee VSE' , searchable: true},
+			{ data: 'computer.memo', title: '메모', searchable: true },
 		],
 		rowCallback: function (row, data, index) {
             var api = this.api();
@@ -96,25 +98,18 @@ var up_asset_list = function () {
         },
 		columnDefs: [
 		    {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-		        const computer_id = row.computer_id;
-		        return '<input type="checkbox" class="form-check-input" name="'+row.computer_name+'" id="'+row.computer_id+'" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer_name + '">'
+		        const computer_id = row.computer.computer_id;
+		        return '<input type="checkbox" class="form-check-input" name="'+row.computer.computer_name+'" id="'+row.computer.computer_id+'" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
 		        }},
             {targets: 1, width: "3%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-		        const computer_name = row.computer_name;
-		        const hotfix = row.hotfix;
-                const date = row.hotfix_date;
-		        return '<a class="upmore swmore-font" data-hotfix="' + hotfix + '" data-date="' + date + '" data-computer_name="' + computer_name +'">'+ hotfix.split('<br>')[0]+ '</a>'}},
-		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-		        const computer_name = row.computer_name;
-                const hotfix = row.hotfix;
-		        const date = row.hotfix_date;
-		        return '<a class="upmore swmore-font" data-date="' + date + '" data-hotfix="' + hotfix + '" data-computer_name="' + computer_name +'">' + date.split('<br>')[0]+ '</a>'}},
-		    {targets: 8, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.os_simple+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.security1+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.security2+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.security3+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.security4+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 8, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.security5+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		    		],
 		language: {
 			"decimal": "",
@@ -162,22 +157,22 @@ $(document).on("click",".upmore", function (e){
 
     //console.log(swVer[1]);
     // Assuming you have a modal with the ID "swListModal" to display the detailed sw_list
-    $("#upAssetModal .modal-title").html(computer_name+"의 Hotfix 리스트");
-    $("#upAssetModal .uptbody").html(tableHTML);
+    $("#secAssetModal .modal-title").html(computer_name+"의 Hotfix 리스트");
+    $("#secAssetModal .uptbody").html(tableHTML);
     //$("#swListModal .modal-body-2").html(swVerHTML);
-    $("#upAssetModal").modal("show");
+    $("#secssetModal").modal("show");
 
      // Input 상자 값에 따라 해당 값을 노란색으로 처리
-    $("#searchInput").on("input", function () {
+    $("#searchInput-sec").on("input", function () {
         const searchValue = $(this).val().trim().toLowerCase();
-        $("#upAssetModal .uptbody tr").each(function () {
+        $("#secAssetModal .sectbody tr").each(function () {
             const rowData = $(this).text().toLowerCase();
             if (rowData.includes(searchValue)) {
                 $(this).addClass("highlight");
             } else if(!rowData.includes(searchValue)) {
                 $(this).removeClass("highlight");
             } else {
-                $("#upAssetModal .uptbody").removeClass("highlight");
+                $("#secAssetModal .uptbody").removeClass("highlight");
             }
         });
     });
@@ -190,34 +185,34 @@ $(document).on("click",".upmore", function (e){
     // os_checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button-up').click(function() {
+    $('#search-button-sec').click(function() {
         var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input-up').val().trim();
+        var searchValue = $('#search-input-sec').val().trim();
 
-        performSearch(column, searchValue, up_asset_list_Data);
+        performSearch(column, searchValue, sec_asset_list_Data);
     });
 
     // 검색창 enter 작동
-    $('#search-input-up').on('keyup', function(event) {
+    $('#search-input-sec').on('keyup', function(event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
             var column = $('#column-dropdown').data('column');
-            var searchValue = $('#search-input-up').val().trim();
+            var searchValue = $('#search-input-sec').val().trim();
 
-            performSearch(column, searchValue, up_asset_list_Data);
+            performSearch(column, searchValue, sec_asset_list_Data);
         }
     });
 
 	$(document).on('click', '#nexts, #after', function() {
-        var current_page = up_asset_list_Data.page();
-        var total_pages = up_asset_list_Data.page.info().pages;
+        var current_page = sec_asset_list_Data.page();
+        var total_pages = sec_asset_list_Data.page.info().pages;
         if ($(this).attr('id') == 'nexts') {
                 if (current_page + 10 < total_pages) {
-                    up_asset_list_Data.page(current_page + 10).draw('page');
+                    sec_asset_list_Data.page(current_page + 10).draw('page');
                 } else {
-                    up_asset_list_Data.page(total_pages - 1).draw('page');
+                    sec_asset_list_Data.page(total_pages - 1).draw('page');
                 }
                 } else {
-                    up_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
+                    sec_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
                 }
     });
 
@@ -266,8 +261,8 @@ function dropdown_text(){
 
 $(document).ready(function () {
     user_list_popup();
-    up_asset_list();
-    checkbox_check($('#up_asset_list tbody'))
+    sec_asset_list();
+    checkbox_check($('#sec_asset_list tbody'))
     //initializeDataTable();
 });
 //

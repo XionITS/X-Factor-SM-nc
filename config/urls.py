@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path
-from common import views_user
+from common import views_user, views_sec
 from common import views_main_hs
 from common import views_os_ver
 from common import views_up
@@ -47,6 +47,9 @@ urlpatterns = [
 
     path('up_asset/', views_up.up_asset),
     path('up_asset/paging/', views_up.up_asset_paging),
+
+    path('sec_asset/', views_sec.sec_asset),
+    path('sec_asset/paging/', views_sec.sec_asset_paging),
 
 
     path('create/', views_group.create),

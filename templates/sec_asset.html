@@ -6,7 +6,7 @@
 <div class="col-11" style="margin: 10px auto;">
     <!-- BEGIN page-header -->
     <p class="fs-24px pt-10px">
-        업데이트별 자산현황 (전체)
+        보안프로그램 구동별 자산 현황
     </p>
     <!-- END page-header -->
     <div class="row">
@@ -37,34 +37,48 @@
                         </button>
                             <div class="dropdown-menu" aria-labelledby="column-dropdown" id="search-dropdown">
                             <!-- 드롭다운 메뉴 아이템들 -->
-                                <a class="dropdown-item" href="#" data-column="computer_name">컴퓨터 이름</a>
-                                <a class="dropdown-item" href="#" data-column="chassistype">구분</a>
-                                <a class="dropdown-item" href="#" data-column="os_version">버전</a>
-                                <a class="dropdown-item" href="#" data-column="ip_address">IP주소</a>
-                                <a class="dropdown-item" href="#" data-column="mac_address">Mac주소</a>
-                                <a class="dropdown-item" href="#" data-column="memo">메모</a>
+                                <a class="dropdown-item" href="#" data-column="computer__os_simple">구분</a>
+                                <a class="dropdown-item" href="#" data-column="computer__computer_name">컴퓨터 이름</a>
+                                <a class="dropdown-item" href="#" data-column="security1">Cososys</a>
+                                <a class="dropdown-item" href="#" data-column="security2">Symantec</a>
+                                <a class="dropdown-item" href="#" data-column="security3">CBR</a>
+                                <a class="dropdown-item" href="#" data-column="security4">CBC</a>
+                                <a class="dropdown-item" href="#" data-column="security5">McAfee</a>
+                                <a class="dropdown-item" href="#" data-column="computer__memo">메모</a>
                             </div>
                     </div>
                     <div class="input-group">
-                        <input type="search" class="form-control" id="search-input-up" placeholder="검색어를 입력하세요">
+                        <input type="search" class="form-control" id="search-input-sec" placeholder="검색어를 입력하세요">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-warning " type="button" id="search-button-up">검색</button>
+                            <button class="btn btn-outline-warning " type="button" id="search-button-sec">검색</button>
                         </div>
                     </div>
                 </div>
+                <table id="sec_total_list" class="table fs-14px mb-12 text-center text-white text-opacity-2 nc-12 table-hover mx-auto" style="width: 200px; text-align: center;">
+                    <thead>
+                    <tr class="table-active text-white text-opacity-75">
+                        <th class="text-center" style=" height: 10px;">보안솔루션</th>
+                        <th class="text-center" style=" height: 10px;">전체 설치 수</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
                 <br>
                 <br>
                 <br>
-                <table id="up_asset_list" class="table fs-14px mb-0 text-center text-white text-opacity-60 m-auto nc-12 table-hover">
+                <table id="sec_asset_list" class="table fs-14px mb-0 text-center text-white text-opacity-60 m-auto nc-12 table-hover">
                     <thead>
                         <tr class="table-active text-white text-opacity-75">
                             <th class="text-center">No</th>
                             <th class="text-center">구분</th>
                             <th class="text-center">컴퓨터 이름</th>
-                            <th class="text-center">Mac주소</th>
-                            <th class="text-center">IPv4</th>
-                            <th class="text-center">Hotfix</th>
-                            <th class="text-center">업데이트 일자</th>
+                            <th class="text-center">Cososys</th>
+                            <th class="text-center">Symantec</th>
+                            <th class="text-center">CarbonBlack CBR</th>
+                            <th class="text-center">CarbonBlack CBC</th>
+                            <th class="text-center">McAfee VSE</th>
                             <th class="text-center">메모</th>
                             <th class="text-center">선택</th>
                         </tr>
@@ -102,32 +116,33 @@
     </div>
 </div>
 
-<div class="modal" name="upAssetModal" id="upAssetModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-scrollable">
-    <div class="modal-content" style="background-color:#1d2835;">
-      <div class="modal-header">
-        <h5 class="modal-title"></h5>
-      </div>
-      <div class="modal-body">
-          <div class="mb-2">
-              <input type="text" id="searchInput" class="form-control" placeholder="검색할 내용을 입력하세요 (입력한 값이 노란색으로 보여집니다.)">
-          </div>
-          <table class="table uptable" style="overflow-y: auto;">
-              <thead class="upthead">
-                    <th scope="col" style="text-align: center">Hotfix</th>
-                    <th scope="col" style="text-align: center">업데이트 날짜</th>
+<!--<div class="modal" name="groupModal" id="groupModal" tabindex="-1">-->
+<!--    <div class="modal-dialog modal-dialog-scrollable">-->
+<!--        <div class="modal-content" style="background-color:#1d2835;">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title"></h5>-->
+<!--            </div>-->
+<!--            <form id="GroupCreateForm" class="d-flex">-->
+<!--                <div class="modal-body col-md-8">-->
+<!--                    <div class="form-group mb-3">-->
+<!--                        <label class="form-label" for="groupName">Group Name</label>-->
+<!--                        <input class="form-control form-control-lg mb-3" id="groupName" name="groupName" type="text" placeholder="">-->
+<!--                    </div>-->
+<!--                    <label class="form-label" for="groupDescription">Group Description</label>-->
+<!--                    <textarea class="form-control" id="groupDescription" name="groupDescription" rows="5"></textarea>-->
+<!--                </div>-->
+<!--                <div class="modal-body col-md-4">-->
+<!--                    <div class="form-check"></div>-->
+<!--                </div>-->
+<!--            </form>-->
 
-              </thead>
-              <tbody class="uptbody"></tbody>
-          </table>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+<!--            <div class="modal-footer">-->
+<!--                <button type="button" class="btn btn-primary groupCreate" id="groupCreate">CREATE</button>-->
+<!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 {% endblock %}
 
 

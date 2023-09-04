@@ -14,6 +14,13 @@ class CommonHistorySerializer(serializers.ModelSerializer):  #user 정보
         model = Xfactor_Common
         fields = '__all__'
 
+class XfactorSecuritySerializer(serializers.ModelSerializer):
+    computer = CommonSerializer()
+
+    class Meta:
+        model = Xfactor_Security
+        fields = '__all__'
+
 class NanoSerializer(serializers.ModelSerializer):
     # 추후엔 user가 히스토리 위주로 가져올수있게
     # xfactor_user = UserHistorySerializer()
