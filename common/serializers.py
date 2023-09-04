@@ -58,3 +58,10 @@ class LimitedCommonSerializer(serializers.ModelSerializer):
         sw_list_items = obj.sw_list.split('<br>')
         limited_sw_list = '<br>'.join(sw_list_items[:4])
         return limited_sw_list
+
+class XfactorPurchaseSerializer(serializers.ModelSerializer):
+    computer = CommonSerializer()
+
+    class Meta:
+        model = Xfactor_Purchase
+        fields = ['computer', 'mem_use', 'disk_use', 'user_date']

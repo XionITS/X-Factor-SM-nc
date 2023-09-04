@@ -6,14 +6,17 @@ from common import views_main_hs
 from common import views_os_ver
 from common import views_up
 from common import views_deploy
+from common import views_export
+from common import views_group
+
+from common import views_pur_asset
 
 from common import views_asset
 from common import views_history
 from common import views_user_management
 from common import views_group_management
 from common import views_log_management
-from common import views_export
-from common import views_group
+
 
 
 urlpatterns = [
@@ -51,6 +54,12 @@ urlpatterns = [
     path('package/list/', views_deploy.package),
     path('deploy_action/', views_deploy.deploy_action),
     path('member/list/', views_deploy.group_list),
+
+
+    #구매팀 페이지
+    path('pur_asset/', views_pur_asset.pur_asset),
+    path('pur_asset/pur_hwpaging/', views_pur_asset.pur_asset_paginghw),
+    path('pur_asset/pur_swpaging/', views_pur_asset.pur_asset_pagingsw),
 
     #Asset 페이지
     path('asset', views_asset.asset),
