@@ -211,24 +211,24 @@ $(document).ready(function () {
     //initializeDataTable();
 });
 
-$(document).on("click","#creategroup", function (e){
-    $("#groupName").val("");
-    $("#groupDescription").val("");
-    const check_id = [];
-    const check_name = [];
-    var modalbody = "";
-    for (const computer_id in checkedItems) {
-        const computer_name = checkedItems[computer_id];
-        //modalbody += '<div><input type="hidden" name="'+computer_id+'" id="'+computer_id+'" value="'+computer_id+'">'+computer_name+'</div>'
-        //modalbody += '<input type="hidden" name="'+computer_name+'" id="'+computer_name+'" value="'+computer_name+'">'
-        //modalbody += '컴퓨터아이디'+computer_id + '<br/>';
-        //modalbody += '컴퓨터이름'+computer_name + '<br/>';
-        modalbody += '<input class="form-check-input" type="checkbox" value="'+computer_id+'" id="'+computer_id+'" computer-name="' + computer_name +'" checked><label class="form-check-label" for="'+computer_id+'">'+computer_name+'</label><br>'
-    }
-    $("#groupModal .modal-title").html("그룹 생성 팝업창");
-    $("#groupModal .form-check").html(modalbody);
-    $("#groupModal").modal("show");
-});
+//$(document).on("click","#creategroup", function (e){
+//    $("#groupName").val("");
+//    $("#groupDescription").val("");
+//    const check_id = [];
+//    const check_name = [];
+//    var modalbody = "";
+//    for (const computer_id in checkedItems) {
+//        const computer_name = checkedItems[computer_id];
+//        //modalbody += '<div><input type="hidden" name="'+computer_id+'" id="'+computer_id+'" value="'+computer_id+'">'+computer_name+'</div>'
+//        //modalbody += '<input type="hidden" name="'+computer_name+'" id="'+computer_name+'" value="'+computer_name+'">'
+//        //modalbody += '컴퓨터아이디'+computer_id + '<br/>';
+//        //modalbody += '컴퓨터이름'+computer_name + '<br/>';
+//        modalbody += '<input class="form-check-input" type="checkbox" value="'+computer_id+'" id="'+computer_id+'" computer-name="' + computer_name +'" checked><label class="form-check-label" for="'+computer_id+'">'+computer_name+'</label><br>'
+//    }
+//    $("#groupModal .modal-title").html("그룹 생성 팝업창");
+//    $("#groupModal .form-check").html(modalbody);
+//    $("#groupModal").modal("show");
+//});
 
 //
 //$(document).on("click","#groupCreate", function(event) {

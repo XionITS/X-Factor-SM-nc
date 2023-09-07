@@ -1,5 +1,6 @@
 
 // ----------------------------------------- user_list_popup start -----------------------------------------
+
 function user_list_popup() {
     var user_list_popup = function () {
         var user_list_popupData = $('#user_list_popupTable').DataTable({
@@ -102,7 +103,6 @@ function checkbox_check($tbody){
         var computer_id = $(this).data('computer-id');
         var computer_name = $(this).data('computer-name');
         console.log("Clicked checkbox for computer ID:", computer_id);
-
         if ($(this).prop('checked')) {
             checkedItems[computer_id] = computer_name;
         } else {
@@ -150,9 +150,11 @@ $(document).on("click","#groupCreate", function(event) {
     let computerIds = []
     let computerNames = []
     const computerElements = $('#groupModal .form-check').find('.form-check-input');
-
+    console.log("zzz");
     computerElements.each(function () {
         const computer_id = $(this).attr("id");
+
+        console.log(computer_id);
         const computer_name = $(this).attr('computer-name');
         computerIds.push(computer_id);
         computerNames.push(computer_name);
@@ -198,3 +200,11 @@ function performSearch(column, searchValue, list_Data) {
     }
 }
 //////////////////////////////////////////////////////////////////
+
+$(document).ready(function () {
+    user_list_popup();
+    //sidebar();
+    //initEvent();
+
+    //initializeDataTable();
+});

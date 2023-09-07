@@ -13,7 +13,7 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 import pytz
-#today_collect_date = timezone.now() - timedelta(minutes=10)
+#today_collect_date = timezone.now() - timedelta(minutes=7)
 
 @csrf_exempt
 def ver_asset(request):
@@ -29,7 +29,7 @@ def ver_asset(request):
     # 현재 시간대로 시간 변환
     local_now = utc_now.astimezone(local_tz)
     # 24시간 30분 이전의 시간 계산
-    today_collect_date = local_now - timedelta(minutes=10)
+    today_collect_date = local_now - timedelta(minutes=7)
 
     asset = Daily_Statistics.objects.filter(statistics_collection_date__gt=today_collect_date, classification='os_simple').values('item', 'item_count').order_by('-item_count')[:5]
     total_item_count = sum(asset.values_list('item_count', flat=True))
@@ -51,7 +51,7 @@ def ver_asset_paging(request):
     # 현재 시간대로 시간 변환
     local_now = utc_now.astimezone(local_tz)
     # 24시간 30분 이전의 시간 계산
-    today_collect_date = local_now - timedelta(minutes=10)
+    today_collect_date = local_now - timedelta(minutes=7)
 
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
@@ -171,7 +171,7 @@ def os_asset(request):
     # 현재 시간대로 시간 변환
     local_now = utc_now.astimezone(local_tz)
     # 24시간 30분 이전의 시간 계산
-    today_collect_date = local_now - timedelta(minutes=10)
+    today_collect_date = local_now - timedelta(minutes=7)
 
     # 테이블아래 자산현황
     asset = Daily_Statistics.objects.filter(statistics_collection_date__gt=today_collect_date, classification='os_simple').values('item', 'item_count').order_by('-item_count')
@@ -195,7 +195,7 @@ def os_asset_paging(request):
     # 현재 시간대로 시간 변환
     local_now = utc_now.astimezone(local_tz)
     # 24시간 30분 이전의 시간 계산
-    today_collect_date = local_now - timedelta(minutes=10)
+    today_collect_date = local_now - timedelta(minutes=7)
 
 
     user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(os_total='unconfirmed').exclude(ip_address='unconfirmed')

@@ -13,7 +13,7 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 
-today_collect_date = timezone.now() - timedelta(minutes=10)
+today_collect_date = timezone.now() - timedelta(minutes=7)
 
 @csrf_exempt
 def up_asset(request):
@@ -29,7 +29,7 @@ def up_asset(request):
 
 @csrf_exempt
 def up_asset_paging(request):
-    today_collect_date = timezone.now() - timedelta(minutes=10)
+    today_collect_date = timezone.now() - timedelta(minutes=7)
     default_os = request.POST.get('filter[defaultColumn]')
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')

@@ -65,7 +65,8 @@ urlpatterns = [
     path('pur_asset/pur_swpaging/', views_pur_asset.pur_asset_pagingsw),
 
     #Asset 페이지
-    path('asset', views_asset.asset),
+    path('asset/', views_asset.asset),
+    path('asset/search/', views_asset.search),
 
     #history 페이지
     path('history', views_history.history),

@@ -66,17 +66,23 @@ class Xfactor_Service(models.Model):
     essential4 = models.CharField(max_length=100)
     essential5 = models.CharField(max_length=100)
     subnet = models.CharField(max_length=100)
+    mem_use = models.CharField(max_length=100)
+    disk_use = models.CharField(max_length=100)
+    tcpu = models.CharField(max_length=100)
     user_date = models.DateTimeField(auto_now_add=True)
 
 
 class Xfactor_Service_log(models.Model):
-    computer = models.ForeignKey(Xfactor_Common, on_delete=models.CASCADE)
+    computer = models.ForeignKey(Xfactor_Common_log, on_delete=models.CASCADE)
     essential1 = models.CharField(max_length=100)
     essential2 = models.CharField(max_length=100)
     essential3 = models.CharField(max_length=100)
     essential4 = models.CharField(max_length=100)
     essential5 = models.CharField(max_length=100)
     subnet = models.CharField(max_length=100)
+    mem_use = models.CharField(max_length=100)
+    disk_use = models.CharField(max_length=100)
+    tcpu = models.CharField(max_length=100)
     user_date = models.DateTimeField(auto_now_add=True)
 
 
@@ -88,7 +94,7 @@ class Xfactor_Purchase(models.Model):
 
 
 class Xfactor_Purchase_log(models.Model):
-    computer = models.ForeignKey(Xfactor_Common, on_delete=models.CASCADE)
+    computer = models.ForeignKey(Xfactor_Common_log, on_delete=models.CASCADE)
     mem_use = models.TextField()
     disk_use = models.TextField()
     user_date = models.DateTimeField(auto_now_add=True)
@@ -120,7 +126,7 @@ class Xfactor_Security(models.Model):
 
 
 class Xfactor_Security_log(models.Model):
-    computer = models.ForeignKey(Xfactor_Common, on_delete=models.CASCADE)
+    computer = models.ForeignKey(Xfactor_Common_log, on_delete=models.CASCADE)
     security1 = models.CharField(max_length=100)
     security2 = models.CharField(max_length=100)
     security3 = models.CharField(max_length=100)

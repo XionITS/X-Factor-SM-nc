@@ -18,6 +18,15 @@
                     <li class="nav-item me-3" role="presentation"><a href="#" id="hw" class="nav-link active px-2" data-bs-toggle="tab" aria-selected="true" role="tab" value="H/W" onclick="pur_hwbutton(this);" >H/W</a></li>
                     <li class="nav-item me-3" role="presentation"><a href="#" id="sw" class="nav-link px-2" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab" value="S/W" onclick="pur_swbutton(this);">S/W</a></li>
                 </ul>
+                <br>
+                <div class="">
+                    <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="creategroup" aria-expanded="false">
+                    그룹 생성
+                    </button>
+                    <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="createdeploy" aria-expanded="false">
+                    배포 하기
+                    </button>
+                </div>
                 <!-- 검색어 필터  -->
                 <div class="search-dropdown">
                     <div class="dropdown">
@@ -45,6 +54,7 @@
                 <table id="hs_pur_asset_list" class="table fs-14px mb-0 text-center text-white text-opacity-60 m-auto nc-12 table-hover">
                     <thead>
                         <tr class="table-active text-white text-opacity-75">
+                            <th class="text-center">선택</th>
                             <th class="text-center">No</th>
                             <th class="text-center">구분</th>
                             <th class="text-center">컴퓨터 이름</th>
@@ -87,7 +97,7 @@
     </div>
 </div>
 
-<div class="modal" name="swListModal" id="swListModal" tabindex="-1">
+<div class="modal" name="pur_swListModal" id="pur_swListModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content" style="background-color:#1d2835;">
       <div class="modal-header">
@@ -101,7 +111,7 @@
               <thead class="hsthead">
                     <th scope="col">SW Name</th>
                     <th scope="col">SW Version</th>
-
+                    <th scope="col">SW Install</th>
               </thead>
               <tbody class="hstbody"></tbody>
           </table>
@@ -113,6 +123,7 @@
     </div>
   </div>
 </div>
+
 {% endblock %}
 
 

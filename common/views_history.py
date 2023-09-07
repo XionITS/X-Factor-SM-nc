@@ -13,7 +13,7 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 
-today_collect_date = timezone.now() - timedelta(minutes=10)
+today_collect_date = timezone.now() - timedelta(minutes=7)
 
 @csrf_exempt
 def history(request):

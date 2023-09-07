@@ -13,7 +13,7 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 
-today_collect_date = timezone.now() - timedelta(minutes=10)
+today_collect_date = timezone.now() - timedelta(minutes=7)
 
 @csrf_exempt
 def asset(request):
@@ -21,8 +21,23 @@ def asset(request):
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
 
-
     context = {'menu_list': menu.data}
     return render(request, 'asset.html', context)
 
 
+
+@csrf_exempt
+def search(request):
+    if request.method == "POST":
+        today_collect_date = timezone.now() - timedelta(minutes=7)
+        search_text = request.POST.get('searchText', None)
+        #print(search_text)
+        user = Xfactor_Service.objects.select_related('computer').filter(user_date__gt=today_collect_date).filter(computer__computer_name=search_text)
+        user_data = XfactorServiceerializer(user, many=True).data
+        print(user_data)
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaa")
+        #print(user_data.data)
+        # response = {
+        #     'data': user_data,  # Serialized data for the current page
+        # }
+        return JsonResponse({'data': user_data})

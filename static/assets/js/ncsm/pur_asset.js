@@ -19,6 +19,24 @@ var hw_pur_asset_list = function () {
 		serverSide: true,
 		displayLength: false,
 
+		drawCallback: function (settings) {
+                // 페이지 변경시 체크박스 값을 설정합니다.
+                var api = this.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+
+                // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    var data = api.row(row).data();
+                    var computer_id = data.computer.computer_id;
+
+                    if (checkedItems[computer_id]) {
+                        $(row).find('input[type="checkbox"]').prop('checked', true);
+                    } else {
+                        $(row).find('input[type="checkbox"]').prop('checked', false);
+                    }
+                }
+            },
 		ajax: {
 			url: 'pur_hwpaging/',
 			type: "POST",
@@ -27,14 +45,14 @@ var hw_pur_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                            1: 'chassistype',
-                            2: 'computer_name',
-                            3: 'ip_address',
-                            4: 'first_network',
-                            5: 'mem_use',
-                            6: 'disk_use',
-                            7: 'hw',
-                            8: 'memo',
+                            2: 'chassistype',
+                            3: 'computer_name',
+                            4: 'ip_address',
+                            5: 'first_network',
+                            6: 'mem_use',
+                            7: 'disk_use',
+                            8: 'hw',
+                            9: 'memo',
 
                         };
                 data.filter = {
@@ -50,12 +68,12 @@ var hw_pur_asset_list = function () {
             },
 			dataSrc: function (res) {
 				var data = res.data;
-				console.log(data);
 				return data;
 			}
 		},
 
 		columns: [
+		    { data: '', title: '선택', searchable: false },
             { data: '', title: 'No', searchable: true },
 			{ data: 'computer.chassistype', title: '구분', searchable: true },
 			{ data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true },
@@ -74,7 +92,7 @@ var hw_pur_asset_list = function () {
             var page = api.page.info().page;
             var pageLength = api.page.info().length;
             var index = (page * pageLength) + (index + 1);
-            $('td:eq(0)', row).html(index);
+            $('td:eq(1)', row).html(index);
         },
 //        columnDefs: [
 //		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
@@ -85,15 +103,19 @@ var hw_pur_asset_list = function () {
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
 		columnDefs: [
-            {targets: 0, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 1, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span title="'+row.hw_cpu+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "3%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span title="'+row.hw_mb+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "3%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span title="'+row.hw_ram+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 7, width: "20%", className: 'text-start text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span title="'+row.hw+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 8, width: "3%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+		        const computer_id = row.computer.computer_id;
+		        return '<input type="checkbox" class="form-check-input" name="'+row.computer.computer_name+'" id="'+row.computer.computer_id+'" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
+		        }},
+            {targets: 1, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 8, width: "20%", className: 'text-start text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		],
 		language: {
 			"decimal": "",
@@ -116,6 +138,8 @@ var hw_pur_asset_list = function () {
 			"infoPostFix": "",
             },
 });
+    //체크박스 저장하기
+    checkbox_check($('#hs_pur_asset_list tbody'))
 
       // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
     dropdown_text();
@@ -164,6 +188,24 @@ var sw_pur_asset_list = function () {
 		serverSide: true,
 		displayLength: false,
 
+		drawCallback: function (settings) {
+            // 페이지 변경시 체크박스 값을 설정합니다.
+            var api = this.api();
+            var rows = api.rows({ page: 'current' }).nodes();
+
+            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var data = api.row(row).data();
+                var computer_id = data.computer.computer_id;
+
+                if (checkedItems[computer_id]) {
+                    $(row).find('input[type="checkbox"]').prop('checked', true);
+                } else {
+                    $(row).find('input[type="checkbox"]').prop('checked', false);
+                }
+            }
+        },
 
 		ajax: {
 			url: 'pur_swpaging/',
@@ -173,12 +215,14 @@ var sw_pur_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-
-                            1: 'computer_name',
                             2: 'chassistype',
-                            3: 'ip_address',
-                            4: 'sw_list',
-                            5: 'memo'
+                            3: 'computer_name',
+                            4: 'ip_address',
+                            5: 'sw_list',
+                            6: 'sw_ver_list',
+                            7: 'sw_install',
+                            8: 'more',
+                            9: 'memo',
 
                         };
                 data.filter = {
@@ -197,12 +241,16 @@ var sw_pur_asset_list = function () {
 		},
 
 		columns: [
+            { data: '', title: '선택', searchable: false },
 		    { data: '', title: 'No', searchable: true },
-			{ data: 'chassistype', title: '구분', searchable: true },
-			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
-            { data: 'ip_address', title: 'IPv4' , searchable: true},
-			{ data: 'sw_list', title: '소프트웨어 목록', searchable: true },
-			{ data: 'memo', title: '메모', searchable: true },
+			{ data: 'computer.chassistype', title: '구분', searchable: true },
+			{ data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true },
+            { data: 'computer.ip_address', title: 'IPv4' , searchable: true},
+			{ data: 'computer.sw_list', title: '소프트웨어 목록', searchable: true },
+			{ data: 'computer.sw_ver_list', title: '소프트웨어 버전', searchable: true },
+			{ data: 'computer.sw_install', title: '설치 일자', searchable: true },
+			{ data: '', title: '더보기', searchable: false },
+			{ data: 'computer.memo', title: '메모', searchable: true },
 
 		],
 		rowCallback: function (row, data, index) {
@@ -210,7 +258,7 @@ var sw_pur_asset_list = function () {
             var page = api.page.info().page;
             var pageLength = api.page.info().length;
             var index = (page * pageLength) + (index + 1);
-            $('td:eq(0)', row).html(index);
+            $('td:eq(1)', row).html(index);
         },
 //        columnDefs: [
 //		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
@@ -221,16 +269,41 @@ var sw_pur_asset_list = function () {
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
 		columnDefs: [
-		    {targets: 0, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 1, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "55%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {
-		        const computer_name = row.computer_name;
-		        const swList = row.sw_list;
-                const swVer = row.sw_ver_list;
-		        return '<span data-toggle="tooltip">' + swList.split('<br>')[0]+'<br>'+swList.split('<br>')[1]+'<br>'+swList.split('<br>')[2]+'<br>'+swList.split('<br>')[3]+ '</span><br><div class="swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
-		    {targets: 5, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+		        const computer_id = row.computer.computer_id;
+		        return '<input type="checkbox" class="form-check-input" name="'+row.computer.computer_name+'" id="'+row.computer.computer_id+'" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
+            }},
+            {targets: 1, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "15%", className: 'text-start text-truncate flex-cloumn column_hidden',
+		    render: function(data, type, row) {
+		        const swList = row.computer.sw_list;
+                const swListArray = swList ? swList.split('<br>') : [];
+		        return '<span data-toggle="tooltip">' + (swListArray[0] || '') + '<br>' + (swListArray[1] || '') + '<br>' + (swListArray[2] || '') + '<br>' + (swListArray[3] || '')}},
+
+		    {targets: 6, width: "10%", className: 'text-start text-truncate flex-cloumn column_hidden',
+		    render: function(data, type, row) {
+                const swVer = row.computer.sw_ver_list;
+                const swVerArray = swVer ? swVer.split('<br>') : [];
+		        return '<span data-toggle="tooltip">' + (swVerArray[0] || '') + '<br>' + (swVerArray[1] || '') + '<br>' + (swVerArray[2] || '') + '<br>' + (swVerArray[3] || '')}},
+
+		    {targets: 7, width: "10%", className: 'text-start text-truncate flex-cloumn column_hidden',
+		    render: function(data, type, row) {
+		        const swInstall= row.computer.sw_install;
+		        const swInstallArray = swInstall ? swInstall.split('<br>') : [];
+		        return '<span data-toggle="tooltip">' + (swInstallArray[0] || '') + '<br>' + (swInstallArray[1] || '') + '<br>' + (swInstallArray[2] || '') + '<br>' + (swInstallArray[3] || '')}},
+
+		    {targets: 8, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden',
+		    render: function(data, type, row) {
+		        const computer_name = row.computer.computer_name;
+		        const swList = row.computer.sw_list;
+		        const swVer = row.computer.sw_ver_list;
+		        const swInstall= row.computer.sw_install;
+		        return '</span><br><div class="pur_swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-swinstall="' + swInstall + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
+
+		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		],
 		language: {
 			"decimal": "",
@@ -253,15 +326,19 @@ var sw_pur_asset_list = function () {
 			"infoPostFix": "",
             },
 });
+    //체크박스 저장하기
+    checkbox_check($('#hs_pur_asset_list tbody'))
+
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
     dropdown_text();
+
 
       // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
     $('#search-button-up').click(function() {
         var column = $('#column-dropdown').data('column');
         var searchValue = $('#search-input').val().trim();
 
-        performSearch(column, searchValue, up_asset_list_Data);
+        performSearch(column, searchValue, sw_pur_asset_list_Data);
     });
 
     // 검색창 enter 작동
@@ -270,13 +347,13 @@ var sw_pur_asset_list = function () {
             var column = $('#column-dropdown').data('column');
             var searchValue = $('#search-input').val().trim();
 
-            performSearch(column, searchValue, up_asset_list_Data);
+            performSearch(column, searchValue, sw_pur_asset_list_Data);
         }
     });
 
 	$(document).on('click', '#nexts, #after', function() {
-        var current_page = hs_pur_asset_list_Data.page();
-        var total_pages = hs_pur_asset_list_Data.page.info().pages;
+        var current_page = sw_pur_asset_list_Data.page();
+        var total_pages = sw_pur_asset_list_Data.page.info().pages;
         if ($(this).attr('id') == 'nexts') {
                 if (current_page + 10 < total_pages) {
                     sw_pur_asset_list_Data.page(current_page + 10).draw('page');
@@ -291,22 +368,24 @@ var sw_pur_asset_list = function () {
 
 function pur_hwbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>first_network</th><th>mem_use</th><th>disk_use</th><th>hw</th><th>메모</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>first_network</th><th>mem_use</th><th>disk_use</th><th>hw</th><th>메모</th></tr></thead><tbody></tbody>';
     $('#hs_pur_asset_list').DataTable().destroy();
     $('#hs_pur_asset_list').html(newTableContent);
     hw_pur_asset_list();
     $(btn).addClass('active');
     $('.hsbutton').not(btn).removeClass('active');
+    checkedItems = {};
 };
 
 function pur_swbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>소프트웨어 목록</th><th>memo</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>소프트웨어 목록</th><th>소프트웨어 버전</th><th>설치 일자</th><th>더보기</th><th>메모</th></tr></thead><tbody></tbody>';
     $('#hs_pur_asset_list').DataTable().destroy();
     $('#hs_pur_asset_list').html(newTableContent);
     sw_pur_asset_list();
     $(btn).addClass('active');
     $('.hsbutton').not(btn).removeClass('active');
+    checkedItems = {};
 };
 
 // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
@@ -324,6 +403,7 @@ $(document).ready(function () {
     //sidebar();
     //initEvent();
     //initializeDataTable();
+
 });
 
 
@@ -345,21 +425,36 @@ $(document).ready(function () {
 //        }
 //    });
 
-$(document).on("click",".swmore", function (e){
+$(document).on("click",".pur_swmore", function (e){
+
     const computer_name = $(this).data("computer_name");
     const swList = $(this).data("swlist");
     const swVer = $(this).data("swver");
-    swList2 = swList.split('<br>')
-    swVer2 = swVer.split('<br>')
+    let swInstall = $(this).data("swinstall");
+    if (!swInstall || typeof swInstall !== "string") {
+        swInstall = "";
+    }
+
+    pur_swList2 = swList.split('<br>');
+    pur_swVer2 = swVer.split('<br>');
+    let pur_swInstall2;
+    if (typeof swInstall === "string") {
+        pur_swInstall2 = swInstall.split('<br>').map(value => value.trim());
+    } else {
+        pur_swInstall2 = [];
+    }
+    //pur_swInstall2 = swInstall.split('<br>');
 //    const swListHTML = "<ul>" + swList2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
 //    const swVerHTML = "<ul>" + swVer2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
-    const combinedData = swList2.map((item, index) => [item, swVer2[index]]);
+    //const combinedData = pur_swList2.map((item, index) => [item, pur_swVer2[index], pur_swInstall2[index]]);
+    const combinedData = pur_swList2.map((item, index) => [item, pur_swVer2[index], pur_swInstall2[index] || ""]);
 
     // Generate the table HTML
-    const tableHTML = combinedData.map(([item, version]) => `
+    const tableHTML = combinedData.map(([item, version, install]) => `
         <tr>
             <td scope="row">${item}</td>
             <td>${version}</td>
+            <td>${install}</td>
         </tr>
     `).join('');
 
@@ -367,15 +462,15 @@ $(document).on("click",".swmore", function (e){
 
     //console.log(swVer[1]);
     // Assuming you have a modal with the ID "swListModal" to display the detailed sw_list
-    $("#swListModal .modal-title").html(computer_name+"의 소프트웨어 및 버전");
-    $("#swListModal .hstbody").html(tableHTML);
+    $("#pur_swListModal .modal-title").html(computer_name+"의 소프트웨어 및 버전");
+    $("#pur_swListModal .hstbody").html(tableHTML);
     //$("#swListModal .modal-body-2").html(swVerHTML);
-    $("#swListModal").modal("show");
+    $("#pur_swListModal").modal("show");
 
      // Input 상자 값에 따라 해당 값을 노란색으로 처리
     $("#searchInput").on("input", function () {
         const searchValue = $(this).val().trim().toLowerCase();
-        $("#swListModal .hstbody tr").each(function () {
+        $("#pur_swListModal .hstbody tr").each(function () {
             const rowData = $(this).text().toLowerCase();
             if (rowData.includes(searchValue)) {
                 $(this).addClass("highlight");
