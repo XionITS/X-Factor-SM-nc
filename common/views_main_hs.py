@@ -47,7 +47,7 @@ def dashboard(request):
     # print(menu_list)
     #menu_list = list(Xfactor_CommonAuth.objects.values().filter(xfactor_user__computer_id='123', auth_use='true'))
     context = {'menu_list' : menu.data}
-    return render(request, 'dashboard.html', context)
+    return render(request, 'dashboard1.html', context)
 
 
 def dashboard1(request):
