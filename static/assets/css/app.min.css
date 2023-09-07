@@ -30988,3 +30988,18 @@ input:checked+labl::before{
     border-radius: 4px;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
 }
+#sec_total_list {
+    margin: 0 auto; /* 수평 가운데 정렬을 위한 스타일 */
+    display: table;
+}
+
+#sec_total_list th, #sec_total_list td {
+    padding: 5px; /* 셀 내용의 여백 조절 */
+}
+
+#sec_total_list th {
+    height: 10px; /* 테이블 헤더 셀 높이 설정 */
+}
+
+.btn-group {
+        margin-bottom: 10px;

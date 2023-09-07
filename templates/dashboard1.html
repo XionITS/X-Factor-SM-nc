@@ -1,0 +1,545 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<!-- BEGIN #header -->
+<!-- END #header -->
+<!-- BEGIN #sidebar -->
+<!-- END #sidebar -->
+<!-- BEGIN #content -->
+<div id="content" class="dashboard-content">
+    <div class="row justify-content-sm-between">
+        <div class="col-xxl-8 col-xl-8 col-lg-12 col-md-12 col-12 flex-fill">
+            <div class="card mb-3" style="height: 258px;">
+                <div class="card-body h-220px">
+                    <div class="d-flex fw-bold fs-12px">
+                        <div class="flex-grow-1">전체 자산 수</div>
+                    </div>
+                    <div id="asset_overview_chart" style="width: 90%; margin: 0 auto;"></div>
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <div class="mt-3" id="asset_all_chart"></div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mt-3" id="asset_all_os_chart"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="col-xxl-2 col-xl-4 col-lg-6 col-md-6 col-12 flex-fill">-->
+<!--            <div class="card mb-3" style="height: 258px;">-->
+<!--                <div class="card-body h-220px">-->
+<!--                    <div class="d-flex fw-bold fs-12px mb-2">-->
+<!--                        <div class="flex-grow-1">OS 설치 현황</div>-->
+<!--                    </div>-->
+<!--                    <div class="row align-items-center">-->
+<!--                        <div class="h-145px">-->
+<!--                            <div class="col-12">-->
+<!--                                <div class="mt-2" id="os_donut" style="width: 80%; margin: 0 auto;"></div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card-arrow">-->
+<!--                    <div class="card-arrow-top-left"></div>-->
+<!--                    <div class="card-arrow-top-right"></div>-->
+<!--                    <div class="card-arrow-bottom-left"></div>-->
+<!--                    <div class="card-arrow-bottom-right"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-xxl-2 col-xl-4 col-lg-6 col-md-6 col-12 flex-fill">-->
+<!--            <div class="card mb-3" style="height: 258px;">-->
+<!--                <div class="card-body h-220px">-->
+<!--                    <div class="d-flex fw-bold fs-12px mb-2">-->
+<!--                        <div class="flex-grow-1">유/무선 연결 현황</div>-->
+<!--                    </div>-->
+<!--                    <div class="row align-items-center">-->
+<!--                        <div class="h-145px">-->
+<!--                            <div class="col-12">-->
+<!--                                <div class="mt-2" id="wire_donut" style="width: 80%; margin: 0 auto;"></div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card-arrow">-->
+<!--                    <div class="card-arrow-top-left"></div>-->
+<!--                    <div class="card-arrow-top-right"></div>-->
+<!--                    <div class="card-arrow-bottom-left"></div>-->
+<!--                    <div class="card-arrow-bottom-right"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="col-xxl-2 col-xl-4 col-lg-7 col-md-6 col-12 flex-fill">
+            <div class="card mb-3" style="height: 258px;">
+                <div class="card-body h-220px">
+                    <div class="d-flex fw-bold fs-12px mb-2">
+                        <div class="flex-grow-1">장기 미접속 자산 ( 150 days )</div>
+                    </div>
+                    <div class="row align-items-center">
+                            <div class="col-12">
+                                <div class="mt-2" id="notConnected_donut" style="width: 80%; margin: 0 auto;"></div>
+                            </div>
+                    </div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="col-xl-3 col-l-3 pl-2">-->
+<!--            <div class="card mb-3" style="height:550px">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="d-flex fw-bold fs-12px mb-2">-->
+<!--                        <div class="flex-grow-1">최대 MEMORY 점유 프로세스 Top 14</div>-->
+<!--                    </div>-->
+<!--                    <table class="table table-memProc text-nowrap " width="100%" style="border-collapse: separate; border-spacing : 0 10px">-->
+<!--                        <thead>-->
+<!--                        <tr>-->
+<!--                            <th style="width: 20%;">No</th>-->
+<!--                            <th style="width: 50%;">프로세스 이름</th>-->
+<!--                            <th style="text-align:center; width: 30%;">자산 수</th>-->
+<!--                        </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody class="fw-bold fs-12px mb-2" id="table-memProc-body">-->
+<!--                        {% for data in dataList.highMemProc_listData %}-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                {{ forloop.counter }}-->
+<!--                            </td>-->
+<!--                            <td class="ellipsis">-->
+<!--                                <a href="#" class="highMemProc-link" data-id="{{data.item}}">-->
+<!--                                    {{ data.item }}-->
+<!--                                </a>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:center;">-->
+<!--                                {{ data.count }}-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        {% endfor %}-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                    <div class="d-flex fw-bold fs-12px mb-2 mt-3">-->
+<!--                        <div class="flex-grow-1">MEMORY 사용률 초과 서버</div>-->
+<!--                    </div>-->
+<!--                    <div class="mb-2 fs-5 text-truncate">897 / 2798 대</div>-->
+<!--                    <div class="progress h-3px bg-secondary-transparent-2 mb-1">-->
+<!--                        <div id="mem-bar" class="progress-bar bg-white"></div>-->
+<!--                    </div>-->
+<!--                    <div class="fs-11px text-inverse text-opacity-50 mb-2 text-truncate">-->
+<!--                        95% 초과-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--                <div class="card-arrow">-->
+<!--                    <div class="card-arrow-top-left"></div>-->
+<!--                    <div class="card-arrow-top-right"></div>-->
+<!--                    <div class="card-arrow-bottom-left"></div>-->
+<!--                    <div class="card-arrow-bottom-right"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-xl-3 col-l-3 pl-2">-->
+<!--            <div class="card mb-3" style="height:550px">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="d-flex fw-bold fs-12px mb-2">-->
+<!--                        <div class="flex-grow-1">최대 CPU 점유 프로세스 Top 14</div>-->
+<!--                    </div>-->
+<!--                    <table class="table table-cpuProc text-nowrap " width="100%" style="border-collapse: separate; border-spacing : 0 10px">-->
+<!--                        <thead>-->
+<!--                        <tr>-->
+<!--                            <th style="width: 20%;">No</th>-->
+<!--                            <th style="width: 50%;">프로세스 이름</th>-->
+<!--                            <th style="text-align:center; width: 30%;">자산 수</th>-->
+<!--                        </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody class="fw-bold fs-12px mb-2" id="table-cpuProc-body">-->
+<!--                        {% for data in dataList.highCpuProc_listData %}-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                {{ forloop.counter }}-->
+<!--                            </td>-->
+<!--                            <td class="ellipsis">-->
+<!--                                <a href="#" class="highCpuProc-link" data-id="{{data.item}}">-->
+<!--                                    {{ data.item }}-->
+<!--                                </a>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:center;">-->
+<!--                                {{ data.count }}-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        {% endfor %}-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                    <div class="d-flex fw-bold fs-12px mb-2 mt-3">-->
+<!--                        <div class="flex-grow-1">CPU 사용률 초과 서버</div>-->
+<!--                    </div>-->
+<!--                    <div class="mb-2 fs-5 text-truncate">540 / 2798 대</div>-->
+<!--                    <div class="progress h-3px bg-secondary-transparent-2 mb-1">-->
+<!--                        <div id="cpu-bar" class="progress-bar bg-white"></div>-->
+<!--                    </div>-->
+<!--                    <div class="fs-11px text-inverse text-opacity-50 mb-2 text-truncate">-->
+<!--                        95% 초과-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card-arrow">-->
+<!--                    <div class="card-arrow-top-left"></div>-->
+<!--                    <div class="card-arrow-top-right"></div>-->
+<!--                    <div class="card-arrow-bottom-left"></div>-->
+<!--                    <div class="card-arrow-bottom-right"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-xl-3 col-l-3 pl-2">-->
+<!--            <div class="card mb-3" style="height:550px">-->
+<!--                <div class="card-body">-->
+<!--                    <div class="d-flex fw-bold fs-12px mb-2">-->
+<!--                        <div class="flex-grow-1">최대 DISK 점유 어플리케이션 Top 14</div>-->
+<!--                    </div>-->
+<!--                    <table class="table table-diskApp text-nowrap " width="100%" style="border-collapse: separate; border-spacing : 0 10px">-->
+<!--                        <thead>-->
+<!--                        <tr>-->
+<!--                            <th style="width: 20%;">No</th>-->
+<!--                            <th style="width: 50%;">어플리케이션 이름</th>-->
+<!--                            <th style="text-align:center; width: 30%;">자산 수</th>-->
+<!--                        </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody class="fw-bold fs-12px mb-2" id="table-diskApp-body">-->
+<!--                        {% for data in dataList.highDiskApp_listData %}-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                {{ forloop.counter }}-->
+<!--                            </td>-->
+<!--                            <td class="ellipsis">-->
+<!--                                <a href="#" class="highDiskApp-link" data-id="{{data.item}}">-->
+<!--                                    {{ data.item }}-->
+<!--                                </a>-->
+<!--                            </td>-->
+<!--                            <td style="text-align:center;">-->
+<!--                                {{ data.count }}-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        {% endfor %}-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                    <div class="d-flex fw-bold fs-12px mb-3 mt-3">-->
+<!--                        <div class="flex-grow-1">DISK 사용률 초과 서버</div>-->
+<!--                    </div>-->
+<!--                    <div class="mb-2 fs-5 text-truncate">245 / 2798 대</div>-->
+<!--                    <div class="progress h-3px bg-secondary-transparent-2 mb-1">-->
+<!--                        <div id="disk-bar" class="progress-bar bg-white"></div>-->
+<!--                    </div>-->
+<!--                    <div class="fs-11px text-inverse text-opacity-50 mb-2 text-truncate">-->
+<!--                        95% 초과-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="card-arrow">-->
+<!--                    <div class="card-arrow-top-left"></div>-->
+<!--                    <div class="card-arrow-top-right"></div>-->
+<!--                    <div class="card-arrow-bottom-left"></div>-->
+<!--                    <div class="card-arrow-bottom-right"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="col-xl-4 col-l-3 pr-2">
+            <div class="card mb-3" style="height:267px;">
+                <div class="card-body">
+                    <div class="d-flex fw-bold fs-12px">
+                        <div class="flex-grow-1">위치별 자산 현황</div>
+                    </div>
+                    <div id="location_bar"></div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-l-3 pr-2">
+            <div class="card mb-3" style="height:267px;">
+                <div class="card-body">
+                    <div class="d-flex fw-bold fs-12px mb-2">
+                        <div class="flex-grow-1">Office 버전별 통계</div>
+                    </div>
+
+                    <div id="office_bar"></div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-l-3 pr-2">
+            <div class="card mb-3" style="height:267px;">
+                <div class="card-body">
+                    <div class="d-flex fw-bold fs-12px mb-2">
+                        <div class="flex-grow-1">보안패치 </div>
+                    </div>
+
+                    <div id="sec_patch_pie"></div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-l-3 pr-2">
+            <div class="card mb-3" style="height:267px;">
+                <div class="card-body">
+                    <div class="d-flex fw-bold fs-12px mb-2">
+                        <div class="flex-grow-1">OS버전별 자산 현황</div>
+                    </div>
+                            <br>
+                    <div class="d-flex align-items-center justify-content-sm-between">
+                        <div class="d-flex col-9">
+                            <div class="col-3 small text-white text-opacity-50 text-truncate">
+                                <i class="fas fa-server fa-fw me-1" ></i>
+                                <span title="{{data.name}}">Windows10 21H2</span>
+                                <br>
+                                <br>
+                                <i class="fas fa-server fa-fw me-1" ></i>
+                                <span title="{{data.name}}">Windows10 21H2</span>
+                                <br>
+                                <br>
+                                <i class="fas fa-server fa-fw me-1" ></i>
+                                <span title="{{data.name}}">Windows10 21H2</span>
+                                <br>
+                                <br>
+                            </div>
+                            <div class="col-3">
+                                <div class="small text-white text-opacity-50 text-truncate text-center" title="{{data.value}}">2000</div>
+                                <br>
+                                <div class="small text-white text-opacity-50 text-truncate text-center" title="{{data.value}}">2000</div>
+                                <br>
+                                <div class="small text-white text-opacity-50 text-truncate text-center" title="{{data.value}}">2000</div>
+                            </div>
+                            <div class="col-3 small text-white text-opacity-50 text-truncate ps-3">
+                                <i class="fas fa-server fa-fw me-1"></i>
+                                <span title="{{data.name}}">Windows10 21H1</span>
+                                <br>
+                                <br>
+                                <i class="fas fa-server fa-fw me-1"></i>
+                                <span title="{{data.name}}">Windows10 21H1</span>
+                                <br>
+                                <br>
+                                <i class="fas fa-server fa-fw me-1"></i>
+                                <span title="{{data.name}}">Windows10 21H1</span>
+                                <br>
+                                <br>
+                            </div>
+                            <div class="col-3">
+                                <div class="small text-white text-opacity-50 text-truncate text-center" title="{{data.value}}">1000</div>
+                                <br>
+                                <div class="small text-white text-opacity-50 text-truncate text-center" title="{{data.value}}">1000</div>
+                                <br>
+                                <div class="small text-white text-opacity-50 text-truncate text-center" title="{{data.value}}">1000</div>
+                            </div>
+                        <div class="col-4">
+                            <div class="mt-n4 mb-n2" id="os_pie"></div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-l-3 pr-2">
+            <div class="card mb-3" style="height:267px;">
+                <div class="card-body">
+                    <div class="d-flex fw-bold fs-12px mb-2">
+                        <div class="flex-grow-1">월별 자산 변화 수</div>
+                    </div>
+
+                    <div id="chAsset_line"></div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-l-3 pr-2">
+            <div class="card mb-3" style="height:267px;">
+                <div class="card-body">
+                    <div class="d-flex fw-bold fs-12px mb-2">
+                        <div class="flex-grow-1">CPU 사용량</div>
+                    </div>
+
+                    <div id="cpu_line"></div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="col-xl-4 col-l-4 pr-2">
+            <div class="card mb-3 ">
+                <div class="card-body h-205px">
+                    <div class="d-flex fw-bold fs-12px mb-2">
+                        <div class="flex-grow-1">관리 자산</div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="h-145px">
+                            <div class="col-12">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-l-4 pl-2">
+            <div class="card mb-3">
+                <div class="card-body h-205px">
+                    <div class="d-flex fw-bold fs-12px mb-2">
+                        <div class="flex-grow-1">미관리 자산</div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="h-145px">
+                            <div class="col-12">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-l-4 pr-2">
+            <div class="card mb-3">
+                <div class="card-body h-205px">
+                    <div class="d-flex fw-bold fs-12px mb-2">
+                        <div class="flex-grow-1">자산 관리 현황</div>
+                        <div class="d-flex fw-bold fs-17px mb-2"></div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="h-145px">
+                            <div class="col-12">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+    <!-- END row -->
+</div>
+<!-- END #content -->
+<script>
+$(document).ready(function() {
+// 대시보드 하단 리포트 달력
+    $('#report_calendar').datepicker({
+      format: 'yyyy-mm-dd',
+      endDate: new Date(),
+    }).on('changeDate', function(e) {
+      var date = e.format();
+      var width = 1200;
+      var height = 900;
+      var left = (screen.width - width) / 2;
+      var top = (screen.height - height) / 2;
+      var options = `width=${width}, height=${height}, left=${left}, top=${top}, scrollbars=yes`;
+      window.open("/report_date/?date=" + date, "_blank", options);
+    });
+
+// 최대 리소스 점유 프로세스 fade in 효과
+    var numRowsToShow = 7;
+    var animationSpeed = 3000;
+    var pauseOnHover = true;
+    var loopCpuProc = setInterval(rotateRowsCpuProc, animationSpeed);
+    var allRowsCpuProc = $('#table-cpuProc-body tr').get();
+    $(allRowsCpuProc).slice(numRowsToShow).hide();
+    var loopMemProc = setInterval(rotateRowsMemProc, animationSpeed);
+    var allRowsMemProc = $('#table-memProc-body tr').get();
+    $(allRowsMemProc).slice(numRowsToShow).hide();
+    var loopDiskApp = setInterval(rotateRowsDiskApp, animationSpeed);
+    var allRowsDiskApp = $('#table-diskApp-body tr').get();
+    $(allRowsDiskApp).slice(numRowsToShow).hide();
+    if (pauseOnHover) {
+        $("#table-cpuProc-body").hover(function() {
+            clearInterval(loopCpuProc);
+        }, function() {
+            loopCpuProc = setInterval(rotateRowsCpuProc, animationSpeed);
+        });
+        $("#table-memProc-body").hover(function() {
+            clearInterval(loopMemProc);
+        }, function() {
+            loopMemProc = setInterval(rotateRowsMemProc, animationSpeed);
+        });
+        $("#table-diskApp-body").hover(function() {
+            clearInterval(loopDiskApp);
+        }, function() {
+            loopDiskApp = setInterval(rotateRowsDiskApp, animationSpeed);
+        });
+    }
+    function rotateRowsCpuProc() {
+        rotateRowsGeneral('#table-cpuProc-body', allRowsCpuProc);
+    }
+    function rotateRowsMemProc() {
+        rotateRowsGeneral('#table-memProc-body', allRowsMemProc);
+    }
+    function rotateRowsDiskApp() {
+        rotateRowsGeneral('#table-diskApp-body', allRowsDiskApp);
+    }
+    function rotateRowsGeneral(tableBodySelector, allRows) {
+        var firstSet = $(tableBodySelector + ' tr:visible');
+        var nextSet = firstSet.last().nextAll().slice(0, numRowsToShow);
+        if (nextSet.length === 0) {
+            nextSet = $(allRows).slice(0, numRowsToShow);
+        }
+        firstSet.fadeOut('slow', function() {
+            nextSet.fadeIn('slow');
+            if (nextSet.last().next().length === 0) {
+                $(allRows).prependTo(tableBodySelector);
+            }
+        });
+    }
+
+    window.setTimeout('window.location.reload()',600000);
+
+});
+
+</script>
+{% endblock %}
