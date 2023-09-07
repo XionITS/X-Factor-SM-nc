@@ -25,22 +25,22 @@ var sec_asset_list = function () {
 		],
 		drawCallback: function (settings) {
                 // 페이지 변경시 체크박스 값을 설정합니다.
-                var api = this.api();
-                var rows = api.rows({ page: 'current' }).nodes();
+            var api = this.api();
+            var rows = api.rows({ page: 'current' }).nodes();
 
-                // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-                for (var i = 0; i < rows.length; i++) {
-                    var row = rows[i];
-                    var data = api.row(row).data();
-                    var computer_id = data.computer_id;
+            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var data = api.row(row).data();
+                var computer_id = data.computer.computer_id;
 
-                    if (checkedItems[computer_id]) {
-                        $(row).find('input[type="checkbox"]').prop('checked', true);
-                    } else {
-                        $(row).find('input[type="checkbox"]').prop('checked', false);
-                    }
+                if (checkedItems[computer_id]) {
+                    $(row).find('input[type="checkbox"]').prop('checked', true);
+                } else {
+                    $(row).find('input[type="checkbox"]').prop('checked', false);
                 }
-            },
+            }
+        },
 		ajax: {
 			url: 'paging/',
 			type: "POST",
@@ -71,8 +71,17 @@ var sec_asset_list = function () {
                 data.page = (data.start / data.length) + 1;
                 data.page_length = data.length;
             },
-			dataSrc: function (res) {
-				var data = res.data;
+            dataSrc: function (res) {
+                $("#sec_total_list tbody").empty();
+                var data = res.data;
+                var countList = res.count_list;
+                var tbody = $("#sec_total_list tbody");
+                var row = '<tr>';
+                for (var j = 0; j < countList.length; j++) {
+                    var count = countList[j];
+                    row += '<td>' + count + ' 개</td>';
+                }
+                tbody.append(row);
 				return data;
 			}
 		},
@@ -87,6 +96,7 @@ var sec_asset_list = function () {
             { data: 'security3', title: 'CarbonBlack CBR' , searchable: true},
             { data: 'security4', title: 'CarbonBlack CBC' , searchable: true},
             { data: 'security5', title: 'McAfee VSE' , searchable: true},
+            { data: '', title: '더보기' , searchable: true},
 			{ data: 'computer.memo', title: '메모', searchable: true },
 		],
 		rowCallback: function (row, data, index) {
@@ -109,7 +119,12 @@ var sec_asset_list = function () {
 		    {targets: 6, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.security3+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.security4+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 8, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.security5+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 9, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                return '<a class="secmore swmore-font" data-cbr="' + row.security3 +'" ' +
+                    'data-computer_name="' + row.computer.computer_name + '" data-cososys="' + row.security1 + '" data-cososys_ver="' + row.security1_ver + '" ' +
+                    'data-symantec="' + row.security2 +'" data-symantec_ver="' + row.security2_ver +'" data-cbr_ver="' + row.security3_ver +'" data-cbc="' + row.security4 +'" ' +
+                    'data-cbc_ver="' + row.security4_ver +'" data-mcafee="' + row.security5 +'" data-mcafee_ver="' + row.security5_ver +'" data-ip_address="' + row.computer.ip_address + '" data-mac_address="' + row.computer.mac_address + '" data-os_total="' + row.computer.os_total + '"> 더보기 </a>'}},
+		    {targets: 10, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		    		],
 		language: {
 			"decimal": "",
@@ -135,52 +150,76 @@ var sec_asset_list = function () {
 });
 
 
-$(document).on("click",".upmore", function (e){
-    const computer_name = $(this).data("computer_name");
-    const swList = $(this).data("hotfix");
-    const swVer = $(this).data("date");
-    swList2 = swList.split('<br>')
-    swVer2 = swVer.split('<br>')
+$(document).on("click",".secmore", function (e){
+    let swList = []
+    let swVer = []
+    if ($(this).data("cososys").trim() === "True") {
+        swList.push('Cososys')
+        swVer.push($(this).data("cososys_ver"))
+    }
+    if ($(this).data("symantec").trim() === 'True') {
+        swList.push('symantec')
+        swVer.push($(this).data("symantec_ver"))
+    }
+    if ($(this).data("cbr").trim() === 'True') {
+        swList.push('CarbonBlack CBR')
+        swVer.push($(this).data("cbr_ver"))
+    }
+    if ($(this).data("cbc").trim() === 'True') {
+        swList.push('CarbonBlack CBC');
+        swVer.push($(this).data("cbc_ver"))
+    }
+    if ($(this).data("mcafee").trim() === 'True') {
+        swList.push('McAfee VSE')
+        swVer.push($(this).data("mcafee_ver"))
+    }
+
 //    const swListHTML = "<ul>" + swList2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
 //    const swVerHTML = "<ul>" + swVer2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
-    const combinedData = swList2.map((item, index) => [item, swVer2[index]]);
-
+    let tableHTML = "";
+    $(this).data("computer_name").trim()
+    console.log(swList)
     // Generate the table HTML
-    const tableHTML = combinedData.map(([item, version]) => `
-        <tr>
-            <td scope="row" style="text-align: center">${item}</td>
-            <td style="text-align: center">${version}</td>
-        </tr>
-    `).join('');
+    for (let i = 0; i < swList.length; i++) {
+        const item = swList[i];
+        const version = swVer[i];
 
-
-
-    //console.log(swVer[1]);
+        tableHTML += `
+            <tr>
+                <td scope="row" style="text-align: center">${item}</td>
+                <td style="text-align: center">${version}</td>
+            </tr>
+        `;
+    }
+    $('.sectableCom .sectheadCom tr:nth-child(1) th:nth-child(2)').text($(this).data("computer_name").trim());
+    $('.sectableCom .sectheadCom tr:nth-child(2) th:nth-child(2)').text($(this).data("ip_address").trim());
+    $('.sectableCom .sectheadCom tr:nth-child(3) th:nth-child(2)').text($(this).data("mac_address").trim());
+    $('.sectableCom .sectheadCom tr:nth-child(4) th:nth-child(2)').text($(this).data("os_total").trim());
     // Assuming you have a modal with the ID "swListModal" to display the detailed sw_list
-    $("#secAssetModal .modal-title").html(computer_name+"의 Hotfix 리스트");
-    $("#secAssetModal .uptbody").html(tableHTML);
+    $("#secAssetModal .modal-title").html('보안솔루션 팝업창');
+    $("#secAssetModal .sectbody").html(tableHTML);
     //$("#swListModal .modal-body-2").html(swVerHTML);
-    $("#secssetModal").modal("show");
+    $("#secAssetModal").modal("show");
 
      // Input 상자 값에 따라 해당 값을 노란색으로 처리
-    $("#searchInput-sec").on("input", function () {
-        const searchValue = $(this).val().trim().toLowerCase();
-        $("#secAssetModal .sectbody tr").each(function () {
-            const rowData = $(this).text().toLowerCase();
-            if (rowData.includes(searchValue)) {
-                $(this).addClass("highlight");
-            } else if(!rowData.includes(searchValue)) {
-                $(this).removeClass("highlight");
-            } else {
-                $("#secAssetModal .uptbody").removeClass("highlight");
-            }
-        });
-    });
+    // $("#searchInput-sec").on("input", function () {
+    //     const searchValue = $(this).val().trim().toLowerCase();
+    //     $("#secAssetModal .sectbody tr").each(function () {
+    //         const rowData = $(this).text().toLowerCase();
+    //         if (rowData.includes(searchValue)) {
+    //             $(this).addClass("highlight");
+    //         } else if(!rowData.includes(searchValue)) {
+    //             $(this).removeClass("highlight");
+    //         } else {
+    //             $("#secAssetModal .sectbody").removeClass("highlight");
+    //         }
+    //     });
+    // });
 });
 
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
     dropdown_text();
-
+    checkbox_check($('#sec_asset_list tbody'))
     // row 선택시 체크박스 체크 및 해제
     // os_checkbox_check();
 
@@ -218,38 +257,6 @@ $(document).on("click",".upmore", function (e){
 
 };
 
-
-
-// function os_checkbox_check(){
-//     console.log("os_checkbox_check() called");
-//     $('#os_asset_list tbody').off('click', 'tr');
-//     $('#os_asset_list tbody').on('click', 'tr', function () {
-//         var checkbox = $(this).find('input[type="checkbox"]');
-//         var hidden = $(this).find('input[type="hidden"]');
-//         var computer_id = checkbox.attr('id');
-//         console.log(computer_id)
-//         checkbox.prop('checked', !checkbox.prop('checked'));
-//         if (checkbox.prop('checked')) {
-//             checkedItems[computer_id] = computer_id;
-//         } else {
-//             delete checkedItems[computer_id];
-//         }
-//     });
-//
-//     $('#os_asset_list tbody').on('click', 'input[type="checkbox"]', function (event) {
-//         event.stopPropagation(); // Prevent the row click event from firing when clicking the checkbox
-//         var computer_id = $(this).data('computer-id');
-//         console.log("Clicked checkbox for computer ID:", computer_id);
-//         console.log(computer_id)
-//
-//         if ($(this).prop('checked')) {
-//             checkedItems[computer_id] = computer_id;
-//         } else {
-//             delete checkedItems[computer_id];
-//         }
-//     });
-// }
-
 // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
 function dropdown_text(){
     $('.dropdown-menu a').click(function() {
@@ -262,73 +269,8 @@ function dropdown_text(){
 $(document).ready(function () {
     user_list_popup();
     sec_asset_list();
-    checkbox_check($('#sec_asset_list tbody'))
+    // checkbox_check($('#sec_asset_list tbody'))
     //initializeDataTable();
 });
-//
-//$(document).on("click","#creategroup", function (e){
-//    $("#groupName").val("");
-//    $("#groupDescription").val("");
-//    const check_id = [];
-//    const check_name = [];
-//    var modalbody = "";
-//    for (const computer_id in checkedItems) {
-//        const computer_name = checkedItems[computer_id];
-//        //modalbody += '<div><input type="hidden" name="'+computer_id+'" id="'+computer_id+'" value="'+computer_id+'">'+computer_name+'</div>'
-//        //modalbody += '<input type="hidden" name="'+computer_name+'" id="'+computer_name+'" value="'+computer_name+'">'
-//        //modalbody += '컴퓨터아이디'+computer_id + '<br/>';
-//        //modalbody += '컴퓨터이름'+computer_name + '<br/>';
-//        modalbody += '<input class="form-check-input" type="checkbox" value="'+computer_id+'" id="'+computer_id+'" computer-name="' + computer_name +'" checked><label class="form-check-label" for="'+computer_id+'">'+computer_name+'</label><br>'
-//    }
-//    $("#groupModal .modal-title").html("그룹 생성 팝업창");
-//    $("#groupModal .form-check").html(modalbody);
-//    $("#groupModal").modal("show");
-//});
-//
-//
-//$(document).on("click","#groupCreate", function(event) {
-//    event.preventDefault(); // 기본 제출 동작을 막습니다.
-//    // 폼 데이터를 가져옵니다.
-//    var form = document.getElementById("GroupCreateForm");
-//    var group_name = form.elements.groupName.value;
-//    var group_description = form.elements.groupDescription.value;
-//    let computerIds = []
-//    let computerNames = []
-//    const computerElements = $('#groupModal .form-check').find('.form-check-input');
-//
-//    computerElements.each(function () {
-//        const computer_id = $(this).attr("id");
-//        const computer_name = $(this).attr('computer-name');
-//        computerIds.push(computer_id);
-//        computerNames.push(computer_name);
-//    });
-//
-//    $.ajax({
-//    url: 'create/', // views.py 파일의 URL을 여기에 넣으세요.
-//    type: 'POST',
-//    dataType: 'json',
-//    data:  {
-//         'group_name' : group_name,
-//         'group_description' : group_description,
-//         'computerIds' : JSON.stringify(computerIds),
-//         'computerNames' : JSON.stringify(computerNames),
-//    },
-//    data:  {
-//         'group_name' : group_name,
-//         'group_description' : group_description,
-//         'computerIds' : JSON.stringify(computerIds),
-//         'computerNames' : JSON.stringify(computerNames),
-//    },
-//    success: function (response) {
-//    // response에 따른 처리 - 예: 경고창 띄우기
-//        if (response.success == "success") {
-//            alert(response.message);
-//            $('#groupModal').modal('hide');
-//        } else {
-//            alert('실패 : ' + response.message);
-//        }
-//    }
-//    });
-//});
 
 

@@ -63,7 +63,7 @@ var up_asset_list = function () {
                     column: column,
                     columnmap: columnMap[orderColumn],
                     direction: orderDir,
-                    value : $('#search-input').val(),
+                    value : $('#search-input-up').val(),
                     value2 : $('#up_asset_list_filter input[type="search"]').val(),
                     regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };

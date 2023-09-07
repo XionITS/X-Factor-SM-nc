@@ -28,6 +28,7 @@ urlpatterns = [
     path('update/', views_user.update, name='update'),
     ############################################
     path('dashboard/', views_main_hs.dashboard),
+    path('dashboard1/', views_main_hs.dashboard1),
     #path('admin/', admin.site.urls),
     #path('index/', views_main_hs.index),
     #path('index/paging/', views_main_hs.index_paging),
@@ -50,6 +51,8 @@ urlpatterns = [
 
     path('sec_asset/', views_sec.sec_asset),
     path('sec_asset/paging/', views_sec.sec_asset_paging),
+    path('sec_asset_list/', views_sec.sec_asset_list),
+    path('sec_asset_list/paging/', views_sec.sec_asset_list_paging),
 
 
     path('create/', views_group.create),

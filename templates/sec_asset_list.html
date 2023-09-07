@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<!-- BEGIN #content -->
+
+<div class="col-11" style="margin: 10px auto;">
+    <!-- BEGIN page-header -->
+    <p class="fs-24px pt-10px">
+        보안프로그램 구동별 자산 현황 2
+    </p>
+    <!-- END page-header -->
+    <div class="row">
+        <!--BEGIN card-->
+        <div class="card h-auto">
+            <!--BEGIN card-body-->
+            <div class="card-body">
+                <br>
+                <div class="" style="">
+                    <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="creategroup" aria-expanded="false">
+                    그룹 생성
+                    </button>
+                    <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="createdeploy" aria-expanded="false">
+                    배포 하기
+                    </button>
+                </div>
+
+                <!-- 검색어 필터  -->
+                <div class="search-dropdown">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-warning dropdown-toggle" type="button" id="column-dropdown" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        선택한 컬럼
+                        </button>
+                            <div class="dropdown-menu" aria-labelledby="column-dropdown" id="search-dropdown">
+                            <!-- 드롭다운 메뉴 아이템들 -->
+                                <a class="dropdown-item" href="#" data-column="computer__chassistype">구분</a>
+                                <a class="dropdown-item" href="#" data-column="computer__os_simple">OS</a>
+                                <a class="dropdown-item" href="#" data-column="computer__computer_name">컴퓨터 이름</a>
+                                <a class="dropdown-item" href="#" data-column="computer__ip_address">IPv4</a>
+                                <a class="dropdown-item" href="#" data-column="computer__mac_address">Mac주소</a>
+                                <a class="dropdown-item" href="#" data-column="ext_chr">크롬</a>
+                                <a class="dropdown-item" href="#" data-column="ext_edg">엣지</a>
+                                <a class="dropdown-item" href="#" data-column="ext_fir">파이어폭스</a>
+                                <a class="dropdown-item" href="#" data-column="computer__sw_list">소프트웨어</a>
+                                <a class="dropdown-item" href="#" data-column="computer__hotfix">hotfix</a>
+                            </div>
+                    </div>
+                    <div class="input-group">
+                        <input type="search" class="form-control" id="search-input-sec_list" placeholder="검색어를 입력하세요">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-warning " type="button" id="search-button-sec_list">검색</button>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <table id="sec_asset_list2" class="table fs-14px mb-0 text-center text-white text-opacity-60 m-auto nc-12 table-hover">
+                    <thead>
+                        <tr class="table-active text-white text-opacity-75">
+                            <th class="text-center">선택</th>
+                            <th class="text-center">No</th>
+                            <th class="text-center">구분</th>
+                            <th class="text-center">OS</th>
+                            <th class="text-center">컴퓨터 이름</th>
+                            <th class="text-center">IPv4</th>
+                            <th class="text-center">MAC주소</th>
+                            <th class="text-center">확장프로그램</th>
+                            <th class="text-center">소프트웨어</th>
+                            <th class="text-center">Hotfix</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <!--END card-body-->
+            <!--BEGIN card-arrow-->
+            <div class="card-arrow">
+                <div class="card-arrow-top-left"></div>
+                <div class="card-arrow-top-right"></div>
+                <div class="card-arrow-bottom-left"></div>
+                <div class="card-arrow-bottom-right"></div>
+            </div>
+            <!--END card-arrow-->
+        </div>
+        <!--END card-->
+
+        <div id="bottom_asset">
+            {% if asset %}
+                타입별 자산 현황 (&nbsp;&nbsp;
+                총 자산 수 : {{total_item_count}} 대 &nbsp;    =   &nbsp;
+                {% for item in asset %}
+                     {{item.item}} : {{item.item_count}}대&nbsp;&nbsp;
+                {% endfor %}
+            )
+            {% endif %}
+
+            <a href="{% url 'export' model='Xfactor_Common' %}" class="btn btn-outline-warning export">Export to Excel</a>
+
+        </div>
+    </div>
+</div>
+
+<!--브라우저 확장 프로그램-->
+<div class="modal" name="ext_Modal" id="ext_Modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content" style="background-color:#1d2835;">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+      </div>
+      <div class="modal-body">
+          <div class="mb-2">
+              <input type="text" id="searchInput_ext" class="form-control" placeholder="검색할 내용을 입력하세요 (입력한 값이 노란색으로 보여집니다.)">
+          </div>
+          <table class="table exttable" style="overflow-y: auto;">
+              <thead class="extthead">
+                    <th scope="col" style="text-align: center">Chrome</th>
+                    <th scope="col" style="text-align: center">Chrome version</th>
+                    <th scope="col" style="text-align: center">Edge</th>
+                    <th scope="col" style="text-align: center">Edge version</th>
+                    <th scope="col" style="text-align: center">Firefox</th>
+                    <th scope="col" style="text-align: center">Firefox version</th>
+              </thead>
+              <tbody class="exttbody"></tbody>
+          </table>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Hotfix 모달창-->
+<div class="modal" name="hotModal" id="hotModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content" style="background-color:#1d2835;">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+      </div>
+      <div class="modal-body">
+          <div class="mb-2">
+              <input type="text" id="searchInput_hot" class="form-control" placeholder="검색할 내용을 입력하세요 (입력한 값이 노란색으로 보여집니다.)">
+          </div>
+          <table class="table hottable" style="overflow-y: auto;">
+              <thead class="hotthead">
+                    <th scope="col" style="text-align: center">Hotfix</th>
+                    <th scope="col" style="text-align: center">업데이트 날짜</th>
+
+              </thead>
+              <tbody class="hottbody"></tbody>
+          </table>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--sw 설치된 프로그램-->
+<div class="modal" name="swList_Modal" id="swList_Modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content" style="background-color:#1d2835;">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+      </div>
+      <div class="modal-body">
+          <div class="mb-2">
+              <input type="text" id="searchInput_swList" class="form-control" placeholder="검색할 내용을 입력하세요 (입력한 값이 노란색으로 보여집니다.)">
+          </div>
+          <table class="table swListtable" style="overflow-y: auto;">
+              <thead class="swListthead">
+                    <th scope="col" style="text-align: center">SW Name</th>
+                    <th scope="col" style="text-align: center">SW Version</th>
+                    <th scope="col" style="text-align: center">SW Install</th>
+              </thead>
+              <tbody class="swListtbody"></tbody>
+          </table>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+

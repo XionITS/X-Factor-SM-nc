@@ -50,6 +50,22 @@ def dashboard(request):
     return render(request, 'dashboard.html', context)
 
 
+def dashboard1(request):
+    print(Xfactor_Xuser_Auth.objects.all())
+    #session을 computer_id에 넣기
+    xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
+    menu = XuserAuthSerializer(xuser_auths, many=True)
+    # user_auths = Xfactor_CommonAuth.objects.filter(xfactor_user__computer_id='123', auth_use='true')  # 사용자의 권한 목록 가져오기
+    # menu_list = []
+    # for user_auth in user_auths:
+    #     menu_list.append(user_auth.xfactor_auth)
+    # menu_list = serialize('json', menu_list)
+    # print(menu_list)
+    #menu_list = list(Xfactor_CommonAuth.objects.values().filter(xfactor_user__computer_id='123', auth_use='true'))
+    context = {'menu_list' : menu.data}
+    return render(request, 'dashboard1.html', context)
+
+
 @csrf_exempt
 def hs_asset(request):
     #메뉴
