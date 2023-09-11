@@ -1,7 +1,9 @@
+import json
+
 from django.http import HttpResponse
 import math
 import operator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
@@ -14,23 +16,24 @@ from .models import *
 from .serializers import *
 
 today_collect_date = timezone.now() - timedelta(minutes=7)
-
+with open("setting.json", encoding="UTF-8") as f:
+    SETTING = json.loads(f.read())
+DBSettingTime = SETTING['DB']['DBSelectTime']
 
 def sec_asset(request):
     #메뉴
+
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
     #테이블아래 자산현황
     asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(asset.values_list('item_count', flat=True))
-
     context = {'menu_list': menu.data}
     return render(request, 'sec_asset.html', context)
 
-
 @csrf_exempt
 def sec_asset_paging(request):
-    today_collect_date = timezone.now() - timedelta(minutes=7)
+    today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     default_os = request.POST.get('filter[defaultColumn]')
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
@@ -116,12 +119,11 @@ def sec_asset_paging(request):
                          Q(security4__icontains=filter_value) |
                          Q(security5__icontains=filter_value) |
                          Q(computer__memo__icontains=filter_value))
-            print(query)
             user = user.filter(query)
 
 
     filter_columnmap = request.POST.get('filter[columnmap]')
-    order_column_index = int(request.POST.get('order[1][column]', 0))
+    order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         2: 'computer__os_simple',
@@ -182,7 +184,7 @@ def sec_asset_list(request):
 
 @csrf_exempt
 def sec_asset_list_paging(request):
-    today_collect_date = timezone.now() - timedelta(minutes=10)
+    today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
@@ -288,19 +290,20 @@ def sec_asset_list_paging(request):
 
 
     filter_columnmap = request.POST.get('filter[columnmap]')
-    order_column_index = int(request.POST.get('order[1][column]', 0))
+    order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'computer.chassistype',
-        2: 'computer.os_simple',
-        3: 'computer.computer_name',
-        4: 'computer.ip_address',
-        5: 'computer.mac_address',
-        6: 'ext_chr',
-        7: '',  # Add mappings for other columns here
+        2: 'computer__chassistype',
+        3: 'computer__os_simple',
+        4: 'computer__computer_name',
+        5: 'computer__ip_address',
+        6: 'computer__mac_address',
+        7: 'ext_chr',
+        8: 'computer__sw_list',
+        9: 'computer__hotfix'
     }
-    order_column = order_column_map.get(order_column_index, 'computer__computer_name')
-    if order_column_dir == 'asc':
+    order_column = order_column_map.get(order_column_index, 'computer__chassistype')
+    if order_column_dir == 'desc':
         user = user.order_by(order_column)
     else:
         user = user.order_by('-' + order_column)

@@ -90,7 +90,6 @@ def hs_asset(request):
 @csrf_exempt
 def hs_asset_paginghw(request):
     filter_column = request.POST.get('filter[column]')
-    print(filter_column)
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
     # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
@@ -259,7 +258,6 @@ def hs_asset_paginghw(request):
 @csrf_exempt
 def hs_asset_pagingsw(request):
     filter_column = request.POST.get('filter[column]')
-    print(filter_column)
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
     # 현재 시간대 객체 생성, 예시: "Asia/Seoul"

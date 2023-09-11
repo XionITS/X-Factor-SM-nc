@@ -119,12 +119,22 @@ var up_asset_list = function () {
 		        const computer_name = row.computer_name;
 		        const hotfix = row.hotfix;
                 const date = row.hotfix_date;
-		        return '<a class="upmore swmore-font" data-hotfix="' + hotfix + '" data-date="' + date + '" data-computer_name="' + computer_name +'">'+ hotfix.split('<br>')[0]+ '</a>'}},
+                if (row.hotfix === 'unconfirmed') {
+                    return "";
+                } else {
+                    return '<a class="upmore swmore-font" data-hotfix="' + hotfix + '" data-date="' + date + '" data-computer_name="' + computer_name +'">'+ hotfix.split('<br>')[0]+ '</a>'
+                }
+            }},
 		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-		        const computer_name = row.computer_name;
+                const computer_name = row.computer_name;
                 const hotfix = row.hotfix;
-		        const date = row.hotfix_date;
-		        return '<a class="upmore swmore-font" data-date="' + date + '" data-hotfix="' + hotfix + '" data-computer_name="' + computer_name +'">' + date.split('<br>')[0]+ '</a>'}},
+                const date = row.hotfix_date;
+                if (row.hotfix_date === 'unconfirmed'){
+                    return "";
+                } else {
+                    return '<a class="upmore swmore-font" data-date="' + date + '" data-hotfix="' + hotfix + '" data-computer_name="' + computer_name +'">' + date.split('<br>')[0]+ '</a>'
+                }
+            }},
 		    {targets: 8, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		    		],
 		language: {
