@@ -32,7 +32,7 @@ def search(request):
         today_collect_date = timezone.now() - timedelta(minutes=7)
         search_text = request.POST.get('searchText', None)
         #print(search_text)
-        user = Xfactor_Service.objects.select_related('computer').filter(user_date__gt=today_collect_date).filter(computer__computer_name=search_text)
+        user = Xfactor_Service.objects.select_related('computer').filter(user_date__gte=today_collect_date).filter(computer__computer_name=search_text)
         user_data = XfactorServiceerializer(user, many=True).data
         print(user_data)
         print("aaaaaaaaaaaaaaaaaaaaaaaaaa")

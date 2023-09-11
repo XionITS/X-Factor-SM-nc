@@ -31,7 +31,7 @@ def ver_asset(request):
     # 24시간 30분 이전의 시간 계산
     today_collect_date = local_now - timedelta(minutes=7)
 
-    asset = Daily_Statistics.objects.filter(statistics_collection_date__gt=today_collect_date, classification='os_simple').values('item', 'item_count').order_by('-item_count')[:5]
+    asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='os_simple').values('item', 'item_count').order_by('-item_count')[:5]
     total_item_count = sum(asset.values_list('item_count', flat=True))
 
     context = {'menu_list': menu.data, 'asset': asset, 'total_item_count': total_item_count}
@@ -55,7 +55,7 @@ def ver_asset_paging(request):
 
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
-        user = user.filter(user_date__gt=today_collect_date)
+        user = user.filter(user_date__gte=today_collect_date)
         user = user.filter(query)
         #user = Xfactor_Common.objects.filter(query)
         if filter_value:
@@ -86,7 +86,7 @@ def ver_asset_paging(request):
                          Q(memo__icontains=filter_value))
             user = user.filter(query)
     else:
-        user = user.filter(user_date__gt=today_collect_date)
+        user = user.filter(user_date__gte=today_collect_date)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -174,7 +174,7 @@ def os_asset(request):
     today_collect_date = local_now - timedelta(minutes=7)
 
     # 테이블아래 자산현황
-    asset = Daily_Statistics.objects.filter(statistics_collection_date__gt=today_collect_date, classification='os_simple').values('item', 'item_count').order_by('-item_count')
+    asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='os_simple').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(asset.values_list('item_count', flat=True))
 
     context = {'menu_list': menu.data, 'asset': asset, 'total_item_count': total_item_count}
@@ -198,11 +198,12 @@ def os_asset_paging(request):
     today_collect_date = local_now - timedelta(minutes=7)
 
 
-    user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(os_total='unconfirmed').exclude(ip_address='unconfirmed')
+    user = Xfactor_Common.objects.filter(os_total__icontains=default_os)
+    #user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(os_total='unconfirmed').exclude(ip_address='unconfirmed')
 
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
-        user = user.filter(user_date__gt=today_collect_date)
+        user = user.filter(user_date__gte=today_collect_date)
         user = user.filter(query)
         #user = Xfactor_Common.objects.filter(query)
         if filter_value:
@@ -233,7 +234,7 @@ def os_asset_paging(request):
                          Q(memo__icontains=filter_value))
             user = user.filter(query)
     else:
-        user = user.filter(user_date__gt=today_collect_date)
+        user = user.filter(user_date__gte=today_collect_date)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')

@@ -21,7 +21,7 @@ def up_asset(request):
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
     #테이블아래 자산현황
-    asset = Daily_Statistics.objects.filter(statistics_collection_date__gt=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
+    asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(asset.values_list('item_count', flat=True))
 
     context = {'menu_list': menu.data}
@@ -34,12 +34,12 @@ def up_asset_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(os_simple='Linux')
+    user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(os_simple='Linux').exclude(os_simple='Mac')
     hotfix_dates = user.values_list('hotfix_date', flat=True)
     # user = user.datetime.strptime(user.hotfix_date, '%m/%d/%Y %H:%M:%S')
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
-        user = user.filter(user_date__gt=today_collect_date)
+        user = user.filter(user_date__gte=today_collect_date)
         user = user.filter(query)
         #user = Xfactor_Common.objects.filter(query)
         if filter_value:
@@ -73,7 +73,7 @@ def up_asset_paging(request):
                          Q(memo__icontains=filter_value))
             user = user.filter(query)
     else:
-        user = user.filter(user_date__gt=today_collect_date)
+        user = user.filter(user_date__gte=today_collect_date)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')

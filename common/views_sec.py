@@ -21,7 +21,7 @@ def sec_asset(request):
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
     #테이블아래 자산현황
-    asset = Daily_Statistics.objects.filter(statistics_collection_date__gt=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
+    asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(asset.values_list('item_count', flat=True))
 
     context = {'menu_list': menu.data}
@@ -35,7 +35,7 @@ def sec_asset_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Security.objects.select_related('computer').filter(user_date__gt=today_collect_date)
+    user = Xfactor_Security.objects.select_related('computer').filter(user_date__gte=today_collect_date)
 
     cososys_count = user.filter(security1='True ').count()
     symantec_count = user.filter(security2='True ').count()
@@ -83,7 +83,7 @@ def sec_asset_paging(request):
                          Q(computer__memo__icontains=filter_value))
             user = user.filter(query)
     else:
-        user = Xfactor_Security.objects.select_related('computer').filter(user_date__gt=today_collect_date)
+        user = Xfactor_Security.objects.select_related('computer').filter(user_date__gte=today_collect_date)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -173,7 +173,7 @@ def sec_asset_list(request):
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
     # 테이블아래 자산현황
-    asset = Daily_Statistics.objects.filter(statistics_collection_date__gt=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
+    asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(asset.values_list('item_count', flat=True))
 
     context = {'menu_list': menu.data}
@@ -186,7 +186,7 @@ def sec_asset_list_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Security.objects.select_related('computer').filter(user_date__gt=today_collect_date)
+    user = Xfactor_Security.objects.select_related('computer').filter(user_date__gte=today_collect_date)
 
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
@@ -239,7 +239,7 @@ def sec_asset_list_paging(request):
                          )
             user = user.filter(query)
     else:
-        user = Xfactor_Security.objects.select_related('computer').filter(user_date__gt=today_collect_date)
+        user = Xfactor_Security.objects.select_related('computer').filter(user_date__gte=today_collect_date)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')

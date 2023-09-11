@@ -30,7 +30,7 @@ class Xfactor_Common(models.Model):
     user_date = models.DateTimeField(auto_now_add=True)
 
 
-class Xfactor_Common_log(models.Model):
+class Xfactor_Daily(models.Model):
     computer_id = models.CharField(max_length=100)
     computer_name = models.CharField(max_length=100)
     ip_address = models.CharField(max_length=100)
@@ -53,9 +53,36 @@ class Xfactor_Common_log(models.Model):
     last_network = models.TextField(null=True)
     hotfix = models.TextField(null=True)
     hotfix_date = models.TextField(null=True)
-    subnet = models.TextField(null=True)
+    subnet = models.CharField(max_length=100)
     memo = models.TextField(null=True)
+    essential1 = models.CharField(max_length=100)
+    essential2 = models.CharField(max_length=100)
+    essential3 = models.CharField(max_length=100)
+    essential4 = models.CharField(max_length=100)
+    essential5 = models.CharField(max_length=100)
+    mem_use = models.CharField(max_length=100)
+    disk_use = models.CharField(max_length=100)
+    t_cpu = models.CharField(max_length=100)
+    security1 = models.CharField(max_length=100)
+    security2 = models.CharField(max_length=100)
+    security3 = models.CharField(max_length=100)
+    security4 = models.CharField(max_length=100)
+    security5 = models.CharField(max_length=100)
+    security1_ver = models.CharField(max_length=100)
+    security2_ver = models.CharField(max_length=100)
+    security3_ver = models.CharField(max_length=100)
+    security4_ver = models.CharField(max_length=100)
+    security5_ver = models.CharField(max_length=100)
+    uuid = models.CharField(max_length=100)
+    multi_boot = models.CharField(max_length=100)
+    ext_chr = models.TextField()
+    ext_chr_ver = models.TextField()
+    ext_edg = models.TextField()
+    ext_edg_ver = models.TextField()
+    ext_fir = models.TextField()
+    ext_fir_ver = models.TextField()
     user_date = models.DateTimeField(auto_now_add=True)
+
 
 
 class Xfactor_Service(models.Model):
@@ -68,33 +95,12 @@ class Xfactor_Service(models.Model):
     subnet = models.CharField(max_length=100)
     mem_use = models.CharField(max_length=100)
     disk_use = models.CharField(max_length=100)
-    tcpu = models.CharField(max_length=100)
-    user_date = models.DateTimeField(auto_now_add=True)
-
-
-class Xfactor_Service_log(models.Model):
-    computer = models.ForeignKey(Xfactor_Common_log, on_delete=models.CASCADE)
-    essential1 = models.CharField(max_length=100)
-    essential2 = models.CharField(max_length=100)
-    essential3 = models.CharField(max_length=100)
-    essential4 = models.CharField(max_length=100)
-    essential5 = models.CharField(max_length=100)
-    subnet = models.CharField(max_length=100)
-    mem_use = models.CharField(max_length=100)
-    disk_use = models.CharField(max_length=100)
-    tcpu = models.CharField(max_length=100)
+    t_cpu = models.CharField(max_length=100)
     user_date = models.DateTimeField(auto_now_add=True)
 
 
 class Xfactor_Purchase(models.Model):
     computer = models.ForeignKey(Xfactor_Common, on_delete=models.CASCADE)
-    mem_use = models.TextField()
-    disk_use = models.TextField()
-    user_date = models.DateTimeField(auto_now_add=True)
-
-
-class Xfactor_Purchase_log(models.Model):
-    computer = models.ForeignKey(Xfactor_Common_log, on_delete=models.CASCADE)
     mem_use = models.TextField()
     disk_use = models.TextField()
     user_date = models.DateTimeField(auto_now_add=True)
@@ -124,30 +130,6 @@ class Xfactor_Security(models.Model):
     ext_fir_ver = models.TextField()
     user_date = models.DateTimeField(auto_now_add=True)
 
-
-class Xfactor_Security_log(models.Model):
-    computer = models.ForeignKey(Xfactor_Common_log, on_delete=models.CASCADE)
-    security1 = models.CharField(max_length=100)
-    security2 = models.CharField(max_length=100)
-    security3 = models.CharField(max_length=100)
-    security4 = models.CharField(max_length=100)
-    security5 = models.CharField(max_length=100)
-    security1_ver = models.CharField(max_length=100)
-    security2_ver = models.CharField(max_length=100)
-    security3_ver = models.CharField(max_length=100)
-    security4_ver = models.CharField(max_length=100)
-    security5_ver = models.CharField(max_length=100)
-    uuid = models.CharField(max_length=500)
-    multi_boot = models.TextField()
-    first_network = models.TextField()
-    last_boot = models.TextField()
-    ext_chr = models.TextField()
-    ext_chr_ver = models.TextField()
-    ext_edg = models.TextField()
-    ext_edg_ver = models.TextField()
-    ext_fir = models.TextField()
-    ext_fir_ver = models.TextField()
-    user_date = models.DateTimeField(auto_now_add=True)
 
 
 class Xfactor_Nano(models.Model):
