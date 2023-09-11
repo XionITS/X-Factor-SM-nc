@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponse
 import math
 import operator
@@ -14,6 +16,9 @@ from .models import *
 from .serializers import *
 
 today_collect_date = timezone.now() - timedelta(minutes=7)
+with open("setting.json", encoding="UTF-8") as f:
+    SETTING = json.loads(f.read())
+DBSettingTime = SETTING['DB']['DBSelectTime']
 
 @csrf_exempt
 def up_asset(request):
@@ -29,7 +34,7 @@ def up_asset(request):
 
 @csrf_exempt
 def up_asset_paging(request):
-    today_collect_date = timezone.now() - timedelta(minutes=7)
+    today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     default_os = request.POST.get('filter[defaultColumn]')
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')

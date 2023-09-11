@@ -49,13 +49,14 @@ var sec_asset_list2 = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                        1: 'computer.chassistype',
-                        2: 'computer.os_simple',
-                        3: 'computer.computer_name',
-                        4: 'computer.ip_address',
-                        5: 'computer.mac_address',
-                        6: 'ext_chr',
-                        7: '',
+                        2: 'computer.chassistype',
+                        3: 'computer.os_simple',
+                        4: 'computer.computer_name',
+                        5: 'computer.ip_address',
+                        6: 'computer.mac_address',
+                        7: 'ext_chr',
+                        8: 'computer.sw_list',
+                        9: 'computer.hotfix'
                         };
                 data.filter = {
                     defaultColumn : defaultColumn,
@@ -106,16 +107,26 @@ var sec_asset_list2 = function () {
 		    {targets: 5, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.security2+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 6, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.security3+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-                return '<a class="extmore swmore-font" data-ext_chr="' + row.ext_chr +'" ' +
-                    'data-ext_chr_ver="' + row.ext_chr_ver + '" data-ext_edg="' + row.ext_edg + '" data-ext_edg_ver="' + row.ext_edg_ver + '" ' +
-                    'data-ext_fir="' + row.ext_fir +'" data-ext_fir_ver="' + row.ext_fir_ver +'" data-computer_name="' + row.computer.computer_name +'" >더보기</a>'}},
+                if (row.ext_chr === 'unconfirmed' && row.ext_edg === 'unconfirmed' && row.ext_fir === 'unconfirmed') {
+                    return '';
+                } else {
+                    return '<a class="extmore swmore-font" data-ext_chr="' + row.ext_chr +'" ' +
+                        'data-ext_chr_ver="' + row.ext_chr_ver + '" data-ext_edg="' + row.ext_edg + '" data-ext_edg_ver="' + row.ext_edg_ver + '" ' +
+                        'data-ext_fir="' + row.ext_fir +'" data-ext_fir_ver="' + row.ext_fir_ver +'" data-computer_name="' + row.computer.computer_name +'" >더보기</a>'
+                }
+            }},
 		    {targets: 8, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
                 return '<a class="swListmore swmore-font" ' +
                     'data-computer_name="' + row.computer.computer_name + '" data-sw_list="' + row.computer.sw_list + '" data-sw_ver_list="' + row.computer.sw_ver_list + '" ' +
                     'data-sw_install="' + row.computer.sw_install + '">더보기</a>'}},
 		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-                return '<a class="hotmore swmore-font" ' +
-                    'data-computer_name="' + row.computer.computer_name + '" data-hotfix="' + row.computer.hotfix + '" data-hotfix_date="' + row.computer.hotfix_date + '">더보기</a>'}},
+                if (row.computer.hotfix === 'not apply') {
+                    return "";
+                } else {
+                    return '<a class="hotmore swmore-font" ' +
+                        'data-computer_name="' + row.computer.computer_name + '" data-hotfix="' + row.computer.hotfix + '" data-hotfix_date="' + row.computer.hotfix_date + '">더보기</a>'
+                }
+                }},
 		    		],
 		language: {
 			"decimal": "",
