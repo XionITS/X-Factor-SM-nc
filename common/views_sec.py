@@ -172,6 +172,7 @@ def sec_asset_paging(request):
 
 def sec_asset_list(request):
     # 메뉴
+    today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
     # 테이블아래 자산현황

@@ -40,7 +40,7 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 
 @csrf_exempt
 def dashboard(request):
-    print(Xfactor_Xuser_Auth.objects.all())
+    # print(Xfactor_Xuser_Auth.objects.all())
     #session을 computer_id에 넣기
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
@@ -56,7 +56,7 @@ def dashboard(request):
 
 
 def dashboard1(request):
-    print(Xfactor_Xuser_Auth.objects.all())
+    # print(Xfactor_Xuser_Auth.objects.all())
     #session을 computer_id에 넣기
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
