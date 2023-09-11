@@ -22,3 +22,18 @@ def Dashboard():
     asset = Daily_Statistics_log.objects.all()
     asset.filter(item='Desktop').values('item', 'item_count', 'statistics_collection_date')
     print(asset.filter(item='Desktop').values('item', 'item_count', 'statistics_collection_date'))
+
+    # 예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시
+    # try:
+    #     wire_pieData = inputDb('wire_pieData')
+    #     logger.info('dashboardFunction.py - wire_pieData - Success')
+    # except:
+    #     logger.warning('dashboardFunction.py - Error Occurred')
+    #     logger.warning('Error - wire_pieData')
+    #     # -----------------------------상단 물리/가상 파이차트 ------------------------------------
+    # try:
+    #     virtual_pieData = inputDb('virtual_pieData')
+    #     logger.info('dashboardFunction.py - virtual_pieData - Success')
+    # except:
+    #     logger.warning('dashboardFunction.py - Error Occurred')
+    #     logger.warning('Error - virtual_pieData')
