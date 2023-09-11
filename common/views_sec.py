@@ -15,14 +15,14 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 
-today_collect_date = timezone.now() - timedelta(minutes=7)
+#today_collect_date = timezone.now() - timedelta(minutes=7)
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
 
 def sec_asset(request):
     #메뉴
-
+    today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
     #테이블아래 자산현황
