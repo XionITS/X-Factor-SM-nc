@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Count
 from functools import reduce
 from datetime import datetime, timedelta
 from django.core.serializers import serialize
@@ -32,6 +32,7 @@ import pytz
 # auth_url = user_auth.xfactor_auth.auth_url
 # print(menu_list)
 #today_collect_date = timezone.now() - timedelta(minutes=7)
+from .views_dashboard import Dashboard
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -40,17 +41,11 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 
 @csrf_exempt
 def dashboard(request):
+    Dashboard()
     # print(Xfactor_Xuser_Auth.objects.all())
     #session을 computer_id에 넣기
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
-    # user_auths = Xfactor_CommonAuth.objects.filter(xfactor_user__computer_id='123', auth_use='true')  # 사용자의 권한 목록 가져오기
-    # menu_list = []
-    # for user_auth in user_auths:
-    #     menu_list.append(user_auth.xfactor_auth)
-    # menu_list = serialize('json', menu_list)
-    # print(menu_list)
-    #menu_list = list(Xfactor_CommonAuth.objects.values().filter(xfactor_user__computer_id='123', auth_use='true'))
     context = {'menu_list' : menu.data}
     return render(request, 'dashboard1.html', context)
 
@@ -114,6 +109,8 @@ def hs_asset_paginghw(request):
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
         user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
+        users = user.values('chassistype').annotate(count=Count('chassistype'))
+        print(users)
         user = user.filter(query)
         if filter_value:
             if ' and ' in filter_value:
