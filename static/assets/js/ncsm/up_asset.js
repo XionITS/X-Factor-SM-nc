@@ -40,6 +40,17 @@ var up_asset_list = function () {
                         $(row).find('input[type="checkbox"]').prop('checked', false);
                     }
                 }
+                var current_page_up = up_asset_list_Data.page();
+                var total_pages_up = up_asset_list_Data.page.info().pages;
+                $('#nexts').remove();
+                $('#after').remove();
+
+                if (total_pages_up > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+                $('<button type="button" class="btn" id="nexts_up">10≫</button>')
+                .insertAfter('#up_asset_list_paginate .paginate_button:last');
+                $('<button type="button" class="btn" id="after_up">≪10</button>')
+                .insertBefore('#up_asset_list_paginate .paginate_button:first');
+                }
             },
 		ajax: {
 			url: 'paging/',
@@ -136,7 +147,7 @@ var up_asset_list = function () {
 			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
 			"infoPostFix": "",
             },
-
+            pagingType: 'numbers',//이전 다음 버튼 히든처리
 });
 
 
@@ -207,21 +218,23 @@ $(document).on("click",".upmore", function (e){
         }
     });
 
-	$(document).on('click', '#nexts, #after', function() {
-        var current_page = up_asset_list_Data.page();
-        var total_pages = up_asset_list_Data.page.info().pages;
-        if ($(this).attr('id') == 'nexts') {
-                if (current_page + 10 < total_pages) {
-                    up_asset_list_Data.page(current_page + 10).draw('page');
+	$(document).on('click', '#nexts_up, #after_up', function() {
+        var current_page_up = up_asset_list_Data.page();
+        var total_pages_up = up_asset_list_Data.page.info().pages;
+        if ($(this).attr('id') == 'nexts_up') {
+                if (current_page_up + 10 < total_pages_up) {
+                    up_asset_list_Data.page(current_page_up + 10).draw('page');
                 } else {
-                    up_asset_list_Data.page(total_pages - 1).draw('page');
+                    up_asset_list_Data.page(total_pages_up - 1).draw('page');
                 }
                 } else {
-                    up_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
+                    up_asset_list_Data.page(Math.max(current_page_up - 10, 0)).draw('page');
                 }
-    });
-
+});
+    var customStyle = '<style>#nexts_up, #after_up {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
+    $('head').append(customStyle);
 };
+
 
 
 

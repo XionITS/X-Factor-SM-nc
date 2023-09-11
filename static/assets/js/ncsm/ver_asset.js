@@ -41,6 +41,17 @@ var all_asset_list = function () {
                         $(row).find('input[type="checkbox"]').prop('checked', false);
                     }
                 }
+                var current_page_all = all_asset_list_Data.page();
+                var total_pages_all = all_asset_list_Data.page.info().pages;
+                $('#nexts').remove();
+                $('#after').remove();
+
+                if (total_pages_all > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+                $('<button type="button" class="btn" id="nexts_all">10≫</button>')
+                .insertAfter('#ver_asset_list_paginate .paginate_button:last');
+                $('<button type="button" class="btn" id="after_all">≪10</button>')
+                .insertBefore('#ver_asset_list_paginate .paginate_button:first');
+                }
             },
 		ajax: {
 			url: 'paging/',
@@ -126,6 +137,8 @@ var all_asset_list = function () {
 			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
 			"infoPostFix": "",
             },
+            pagingType: 'numbers',//이전 다음 버튼 히든처리
+
 
 });
 
@@ -153,20 +166,21 @@ var all_asset_list = function () {
         }
     });
 
-	$(document).on('click', '#nexts, #after', function() {
-        var current_page = all_asset_list_Data.page();
-        var total_pages = all_asset_list_Data.page.info().pages;
-        if ($(this).attr('id') == 'nexts') {
-                if (current_page + 10 < total_pages) {
-                    all_asset_list_Data.page(current_page + 10).draw('page');
+	$(document).on('click', '#nexts_all, #after_all', function() {
+        var current_page_all = all_asset_list_Data.page();
+        var total_pages_all = all_asset_list_Data.page.info().pages;
+        if ($(this).attr('id') == 'nexts_all') {
+                if (current_page_all + 10 < total_pages_all) {
+                    all_asset_list_Data.page(current_page_all + 10).draw('page');
                 } else {
-                    all_asset_list_Data.page(total_pages - 1).draw('page');
+                    all_asset_list_Data.page(total_pages_all - 1).draw('page');
                 }
                 } else {
-                    all_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
+                    all_asset_list_Data.page(Math.max(current_page_all - 10, 0)).draw('page');
                 }
-    });
-
+});
+    var customStyle = '<style>#nexts_all, #after_all {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
+    $('head').append(customStyle);
 };
 
 
@@ -201,6 +215,17 @@ var win_asset_list = function () {
                     } else {
                         $(row).find('input[type="checkbox"]').prop('checked', false);
                     }
+                }
+                var current_page_win = win_asset_list_Data.page();
+                var total_pages_win = win_asset_list_Data.page.info().pages;
+                $('#nexts').remove();
+                $('#after').remove();
+
+                if (total_pages_win > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+                $('<button type="button" class="btn" id="nexts_win">10≫</button>')
+                .insertAfter('#ver_asset_list_paginate .paginate_button:last');
+                $('<button type="button" class="btn" id="after_win">≪10</button>')
+                .insertBefore('#ver_asset_list_paginate .paginate_button:first');
                 }
             },
 		ajax: {
@@ -288,6 +313,7 @@ var win_asset_list = function () {
 			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
 			"infoPostFix": "",
             },
+            pagingType: 'numbers',//이전 다음 버튼 히든처리
 
 });
 
@@ -315,19 +341,21 @@ var win_asset_list = function () {
         }
     });
 
-	$(document).on('click', '#nexts, #after', function() {
-        var current_page = win_asset_list_Data.page();
-        var total_pages = win_asset_list_Data.page.info().pages;
-        if ($(this).attr('id') == 'nexts') {
-                if (current_page + 10 < total_pages) {
-                    win_asset_list_Data.page(current_page + 10).draw('page');
+	$(document).on('click', '#nexts_win, #after_win', function() {
+        var current_page_win = win_asset_list_Data.page();
+        var total_pages_win = win_asset_list_Data.page.info().pages;
+        if ($(this).attr('id') == 'nexts_win') {
+                if (current_page_win + 10 < total_pages_win) {
+                    win_asset_list_Data.page(current_page_win + 10).draw('page');
                 } else {
-                    win_asset_list_Data.page(total_pages - 1).draw('page');
+                    win_asset_list_Data.page(total_pages_win - 1).draw('page');
                 }
                 } else {
-                    win_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
+                    win_asset_list_Data.page(Math.max(current_page_win - 10, 0)).draw('page');
                 }
 });
+    var customStyle = '<style>#nexts_win, #after_win {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
+    $('head').append(customStyle);
 };
 
 var mac_asset_list = function () {
@@ -359,6 +387,17 @@ var mac_asset_list = function () {
                     } else {
                         $(row).find('input[type="checkbox"]').prop('checked', false);
                     }
+                }
+                var current_page_mac = mac_asset_list_Data.page();
+                var total_pages_mac = mac_asset_list_Data.page.info().pages;
+                $('#nexts').remove();
+                $('#after').remove();
+
+                if (total_pages_mac > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+                $('<button type="button" class="btn" id="nexts_mac">10≫</button>')
+                .insertAfter('#ver_asset_list_paginate .paginate_button:last');
+                $('<button type="button" class="btn" id="after_mac">≪10</button>')
+                .insertBefore('#ver_asset_list_paginate .paginate_button:first');
                 }
             },
 		ajax: {
@@ -443,6 +482,7 @@ var mac_asset_list = function () {
 			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
 			"infoPostFix": "",
             },
+            pagingType: 'numbers',//이전 다음 버튼 히든처리
 
 });
 
@@ -470,19 +510,21 @@ var mac_asset_list = function () {
         }
     });
 
-	$(document).on('click', '#nexts, #after', function() {
-        var current_page = mac_asset_list_Data.page();
-        var total_pages = mac_asset_list_Data.page.info().pages;
-        if ($(this).attr('id') == 'nexts') {
-                if (current_page + 10 < total_pages) {
-                    mac_asset_list_Data.page(current_page + 10).draw('page');
+	$(document).on('click', '#nexts_mac, #after_mac', function() {
+        var current_page_mac = mac_asset_list_Data.page();
+        var total_pages_mac = mac_asset_list_Data.page.info().pages;
+        if ($(this).attr('id') == 'nexts_mac') {
+                if (current_page_mac + 10 < total_pages_mac) {
+                    mac_asset_list_Data.page(current_page_mac + 10).draw('page');
                 } else {
-                    mac_asset_list_Data.page(total_pages - 1).draw('page');
+                    mac_asset_list_Data.page(total_pages_mac - 1).draw('page');
                 }
                 } else {
-                    mac_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
+                    mac_asset_list_Data.page(Math.max(current_page_mac - 10, 0)).draw('page');
                 }
 });
+    var customStyle = '<style>#nexts_mac, #after_mac {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
+    $('head').append(customStyle);
 };
 
 var other_asset_list = function () {
@@ -514,6 +556,17 @@ var other_asset_list = function () {
                     } else {
                         $(row).find('input[type="checkbox"]').prop('checked', false);
                     }
+                }
+                var current_page_other = other_asset_list_Data.page();
+                var total_pages_other = other_asset_list_Data.page.info().pages;
+                $('#nexts').remove();
+                $('#after').remove();
+
+                if (total_pages_other > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+                $('<button type="button" class="btn" id="nexts_other">10≫</button>')
+                .insertAfter('#hs_asset_list_paginate .paginate_button:last');
+                $('<button type="button" class="btn" id="after_other">≪10</button>')
+                .insertBefore('#hs_asset_list_paginate .paginate_button:first');
                 }
             },
 		ajax: {
@@ -598,6 +651,7 @@ var other_asset_list = function () {
 			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
 			"infoPostFix": "",
             },
+            pagingType: 'numbers',//이전 다음 버튼 히든처리
 
 });
 
@@ -622,19 +676,21 @@ var other_asset_list = function () {
         }
     });
 
-	$(document).on('click', '#nexts, #after', function() {
-        var current_page = other_asset_list_Data.page();
-        var total_pages = other_asset_list_Data.page.info().pages;
-        if ($(this).attr('id') == 'nexts') {
-                if (current_page + 10 < total_pages) {
-                    other_asset_list_Data.page(current_page + 10).draw('page');
+	$(document).on('click', '#nexts_other, #after_other', function() {
+        var current_page_other = other_asset_list_Data.page();
+        var total_pages_other = other_asset_list_Data.page.info().pages;
+        if ($(this).attr('id') == 'nexts_other') {
+                if (current_page_other + 10 < total_pages_other) {
+                    other_asset_list_Data.page(current_page_other + 10).draw('page');
                 } else {
-                    other_asset_list_Data.page(total_pages - 1).draw('page');
+                    other_asset_list_Data.page(total_pages_other - 1).draw('page');
                 }
                 } else {
-                    other_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
+                    other_asset_list_Data.page(Math.max(current_page_other - 10, 0)).draw('page');
                 }
 });
+    var customStyle = '<style>#nexts_other, #after_other {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
+    $('head').append(customStyle);
 };
 
 

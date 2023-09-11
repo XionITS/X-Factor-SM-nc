@@ -39,6 +39,17 @@ var sec_asset_list2 = function () {
                     $(row).find('input[type="checkbox"]').prop('checked', false);
                 }
             }
+            var current_page_sec2 = sec_asset_list2_Data.page();
+            var total_pages_sec2 = sec_asset_list2_Data.page.info().pages;
+            $('#nexts').remove();
+            $('#after').remove();
+
+            if (total_pages_sec2 > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            $('<button type="button" class="btn" id="nexts_sec2">10≫</button>')
+            .insertAfter('#sec_asset_list2_paginate .paginate_button:last');
+            $('<button type="button" class="btn" id="after_sec2">≪10</button>')
+            .insertBefore('#sec_asset_list2_paginate .paginate_button:first');
+            }
         },
         ajax: {
             url: 'paging/',
@@ -137,7 +148,7 @@ var sec_asset_list2 = function () {
 			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
 			"infoPostFix": "",
             },
-
+            pagingType: 'numbers',//이전 다음 버튼 히든처리
 });
 
 //-----------------------------------브라우저 확장 프로그램------------------------------------------------
@@ -320,20 +331,21 @@ $(document).on("click",".hotmore", function (e){
         }
     });
 
-	$(document).on('click', '#nexts, #after', function() {
-        var current_page = sec_asset_list2_Data.page();
-        var total_pages = sec_asset_list2_Data.page.info().pages;
-        if ($(this).attr('id') == 'nexts') {
-                if (current_page + 10 < total_pages) {
-                    sec_asset_list2_Data.page(current_page + 10).draw('page');
+	$(document).on('click', '#nexts_sec2, #after_sec2', function() {
+        var current_page_sec2 = sec_asset_list2_Data.page();
+        var total_pages_sec2 = sec_asset_list2_Data.page.info().pages;
+        if ($(this).attr('id') == 'nexts_sec2') {
+                if (current_page_sec2 + 10 < total_pages_sec2) {
+                    sec_asset_list2_Data.page(current_page_sec2 + 10).draw('page');
                 } else {
-                    sec_asset_list2_Data.page(total_pages - 1).draw('page');
+                    sec_asset_list2_Data.page(total_pages_sec2 - 1).draw('page');
                 }
                 } else {
-                    sec_asset_list2_Data.page(Math.max(current_page - 10, 0)).draw('page');
+                    sec_asset_list2_Data.page(Math.max(current_page_sec2 - 10, 0)).draw('page');
                 }
-    });
-
+});
+    var customStyle = '<style>#nexts_sec2, #after_sec2 {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
+    $('head').append(customStyle);
 };
 
 // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경

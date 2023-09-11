@@ -1514,9 +1514,23 @@ var hw_asset_list = function () {
 			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
 			"infoPostFix": "",
             },
+            pagingType: 'numbers',//이전 다음 버튼 히든처리
 
+            //페이징 10칸식 이동 로직
+            drawCallback: function() {
+                var current_page_hw = hs_asset_list_Data.page();
+                var total_pages_hw = hs_asset_list_Data.page.info().pages;
+                $('#nexts').remove();
+                $('#after').remove();
+
+                if (total_pages_hw > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+                $('<button type="button" class="btn" id="nexts_hw">10≫</button>')
+                .insertAfter('#hs_asset_list_paginate .paginate_button:last');
+                $('<button type="button" class="btn" id="after_hw">≪10</button>')
+                .insertBefore('#hs_asset_list_paginate .paginate_button:first');
+                }
+            }
 });
-
       // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
       $('.dropdown-menu a').click(function() {
         var column = $(this).data('column');
@@ -1541,19 +1555,21 @@ $('#search-input-hs').on('keyup', function(event) {
         }
     });
 
-$(document).on('click', '#nexts, #after', function() {
-    var current_page = hs_asset_list_Data.page();
-    var total_pages = hs_asset_list_Data.page.info().pages;
-    if ($(this).attr('id') == 'nexts') {
-            if (current_page + 10 < total_pages) {
-                hs_asset_list_Data.page(current_page + 10).draw('page');
-            } else {
-                hs_asset_list_Data.page(total_pages - 1).draw('page');
-            }
-            } else {
-                hs_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
-            }
+	$(document).on('click', '#nexts_hw, #after_hw', function() {
+        var current_page_hw = hs_asset_list_Data.page();
+        var total_pages_hw = hs_asset_list_Data.page.info().pages;
+        if ($(this).attr('id') == 'nexts_hw') {
+                if (current_page_hw + 10 < total_pages_hw) {
+                    hs_asset_list_Data.page(current_page_hw + 10).draw('page');
+                } else {
+                    hs_asset_list_Data.page(total_pages_hw - 1).draw('page');
+                }
+                } else {
+                    hs_asset_list_Data.page(Math.max(current_page_hw - 10, 0)).draw('page');
+                }
 });
+    var customStyle = '<style>#nexts_hw, #after_hw {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
+    $('head').append(customStyle);
 };
 
 
@@ -1656,8 +1672,24 @@ var sw_asset_list = function () {
 			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
 			"infoPostFix": "",
             },
+            pagingType: 'numbers',//이전 다음 버튼 히든처리
 
+            //페이징 10칸식 이동 로직
+            drawCallback: function() {
+                var current_page_sw = sw_asset_list_Data.page();
+                var total_pages_sw = sw_asset_list_Data.page.info().pages;
+                $('#nexts').remove();
+                $('#after').remove();
+
+                if (total_pages_sw > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+                $('<button type="button" class="btn" id="nexts_sw">10≫</button>')
+                .insertAfter('#hs_asset_list_paginate .paginate_button:last');
+                $('<button type="button" class="btn" id="after_sw">≪10</button>')
+                .insertBefore('#hs_asset_list_paginate .paginate_button:first');
+                }
+            }
 });
+
       // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
       $('.dropdown-menu a').click(function() {
         var column = $(this).data('column');
@@ -1682,19 +1714,21 @@ var sw_asset_list = function () {
         }
     });
 
-	$(document).on('click', '#nexts, #after', function() {
-        var current_page = hs_asset_list_Data.page();
-        var total_pages = hs_asset_list_Data.page.info().pages;
-        if ($(this).attr('id') == 'nexts') {
-                if (current_page + 10 < total_pages) {
-                    hs_asset_list_Data.page(current_page + 10).draw('page');
+	$(document).on('click', '#nexts_sw, #after_sw', function() {
+        var current_page_sw = sw_asset_list_Data.page();
+        var total_pages_sw = sw_asset_list_Data.page.info().pages;
+        if ($(this).attr('id') == 'nexts_sw') {
+                if (current_page_sw + 10 < total_pages_sw) {
+                    sw_asset_list_Data.page(current_page_sw + 10).draw('page');
                 } else {
-                    hs_asset_list_Data.page(total_pages - 1).draw('page');
+                    sw_asset_list_Data.page(total_pages_sw - 1).draw('page');
                 }
                 } else {
-                    hs_asset_list_Data.page(Math.max(current_page - 10, 0)).draw('page');
+                    sw_asset_list_Data.page(Math.max(current_page_sw - 10, 0)).draw('page');
                 }
 });
+    var customStyle = '<style>#nexts_sw, #after_sw {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
+    $('head').append(customStyle);
 };
 
 
@@ -1727,7 +1761,6 @@ $(document).ready(function () {
     //sidebar();
     //initEvent();
 
-    //initializeDataTable();
 });
 
 
