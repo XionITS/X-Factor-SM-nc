@@ -2,10 +2,14 @@ import datetime
 import json
 import logging
 
+import pandas as pd
 import pytz
+from dateutil.relativedelta import relativedelta
 from django.db.models import Max, Sum, Count, Q
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
+# from datetime import datetime
+from django.utils.timezone import now
 
 from common.models import Xfactor_Common, Daily_Statistics, Daily_Statistics_log, Xfactor_Service
 from django.core.serializers import serialize
@@ -28,7 +32,6 @@ def Dashboard():
     discover_items = [data['item'] for data in discover_data]
     discover_item_counts = [data['item_count'] for data in discover_data]
     discover_data_list = [discover_items, discover_item_counts]
-
 
     #위치별 자산현황
     location_data = asset.filter(classification='subnet').order_by('item').values('item', 'item_count')
@@ -104,10 +107,14 @@ def Dashboard():
     daily = Daily_Statistics.objects.all()
 
     # 월별 자산 변화 수 차트
-    daily_asset_desktop = asset_log.filter(item='Desktop').values('item_count', 'statistics_collection_date')
-    daily_asset_laptop = asset_log.filter(item='Notebook').values('item_count', 'statistics_collection_date')
-    minutely_asset_desktop = asset.filter(item='Desktop').values('item_count', 'statistics_collection_date')
-    minutely_asset_laptop = asset.filter(item='Notebook').values('item_count', 'statistics_collection_date')
+    lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
+    lastMonth = pd.date_range(lastDay, periods=5, freq='M').strftime("%Y-%m-%d")
+    LM = tuple(lastMonth)
+    print(LM)
+    daily_asset_desktop = asset_log.filter(classification='chassis_type').filter(item='Desktop').values('item_count', 'statistics_collection_date')
+    daily_asset_laptop = asset_log.filter(classification='chassis_type').filter(item='Notebook').values('item_count', 'statistics_collection_date')
+    minutely_asset_desktop = asset.filter(classification='chassis_type').filter(item='Desktop').values('item_count', 'statistics_collection_date')
+    minutely_asset_laptop = asset.filter(classification='chassis_type').filter(item='Notebook').values('item_count', 'statistics_collection_date')
     monthly_asset_ditem_count = [entry['item_count'] for entry in daily_asset_desktop]
     monthly_asset_litem_count = [entry['item_count'] for entry in daily_asset_laptop]
     minutely_asset_ditem_count = [entry['item_count'] for entry in minutely_asset_desktop]
@@ -115,8 +122,8 @@ def Dashboard():
 
     monthly_asset_date = [entry['statistics_collection_date'].strftime('%m') + "월" for entry in daily_asset_desktop]
     minutely_asset_date = [entry['statistics_collection_date'].strftime('%m') + "월" for entry in minutely_asset_desktop]
-    monthly_asset_data_list = [monthly_asset_ditem_count + minutely_asset_ditem_count, monthly_asset_litem_count + minutely_asset_litem_count, monthly_asset_date + minutely_asset_date]
-
+    # monthly_asset_data_list = [monthly_asset_ditem_count + minutely_asset_ditem_count, monthly_asset_litem_count + minutely_asset_litem_count, monthly_asset_date + minutely_asset_date]
+    monthly_asset_data_list = [minutely_asset_ditem_count, minutely_asset_litem_count, minutely_asset_date]
     # CPU 사용량 차트
     try:
         used_tcpu = daily.filter(classification='t_cpu').filter(item='True').values('item_count')
@@ -128,6 +135,7 @@ def Dashboard():
     # os버전별 자산 현황
     try:
         os_asset = daily.filter(classification='win_os_build').values('item', 'item_count')
+        print(os_asset)
         half_index = len(os_asset) // 2
         first_half = os_asset[:half_index]
         second_half = os_asset[half_index:]
@@ -139,7 +147,6 @@ def Dashboard():
     try:
         os_up = daily.filter(classification='os_version_up').values('item', 'item_count')
         os_up_data_list = [entry['item_count'] for entry in os_up]
-        print(os_up_data_list)
     except:
         os_up_data_list = ['-', '-']
 

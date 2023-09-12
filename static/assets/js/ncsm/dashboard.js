@@ -169,12 +169,19 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
     var asset_all_os_chart_options = {
       series: [
         {
-          name: ['Desktop'],
-          data: [6456,8811]
+          name: 'Desktop',
+            group: 'budget',
+          data: [1223,2323,1111,1111,2222, 3333]
         },
         {
-          name: ['Laptop'],
-          data: [123,223]
+          name: 'Laptop',
+            group: 'budget',
+          data: [1243,2253,1111,1111,2222, 3333]
+        },
+          {
+          name: 'Other',
+            group: 'budget',
+          data: [1243,2253,1111,1111,2222, 3333]
         }
       ],
       chart: {
@@ -182,6 +189,7 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
         background: 'transparent',
         foreColor: 'rgba(255, 255, 255, 0.75)',
         height: 200,
+          stacked: true,
         width: '100%',
         toolbar: {
             show: true,
@@ -219,7 +227,7 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
       },
       xaxis: {
         type: 'category',
-        categories: ['Online', 'Total']
+        categories: [['other', 'Mac', 'Windows'],['other', 'Mac', 'Windows']]
       },
       yaxis: {
         title: {
@@ -641,11 +649,11 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
       series: [
           {
           name: 'Desktop',
-          data: dataList.monthly_asset_data_list[0]
+          data: [0, 0, 0, 0, 0, dataList.monthly_asset_data_list[0]]
           },
         {
           name: 'Laptop',
-          data: dataList.monthly_asset_data_list[1]
+          data: [0, 0, 0, 0, 0,dataList.monthly_asset_data_list[1]]
         }
       ],
       chart: {
@@ -684,7 +692,7 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
       },
       xaxis: {
         type: 'category',
-        categories: dataList.monthly_asset_data_list[2]
+        categories: ['4월','5월','6월','7월','8월' ,dataList.monthly_asset_data_list[2]]
       },
       yaxis: {
         title: {
