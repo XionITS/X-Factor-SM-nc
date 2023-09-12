@@ -50,12 +50,11 @@ def dashboard(request):
     cpu_data_list = DCDL['cpu_data_list']
     os_asset_data_list = DCDL['os_asset_data_list']
     os_up_data_list = DCDL['os_up_data_list']
-    dataList = {
-        'monthly_asset_data_list': monthly_asset_data_list,
-        'cpu_data_list': cpu_data_list,
-        'os_asset_data_list': os_asset_data_list,
-        'os_up_data_list': os_up_data_list
-    }
+    discover_data_list = DCDL['discover_data_list']
+    location_data_list = DCDL['location_data_list']
+    hotfix_data_list = DCDL['hotfix_data_list']
+    asset_all_chart_list = DCDL['asset_all_chart_list']
+    office_data_list = DCDL['office_data_list']
     context = {'menu_list' : menu.data, 'dataList': dataList}
     return render(request, 'dashboard1.html', context)
 
