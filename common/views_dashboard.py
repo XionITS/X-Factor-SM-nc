@@ -43,7 +43,7 @@ def Dashboard():
     hotfix_data_list = [hotfix_items, hotfix_item_counts]
 
     # Office 버전
-    office_data = asset.filter(classification='office_ver').order_by('-item_count').values('item', 'item_count')
+    office_data = asset.filter(classification='office_ver').exclude(item='').order_by('-item_count').values('item', 'item_count')
     office_items = [data['item'] for data in office_data]
     office_item_counts = [data['item_count'] for data in office_data]
     office_data_list = [office_items, office_item_counts]
@@ -77,18 +77,23 @@ def Dashboard():
     # [c2 , c2]
     # [c3 , c3]
     asset_all_chart_list = [notebook, desktop, others]    #
-    # discover_Data = Daily_Statistics.objects.filter(classification='discover')
-    # print(discover_Data)
-    # discover_data_json = serialize('json', discover_Data)
-    # print(type(discover_data_json))
-    #
-    # update_Data = Daily_Statistics.objects.filter(classification='update')
-    # update_Data_json = serialize('json', update_Data)
-    # #print(update_Data_json)
-    #
-    # location_Data = Daily_Statistics.objects.filter(classification='subnet')
-    # location_Data_json = serialize('json', location_Data)
-    # #print(location_Data_json)
+
+    #[1,2]
+    #[1.2]
+    #[1.2]
+    #....
+               #    온라인           토탈
+    # win-desk =[on-win-desk,  to-win-desk]
+    # mac -desk =[on-mac-desk,  to-mac-desk]
+    # other -desk[on-other-desk,  to-other-desk]
+
+    # win - note[[on-win-note,  to-win-note]
+    # mac - note[on-mac-note,  to-mac-note]
+    # other -note[on-other-note,  to-other-note]
+
+    # win - other[on-win-other,  to-win-other]
+    # mac - other[on-mac-other,  to-mac-other]
+    # other -other[on-other-other,  to-other-other]
 
 
 
