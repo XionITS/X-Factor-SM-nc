@@ -343,7 +343,7 @@ var handleRenderChartNCOMG = function () {
     }
 
     // createDonutChart("os_donut", os_pieDataCount, os_pieDataItem);
-    osPieChart("os_pie", [2312, 4322], ['업데이트 필요', '업데이트 완료']);
+    osPieChart("os_pie", dataList.os_up_data_list, ['업데이트 완료', '업데이트 필요']);
 
     function createDonutChart(divId, seriesData, labelsData) {
         var donutOptions = {
@@ -390,7 +390,7 @@ var handleRenderChartNCOMG = function () {
             chart: {
                 type: 'pie',
                 width: '100%',
-                height: 240
+                height: 220
             },
             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
             labels: labelsData,
@@ -572,16 +572,15 @@ var handleRenderChartNCOMG = function () {
     var office_version_chart = new ApexCharts(document.querySelector('#office_bar'), office_version_chart_options);
     office_version_chart.render();
 
-
     var asset_ch_chart_options = {
       series: [
         {
           name: 'Desktop',
-          data: [3245,4561,5689,5690,5702,5720,5732,5750]
+          data: dataList.monthly_asset_data_list[0]
         },
         {
           name: 'Laptop',
-          data: [700, 1332,1334,1454,1554,1556,1556,1559]
+          data: dataList.monthly_asset_data_list[1]
         }
       ],
       chart: {
@@ -620,7 +619,7 @@ var handleRenderChartNCOMG = function () {
       },
       xaxis: {
         type: 'category',
-        categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월']
+        categories: dataList.monthly_asset_data_list[2]
       },
       yaxis: {
         title: {
@@ -644,71 +643,45 @@ var handleRenderChartNCOMG = function () {
     asset_overview_chart.render();
 
 
-    var asset_cpu_chart_options = {
-      series: [
-        {
-          name: '',
-          data: [1,2,3,9,12,13,14,24,28,15,2,9]
-        }
-      ],
-      chart: {
-        type: 'line',
-        background: 'transparent',
-        foreColor: 'rgba(255, 255, 255, 0.75)',
-        height: 200,
-        width: '100%',
-        toolbar: {
-            show: true,
-            tools: {
-                zoom: false,
-                pan: false
+    function asset_cpu_chart_options(divId, seriesData, labelsData) {
+        var asset_cpu_chart = {
+            series: seriesData,
+            chart: {
+                type: 'donut',
+                width: '100%',
+                height: 220
+            },
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
+            labels: labelsData,
+            dataLabels: {
+                enabled: true,
+                style: {
+                    colors: ["rgba(" + app.color.whiteRgb + ", 1)"],
+                    fontWeight: '300'
+                },
+                formatter(val, opts) {
+                    const name = opts.w.globals.labels[opts.seriesIndex];
+                    return [val.toFixed(1) + '%'];
+                }
+            },
+            stroke: {
+                width: 0
+            },
+            fill: {
+                type: 'gradient'
+            },
+            legend: {
+                position: 'bottom',
+                formatter: function(val, opts) {
+                    const seriesValue = opts.w.globals.series[opts.seriesIndex];
+                    return val + ": " + seriesValue + "대";
+                }
             }
-        }
-      },
-      stroke: {
-        width: 3
-      },
-      grid: {
-        borderColor: 'rgba(144, 164, 174, 0.5)'
-      },
-      colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', ],
-      dataLabels: {
-        enabled: true,
-        background: {
-            enabled: true,
-            foreColor: 'rgba(29, 40, 53, 0.95)'
-        },
-        dropShadow: {
-            enabled: false,
-        },
-        style: {
-            fontSize: '9px',
-        }
-      },
-      xaxis: {
-        type: 'category',
-        categories: ['28일', '29일', '30일', '31일', '1일', '2일', '3일', '4일', '5일', '6일', '7일', '8일']
-      },
-      yaxis: {
-        title: {
-          text: ''
-        }
-      },
-      legend: {
-        markers: {
-          fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', ]
-        },
-        itemMargin: {
-          horizontal: 20
-        },
-        labels: {
-          colors: 'rgba(255, 255, 255, 0.75)',
-        },
-        position: 'top'
-      }
-    };
-    var asset_cpu_chart = new ApexCharts(document.querySelector('#cpu_line'), asset_cpu_chart_options);
-    asset_cpu_chart.render();
+        };
+        var asset_cpu_chart1 = new ApexCharts(document.querySelector("#" + divId), asset_cpu_chart);
+        asset_cpu_chart1.render();
+    }
+    asset_cpu_chart_options("cpu_donut", dataList.cpu_data_list, ['20% 이상', '20% 이하']);
     //--------------------------------------------------------------------------
     // 금일 가장 많이 배포한 패키지 Top 5
     //--------------------------------------------------------------------------

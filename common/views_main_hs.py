@@ -41,12 +41,22 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 
 @csrf_exempt
 def dashboard(request):
-    Dashboard()
+    DCDL = Dashboard()
     # print(Xfactor_Xuser_Auth.objects.all())
     #session을 computer_id에 넣기
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
-    context = {'menu_list' : menu.data}
+    monthly_asset_data_list = DCDL['monthly_asset_data_list']
+    cpu_data_list = DCDL['cpu_data_list']
+    os_asset_data_list = DCDL['os_asset_data_list']
+    os_up_data_list = DCDL['os_up_data_list']
+    dataList = {
+        'monthly_asset_data_list': monthly_asset_data_list,
+        'cpu_data_list': cpu_data_list,
+        'os_asset_data_list': os_asset_data_list,
+        'os_up_data_list': os_up_data_list
+    }
+    context = {'menu_list' : menu.data, 'dataList': dataList}
     return render(request, 'dashboard1.html', context)
 
 
