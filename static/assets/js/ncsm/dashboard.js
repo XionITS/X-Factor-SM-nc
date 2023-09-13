@@ -373,49 +373,132 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
 //##################################장기 접속/미접속 차트 #################################################
     //console.log(dataList.discover_data_list[0])
     //alert(dataList.discover_data_list.0)
+//
+//    function createDonutChart(divId, seriesData, labelsData) {
+//        var donutOptions = {
+//            series: seriesData,
+//            chart: {
+//                type: 'donut',
+//                width: '100%',
+//                height: 220
+//            },
+//            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
+//            labels: labelsData,
+//            dataLabels: {
+//                enabled: true,
+//                style: {
+//                    colors: ["rgba(" + app.color.whiteRgb + ", 1)"],
+//                    fontWeight: '300'
+//                },
+//                formatter(val, opts) {
+//                    const name = opts.w.globals.labels[opts.seriesIndex];
+//                    return [name + ' ' + val.toFixed(1) + '%'];
+//                }
+//            },
+//            stroke: {
+//                width: 0
+//            },
+//            fill: {
+//                type: 'gradient'
+//            },
+//            legend: {
+//                position: 'bottom',
+//                formatter: function(val, opts) {
+//                    const seriesValue = opts.w.globals.series[opts.seriesIndex];
+//                    return val + ": " + seriesValue + "대";
+//                }
+//            }
+//        };
+//        var donut_chart = new ApexCharts(document.querySelector("#" + divId), donutOptions);
+//        donut_chart.render();
+//    }
+//
+//    discover_counts = dataList.discover_data_list[1]
+//    discover_items = dataList.discover_data_list[0]
+//    createDonutChart("discover_donut", discover_counts, discover_items);
 
-    function createDonutChart(divId, seriesData, labelsData) {
-        var donutOptions = {
-            series: seriesData,
-            chart: {
-                type: 'donut',
-                width: '100%',
-                height: 220
-            },
-            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
-            labels: labelsData,
-            dataLabels: {
-                enabled: true,
-                style: {
-                    colors: ["rgba(" + app.color.whiteRgb + ", 1)"],
-                    fontWeight: '300'
-                },
-                formatter(val, opts) {
-                    const name = opts.w.globals.labels[opts.seriesIndex];
-                    return [name + ' ' + val.toFixed(1) + '%'];
-                }
-            },
-            stroke: {
-                width: 0
-            },
-            fill: {
-                type: 'gradient'
-            },
-            legend: {
-                position: 'bottom',
-                formatter: function(val, opts) {
-                    const seriesValue = opts.w.globals.series[opts.seriesIndex];
-                    return val + ": " + seriesValue + "대";
-                }
+
+
+function apexnotconChart(divId, seriesData, labelsData) {
+    var apexnotconOptions = {
+        series: [100],
+        chart: {
+          height: 250,
+          type: 'radialBar',
+          events: {
+            mounted: (chart) => {
+              chart.windowResizeHandler();
             }
-        };
-        var donut_chart = new ApexCharts(document.querySelector("#" + divId), donutOptions);
-        donut_chart.render();
+          },
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -135,
+            endAngle: 225,
+            hollow: {
+              margin: 0,
+              size: '57%',
+              background: 'transparent',
+              image: undefined,
+              imageOffsetX: 0,
+              imageOffsetY: 0,
+              position: 'front',
+              dropShadow: {
+                enabled: true,
+                top: 3,
+                left: 0,
+                blur: 4,
+                opacity: 0.24
+              }
+            },
+            track: {
+              background: ['rgba(' + app.color.whiteRgb + ', .30)'],
+              strokeWidth: '100%',
+              margin: 0, // margin is in pixels
+              dropShadow: {
+                enabled: true,
+                top: -3,
+                left: 0,
+                blur: 4,
+                opacity: 0.35
+              }
+            },
+            dataLabels: {
+              show: true,
+              name: {
+                offsetY: -10,
+                show: true,
+                color: '#fff',
+                fontSize: '20px'
+              },
+              value: {
+                formatter: function (val) {
+                  return '장기 미접속 자산';
+                },
+                color: '#fff',
+                fontSize: '14px',
+                show: true,
+              }
+            }
+          }
+        },
+        fill: {
+          type: 'gradient',
+          colors: 'rgba(' + app.color.themeRgb + ', 1)',
+        },
+        stroke: {
+          lineCap: 'round'
+        },
+        labels: [seriesData+' 대'],
+    };
+        var apexnotconChart = new ApexCharts(document.querySelector("#" + divId), apexnotconOptions);
+        apexnotconChart.render();
     }
 
-    discover_counts = dataList.discover_data_list[1]
-    discover_items = dataList.discover_data_list[0]
-    createDonutChart("discover_donut", discover_counts, discover_items);
+    // createDonutChart("os_donut", os_pieDataCount, os_pieDataItem);
+    var discover_name = dataList.discover_data_list[0][1]
+    var discover_value = dataList.discover_data_list[1][1]
+    apexnotconChart("apexnotconChart", discover_value, discover_name);
 
 
 //############################# 보안패치 차트#################################################
@@ -460,7 +543,7 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
 
     hotfix_counts = dataList.hotfix_data_list[1]
     hotfix_items = dataList.hotfix_data_list[0]
-    createDonutChart("hotfix_donut", hotfix_counts, hotfix_items);
+    createPieChart("hotfix_donut", hotfix_counts, hotfix_items);
 
 
     //--------------------------------------------------------------------------
@@ -715,46 +798,130 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
     var asset_overview_chart = new ApexCharts(document.querySelector('#chAsset_line'), asset_ch_chart_options);
     asset_overview_chart.render();
 
-
-    function asset_cpu_chart_options(divId, seriesData, labelsData) {
-        var asset_cpu_chart = {
-            series: seriesData,
-            chart: {
-                type: 'donut',
-                width: '100%',
-                height: 220
-            },
-            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
-            labels: labelsData,
-            dataLabels: {
-                enabled: true,
-                style: {
-                    colors: ["rgba(" + app.color.whiteRgb + ", 1)"],
-                    fontWeight: '300'
-                },
-                formatter(val, opts) {
-                    const name = opts.w.globals.labels[opts.seriesIndex];
-                    return [val.toFixed(1) + '%'];
-                }
-            },
-            stroke: {
-                width: 0
-            },
-            fill: {
-                type: 'gradient'
-            },
-            legend: {
-                position: 'bottom',
-                formatter: function(val, opts) {
-                    const seriesValue = opts.w.globals.series[opts.seriesIndex];
-                    return val + ": " + seriesValue + "대";
-                }
+//################################# 태니엄 프로스세 cpu 초과######################################################
+//    function asset_cpu_chart_options(divId, seriesData, labelsData) {
+//        var asset_cpu_chart = {
+//            series: seriesData,
+//            chart: {
+//                type: 'donut',
+//                width: '100%',
+//                height: 220
+//            },
+//            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
+//            labels: labelsData,
+//            dataLabels: {
+//                enabled: true,
+//                style: {
+//                    colors: ["rgba(" + app.color.whiteRgb + ", 1)"],
+//                    fontWeight: '300'
+//                },
+//                formatter(val, opts) {
+//                    const name = opts.w.globals.labels[opts.seriesIndex];
+//                    return [val.toFixed(1) + '%'];
+//                }
+//            },
+//            stroke: {
+//                width: 0
+//            },
+//            fill: {
+//                type: 'gradient'
+//            },
+//            legend: {
+//                position: 'bottom',
+//                formatter: function(val, opts) {
+//                    const seriesValue = opts.w.globals.series[opts.seriesIndex];
+//                    return val + ": " + seriesValue + "대";
+//                }
+//            }
+//        };
+//        var asset_cpu_chart1 = new ApexCharts(document.querySelector("#" + divId), asset_cpu_chart);
+//        asset_cpu_chart1.render();
+//    }
+//    asset_cpu_chart_options("cpu_donut", dataList.cpu_data_list, ['20% 이상', '20% 이하']);
+function apexcpuChart(divId, seriesData, labelsData) {
+    var apexcpuOptions = {
+        series: [100],
+        chart: {
+          height: 250,
+          type: 'radialBar',
+          events: {
+            mounted: (chart) => {
+              chart.windowResizeHandler();
             }
-        };
-        var asset_cpu_chart1 = new ApexCharts(document.querySelector("#" + divId), asset_cpu_chart);
-        asset_cpu_chart1.render();
+          },
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -135,
+            endAngle: 225,
+            hollow: {
+              margin: 0,
+              size: '57%',
+              background: 'transparent',
+              image: undefined,
+              imageOffsetX: 0,
+              imageOffsetY: 0,
+              position: 'front',
+              dropShadow: {
+                enabled: true,
+                top: 3,
+                left: 0,
+                blur: 4,
+                opacity: 0.24
+              }
+            },
+            track: {
+              background: ['rgba(' + app.color.whiteRgb + ', .30)'],
+              strokeWidth: '100%',
+              margin: 0, // margin is in pixels
+              dropShadow: {
+                enabled: true,
+                top: -3,
+                left: 0,
+                blur: 4,
+                opacity: 0.35
+              }
+            },
+            dataLabels: {
+              show: true,
+              name: {
+                offsetY: -10,
+                show: true,
+                color: '#fff',
+                fontSize: '20px'
+              },
+              value: {
+                formatter: function (val) {
+                  return 'Tanium CPU 20% 초과';
+                },
+                color: '#fff',
+                fontSize: '14px',
+                show: true,
+              }
+            }
+          }
+        },
+        fill: {
+          type: 'gradient',
+          colors: 'rgba(' + app.color.themeRgb + ', 1)',
+        },
+        stroke: {
+          lineCap: 'round'
+        },
+        labels: [seriesData+' 대'],
+    };
+        var apexcpuChart = new ApexCharts(document.querySelector("#" + divId), apexcpuOptions);
+        apexcpuChart.render();
     }
-    asset_cpu_chart_options("cpu_donut", dataList.cpu_data_list, ['20% 이상', '20% 이하']);
+
+    // createDonutChart("os_donut", os_pieDataCount, os_pieDataItem);
+
+    var cpu_value = dataList.cpu_data_list[0]
+    apexcpuChart("apexcpuChart", cpu_value, ['']);
+
+
+
+
     //--------------------------------------------------------------------------
     // 금일 가장 많이 배포한 패키지 Top 5
     //--------------------------------------------------------------------------

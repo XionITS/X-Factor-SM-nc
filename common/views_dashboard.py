@@ -144,7 +144,7 @@ def Dashboard():
     # os버전별 자산 현황
     try:
         os_asset = daily.filter(classification='win_os_build').values('item', 'item_count')
-        print(os_asset)
+        #print(os_asset)
         half_index = len(os_asset) // 2
         first_half = os_asset[:half_index]
         second_half = os_asset[half_index:]

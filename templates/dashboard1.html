@@ -9,7 +9,7 @@
 <div id="content" class="dashboard-content">
     <div class="row justify-content-sm-between">
         <div class="col-xxl-8 col-xl-8 col-lg-12 col-md-12 col-12 flex-fill">
-            <div class="card mb-3" style="height: 258px;">
+            <div class="card mb-3" style="height: 275px;">
                 <div class="card-body h-220px">
                     <div class="d-flex fw-bold fs-12px">
                         <div class="flex-grow-1">전체 자산 수</div>
@@ -77,14 +77,14 @@
 <!--            </div>-->
 <!--        </div>-->
         <div class="col-xxl-2 col-xl-4 col-lg-7 col-md-6 col-12 flex-fill">
-            <div class="card mb-3" style="height: 258px;">
+            <div class="card mb-3" style="height: 275px;">
                 <div class="card-body h-220px">
                     <div class="d-flex fw-bold fs-12px mb-2">
                         <div class="flex-grow-1">장기 미접속 자산 ( 150 days )</div>
                     </div>
                     <div class="row align-items-center">
                             <div class="col-12">
-                                <div class="mt-2" id="discover_donut" style="width: 80%; margin: 0 auto;"></div>
+                                <div class="mt-2" id="apexnotconChart" style="width: 80%; margin: 0 auto;"></div>
                             </div>
                     </div>
                 </div>
@@ -375,7 +375,7 @@
                         <div class="flex-grow-1">태니엄 프로세스 CPU 사용량</div>
                     </div>
 
-                    <div id="cpu_donut"></div>
+                    <div id="apexcpuChart"></div>
                 </div>
                 <div class="card-arrow">
                     <div class="card-arrow-top-left"></div>
@@ -455,77 +455,77 @@
 </div>
 <!-- END #content -->
 <script>
-$(document).ready(function() {
-// 대시보드 하단 리포트 달력
-    $('#report_calendar').datepicker({
-      format: 'yyyy-mm-dd',
-      endDate: new Date(),
-    }).on('changeDate', function(e) {
-      var date = e.format();
-      var width = 1200;
-      var height = 900;
-      var left = (screen.width - width) / 2;
-      var top = (screen.height - height) / 2;
-      var options = `width=${width}, height=${height}, left=${left}, top=${top}, scrollbars=yes`;
-      window.open("/report_date/?date=" + date, "_blank", options);
-    });
+<!--$(document).ready(function() {-->
+<!--// 대시보드 하단 리포트 달력-->
+<!--    $('#report_calendar').datepicker({-->
+<!--      format: 'yyyy-mm-dd',-->
+<!--      endDate: new Date(),-->
+<!--    }).on('changeDate', function(e) {-->
+<!--      var date = e.format();-->
+<!--      var width = 1200;-->
+<!--      var height = 900;-->
+<!--      var left = (screen.width - width) / 2;-->
+<!--      var top = (screen.height - height) / 2;-->
+<!--      var options = `width=${width}, height=${height}, left=${left}, top=${top}, scrollbars=yes`;-->
+<!--      window.open("/report_date/?date=" + date, "_blank", options);-->
+<!--    });-->
 
-// 최대 리소스 점유 프로세스 fade in 효과
-    var numRowsToShow = 7;
-    var animationSpeed = 3000;
-    var pauseOnHover = true;
-    var loopCpuProc = setInterval(rotateRowsCpuProc, animationSpeed);
-    var allRowsCpuProc = $('#table-cpuProc-body tr').get();
-    $(allRowsCpuProc).slice(numRowsToShow).hide();
-    var loopMemProc = setInterval(rotateRowsMemProc, animationSpeed);
-    var allRowsMemProc = $('#table-memProc-body tr').get();
-    $(allRowsMemProc).slice(numRowsToShow).hide();
-    var loopDiskApp = setInterval(rotateRowsDiskApp, animationSpeed);
-    var allRowsDiskApp = $('#table-diskApp-body tr').get();
-    $(allRowsDiskApp).slice(numRowsToShow).hide();
-    if (pauseOnHover) {
-        $("#table-cpuProc-body").hover(function() {
-            clearInterval(loopCpuProc);
-        }, function() {
-            loopCpuProc = setInterval(rotateRowsCpuProc, animationSpeed);
-        });
-        $("#table-memProc-body").hover(function() {
-            clearInterval(loopMemProc);
-        }, function() {
-            loopMemProc = setInterval(rotateRowsMemProc, animationSpeed);
-        });
-        $("#table-diskApp-body").hover(function() {
-            clearInterval(loopDiskApp);
-        }, function() {
-            loopDiskApp = setInterval(rotateRowsDiskApp, animationSpeed);
-        });
-    }
-    function rotateRowsCpuProc() {
-        rotateRowsGeneral('#table-cpuProc-body', allRowsCpuProc);
-    }
-    function rotateRowsMemProc() {
-        rotateRowsGeneral('#table-memProc-body', allRowsMemProc);
-    }
-    function rotateRowsDiskApp() {
-        rotateRowsGeneral('#table-diskApp-body', allRowsDiskApp);
-    }
-    function rotateRowsGeneral(tableBodySelector, allRows) {
-        var firstSet = $(tableBodySelector + ' tr:visible');
-        var nextSet = firstSet.last().nextAll().slice(0, numRowsToShow);
-        if (nextSet.length === 0) {
-            nextSet = $(allRows).slice(0, numRowsToShow);
-        }
-        firstSet.fadeOut('slow', function() {
-            nextSet.fadeIn('slow');
-            if (nextSet.last().next().length === 0) {
-                $(allRows).prependTo(tableBodySelector);
-            }
-        });
-    }
+<!--// 최대 리소스 점유 프로세스 fade in 효과-->
+<!--    var numRowsToShow = 7;-->
+<!--    var animationSpeed = 3000;-->
+<!--    var pauseOnHover = true;-->
+<!--    var loopCpuProc = setInterval(rotateRowsCpuProc, animationSpeed);-->
+<!--    var allRowsCpuProc = $('#table-cpuProc-body tr').get();-->
+<!--    $(allRowsCpuProc).slice(numRowsToShow).hide();-->
+<!--    var loopMemProc = setInterval(rotateRowsMemProc, animationSpeed);-->
+<!--    var allRowsMemProc = $('#table-memProc-body tr').get();-->
+<!--    $(allRowsMemProc).slice(numRowsToShow).hide();-->
+<!--    var loopDiskApp = setInterval(rotateRowsDiskApp, animationSpeed);-->
+<!--    var allRowsDiskApp = $('#table-diskApp-body tr').get();-->
+<!--    $(allRowsDiskApp).slice(numRowsToShow).hide();-->
+<!--    if (pauseOnHover) {-->
+<!--        $("#table-cpuProc-body").hover(function() {-->
+<!--            clearInterval(loopCpuProc);-->
+<!--        }, function() {-->
+<!--            loopCpuProc = setInterval(rotateRowsCpuProc, animationSpeed);-->
+<!--        });-->
+<!--        $("#table-memProc-body").hover(function() {-->
+<!--            clearInterval(loopMemProc);-->
+<!--        }, function() {-->
+<!--            loopMemProc = setInterval(rotateRowsMemProc, animationSpeed);-->
+<!--        });-->
+<!--        $("#table-diskApp-body").hover(function() {-->
+<!--            clearInterval(loopDiskApp);-->
+<!--        }, function() {-->
+<!--            loopDiskApp = setInterval(rotateRowsDiskApp, animationSpeed);-->
+<!--        });-->
+<!--    }-->
+<!--    function rotateRowsCpuProc() {-->
+<!--        rotateRowsGeneral('#table-cpuProc-body', allRowsCpuProc);-->
+<!--    }-->
+<!--    function rotateRowsMemProc() {-->
+<!--        rotateRowsGeneral('#table-memProc-body', allRowsMemProc);-->
+<!--    }-->
+<!--    function rotateRowsDiskApp() {-->
+<!--        rotateRowsGeneral('#table-diskApp-body', allRowsDiskApp);-->
+<!--    }-->
+<!--    function rotateRowsGeneral(tableBodySelector, allRows) {-->
+<!--        var firstSet = $(tableBodySelector + ' tr:visible');-->
+<!--        var nextSet = firstSet.last().nextAll().slice(0, numRowsToShow);-->
+<!--        if (nextSet.length === 0) {-->
+<!--            nextSet = $(allRows).slice(0, numRowsToShow);-->
+<!--        }-->
+<!--        firstSet.fadeOut('slow', function() {-->
+<!--            nextSet.fadeIn('slow');-->
+<!--            if (nextSet.last().next().length === 0) {-->
+<!--                $(allRows).prependTo(tableBodySelector);-->
+<!--            }-->
+<!--        });-->
+<!--    }-->
 
-    window.setTimeout('window.location.reload()',600000);
+<!--    window.setTimeout('window.location.reload()',600000);-->
 
-});
+<!--});-->
 
 </script>
 {% endblock %}
