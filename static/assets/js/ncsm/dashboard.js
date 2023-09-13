@@ -497,7 +497,7 @@ function apexnotconChart(divId, seriesData, labelsData) {
 
     // createDonutChart("os_donut", os_pieDataCount, os_pieDataItem);
     var discover_name = dataList.discover_data_list[0][1]
-    var discover_value = dataList.discover_data_list[1][1]
+    var discover_value = dataList.discover_data_list[1][0]
     apexnotconChart("apexnotconChart", discover_value, discover_name);
 
 

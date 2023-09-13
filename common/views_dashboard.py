@@ -28,7 +28,7 @@ def Dashboard():
     asset_log = Daily_Statistics_log.objects.all()
 
     #미관리 자산현황
-    discover_data = asset.filter(classification='discover').order_by('-item').values('item', 'item_count')
+    discover_data = asset.filter(classification='discover').filter(item='장기 미접속 자산').values('item', 'item_count')
     discover_items = [data['item'] for data in discover_data]
     discover_item_counts = [data['item_count'] for data in discover_data]
     discover_data_list = [discover_items, discover_item_counts]
