@@ -85,18 +85,22 @@ def Dashboard():
     #[1.2]
     #[1.2]
     #....
+
+    # win- desk
+
                #    온라인           토탈
-    # win-desk =[on-win-desk,  to-win-desk]
-    # mac -desk =[on-mac-desk,  to-mac-desk]
-    # other -desk[on-other-desk,  to-other-desk]
 
-    # win - note[[on-win-note,  to-win-note]
-    # mac - note[on-mac-note,  to-mac-note]
-    # other -note[on-other-note,  to-other-note]
+    # win-desk =[on-win-desk,  to-win-desk] win group
+    # mac -desk =[on-mac-desk,  to-mac-desk] mac group
+    # other -desk[on-other-desk,  to-other-desk] other group
 
-    # win - other[on-win-other,  to-win-other]
-    # mac - other[on-mac-other,  to-mac-other]
-    # other -other[on-other-other,  to-other-other]
+    # win - note[[on-win-note,  to-win-note] win group
+    # mac - note[on-mac-note,  to-mac-note]mac group
+    # other -note[on-other-note,  to-other-note]other group
+
+    # win - other[on-win-other,  to-win-other] win group
+    # mac - other[on-mac-other,  to-mac-other]mac group
+    # other -other[on-other-other,  to-other-other]other group
 
 
 
