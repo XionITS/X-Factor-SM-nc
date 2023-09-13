@@ -83,12 +83,12 @@ function asset_all_chart(divId, notebook, desktop, other) {
     var asset_all_chart_options = {
     series: [
         {
-        name: ['Notebook'],
-        data: [notebook[0][0]['count'],notebook[1][0]['count']]
-        },
-        {
         name: ['Desktop'],
         data: [desktop[0][0]['count'],desktop[1][0]['count']]
+        },
+        {
+        name: ['Notebook'],
+        data: [notebook[0][0]['count'],notebook[1][0]['count']]
         },
         {
         name: ['Other'],
@@ -171,17 +171,17 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
         {
           name: 'Desktop',
             group: 'budget',
-          data: [1223,2323,1111,1111,2222, 3333]
+          data: [122,343,6543,134,543, 6678]
         },
         {
           name: 'Laptop',
             group: 'budget',
-          data: [1243,2253,1111,1111,2222, 3333]
+          data: [112,323,123,123,432, 133]
         },
           {
           name: 'Other',
             group: 'budget',
-          data: [1243,2253,1111,1111,2222, 3333]
+          data: [112,90,82,132,102, 99]
         }
       ],
       chart: {
