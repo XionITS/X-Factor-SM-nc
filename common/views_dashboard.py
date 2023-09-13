@@ -46,9 +46,17 @@ def Dashboard():
     hotfix_data_list = [hotfix_items, hotfix_item_counts]
 
     # Office 버전
-    office_data = asset.filter(classification='office_ver').exclude(item='').order_by('-item_count').values('item', 'item_count')
-    office_items = [data['item'] for data in office_data]
-    office_item_counts = [data['item_count'] for data in office_data]
+    # office_data = asset.filter(classification='office_ver').exclude(item='').order_by('-item_count').values('item', 'item_count')
+    office_data_new = asset.filter(classification='office_ver', item__in=['Office 21', 'Office 19', 'Office 16']).aggregate(total=Sum('item_count'))
+    office_data_old = asset.filter(classification='office_ver', item__in=['Office 15']).aggregate(total=Sum('item_count'))
+    if office_data_old['total'] == None:
+        office_data_old['total'] = 0
+    office_data_none = asset.filter(classification='office_ver', item__in=['unconfiremd', '오피스 없음', '']).aggregate(
+        total=Sum('item_count'))
+    # office_items = [data['item'] for data in office_data]
+    # office_item_counts = [data['item_count'] for data in office_data]
+    office_items = ['Office 16 이상', 'Office 16 미만', 'Office 설치 안됨']
+    office_item_counts = [office_data_new['total'], office_data_old['total'], office_data_none['total']]
     office_data_list = [office_items, office_item_counts]
 
     # 전체자산수 Online, TOTAL, Chassis type
@@ -119,7 +127,7 @@ def Dashboard():
     lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
     lastMonth = pd.date_range(lastDay, periods=5, freq='M').strftime("%Y-%m-%d")
     LM = tuple(lastMonth)
-    print(LM)
+    # print(LM)
     daily_asset_desktop = asset_log.filter(classification='chassis_type').filter(item='Desktop').values('item_count', 'statistics_collection_date')
     daily_asset_laptop = asset_log.filter(classification='chassis_type').filter(item='Notebook').values('item_count', 'statistics_collection_date')
     minutely_asset_desktop = asset.filter(classification='chassis_type').filter(item='Desktop').values('item_count', 'statistics_collection_date')
@@ -144,7 +152,7 @@ def Dashboard():
     # os버전별 자산 현황
     try:
         os_asset = daily.filter(classification='win_os_build').values('item', 'item_count')
-        #print(os_asset)
+        # print(os_asset)
         half_index = len(os_asset) // 2
         first_half = os_asset[:half_index]
         second_half = os_asset[half_index:]
