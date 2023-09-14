@@ -7,9 +7,8 @@ import os
 import datetime
 
 
-csrf_exempt
+@csrf_exempt
 def export(request, model):
-
     # 동적으로 모델에서 컬럼명 추출
     model_class = apps.get_model('common', model)  # 앱 이름과 모델명을 지정하여 모델 클래스를 가져옵니다
     columns = [field.name for field in model_class._meta.get_fields() if not field.many_to_many and not field.one_to_many]  # 모델의 모든 필드 이름을 가져옵니다
