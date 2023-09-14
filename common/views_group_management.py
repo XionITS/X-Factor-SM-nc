@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 import math
+import json
 import operator
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -12,8 +13,11 @@ from django.core.serializers import serialize
 from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
+with open("setting.json", encoding="UTF-8") as f:
+    SETTING = json.loads(f.read())
+DBSettingTime = SETTING['DB']['DBSelectTime']
 
-today_collect_date = timezone.now() - timedelta(minutes=7)
+today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 
 @csrf_exempt
 def group(request):

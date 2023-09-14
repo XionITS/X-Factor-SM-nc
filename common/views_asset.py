@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 import math
 import operator
+import json
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -13,7 +14,12 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 
-today_collect_date = timezone.now() - timedelta(minutes=7)
+with open("setting.json", encoding="UTF-8") as f:
+    SETTING = json.loads(f.read())
+DBSettingTime = SETTING['DB']['DBSelectTime']
+
+today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+
 
 @csrf_exempt
 def asset(request):
@@ -29,11 +35,12 @@ def asset(request):
 @csrf_exempt
 def search(request):
     if request.method == "POST":
-        today_collect_date = timezone.now() - timedelta(minutes=7)
+        today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
         #print(search_text)
         user = Xfactor_Service.objects.select_related('computer').filter(user_date__gte=today_collect_date).filter(computer__computer_name=search_text)
-        user_data = XfactorServiceerializer(user, many=True).data
+        #print(user)
+        user_data = XfactorServiceserializer(user, many=True).data
         #print(user_data.data)
         # response = {
         #     'data': user_data,  # Serialized data for the current page
