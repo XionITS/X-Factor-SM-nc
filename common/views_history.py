@@ -55,7 +55,7 @@ def search_box_h(request):
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
-        user_data = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).filter(computer_name__contains=search_text).values('computer_name')
+        user_data = Xfactor_Common.objects.filter(computer_name__contains=search_text).values('computer_name')
         print(user_data)
         # user_data = XfactorServiceserializer(user, many=True).data
         return JsonResponse({'data': list(user_data)})

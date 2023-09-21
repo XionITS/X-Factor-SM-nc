@@ -46,9 +46,35 @@ def signup(request):
             if page == 'um':
                 res_data['error'] = "회원가입에 성공하였습니다."
                 redirect_url = '../user_management'
+                function = 'Add User'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+                item = 'Add user '+ x_id
+                result = '성공'
+                user = request.session.get('sessionid')
+                date = timezone.now()
+                Xfactor_log = Xfactor_Log(
+                    log_func=function,
+                    log_item=item,
+                    log_result=result,
+                    log_user=user,
+                    log_date=date
+                )
+                Xfactor_log.save()
                 return redirect(redirect_url)
                 #return render(request, 'user_management.html', res_data)
             else :
+                function = 'Signup User'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+                item = 'Signup user ' + x_id
+                result = '성공'
+                user = x_id
+                date = timezone.now()
+                Xfactor_log = Xfactor_Log(
+                    log_func=function,
+                    log_item=item,
+                    log_result=result,
+                    log_user=user,
+                    log_date=date
+                )
+                Xfactor_log.save()
                 res_data['error'] = "회원가입에 성공하였습니다."
                 return render(request, 'common/login.html', res_data)
         else:
@@ -93,7 +119,8 @@ def login(request):
                     item = 'admin 계정'
                     result = '성공'
                     user = RS[0]
-                    date = timezone.now()
+                    now = timezone.now().replace(microsecond=0)
+                    date = now.strftime("%Y-%m-%d %H:%M:%S")
                     print(date)
                     Xfactor_log = Xfactor_Log(
                         log_func=function,
@@ -367,6 +394,23 @@ def delete(request):
 
         Conn.commit()
         Conn.close()
+
+        function = 'User Delete'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+        item = 'Delete user ' + x_id
+        result = '성공'
+        user = request.session.get('sessionid')
+        now = datetime.now().replace(microsecond=0)
+        date = now.strftime("%Y-%m-%d %H:%M:%S")
+        print(date)
+        Xfactor_log = Xfactor_Log(
+            log_func=function,
+            log_item=item,
+            log_result=result,
+            log_user=user,
+            log_date=date
+        )
+        Xfactor_log.save()
+
         return JsonResponse({'result': 'success'}, status=200)  # 성공적으로 삭제되었을 때 응답
     except Exception as e:
         print(str(e))  # 에러 메시지 출력 (디버깅 용)

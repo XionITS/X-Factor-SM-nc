@@ -1,3 +1,4 @@
+import pytz
 from django.db.models.expressions import RawSQL
 from django.http import HttpResponse
 import math
@@ -33,13 +34,24 @@ def log(request):
 
 @csrf_exempt
 def log_paging(request):
-    log = Xfactor_Log.objects.order_by('-log_date')
+    korean_tz = pytz.timezone('Asia/Seoul')
+    logs = Xfactor_Log.objects.order_by('-log_date')
+    formatted_logs = [
+        {
+            'log_func': log.log_func,
+            'log_item': log.log_item,
+            'log_result': log.log_result,
+            'log_user': log.log_user,
+            'log_date': log.log_date.astimezone(korean_tz).strftime("%Y-%m-%d %H:%M:%S")
+        }
+        for log in logs
+    ]
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
 
     # Paginate the queryset
-    paginator = Paginator(log, length)
+    paginator = Paginator(formatted_logs, length)
     page_number = (start // length) + 1
 
     try:

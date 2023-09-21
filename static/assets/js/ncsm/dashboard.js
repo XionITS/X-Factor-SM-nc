@@ -1158,7 +1158,7 @@ var handleRenderChartNCOMG = function () {
 
 
 ///////////////////////Datepicker////////////////////
-$("#datepicker1").datepicker({
+$("#datepickerD").datepicker({
     format: 'yyyy-mm-dd',
     autoclose: true,
 }).on('changeDate', function (e) {
@@ -1166,7 +1166,7 @@ $("#datepicker1").datepicker({
 });
 $(document).ready(function () {
     $("button.input-group-text").click(function () {
-        $("#datepicker1").focus(); // input에 포커스를 줍니다. 이로써 데이터피커가 표시될 수 있습니다.
+        $("#datepickerD").focus(); // input에 포커스를 줍니다. 이로써 데이터피커가 표시될 수 있습니다.
     });
 });
 

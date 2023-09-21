@@ -10,24 +10,25 @@ var date1 = ''
 var date2 = ''
 $(document).ready(function(){
 
+    $("#aa").click(function(){
+        $("#datepicker1").focus(); // input에 포커스를 줍니다. 이로써 데이터피커가 표시될 수 있습니다.
+    });
     $("#datepicker1").datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
     }).on('changeDate', function(e) {
         date1 = e.format()
     });
-    $("#aa").click(function(){
-    $("#datepicker1").focus(); // input에 포커스를 줍니다. 이로써 데이터피커가 표시될 수 있습니다.
-});
+
+    $("#bb").click(function(){
+        $("#datepicker2").focus(); // input에 포커스를 줍니다. 이로써 데이터피커가 표시될 수 있습니다.
+    });
     $("#datepicker2").datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
     }).on('changeDate', function(e) {
         date2 = e.format()
     });
-    $("#bb").click(function(){
-        $("#datepicker2").focus(); // input에 포커스를 줍니다. 이로써 데이터피커가 표시될 수 있습니다.
-      });
 
 
   $('#search_his').autocomplete({
