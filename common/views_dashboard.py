@@ -52,6 +52,8 @@ def Dashboard():
     # Office 버전
     # office_data = asset.filter(classification='office_ver').exclude(item='').order_by('-item_count').values('item', 'item_count')
     office_data_new = asset.filter(classification='office_ver', item__in=['Office 21', 'Office 19', 'Office 16']).aggregate(total=Sum('item_count'))
+    if office_data_new['total'] == None:
+        office_data_new['total'] = 0
     office_data_old = asset.filter(classification='office_ver', item__in=['Office 15']).aggregate(total=Sum('item_count'))
     if office_data_old['total'] == None:
         office_data_old['total'] = 0
