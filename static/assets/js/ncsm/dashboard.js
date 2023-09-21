@@ -6,253 +6,396 @@ var handleRenderChartNCOMG = function () {
     // global apexchart settings
     Apex = {
         title: {
-          style: {
-            fontSize: "12px",
-            fontWeight: "bold",
-            fontFamily: app.font.family,
-            color: app.color.white,
-          },
+            style: {
+                fontSize: "13px",
+                fontWeight: "bold",
+                fontFamily: app.font.family,
+                color: app.color.white,
+            },
         },
         legend: {
-          fontFamily: app.font.family,
-          labels: {
-            colors: "#fff",
-            show: true,
-          },
+            fontFamily: app.font.family,
+            labels: {
+                colors: "#fff",
+                show: true,
+            },
         },
         tooltip: {
-          style: {
-            fontSize: "10px",
-            fontFamily: app.font.family,
-          },
+            style: {
+                fontSize: "11px",
+                fontFamily: app.font.family,
+            },
         },
         grid: {
-          borderColor: "rgba(" + app.color.whiteRgb + ", .25)",
+            borderColor: "rgba(" + app.color.whiteRgb + ", .25)",
         },
         dataLabels: {
-          style: {
-            fontSize: "12px",
-            fontFamily: app.font.family,
-            fontWeight: "bold",
-            colors: undefined,
-          },
+            style: {
+                fontSize: "12px",
+                fontFamily: app.font.family,
+                fontWeight: "bold",
+                colors: undefined,
+            },
         },
         xaxis: {
-          axisBorder: {
-            show: false,
-            color: "rgba(" + app.color.whiteRgb + ", .25)",
-            height: 1,
-            width: "100%",
-            offsetX: 0,
-            offsetY: -1,
-          },
-          axisTicks: {
-            show: false,
-            borderType: "solid",
-            color: "rgba(" + app.color.whiteRgb + ", .25)",
-            height: 6,
-            offsetX: 0,
-            offsetY: 0,
-          },
-          labels: {
-            style: {
-              colors: "#fff",
-              fontSize: "9px",
-              fontFamily: app.font.family,
-              fontWeight: 400,
-              cssClass: "apexcharts-xaxis-label",
+            axisBorder: {
+                show: false,
+                color: "rgba(" + app.color.whiteRgb + ", .25)",
+                height: 1,
+                width: "100%",
+                offsetX: 0,
+                offsetY: -1,
             },
-          },
+            axisTicks: {
+                show: false,
+                borderType: "solid",
+                color: "rgba(" + app.color.whiteRgb + ", .25)",
+                height: 6,
+                offsetX: 0,
+                offsetY: 0,
+            },
+            labels: {
+                style: {
+                    colors: "#fff",
+                    fontSize: "13px",
+                    fontFamily: app.font.family,
+                    fontWeight: 400,
+                    cssClass: "apexcharts-xaxis-label",
+                },
+            },
         },
         yaxis: {
-          labels: {
-            style: {
-              colors: "#fff",
-              fontSize: "9px",
-              fontFamily: app.font.family,
-              fontWeight: 400,
-              cssClass: "apexcharts-xaxis-label",
+            labels: {
+                style: {
+                    colors: "#fff",
+                    fontSize: "13px",
+                    fontFamily: app.font.family,
+                    fontWeight: 400,
+                    cssClass: "apexcharts-xaxis-label",
+                },
             },
-          },
         },
     };
 
 
 //############################### 전체 자산 수 #######################################
-function asset_all_chart(divId, notebook, desktop, other) {
-    var asset_all_chart_options = {
-    series: [
-        {
-        name: ['Desktop'],
-        data: [desktop[0][0]['count'],desktop[1][0]['count']]
-        },
-        {
-        name: ['Notebook'],
-        data: [notebook[0][0]['count'],notebook[1][0]['count']]
-        },
-        {
-        name: ['Other'],
-        data: [other[0]['count'],other[1]['count']]
-        }
-    ],
-    chart: {
-        type: 'bar',
-        background: 'transparent',
-        foreColor: 'rgba(255, 255, 255, 0.75)',
-        height: 200,
-        stacked: true
-    },
-    responsive: [{
-        breakpoint: 480,
-        options: {
-            legend: {
-            position: 'bottom',
-            offsetX: -10,
-            offsetY: 0
-            }
-        }
-        }],
-        plotOptions: {
-    bar: {
-        horizontal: true,
-        dataLabels: { position: 'middle' }
+    function asset_all_chart(divId, notebook, desktop, other) {
+        // 데이터 포인트의 총합을 계산
+        const totalData1 = [
+            notebook[0][0]['count'] + desktop[0][0]['count'] + other[0]['count']
+        ];
+        const totalData2 = [
+            notebook[1][0]['count'] + desktop[1][0]['count'] + other[1]['count']
+        ];
+
+        document.getElementById('totalDataDiv').innerHTML = `Online : ${totalData1} &nbsp;&nbsp;&nbsp;&nbsp;Total : ${totalData2}`;
+
+        var asset_all_chart_options = {
+            series: [
+                {
+                    name: ['Desktop'],
+                    data: [desktop[0][0]['count'], desktop[1][0]['count']]
+                },
+                {
+                    name: ['Notebook'],
+                    data: [notebook[0][0]['count'], notebook[1][0]['count']]
+                },
+                {
+                    name: ['Other'],
+                    data: [other[0]['count'], other[1]['count']]
+                },
+            ],
+            chart: {
+                type: 'bar',
+                background: 'transparent',
+                foreColor: 'rgba(255, 255, 255, 0.75)',
+                height: 225,
+                stacked: true,
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                },
+            },
+            grid: {
+                borderColor: 'rgba(144, 164, 174, 0.5)'
+            },
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', 'rgba(0,0,0,0)'],
+            xaxis: {
+                categories: ['Online', 'Total'],
+                labels: {
+                    style: {
+                        fontSize: '13px'
+                    }
+                },
+            },
+
+            dataLabels: {
+                enabled: true,
+                enabledOnSeries: [0, 1, 2],
+                formatter: function (val, opt) {
+                    let series = opt.w.config.series;
+                    let idx = opt.dataPointIndex;
+                    const total = series.reduce((total, self) => total + self.data[idx], 0);
+                    return `${val}`;
+                },
+                style: {
+                    fontSize: '13px',
+                    colors: ["#fff"],
+                }
+            },
+            // legend: {
+            //     markers: {
+            //         fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', ]
+            //     },
+            //     itemMargin: {
+            //         horizontal: 20
+            //     },
+            //     fill: {
+            //         opacity: 1
+            //     },
+            //     labels: {
+            //         colors: 'rgba(255, 255, 255, 0.75)',
+            //     },
+            //     position: 'bottom'
+            // }
+        };
+        var asset_all_chart = new ApexCharts(document.querySelector('#asset_all_chart'), asset_all_chart_options);
+        asset_all_chart.render();
     }
-    },
-    grid: {
-        borderColor: 'rgba(144, 164, 174, 0.5)'
-    },
-    colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', ],
-    dataLabels: {
-        enabled: true,
-        background: {
-            enabled: true,
-            foreColor: 'rgba(29, 40, 53, 0.95)'
-        },
-        dropShadow: {
-            enabled: false,
-        },
-        style: {
-            fontSize: '9px',
-        }
-    },
-    xaxis: {
-        categories: ['Online', 'Total']
-    },
-    legend: {
-        markers: {
-          fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', ]
-        },
-        itemMargin: {
-          horizontal: 20
-        },
-        fill: {
-        opacity: 1
-        },
-        labels: {
-        colors: 'rgba(255, 255, 255, 0.75)',
-        },
-        position: 'bottom'
-    }
-    };
-    var asset_all_chart = new ApexCharts(document.querySelector('#asset_all_chart'), asset_all_chart_options);
-    asset_all_chart.render();
-}
 
     asset_all_notebook = dataList.asset_all_chart_list[0]
     asset_all_desktop = dataList.asset_all_chart_list[1]
     asset_all_other = dataList.asset_all_chart_list[2]
+
+
     asset_all_chart("asset_all_chart", asset_all_notebook, asset_all_desktop, asset_all_other);
 
 
-//############################### 전체 자산 수 #######################################
-function asset_all_os_chart(divId, seriesData, labelsData) {
-    var asset_all_os_chart_options = {
-      series: [
-        {
-          name: 'Desktop',
-            group: 'budget',
-          data: [122,343,6543,134,543, 6678]
-        },
-        {
-          name: 'Laptop',
-            group: 'budget',
-          data: [112,323,123,123,432, 133]
-        },
-          {
-          name: 'Other',
-            group: 'budget',
-          data: [112,90,82,132,102, 99]
-        }
-      ],
-      chart: {
-        type: 'bar',
-        background: 'transparent',
-        foreColor: 'rgba(255, 255, 255, 0.75)',
-        height: 200,
-          stacked: true,
-        width: '100%',
-        toolbar: {
-            show: true,
-            tools: {
-                zoom: false,
-                pan: false
+//############################### 전체 자산 수(Online OS) #######################################
+    function asset_all_os_chart1(divId, seriesData, labelsData) {
+        var asset_all_os_chart_options1 = {
+            series: [
+                {
+                    name: 'Desktop',
+                    group: 'budget',
+                    data: [122, 343, 6543,]
+                },
+                {
+                    name: 'Notebook',
+                    group: 'budget',
+                    data: [112, 323, 123,]
+                },
+                {
+                    name: 'Other',
+                    group: 'budget',
+                    data: [112, 90, 82,]
+                }
+            ],
+            //   chart: {
+            //     type: 'bar',
+            //     background: 'transparent',
+            //     foreColor: 'rgba(255, 255, 255, 0.75)',
+            //     height: 200,
+            //       stacked: true,
+            //     width: '100%',
+            //     toolbar: {
+            //         show: true,
+            //         tools: {
+            //             zoom: false,
+            //             pan: false
+            //         }
+            //     }
+            //   },
+            //     plotOptions: {
+            //   bar: {
+            //     horizontal: true,
+            //     // dataLabels: { position: 'top' }
+            //   }
+            // },
+            //   stroke: {
+            //     width: 3
+            //   },
+            //   grid: {
+            //     borderColor: 'rgba(144, 164, 174, 0.5)'
+            //   },
+            chart: {
+                type: 'bar',
+                background: 'transparent',
+                foreColor: 'rgba(255, 255, 255, 0.75)',
+                height: 110,
+                stacked: true,
+                toolbar: {
+                show: false
+            },
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'top',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                },
+            },
+            grid: {
+                borderColor: 'rgba(144, 164, 174, 0.5)'
+            },
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', 'rgba(0,0,0,0)'],
+
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '9px',
+                    colors: ["#fff"],
+                }
+            },
+            xaxis: {
+                type: 'category',
+                categories: ['other', 'Mac', 'Windows'],
+                labels: {
+                    show : false,
+                    style: {
+                        fontSize: "8px",
+                    },
+                },
+            },
+            yaxis: {
+                labels: {
+                    fontSize: "8px",
+                },
+            },
+            legend: {
+                fontSize: '10px',
+                markers: {
+                    fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',]
+                },
+                itemMargin: {
+                    horizontal: 20
+                },
+                labels: {
+                    colors: 'rgba(255, 255, 255, 0.75)',
+                },
+                position: 'top'
             }
-        }
-      },
-        plotOptions: {
-      bar: {
-        horizontal: true,
-        dataLabels: { position: 'top' }
-      }
-    },
-      stroke: {
-        width: 3
-      },
-      grid: {
-        borderColor: 'rgba(144, 164, 174, 0.5)'
-      },
-      colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', ],
-      dataLabels: {
-        enabled: true,
-        background: {
-            enabled: true,
-            foreColor: 'rgba(29, 40, 53, 0.95)'
-        },
-        dropShadow: {
-            enabled: false,
-        },
-        style: {
-            fontSize: '9px',
-        }
-      },
-      xaxis: {
-        type: 'category',
-        categories: [['other', 'Mac', 'Windows'],['other', 'Mac', 'Windows']]
-      },
-      yaxis: {
-        title: {
-          text: ''
-        }
-      },
-      legend: {
-        markers: {
-          fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', ]
-        },
-        itemMargin: {
-          horizontal: 20
-        },
-        labels: {
-          colors: 'rgba(255, 255, 255, 0.75)',
-        },
-        position: 'bottom'
-      }
-    };
-    var asset_all_os_chart = new ApexCharts(document.querySelector('#asset_all_os_chart'), asset_all_os_chart_options);
-    asset_all_os_chart.render();
-}
+        };
+        var asset_all_os_chart1 = new ApexCharts(document.querySelector('#asset_all_os_chart1'), asset_all_os_chart_options1);
+        asset_all_os_chart1.render();
+    }
+
     hotfix_counts = dataList.hotfix_data_list[1]
     hotfix_items = dataList.hotfix_data_list[0]
-    asset_all_os_chart("asset_all_os_chart", hotfix_counts, hotfix_items);
+    asset_all_os_chart1("asset_all_os_chart", hotfix_counts, hotfix_items);
+
+//#######################################전체 자산 수(Total OS)#################################
+    function asset_all_os_chart2(divId, seriesData, labelsData) {
+        var asset_all_os_chart_options2 = {
+            series: [
+                {
+                    name: 'Desktop',
+                    group: 'budget',
+                    data: [134, 543, 6678]
+                },
+                {
+                    name: 'Notebook',
+                    group: 'budget',
+                    data: [123, 432, 133]
+                },
+                {
+                    name: 'Other',
+                    group: 'budget',
+                    data: [132, 102, 99]
+                }
+            ],
+            chart: {
+                type: 'bar',
+                background: 'transparent',
+                foreColor: 'rgba(255, 255, 255, 0.75)',
+                height: 112,
+                stacked: true,
+                toolbar: {
+                show: false
+            },
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                },
+            },
+            grid: {
+                borderColor: 'rgba(144, 164, 174, 0.5)'
+            },
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', 'rgba(0,0,0,0)'],
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '9px',
+                    colors: ["#fff"],
+                }
+            },
+            xaxis: {
+                type: 'category',
+                categories: ['other', 'Mac', 'Windows',],
+                labels: {
+                    show : false,
+                    style: {
+                        fontSize: "8px",
+                    },
+                },
+            },
+            yaxis: {
+                labels: {
+                    fontSize: "8px",
+                }
+            },
+
+            legend: {
+                fontSize: '8px',
+                markers: {
+                    fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',]
+                },
+                itemMargin: {
+                    horizontal: 20
+                },
+                labels: {
+                    colors: 'rgba(255, 255, 255, 0.75)',
+                },
+                position: 'bottom'
+            }
+        };
+        var asset_all_os_chart2 = new ApexCharts(document.querySelector('#asset_all_os_chart2'), asset_all_os_chart_options2);
+        asset_all_os_chart2.render();
+    }
+
+    hotfix_counts = dataList.hotfix_data_list[1]
+    hotfix_items = dataList.hotfix_data_list[0]
+    asset_all_os_chart2("asset_all_os_chart2", hotfix_counts, hotfix_items);
 
     //--------------------------------------------------------------------------
     // 자산 관리 현황 미니도넛, 프로그레스 바 - DISK 사용률 초과 서버, MEMORY 사용률 초과 서버
@@ -267,38 +410,38 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
     var om_disk_chartOptions = {
         series: [20, 20, 20, 20, 20],
         chart: {
-          width: 100,
-          height: 100,
-          type: 'donut',
-          toolbar: {
-            show: false
-          }
+            width: 100,
+            height: 100,
+            type: 'donut',
+            toolbar: {
+                show: false
+            }
         },
         colors: ['rgba(223, 224, 223, .2)', 'rgba(223, 224, 223, .4)', 'rgba(223, 224, 223, .5)', 'rgba(223, 224, 223, .8)', 'rgba(223, 224, 223, 1)'],
         plotOptions: {
-          pie: {
-            donut: {
-              labels: {
-                show: false
-              }
+            pie: {
+                donut: {
+                    labels: {
+                        show: false
+                    }
+                }
             }
-          }
         },
         dataLabels: {
-          enabled: false
+            enabled: false
         },
         legend: {
-          show: false
+            show: false
         },
         stroke: {
-          show: false
+            show: false
         },
         tooltip: {
-          enabled: false
+            enabled: false
         }
     };
     var chartContainers = document.querySelectorAll('.om_disk_chart');
-    chartContainers.forEach(function(container) {
+    chartContainers.forEach(function (container) {
         var chart = new ApexCharts(container, om_disk_chartOptions);
         chart.render();
     });
@@ -340,6 +483,7 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
                 enabled: true,
                 style: {
                     colors: ["rgba(" + app.color.whiteRgb + ", 1)"],
+                    fontSize: '13px',
                     fontWeight: '300'
                 },
                 formatter(val, opts) {
@@ -355,7 +499,7 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
             },
             legend: {
                 position: 'bottom',
-                formatter: function(val, opts) {
+                formatter: function (val, opts) {
                     const seriesValue = opts.w.globals.series[opts.seriesIndex];
                     return val;
                 }
@@ -367,7 +511,6 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
 
     // createDonutChart("os_donut", os_pieDataCount, os_pieDataItem);
     osPieChart("os_pie", dataList.os_up_data_list, ['업데이트 완료', '업데이트 필요']);
-
 
 
 //##################################장기 접속/미접속 차트 #################################################
@@ -418,79 +561,78 @@ function asset_all_os_chart(divId, seriesData, labelsData) {
 //    createDonutChart("discover_donut", discover_counts, discover_items);
 
 
-
-function apexnotconChart(divId, seriesData, labelsData) {
-    var apexnotconOptions = {
-        series: [100],
-        chart: {
-          height: 250,
-          type: 'radialBar',
-          events: {
-            mounted: (chart) => {
-              chart.windowResizeHandler();
-            }
-          },
-        },
-        plotOptions: {
-          radialBar: {
-            startAngle: -135,
-            endAngle: 225,
-            hollow: {
-              margin: 0,
-              size: '57%',
-              background: 'transparent',
-              image: undefined,
-              imageOffsetX: 0,
-              imageOffsetY: 0,
-              position: 'front',
-              dropShadow: {
-                enabled: true,
-                top: 3,
-                left: 0,
-                blur: 4,
-                opacity: 0.24
-              }
-            },
-            track: {
-              background: ['rgba(' + app.color.whiteRgb + ', .30)'],
-              strokeWidth: '100%',
-              margin: 0, // margin is in pixels
-              dropShadow: {
-                enabled: true,
-                top: -3,
-                left: 0,
-                blur: 4,
-                opacity: 0.35
-              }
-            },
-            dataLabels: {
-              show: true,
-              name: {
-                offsetY: -10,
-                show: true,
-                color: '#fff',
-                fontSize: '20px'
-              },
-              value: {
-                formatter: function (val) {
-                  return '장기 미접속 자산';
+    function apexnotconChart(divId, seriesData, labelsData) {
+        var apexnotconOptions = {
+            series: [100],
+            chart: {
+                height: 250,
+                type: 'radialBar',
+                events: {
+                    mounted: (chart) => {
+                        chart.windowResizeHandler();
+                    }
                 },
-                color: '#fff',
-                fontSize: '14px',
-                show: true,
-              }
-            }
-          }
-        },
-        fill: {
-          type: 'gradient',
-          colors: 'rgba(' + app.color.themeRgb + ', 1)',
-        },
-        stroke: {
-          lineCap: 'round'
-        },
-        labels: [seriesData+' 대'],
-    };
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -135,
+                    endAngle: 225,
+                    hollow: {
+                        margin: 0,
+                        size: '57%',
+                        background: 'transparent',
+                        image: undefined,
+                        imageOffsetX: 0,
+                        imageOffsetY: 0,
+                        position: 'front',
+                        dropShadow: {
+                            enabled: true,
+                            top: 3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.24
+                        }
+                    },
+                    track: {
+                        background: ['rgba(' + app.color.whiteRgb + ', .30)'],
+                        strokeWidth: '100%',
+                        margin: 0, // margin is in pixels
+                        dropShadow: {
+                            enabled: true,
+                            top: -3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.35
+                        }
+                    },
+                    dataLabels: {
+                        show: true,
+                        name: {
+                            offsetY: -10,
+                            show: true,
+                            color: '#fff',
+                            fontSize: '20px'
+                        },
+                        value: {
+                            formatter: function (val) {
+                                return '장기 미접속 자산';
+                            },
+                            color: '#fff',
+                            fontSize: '14px',
+                            show: true,
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'gradient',
+                colors: 'rgba(' + app.color.themeRgb + ', 1)',
+            },
+            stroke: {
+                lineCap: 'round'
+            },
+            labels: [seriesData + ' 대'],
+        };
         var apexnotconChart = new ApexCharts(document.querySelector("#" + divId), apexnotconOptions);
         apexnotconChart.render();
     }
@@ -516,6 +658,7 @@ function apexnotconChart(divId, seriesData, labelsData) {
                 enabled: true,
                 style: {
                     colors: ["rgba(" + app.color.whiteRgb + ", 1)"],
+                    fontSize: '13px',
                     fontWeight: '300'
                 },
                 formatter(val, opts) {
@@ -531,7 +674,7 @@ function apexnotconChart(divId, seriesData, labelsData) {
             },
             legend: {
                 position: 'bottom',
-                formatter: function(val, opts) {
+                formatter: function (val, opts) {
                     const seriesValue = opts.w.globals.series[opts.seriesIndex];
                     return val;
                 }
@@ -563,237 +706,240 @@ function apexnotconChart(divId, seriesData, labelsData) {
 //#################################위치별 자산현황###########################################
     function location_chart(divId, seriesData, labelsData) {
         var asset_location_chart_options = {
-        chart: {
-          type: 'bar',
-          background: 'transparent',
-          foreColor: 'rgba(255, 255, 255, 0.75)',
-          height: 200,
-          width :'100%',
-          type: 'bar',
-          toolbar: {
-            show: true,
-            tools: {
-                zoom: false,
-                pan: false
-            }
-          }
-        },
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: '50%',
-            distributed: true,
-            endingShape: 'rounded',
-            dataLabels: {
-                total: {
-                    enabled: true,
+            chart: {
+                type: 'bar',
+                background: 'transparent',
+                foreColor: 'rgba(255, 255, 255, 0.75)',
+                height: 200,
+                width: '100%',
+                type: 'bar',
+                toolbar: {
+                    show: true,
+                    tools: {
+                        zoom: false,
+                        pan: false
+                    }
+                }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '50%',
+                    distributed: true,
+                    endingShape: 'rounded',
+                    dataLabels: {
+                        total: {
+                            enabled: true,
+                        },
+                    }
                 },
+            },
+            legend: {
+                show: false
+            },
+            dataLabels: {
+                enabled: true,
+                // background: {
+                //   enabled: true,
+                //   foreColor: 'rgba(29, 40, 53, 0.95)'
+                // },
+                // dropShadow: {
+                //   enabled: false,
+                // },
+                style: {
+                    fontSize: '13px',
+                    colors: ["#fff"],
+                }
+            },
+            stroke: {
+                width: 3
+            },
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
+            series: [{
+                data: seriesData
+            }],
+            grid: {
+                borderColor: 'rgba(144, 164, 174, 0.5)'
+            },
+            xaxis: {
+                categories: labelsData,
+                labels: {
+                    show: true,
+                    style: {
+                        fontSize: '13px'
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    show: true,
+                    formatter: function (val) {
+                        return parseInt(val);
+                    }
+                }
             }
-          },
-        },
-        legend: {
-          show: false
-        },
-        dataLabels: {
-          enabled: true,
-          background: {
-            enabled: true,
-            foreColor: 'rgba(29, 40, 53, 0.95)'
-          },
-          dropShadow: {
-            enabled: false,
-          },
-          style: {
-            fontSize: '9px',
-          }
-        },
-        stroke: {
-          width: 3
-        },
-        colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
-        series: [{
-          data: seriesData
-        }],
-        grid: {
-          borderColor: 'rgba(144, 164, 174, 0.5)'
-        },
-        xaxis: {
-          categories: labelsData,
-          labels: {
-            show: true,
-            style: {
-              fontSize: '12px'
-            }
-          }
-        },
-        yaxis: {
-          labels: {
-            show: true,
-            formatter : function (val){
-                return parseInt(val);
-            }
-          }
-        }
         };
         var asset_location_chart = new ApexCharts(document.querySelector('#location_bar'), asset_location_chart_options);
         asset_location_chart.render();
     }
+
     location_counts = dataList.location_data_list[1]
     location_items = dataList.location_data_list[0]
     location_chart("location_bar", location_counts, location_items);
 
 
-
-
 //####################################오피스버전별#########################################
     function office_chart(divId, seriesData, labelsData) {
         var asset_office_chart_options = {
-        chart: {
-          type: 'bar',
-          background: 'transparent',
-          foreColor: 'rgba(255, 255, 255, 0.75)',
-          height: 200,
-          width :'100%',
-          type: 'bar',
-          toolbar: {
-            show: true,
-            tools: {
-                zoom: false,
-                pan: false
-            }
-          }
-        },
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: '50%',
-            distributed: true,
-            endingShape: 'rounded',
-            dataLabels: {
-                total: {
-                    enabled: true,
+            chart: {
+                type: 'bar',
+                background: 'transparent',
+                foreColor: 'rgba(255, 255, 255, 0.75)',
+                height: 200,
+                width: '100%',
+                type: 'bar',
+                toolbar: {
+                    show: true,
+                    tools: {
+                        zoom: false,
+                        pan: false
+                    }
+                }
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '50%',
+                    distributed: true,
+                    endingShape: 'rounded',
+                    dataLabels: {
+                        total: {
+                            enabled: true,
+                        },
+                    }
                 },
+            },
+            legend: {
+                show: false
+            },
+            dataLabels: {
+                enabled: true,
+                // background: {
+                //   enabled: true,
+                //   foreColor: 'rgba(29, 40, 53, 0.95)'
+                // },
+                // dropShadow: {
+                //   enabled: false,
+                // },
+                style: {
+                    fontSize: '13px',
+                    colors: ["#fff"],
+                }
+            },
+            stroke: {
+                width: 3
+            },
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
+            series: [{
+                data: seriesData
+            }],
+            grid: {
+                borderColor: 'rgba(144, 164, 174, 0.5)'
+            },
+            xaxis: {
+                categories: labelsData,
+                labels: {
+                    show: true,
+                    style: {
+                        fontSize: '13px'
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    show: true,
+                    formatter: function (val) {
+                        return parseInt(val);
+                    }
+                }
             }
-          },
-        },
-        legend: {
-          show: false
-        },
-        dataLabels: {
-          enabled: true,
-          background: {
-            enabled: true,
-            foreColor: 'rgba(29, 40, 53, 0.95)'
-          },
-          dropShadow: {
-            enabled: false,
-          },
-          style: {
-            fontSize: '9px',
-          }
-        },
-        stroke: {
-          width: 3
-        },
-        colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
-        series: [{
-          data: seriesData
-        }],
-        grid: {
-          borderColor: 'rgba(144, 164, 174, 0.5)'
-        },
-        xaxis: {
-          categories: labelsData,
-          labels: {
-            show: true,
-            style: {
-              fontSize: '12px'
-            }
-          }
-        },
-        yaxis: {
-          labels: {
-            show: true,
-            formatter : function (val){
-                return parseInt(val);
-            }
-          }
-        }
         };
         var asset_office_chart = new ApexCharts(document.querySelector('#office_donut'), asset_office_chart_options);
         asset_office_chart.render();
     }
+
     office_counts = dataList.office_data_list[1]
     office_items = dataList.office_data_list[0]
     office_chart("office_donut", office_counts, office_items);
 
 //############################################################################################################################
     var asset_ch_chart_options = {
-      series: [
-          {
-          name: 'Desktop',
-          data: [0, 0, 0, 0, 0, dataList.monthly_asset_data_list[0]]
-          },
-        {
-          name: 'Laptop',
-          data: [0, 0, 0, 0, 0,dataList.monthly_asset_data_list[1]]
-        }
-      ],
-      chart: {
-        type: 'line',
-        background: 'transparent',
-        foreColor: 'rgba(255, 255, 255, 0.75)',
-        height: 200,
-        width: '100%',
-        toolbar: {
-            show: true,
-            tools: {
-                zoom: false,
-                pan: false
+        series: [
+            {
+                name: 'Desktop',
+                data: [0, 0, 0, 0, 0, dataList.monthly_asset_data_list[0]]
+            },
+            {
+                name: 'Notebook',
+                data: [0, 0, 0, 0, 0, dataList.monthly_asset_data_list[1]]
             }
-        }
-      },
-      stroke: {
-        width: 3
-      },
-      grid: {
-        borderColor: 'rgba(144, 164, 174, 0.5)'
-      },
-      colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', ],
-      dataLabels: {
-        enabled: true,
-        background: {
+        ],
+        chart: {
+            type: 'line',
+            background: 'transparent',
+            foreColor: 'rgba(255, 255, 255, 0.75)',
+            height: 200,
+            width: '100%',
+            toolbar: {
+                show: true,
+                tools: {
+                    zoom: false,
+                    pan: false
+                }
+            }
+        },
+        stroke: {
+            width: 3
+        },
+        grid: {
+            borderColor: 'rgba(144, 164, 174, 0.5)'
+        },
+        colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',],
+        dataLabels: {
             enabled: true,
-            foreColor: 'rgba(29, 40, 53, 0.95)'
+            background: {
+                enabled: true,
+                // foreColor: 'rgba(29, 40, 53, 0.95)'
+                foreColor: ["#fff"]
+            },
+            dropShadow: {
+                enabled: false,
+            },
+            style: {
+                fontSize: '13px',
+            }
         },
-        dropShadow: {
-            enabled: false,
+        xaxis: {
+            type: 'category',
+            categories: ['4월', '5월', '6월', '7월', '8월', dataList.monthly_asset_data_list[2]]
         },
-        style: {
-            fontSize: '9px',
+        yaxis: {
+            title: {
+                text: ''
+            }
+        },
+        legend: {
+            markers: {
+                fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',]
+            },
+            itemMargin: {
+                horizontal: 20
+            },
+            labels: {
+                colors: 'rgba(255, 255, 255, 0.75)',
+            },
+            position: 'top'
         }
-      },
-      xaxis: {
-        type: 'category',
-        categories: ['4월','5월','6월','7월','8월' ,dataList.monthly_asset_data_list[2]]
-      },
-      yaxis: {
-        title: {
-          text: ''
-        }
-      },
-      legend: {
-        markers: {
-          fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', ]
-        },
-        itemMargin: {
-          horizontal: 20
-        },
-        labels: {
-          colors: 'rgba(255, 255, 255, 0.75)',
-        },
-        position: 'top'
-      }
     };
     var asset_overview_chart = new ApexCharts(document.querySelector('#chAsset_line'), asset_ch_chart_options);
     asset_overview_chart.render();
@@ -838,78 +984,78 @@ function apexnotconChart(divId, seriesData, labelsData) {
 //        asset_cpu_chart1.render();
 //    }
 //    asset_cpu_chart_options("cpu_donut", dataList.cpu_data_list, ['20% 이상', '20% 이하']);
-function apexcpuChart(divId, seriesData, labelsData) {
-    var apexcpuOptions = {
-        series: [100],
-        chart: {
-          height: 250,
-          type: 'radialBar',
-          events: {
-            mounted: (chart) => {
-              chart.windowResizeHandler();
-            }
-          },
-        },
-        plotOptions: {
-          radialBar: {
-            startAngle: -135,
-            endAngle: 225,
-            hollow: {
-              margin: 0,
-              size: '57%',
-              background: 'transparent',
-              image: undefined,
-              imageOffsetX: 0,
-              imageOffsetY: 0,
-              position: 'front',
-              dropShadow: {
-                enabled: true,
-                top: 3,
-                left: 0,
-                blur: 4,
-                opacity: 0.24
-              }
-            },
-            track: {
-              background: ['rgba(' + app.color.whiteRgb + ', .30)'],
-              strokeWidth: '100%',
-              margin: 0, // margin is in pixels
-              dropShadow: {
-                enabled: true,
-                top: -3,
-                left: 0,
-                blur: 4,
-                opacity: 0.35
-              }
-            },
-            dataLabels: {
-              show: true,
-              name: {
-                offsetY: -10,
-                show: true,
-                color: '#fff',
-                fontSize: '20px'
-              },
-              value: {
-                formatter: function (val) {
-                  return 'Tanium CPU 20% 초과';
+    function apexcpuChart(divId, seriesData, labelsData) {
+        var apexcpuOptions = {
+            series: [100],
+            chart: {
+                height: 250,
+                type: 'radialBar',
+                events: {
+                    mounted: (chart) => {
+                        chart.windowResizeHandler();
+                    }
                 },
-                color: '#fff',
-                fontSize: '14px',
-                show: true,
-              }
-            }
-          }
-        },
-        fill: {
-          type: 'gradient',
-          colors: 'rgba(' + app.color.themeRgb + ', 1)',
-        },
-        stroke: {
-          lineCap: 'round'
-        },
-        labels: [seriesData+' 대'],
-    };
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -135,
+                    endAngle: 225,
+                    hollow: {
+                        margin: 0,
+                        size: '57%',
+                        background: 'transparent',
+                        image: undefined,
+                        imageOffsetX: 0,
+                        imageOffsetY: 0,
+                        position: 'front',
+                        dropShadow: {
+                            enabled: true,
+                            top: 3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.24
+                        }
+                    },
+                    track: {
+                        background: ['rgba(' + app.color.whiteRgb + ', .30)'],
+                        strokeWidth: '100%',
+                        margin: 0, // margin is in pixels
+                        dropShadow: {
+                            enabled: true,
+                            top: -3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.35
+                        }
+                    },
+                    dataLabels: {
+                        show: true,
+                        name: {
+                            offsetY: -10,
+                            show: true,
+                            color: '#fff',
+                            fontSize: '20px'
+                        },
+                        value: {
+                            formatter: function (val) {
+                                return 'Tanium CPU 20% 초과';
+                            },
+                            color: '#fff',
+                            fontSize: '14px',
+                            show: true,
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'gradient',
+                colors: 'rgba(' + app.color.themeRgb + ', 1)',
+            },
+            stroke: {
+                lineCap: 'round'
+            },
+            labels: [seriesData + ' 대'],
+        };
         var apexcpuChart = new ApexCharts(document.querySelector("#" + divId), apexcpuOptions);
         apexcpuChart.render();
     }
@@ -918,8 +1064,6 @@ function apexcpuChart(divId, seriesData, labelsData) {
 
     var cpu_value = dataList.cpu_data_list[0]
     apexcpuChart("apexcpuChart", cpu_value, ['']);
-
-
 
 
     //--------------------------------------------------------------------------
@@ -1013,35 +1157,18 @@ function apexcpuChart(divId, seriesData, labelsData) {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+///////////////////////Datepicker////////////////////
+$("#datepicker1").datepicker({
+    format: 'yyyy-mm-dd',
+    autoclose: true,
+}).on('changeDate', function (e) {
+    date1 = e.format()
+});
+$(document).ready(function () {
+    $("button.input-group-text").click(function () {
+        $("#datepicker1").focus(); // input에 포커스를 줍니다. 이로써 데이터피커가 표시될 수 있습니다.
+    });
+});
 
 
 $(document).ready(function () {
