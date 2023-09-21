@@ -79,3 +79,16 @@ class XfactorServiceserializer(serializers.ModelSerializer):
     class Meta:
         model = Xfactor_Service
         fields = '__all__'
+
+class XfactorDailyserializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Xfactor_Daily
+        fields = '__all__'
+
+
+class XfactorLogserializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Xfactor_Log
+        fields = '__all__'

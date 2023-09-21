@@ -4821,7 +4821,46 @@ fieldset:disabled .btn {
     right: 0;
     left: auto
 }
-
+.new-dropdown-menu {
+    --bs-dropdown-padding-x: 0;
+    --bs-dropdown-padding-y: 0.5rem;
+    --bs-dropdown-spacer: 0.125rem;
+    --bs-dropdown-font-size: 0.875rem;
+    --bs-dropdown-color: rgba(255, 255, 255, 0.75);
+    --bs-dropdown-bg: rgba(29, 40, 53, 0.98);
+    --bs-dropdown-border-color: rgba(255, 255, 255, 0.15);
+    --bs-dropdown-border-radius: 0;
+    --bs-dropdown-border-width: 1px;
+    --bs-dropdown-inner-border-radius: -1px;
+    --bs-dropdown-divider-bg: rgba(255, 255, 255, 0.15);
+    --bs-dropdown-divider-margin-y: 0.5rem;
+    --bs-dropdown-box-shadow: 0 0.5rem 1rem rgba(255, 255, 255, 0.075);
+    --bs-dropdown-link-color: rgba(255, 255, 255, 0.5);
+    --bs-dropdown-link-hover-color: #FFFFFF;
+    --bs-dropdown-link-hover-bg: rgba(255, 255, 255, 0.15);
+    --bs-dropdown-link-active-color: var(--bs-theme-color);
+    --bs-dropdown-link-active-bg: var(--bs-theme);
+    --bs-dropdown-link-disabled-color: #617a86;
+    --bs-dropdown-item-padding-x: 20px;
+    --bs-dropdown-item-padding-y: 6px;
+    --bs-dropdown-header-color: rgba(255, 255, 255, 0.5);
+    --bs-dropdown-header-padding-x: 20px;
+    --bs-dropdown-header-padding-y: 0.5rem;
+    position: absolute;
+    z-index: 1000;
+    display: none;
+    min-width: var(--bs-dropdown-min-width);
+    padding: var(--bs-dropdown-padding-y) var(--bs-dropdown-padding-x);
+    margin: 0;
+    font-size: var(--bs-dropdown-font-size);
+    color: var(--bs-dropdown-color);
+    text-align: left;
+    list-style: none;
+    background-color: var(--bs-dropdown-bg);
+    background-clip: padding-box;
+    border: var(--bs-dropdown-border-width) solid var(--bs-dropdown-border-color);
+    border-radius: var(--bs-dropdown-border-radius)
+}
 @media(min-width:576px) {
     .dropdown-menu-sm-start {
         --bs-position: start
@@ -10178,6 +10217,11 @@ fieldset:disabled .btn {
     cursor:pointer;
 }
 
+.new-text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .vr {
     display: inline-block;
     align-self: stretch;
@@ -31045,4 +31089,8 @@ input:checked+labl::before{
 .modal_center{
     margin: 0 auto;
     width : 65%;
+}
+
+.asset-input-group > * {
+    margin-right: 0;  /* 모든 직계 자식 요소들의 오른쪽 마진을 제거합니다 */
 }

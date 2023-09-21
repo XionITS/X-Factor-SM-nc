@@ -114,19 +114,19 @@ var hw_pur_asset_list = function () {
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
 		columnDefs: [
-		    {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+		    {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer.computer_id;
 		        return '<input type="checkbox" class="form-check-input" name="'+row.computer.computer_name+'" id="'+row.computer.computer_id+'" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
 		        }},
-            {targets: 1, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 7, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 8, width: "20%", className: 'text-start text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 1, width: "3%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "3%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "5%", className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "5%", className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "5%", className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 8, width: "20%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "5%", className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		],
 		language: {
 			"decimal": "",
@@ -294,27 +294,27 @@ var sw_pur_asset_list = function () {
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
 		columnDefs: [
-            {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+            {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_id = row.computer.computer_id;
 		        return '<input type="checkbox" class="form-check-input" name="'+row.computer.computer_name+'" id="'+row.computer.computer_id+'" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
             }},
-            {targets: 1, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "15%", className: 'text-start text-truncate flex-cloumn column_hidden',
+            {targets: 1, width: "3%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "3%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "15%", className: 'text-start new-text-truncate flex-cloumn column_hidden',
 		    render: function(data, type, row) {
 		        const swList = row.computer.sw_list;
                 const swListArray = swList ? swList.split('<br>') : [];
 		        return '<span data-toggle="tooltip">' + (swListArray[0] || '') + '<br>' + (swListArray[1] || '') + '<br>' + (swListArray[2] || '') + '<br>' + (swListArray[3] || '')}},
 
-		    {targets: 6, width: "10%", className: 'text-start text-truncate flex-cloumn column_hidden',
+		    {targets: 6, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden',
 		    render: function(data, type, row) {
                 const swVer = row.computer.sw_ver_list;
                 const swVerArray = swVer ? swVer.split('<br>') : [];
 		        return '<span data-toggle="tooltip">' + (swVerArray[0] || '') + '<br>' + (swVerArray[1] || '') + '<br>' + (swVerArray[2] || '') + '<br>' + (swVerArray[3] || '')}},
 
-		    {targets: 7, width: "10%", className: 'text-start text-truncate flex-cloumn column_hidden',
+		    {targets: 7, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden',
 		    render: function(data, type, row) {
 		        const swInstall= row.computer.sw_install;
 		        const swInstallArray = swInstall ? swInstall.split('<br>') : [];
@@ -328,7 +328,7 @@ var sw_pur_asset_list = function () {
 		        const swInstall= row.computer.sw_install;
 		        return '</span><br><div class="pur_swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-swinstall="' + swInstall + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
 
-		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		],
 		language: {
 			"decimal": "",

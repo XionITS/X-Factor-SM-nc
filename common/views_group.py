@@ -3,8 +3,9 @@ import psycopg2
 from django.shortcuts import render, redirect
 
 from django.http import JsonResponse,HttpResponse
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from .models import Xfactor_Group
+from .models import Xfactor_Group, Xfactor_Log
 import requests
 import json
 import math
@@ -73,6 +74,19 @@ def create(request):
         message_code = "success"
         message = "Group이 생성되었습니다. \n 그룹이름 : " +group_name+"\n 그룹번호 : " +CGID
 
+        function = 'Group Create'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+        item = 'Create Group for the '+ group_name
+        result = '성공'
+        user = request.session.get('sessionid')
+        date = timezone.now()
+        Xfactor_log = Xfactor_Log(
+            log_func=function,
+            log_item=item,
+            log_result=result,
+            log_user=user,
+            log_date=date
+        )
+        Xfactor_log.save()
 
     return JsonResponse({"success":message_code, "message": message})
 

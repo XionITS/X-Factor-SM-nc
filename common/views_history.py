@@ -27,8 +27,53 @@ def history(request):
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
 
-
     context = {'menu_list': menu.data}
     return render(request, 'asset_history.html', context)
 
 
+@csrf_exempt
+def search_h(request):
+    if request.method == "POST":
+        today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+        search_text = request.POST.get('searchText', None)
+        date1 = request.POST.get('date1')
+        date2 = request.POST.get('date2')
+        user1 = Xfactor_Daily.objects.filter(user_date__date=date1).filter(computer_name=search_text)
+        user2 = Xfactor_Daily.objects.filter(user_date__date=date2).filter(computer_name=search_text)
+
+        user_data1 = XfactorDailyserializer(user1, many=True).data
+        user_data2 = XfactorDailyserializer(user2, many=True).data
+        # response = {
+        #     'data': user_data,  # Serialized data for the current page
+        # }
+        return JsonResponse({'data1': user_data1,
+                             'data2': user_data2})
+
+
+@csrf_exempt
+def search_box_h(request):
+    if request.method == "POST":
+        today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+        search_text = request.POST.get('searchText', None)
+        user_data = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).filter(computer_name__contains=search_text).values('computer_name')
+        print(user_data)
+        # user_data = XfactorServiceserializer(user, many=True).data
+        return JsonResponse({'data': list(user_data)})
+
+
+# @csrf_exempt
+# def select_date_l(request):
+#     if request.method == "POST":
+#         date = request.POST.get('date1')
+#         user = Xfactor_Service.objects.select_related('computer').filter(user_date__date=date)
+#         user_data = XfactorServiceserializer(user, many=True).data
+#         return JsonResponse({'data': user_data})
+#
+#
+# @csrf_exempt
+# def select_date_r(request):
+#     if request.method == "POST":
+#         date = request.POST.get('date2')
+#         user = Xfactor_Service.objects.select_related('computer').filter(user_date__date=date)
+#         user_data = XfactorServiceserializer(user, many=True).data
+#         return JsonResponse({'data': user_data})

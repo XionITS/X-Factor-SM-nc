@@ -1483,16 +1483,16 @@ var hw_asset_list = function () {
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
 		columnDefs: [
-            {targets: 0, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 1, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "10%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_cpu+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_mb+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "3%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_ram+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_disk+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 8, width: "10%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_gpu+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 0, width: "3%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 1, width: "3%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "10%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_cpu+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "5%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_mb+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "3%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_ram+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "10%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_disk+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_gpu+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		],
 		language: {
 			"decimal": "",
@@ -1641,16 +1641,16 @@ var sw_asset_list = function () {
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
 		columnDefs: [
-		    {targets: 0, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 1, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 0, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 1, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 4, width: "55%", className: 'text-start text-truncate flex-cloumn column_hidden', render: function(data, type, row) {
 		        const computer_name = row.computer_name;
 		        const swList = row.sw_list;
                 const swVer = row.sw_ver_list;
 		        return '<span data-toggle="tooltip">' + swList.split('<br>')[0]+'<br>'+swList.split('<br>')[1]+'<br>'+swList.split('<br>')[2]+'<br>'+swList.split('<br>')[3]+ '</span><br><div class="swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
-		    {targets: 5, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
 		],
 		language: {
 			"decimal": "",

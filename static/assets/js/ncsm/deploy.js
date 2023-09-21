@@ -3,13 +3,14 @@
 $(document).on("click","#createdeploy", function (e) {
     var computerGroupSelect = $('#computerGroupData');
     var selectedGroup = ''
+    var selectedGroupName = ''
     var selectedPackage = ''
+    var selectedPackageName = ''
     $.ajax({
         url: '../group/list/',
         method: 'POST',
         success: function (res) {
                 var data = res.item;
-                computerGroupSelect.empty();
                 $.each(data, function(index, group) {
                     computerGroupSelect.append($('<option>', {
                         text: group.Name,
@@ -37,11 +38,13 @@ $(document).on("click","#createdeploy", function (e) {
     // 셀렉트 박스 값이 변경되었을 때 이벤트 리스너 추가
     $('#computerGroupData').on('change', function() {
         selectedGroup = $(this).val();
+        selectedGroupName = $("#computerGroupData option:selected").text()
         $.ajax({
             url: '../member/list/',
             method: 'POST',
             data: {
-                id: selectedGroup
+                id: selectedGroup,
+                name: selectedGroupName
             },
             success: function (res) {
                 //그룹 리스트 가져오기
@@ -66,6 +69,7 @@ $(document).on("click","#createdeploy", function (e) {
 
     $('#packageData').on('change', function() {
         selectedPackage = $(this).val();
+        selectedPackageName = $("#packageData option:selected").text()
         console.log('Selected Package ID:', selectedPackage);
     });
 
@@ -88,7 +92,9 @@ $(document).on("click","#createdeploy", function (e) {
             method: 'POST',
             data: {
                 selectedGroup: selectedGroup,
-                selectedPackage: selectedPackage
+                selectedPackage: selectedPackage,
+                selectedGroupName: selectedGroupName,
+                selectedPackageName: selectedPackageName
             },
             success: function(res) {
                 if (res.result === 'success') {
