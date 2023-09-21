@@ -150,7 +150,6 @@ $(document).on("click","#groupCreate", function(event) {
     let computerIds = []
     let computerNames = []
     const computerElements = $('#groupModal .form-check').find('.form-check-input');
-    console.log("zzz");
     computerElements.each(function () {
         const computer_id = $(this).attr("id");
 

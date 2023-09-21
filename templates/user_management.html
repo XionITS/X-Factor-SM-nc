@@ -6,7 +6,7 @@
 <div class="col-11" style="margin: 10px auto;">
     <!-- BEGIN page-header -->
     <p class="fs-24px pt-10px">
-        예상 유휴 자산 (전체)
+        사용자 / 권한 관리
     </p>
     <!-- END page-header -->
     <div class="row">
@@ -14,12 +14,41 @@
         <div class="card h-auto">
             <!--BEGIN card-body-->
             <div class="card-body">
-                <table id="user_list_popupTable" class="table fs-14px mb-0 text-center text-white text-opacity-60 m-auto">
+                <ul class="nav nav-tabs2 nav-tabs-v2 px-3" role="tablist">
+                    <li class="nav-item me-3" role="presentation"><a href="#" id="um_user" class="nav-link active px-2" data-bs-toggle="tab" aria-selected="true" role="tab" value="USER" onclick="um_userbutton(this);" >USER</a></li>
+                    <li class="nav-item me-3" style="display:none;" role="presentation"><a href="#" id="um_group" class="nav-link px-2" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab" value="GROUP" onclick="um_groupbutton(this);">GROUP</a></li>
+                </ul>
+                <br>
+                <br>
+                <div class="">
+                    <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="um_creategroup" aria-expanded="false">
+                    그룹 생성
+                    </button>
+                </div>
+                <!-- 검색어 필터  -->
+                <div class="search-dropdown">
+                    <div class="dropdown">
+                      <button class="btn btn-outline-warning" type="button" id="um_insert" >
+                        추가 하기
+                      </button>
+                      <button class="btn btn-outline-warning" type="button" id="um_delete">
+                        삭제 하기
+                      </button>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <table id="um_list" class="table fs-14px mb-0 text-center text-white text-opacity-60 m-auto nc-12 table-hover">
                     <thead>
                         <tr class="table-active text-white text-opacity-75">
-                            <th class="text-center">번호</th>
-                            <th class="text-center">컴퓨터 이름</th>
-                            <th class="text-center">컴퓨터 이름</th>
+                            <th class="text-center">선택</th>
+                            <th class="text-center">No</th>
+                            <th class="text-center">아이디</th>
+                            <th class="text-center">사용자 이름</th>
+                            <th class="text-center" >이메일</th>
+                            <th class="text-center" >권한</th>
+                            <th class="text-center" >권한 관리</th>
 
                         </tr>
                     </thead>
@@ -38,4 +67,122 @@
         <!--END card-->
     </div>
 </div>
+
+
+<div id="um_auth_modal" class="um_modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content" style="background-color:#1d2835;">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+      </div>
+      <div class="modal-body">
+          <table class="table hstable" style="overflow-y: auto;">
+              <thead class="hsthead">
+                    <th scope="col">SW Name</th>
+
+              </thead>
+              <tbody class="hstbody"></tbody>
+          </table>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="closeBtn3">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- 사용자 추가 모달 창 -->
+<div id="um_insert_modal" class="um_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content" style="background-color:#1d2835;">
+             <div class="modal-header">
+                <h5 class="modal-title">사용자 추가하기</h5>
+            </div>
+          <!-- 회원가입 양식의 내용을 직접 작성하거나, include 등을 사용하여 적절한 HTML을 추가 -->
+          <form action="{% url 'signup' %}" method="POST" name="um_signup_form">
+            {% csrf_token %}
+            <div class="modal_center">
+                <br>
+            <div class="mb-3">
+                <label class="form-label">사용자 아이디 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-lg bg-white bg-opacity-5" placeholder="" id="x_id"
+           value="{{ x_id|default_if_none:'' }}" name="x_id" autocomplete="off"/>
+            </div>
+            <div class = "col-md-12">
+                <div class = "row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">비밀번호 <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control form-control-lg bg-white bg-opacity-5" id="x_pw"
+                   value="" name="x_pw"/>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">비밀번호 확인 <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control form-control-lg bg-white bg-opacity-5" id="re_x_pw"
+                   value="" name="re_x_pw"/>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">이름 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-lg bg-white bg-opacity-5" name="x_name" id="x_name"
+           value="{{user_name|default_if_none:'' }}" autocomplete="off"/>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">이메일 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-lg bg-white bg-opacity-5" name="x_email" id="x_email"
+           value="{{user_email|default_if_none:'' }}" autocomplete="off"/>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">권한 <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-lg bg-white bg-opacity-5" name="x_auth" id="x_auth"
+           value="{{user_dep|default_if_none:'' }}" autocomplete="off"/>
+            </div>
+            <input type="hidden" name="page" id="page" value="um">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary groupCreate" onclick="um_check();">Action</button>
+                <button type="button" class="btn btn-secondary" id="closeBtn">Close</button>
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+  </div>
+
+<!-- 사용자 삭제 모달 창 -->
+<div id="um_delete_modal" class="um_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content" style="background-color:#1d2835;">
+             <div class="modal-header">
+                <h5 class="modal-title">사용자 삭제하기</h5>
+            </div>
+          <!-- 회원가입 양식의 내용을 직접 작성하거나, include 등을 사용하여 적절한 HTML을 추가 -->
+          <form action="{% url 'um_delete' %}" method="POST" id="um_delete_form">
+            {% csrf_token %}
+            <div class="modal_center">
+                <br>
+                해당 계정을 삭제 하시겠습니까?
+                <br><br>
+<!--            <input type="hidden" name="page" value="">-->
+            <div class="modal-body">
+                <div class="form-check"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="user_delete">Action</button>
+                <button type="button" class="btn btn-secondary" id="closeBtn2">Close</button>
+            </div>
+            </div>
+          </form>
+        </div>
+      </div>
+  </div>
 {% endblock %}
+<script>
+
+</script>
+
+

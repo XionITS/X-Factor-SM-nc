@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 import hashlib
 import psycopg2
 import json
+from django.http import JsonResponse
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -25,6 +26,7 @@ def signup(request):
         return render(request, 'common/signup.html')
 
     elif request.method == "POST":
+        page = request.POST.get('page')
         x_id = request.POST.get('x_id')
         x_pw = request.POST.get('x_pw')
         re_x_pw = request.POST.get('re_x_pw')
@@ -35,8 +37,14 @@ def signup(request):
 
         RS = createUsers(x_id, x_pw, x_name, x_email, x_auth)
         if RS == "1":
-            res_data['error'] = "회원가입에 성공하였습니다."
-            return render(request, 'common/login.html', res_data)
+            if page == 'um':
+                res_data['error'] = "회원가입에 성공하였습니다."
+                redirect_url = '../user_management'
+                return redirect(redirect_url)
+                #return render(request, 'user_management.html', res_data)
+            else :
+                res_data['error'] = "회원가입에 성공하였습니다."
+                return render(request, 'common/login.html', res_data)
         else:
             res_data['error'] = "아이디가 존재합니다."
             res_data['x_id'] = x_id
@@ -260,6 +268,7 @@ def createUsers(x_id, x_pw, x_name, x_email, x_auth):
         return a
 
 
+@csrf_exempt
 def updateUsers(x_id, x_pw, x_name, x_email, x_auth):
     try:
         hashpassword = hashlib.sha256(x_pw.encode()).hexdigest()
@@ -287,7 +296,7 @@ def updateUsers(x_id, x_pw, x_name, x_email, x_auth):
         a = "0"
         return a
 
-
+@csrf_exempt
 def taniumUsers(x_id, x_pw):
     try:
         path = SesstionKeyPath
@@ -305,3 +314,26 @@ def taniumUsers(x_id, x_pw):
 
     except ConnectionError as e:
         print(e)
+
+@csrf_exempt
+def delete(request):
+    x_ids_str = request.POST.get('x_id')  # 쉼표로 구분된 문자열을 얻음
+    x_ids = x_ids_str.split(',')
+    try:
+        Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+        Cur = Conn.cursor()
+        for x_id in x_ids:
+            query = """ 
+                    DELETE FROM
+                        common_xfactor_xuser
+                    WHERE
+                        x_id = %s;
+                    """
+            Cur.execute(query, (x_id,))
+
+        Conn.commit()
+        Conn.close()
+        return JsonResponse({'result': 'success'}, status=200)  # 성공적으로 삭제되었을 때 응답
+    except Exception as e:
+        print(str(e))  # 에러 메시지 출력 (디버깅 용)
+        return JsonResponse({'result': 'failure'}, status=400)  # 삭제 중 오류가 발생했을 때 응답

@@ -28,12 +28,12 @@ class NanoSerializer(serializers.ModelSerializer):
     class Meta:
         #추후엔 히
         model = Xfactor_Nano
-        fileds = '__all__'
+        fields = '__all__'
 
 class XuserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Xfactor_Xuser
-        fileds = '__all__'
+        fields = '__all__'
 
 class AuthSerializer(serializers.ModelSerializer): #auth 정보
     class Meta:

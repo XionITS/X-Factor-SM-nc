@@ -1786,9 +1786,7 @@ $(document).on("click",".swmore", function (e){
     const computer_name = $(this).data("computer_name");
     const swList = $(this).data("swlist");
     const swVer = $(this).data("swver");
-    console.log("aa");
     swList2 = swList.split('<br>')
-    console.log(swList);
     swVer2 = swVer.split('<br>')
 //    const swListHTML = "<ul>" + swList2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
 //    const swVerHTML = "<ul>" + swVer2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
