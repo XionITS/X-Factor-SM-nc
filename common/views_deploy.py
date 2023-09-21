@@ -142,8 +142,8 @@ def deploy_action(request):
         }
     }
     CAQ = requests.post(AURL, headers=PSQ, json=body, verify=False)
-    function = '배포'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-    item = 'admin 계정'
+    function = 'Deploy'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+    item = 'Deploy '+ packName + ' for the ' + groupName + ' Group'
     result = '성공'
     user = request.session.get('sessionid')
     date = timezone.now().replace(microsecond=0)

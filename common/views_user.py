@@ -81,7 +81,7 @@ def login(request):
                     request.session['sessionid'] = RS[0]
                     request.session['sessionname'] = RS[2]
                     request.session['sessionemail'] = RS[3]
-                    function = '로그인'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+                    function = 'Login'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
                     item = 'admin 계정'
                     result = '성공'
                     user = RS[0]
@@ -207,6 +207,20 @@ def update(request):
 def logout(request):
     if Login_Method == "WEB":
         if 'sessionid' in request.session:
+
+            function = 'Logout'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+            item = 'admin 계정'
+            result = '성공'
+            user = request.session.get('sessionid')
+            date = timezone.now()
+            Xfactor_log = Xfactor_Log(
+                log_func=function,
+                log_item=item,
+                log_result=result,
+                log_user=user,
+                log_date=date
+            )
+            Xfactor_log.save()
             del (request.session['sessionid'])
             del (request.session['sessionname'])
             del (request.session['sessionemail'])
