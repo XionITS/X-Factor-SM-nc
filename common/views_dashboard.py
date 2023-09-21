@@ -63,6 +63,7 @@ def Dashboard():
     office_item_counts = [office_data_new['total'], office_data_old['total'], office_data_none['total']]
     office_data_list = [office_items, office_item_counts]
 
+    ########################################################################################################################################
     # 전체자산수 Online, TOTAL, Chassis type
     #노트북
     notebook_data = asset.filter(classification='chassis_type').filter(item='Notebook').values('item','item_count')
@@ -86,41 +87,106 @@ def Dashboard():
     other_data_list = {'item': 'Other', 'count': other_data_sum}
     other_data_cache_list = {'item': 'Other', 'count': other_data_cache_sum}
     others = [other_data_list, other_data_cache_list]
-    #print(others)
-    # 온라인 토탈
-    # [c1 , c1]
-    # [c2 , c2]
-    # [c3 , c3]
-    asset_all_chart_list = [notebook, desktop, others]    #
 
-    #[1,2]
-    #[1.2]
-    #[1.2]
-    #....
+    asset_all_chart_list = [notebook, desktop, others]
 
-    # win- desk
+    ########################################################################################################################################
+    # 온라인 차트
+    # desktop[other, mac, winodws]
+    desk_online_other = asset.filter(classification='Desktop_chassis_online').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    desk_online_other_sum = sum(data['item_count'] for data in desk_online_other)
+    desk_online_other_list = {'item': 'Other', 'count': desk_online_other_sum}
 
-               #    온라인           토탈
+    desk_online_mac = asset.filter(classification='Desktop_chassis_online').filter(item='Mac').values('item_count')
+    desk_online_mac_sum = sum(data['item_count'] for data in desk_online_mac)
+    desk_online_mac_list = {'item': 'Mac', 'count': desk_online_mac_sum}
 
-    # win-desk =[on-win-desk,  to-win-desk] win group
-    # mac -desk =[on-mac-desk,  to-mac-desk] mac group
-    # other -desk[on-other-desk,  to-other-desk] other group
+    desk_online_window = asset.filter(classification='Desktop_chassis_online').filter(item='Windows').values('item_count')
+    desk_online_window_sum = sum(data['item_count'] for data in desk_online_window)
+    desk_online_window_list = {'item': 'Windows', 'count': desk_online_window_sum}
 
-    # win - note[[on-win-note,  to-win-note] win group
-    # mac - note[on-mac-note,  to-mac-note]mac group
-    # other -note[on-other-note,  to-other-note]other group
+    desk_online_list = [desk_online_other_list, desk_online_mac_list, desk_online_window_list]
 
-    # win - other[on-win-other,  to-win-other] win group
-    # mac - other[on-mac-other,  to-mac-other]mac group
-    # other -other[on-other-other,  to-other-other]other group
+    # notebook[other, mac, winodws]
+    note_online_other = asset.filter(classification='Notebook_chassis_online').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    note_online_other_sum = sum(data['item_count'] for data in note_online_other)
+    note_online_other_list = {'item': 'Other', 'count': note_online_other_sum}
+
+    note_online_mac = asset.filter(classification='Notebook_chassis_online').filter(item='Mac').values('item_count')
+    note_online_mac_sum = sum(data['item_count'] for data in note_online_mac)
+    note_online_mac_list = {'item': 'Mac', 'count': note_online_mac_sum}
+
+    note_online_window = asset.filter(classification='Notebook_chassis_online').filter(item='Windows').values('item_count')
+    note_online_window_sum = sum(data['item_count'] for data in note_online_window)
+    note_online_window_list = {'item': 'Windows', 'count': note_online_window_sum}
+
+    note_online_list = [note_online_other_list, note_online_mac_list, note_online_window_list]
+
+    # Other[other, mac, winodws]
+    other_online_other = asset.filter(classification='Other_chassis_online').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    other_online_other_sum = sum(data['item_count'] for data in other_online_other)
+    other_online_other_list = {'item': 'Other', 'count': other_online_other_sum}
+
+    other_online_mac = asset.filter(classification='Other_chassis_online').filter(item='Mac').values('item_count')
+    other_online_mac_sum = sum(data['item_count'] for data in other_online_mac)
+    other_online_mac_list = {'item': 'Mac', 'count': other_online_mac_sum}
+
+    other_online_window = asset.filter(classification='Other_chassis_online').filter(item='Windows').values('item_count')
+    other_online_window_sum = sum(data['item_count'] for data in other_online_window)
+    other_online_window_list = {'item': 'Windows', 'count': other_online_window_sum}
+
+    other_online_list = [other_online_other_list, other_online_mac_list, other_online_window_list]
 
 
+########################################################################################################################################
+    # 토탈 차트
+    # desktop[other, mac, winodws]
+    desk_total_other = asset.filter(classification='Desktop_chassis_total').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    desk_total_other_sum = sum(data['item_count'] for data in desk_total_other)
+    desk_total_other_list = {'item': 'Other', 'count': desk_total_other_sum}
 
+    desk_total_mac = asset.filter(classification='Desktop_chassis_total').filter(item='Mac').values('item_count')
+    desk_total_mac_sum = sum(data['item_count'] for data in desk_total_mac)
+    desk_total_mac_list = {'item': 'Mac', 'count': desk_total_mac_sum}
 
-    # local_tz = pytz.timezone('Asia/Seoul')
-    # utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
-    # now = utc_now.astimezone(local_tz)
-    # time = now - datetime.timedelta(minutes=7)
+    desk_total_window = asset.filter(classification='Desktop_chassis_total').filter(item='Windows').values('item_count')
+    desk_total_window_sum = sum(data['item_count'] for data in desk_total_window)
+    desk_total_window_list = {'item': 'Windows', 'count': desk_total_window_sum}
+
+    desk_total_list = [desk_total_other_list, desk_total_mac_list, desk_total_window_list]
+
+    # notebook[other, mac, winodws]
+    note_total_other = asset.filter(classification='Notebook_chassis_total').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    note_total_other_sum = sum(data['item_count'] for data in note_total_other)
+    note_total_other_list = {'item': 'Other', 'count': note_total_other_sum}
+
+    note_total_mac = asset.filter(classification='Notebook_chassis_total').filter(item='Mac').values('item_count')
+    note_total_mac_sum = sum(data['item_count'] for data in note_total_mac)
+    note_total_mac_list = {'item': 'Mac', 'count': note_total_mac_sum}
+
+    note_total_window = asset.filter(classification='Notebook_chassis_total').filter(item='Windows').values('item_count')
+    note_total_window_sum = sum(data['item_count'] for data in note_total_window)
+    note_total_window_list = {'item': 'Windows', 'count': note_total_window_sum}
+
+    note_total_list = [note_total_other_list, note_total_mac_list, note_total_window_list]
+    #print(note_total_list)
+    # Other[other, mac, winodws]
+    other_total_other = asset.filter(classification='Other_chassis_total').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    other_total_other_sum = sum(data['item_count'] for data in other_total_other)
+    other_total_other_list = {'item': 'Other', 'count': other_total_other_sum}
+
+    other_total_mac = asset.filter(classification='Other_chassis_total').filter(item='Mac').values('item_count')
+    other_total_mac_sum = sum(data['item_count'] for data in other_total_mac)
+    other_total_mac_list = {'item': 'Mac', 'count': other_total_mac_sum}
+
+    other_total_window = asset.filter(classification='Other_chassis_total').filter(item='Windows').values('item_count')
+    other_total_window_sum = sum(data['item_count'] for data in other_total_window)
+    other_total_window_list = {'item': 'Windows', 'count': other_total_window_sum}
+
+    other_total_list = [other_total_other_list, other_total_mac_list, other_total_window_list]
+    #print(other_total_list)
+    ########################################################################################################################################
+
 
     # 월별 자산 변화 수 차트
     lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
@@ -176,6 +242,15 @@ def Dashboard():
         'hotfix_data_list': hotfix_data_list,
         'asset_all_chart_list': asset_all_chart_list,
         'office_data_list': office_data_list,
+        'desk_online_list' : desk_online_list,
+        'note_online_list' : note_online_list,
+        'other_online_list' : other_online_list,
+        'desk_total_list' : desk_total_list,
+        'note_total_list' : note_total_list,
+        'other_total_list' : other_total_list,
+
+
+
     }
     # 예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시
     # try:
