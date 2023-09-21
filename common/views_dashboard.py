@@ -26,6 +26,10 @@ def Dashboard():
 
     asset = Daily_Statistics.objects.all()
     asset_log = Daily_Statistics_log.objects.all()
+    service = Xfactor_Service.objects.all()
+    common = Xfactor_Common.objects.all()
+    daily = Daily_Statistics.objects.all()
+
 
     #미관리 자산현황
     discover_data = asset.filter(classification='discover').filter(item='장기 미접속 자산').values('item', 'item_count')
@@ -117,11 +121,6 @@ def Dashboard():
     # utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
     # now = utc_now.astimezone(local_tz)
     # time = now - datetime.timedelta(minutes=7)
-    asset_log = Daily_Statistics_log.objects.all()
-    asset = Daily_Statistics.objects.all()
-    service = Xfactor_Service.objects.all()
-    common = Xfactor_Common.objects.all()
-    daily = Daily_Statistics.objects.all()
 
     # 월별 자산 변화 수 차트
     lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
@@ -147,7 +146,7 @@ def Dashboard():
         notused_tcpu = daily.filter(classification='t_cpu').filter(item='False').values('item_count')
         cpu_data_list = [used_tcpu[0]['item_count'], notused_tcpu[0]['item_count']]
     except:
-        cpu_data_list = [0, notused_tcpu[0]['item_count']]
+        cpu_data_list = [0, 0]
 
     # os버전별 자산 현황
     try:

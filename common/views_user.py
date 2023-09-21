@@ -1,9 +1,15 @@
+import datetime
+
 import requests
+from datetime import datetime
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 import hashlib
 import psycopg2
 import json
+
+from common.models import Xfactor_Log
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -75,6 +81,20 @@ def login(request):
                     request.session['sessionid'] = RS[0]
                     request.session['sessionname'] = RS[2]
                     request.session['sessionemail'] = RS[3]
+                    function = '로그인'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+                    item = 'admin 계정'
+                    result = '성공'
+                    user = RS[0]
+                    date = timezone.now()
+                    print(date)
+                    Xfactor_log = Xfactor_Log(
+                        log_func=function,
+                        log_item=item,
+                        log_result=result,
+                        log_user=user,
+                        log_date=date
+                    )
+                    Xfactor_log.save()
                     return redirect('../dashboard')
     elif Login_Method == "Tanium":
         if request.method == 'GET':

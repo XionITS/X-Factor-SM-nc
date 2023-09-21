@@ -4,8 +4,9 @@ from django.shortcuts import render, redirect
 
 from django.http import JsonResponse,HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from .models import Xfactor_Group
+from .models import Xfactor_Group, Xfactor_Log
 import requests
 import json
 import math
@@ -116,6 +117,8 @@ def package(request):
 def deploy_action(request):
     comId = request.POST.get('selectedGroup')
     packID = request.POST.get('selectedPackage')
+    groupName = request.POST.get('selectedGroupName')
+    packName = request.POST.get('selectedPackageName')
     SKH = '{"username": "' + APIUNM + '", "domain": "", "password": "' + APIPWD + '"}'
     SKURL = apiUrl + SessionKeyPath
     SKR = requests.post(SKURL, data=SKH, verify=False)
@@ -139,9 +142,31 @@ def deploy_action(request):
         }
     }
     CAQ = requests.post(AURL, headers=PSQ, json=body, verify=False)
+    function = '배포'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+    item = 'admin 계정'
+    result = '성공'
+    user = request.session.get('sessionid')
+    date = timezone.now().replace(microsecond=0)
     if CAQ.status_code == 200:
+        Xfactor_log = Xfactor_Log(
+            log_func=function,
+            log_item=item,
+            log_result=result,
+            log_user=user,
+            log_date=date
+        )
+        Xfactor_log.save()
         RD = {'result': 'success'}
     else:
+        result = '실패'
+        Xfactor_log = Xfactor_Log(
+            log_func=function,
+            log_item=item,
+            log_result=result,
+            log_user=user,
+            log_date=date
+        )
+        Xfactor_log.save()
         RD = {'result': 'fail'}
     return JsonResponse(RD)
 

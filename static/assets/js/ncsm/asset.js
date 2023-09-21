@@ -201,90 +201,49 @@
 
 
 
-//function hwbutton(btn) {
-//    let newTableContent = '';
-//    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>hw_cpu</th><th>hw_mb</th><th>hw_ram</th><th>hw_disk</th><th>hw_vga</th><th>memo</th></tr></thead><tbody></tbody>';
-//    $('#hs_asset_list').DataTable().destroy();
-//    $('#hs_asset_list').html(newTableContent);
-//    hw_asset_list();
-//    $(btn).addClass('active');
-//    $('.hsbutton').not(btn).removeClass('active');
-//
-//}
-//
-//function swbutton(btn) {
-//    let newTableContent = '';
-//    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>소프트웨어 목록</th><th>memo</th></tr></thead><tbody></tbody>';
-//    $('#hs_asset_list').DataTable().destroy();
-//    $('#hs_asset_list').html(newTableContent);
-//    sw_asset_list();
-//    $(btn).addClass('active');
-//    $('.hsbutton').not(btn).removeClass('active');
-//
-//}
 
-//$('html').click(function(e){
-//const appElement = document.getElementById('app');
-//        var sidebar = $('#sidebar');
-//        var app = $('#app');
-//    	if(!$(e.target).hasClass('app-sidebar-content') && !$(e.target).hasClass('menu-toggler') && !$(e.target).hasClass('app-sidebar')){
-//            sidebar.css({'display':'none'});
-//            app.removeClass("app-sidebar-toggled");
-//            app.addClass("app-sidebar-collapsed");
-//        }
-//        else{
-//            sidebar.css({'display':'block'});
-//        }
-//    });
+var search = document.getElementById('asset_search_result');
 
-//$(document).on("click",".swmore", function (e){
-//    const computer_name = $(this).data("computer_name");
-//    const swList = $(this).data("swlist");
-//    const swVer = $(this).data("swver");
-//    console.log("aa");
-//    swList2 = swList.split('<br>')
-//    console.log(swList);
-//    swVer2 = swVer.split('<br>')
-////    const swListHTML = "<ul>" + swList2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
-////    const swVerHTML = "<ul>" + swVer2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
-//    const combinedData = swList2.map((item, index) => [item, swVer2[index]]);
-//
-//    // Generate the table HTML
-//    const tableHTML = combinedData.map(([item, version]) => `
-//        <tr>
-//            <td scope="row">${item}</td>
-//            <td>${version}</td>
-//        </tr>
-//    `).join('');
-//
-//
-//
-//    //console.log(swVer[1]);
-//    // Assuming you have a modal with the ID "swListModal" to display the detailed sw_list
-//    $("#swListModal .modal-title").html(computer_name+"의 소프트웨어 및 버전");
-//    $("#swListModal .hstbody").html(tableHTML);
-//    //$("#swListModal .modal-body-2").html(swVerHTML);
-//    $("#swListModal").modal("show");
-//
-//     // Input 상자 값에 따라 해당 값을 노란색으로 처리
-//    $("#searchInput").on("input", function () {
-//        const searchValue = $(this).val().trim().toLowerCase();
-//        $("#swListModal .hstbody tr").each(function () {
-//            const rowData = $(this).text().toLowerCase();
-//            if (rowData.includes(searchValue)) {
-//                $(this).addClass("highlight");
-//            } else {
-//                $(this).removeClass("highlight");
-//            }
-//        });
-//    });
-//});
-var searchButton = document.getElementById('asset_search');
+$(document).ready(function(){
+  $('#asset_search_result').autocomplete({
+    source: function(request, response) {
+      $.ajax({
+        url: 'search_box/',
+        method: 'POST',
+        data: {
+          searchText: request.term
+        },
+        success: function(data){
+          // 데이터 변환 후 반환
+          var autocompleteData = data.data.map(function(item) {
+            return item.computer__computer_name;
+          });
+          response(autocompleteData);
+        }
+      });
+    },
+    minLength: 2  // 최소 문자 수 설정
+  });
+});
 
-searchButton.addEventListener('click', function() {
+
+$('#asset_search').on('click', function(event) {
     var searchInput = document.getElementById('asset_search_result');
     var inputValue = searchInput.value;
+    searchPer(inputValue)
+});
 
+
+$('#asset_search_result').on('keyup', function(event) {
+        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var searchInput = document.getElementById('asset_search_result');
+            var inputValue = searchInput.value;
+            searchPer(inputValue)
+        }
+    });
+
+
+function searchPer(inputValue){
     $.ajax({
         type: "POST",
         url: "search/",
@@ -292,25 +251,22 @@ searchButton.addEventListener('click', function() {
             searchText: inputValue
         },
         success: function(res) {
-            var data = res.data[0]; // 첫 번째 객체 선택
-            console.log(data);
-            console.log(data.disk_use);
+            if (res.data[0] !== undefined){
+                var data = res.data[0]; // 첫 번째 객체 선택
 
-
-            var valueMap = {
-                '사용자': data.computer.computer_name,
-                '메모': data.computer.memo,
-                'IP 주소': data.computer.ip_address,
-                'Mac 주소': data.computer.mac_address,
-                'OS 종류': data.computer.os_simple,
-                'OS 버전': data.computer.os_version,
-                'Office 365 버전': data.essential2,
-                '메모리 사용량': data.mem_use,
-                '디스크 사용량': data.disk_use,
-                '최초 네트워크 접속일': data.first_network,
-                '내 컴퓨터 정보' :data.hw_cpu
-            };
-
+                var valueMap = {
+                    '사용자': data.computer.computer_name,
+                    '메모': data.computer.memo,
+                    'IP 주소': data.computer.ip_address,
+                    'Mac 주소': data.computer.mac_address,
+                    'OS 종류': data.computer.os_simple,
+                    'OS 버전': data.computer.os_version,
+                    'Office 365 버전': data.essential5,
+                    '메모리 사용량': data.mem_use,
+                    '디스크 사용량': data.disk_use,
+                    '최초 네트워크 접속일': data.computer.first_network,
+                    '내 컴퓨터 정보' :data.hw_cpu
+                };
 
             // 각 <td> 요소에 값 설정
             var ipAddressElement = document.getElementById("asset_ip_address");
@@ -348,7 +304,7 @@ searchButton.addEventListener('click', function() {
 
             var office365VersionElement= document.getElementById("asset_office_version");
             if (office365VersionElement) {
-             office365VersionElement.textContent= data.essential2 || "";
+             office365VersionElement.textContent= data.essential5 || "";
             }
 
             var memoryUsageElement=document.getElementById('asset_mem_use');
@@ -363,18 +319,122 @@ searchButton.addEventListener('click', function() {
 
             var firstNetworkAccessDateElement=document.getElementById('asset_first_network');
             if(firstNetworkAccessDateElement){
-            firstNetworkAccessDateElement.textContent=data.first_network||"";
+            firstNetworkAccessDateElement.textContent=data.computer.first_network||"";
             }
 
 
             var myComputerInfoElemnt=document.getElementById('asset_hw_cpu');
             if(myComputerInfoElemnt){
-             myComputerInfoElemnt.innerText="CPU: "+data.computer.hw_cpu + " \n RAM : "+data.computer.hw_ram+ " \n 메인보드 : "+data.computer.hw_mb+ " \n 디스크 : "+data.computer.hw_disk+ " \n 그래픽카드 : "+data.computer.hw_vga;
+             myComputerInfoElemnt.innerText="CPU: "+data.computer.hw_cpu + " \n RAM : "+data.computer.hw_ram+ " \n 메인보드 : "+data.computer.hw_mb+ " \n 디스크 : "+data.computer.hw_disk+ " \n 그래픽카드 : "+data.computer.hw_gpu;
            }
+        } else {
+                return
+            }
 
         }
     });
-});
+}
+
+// search.addEventListener('input', function() {
+//     var inputValue = search.value;
+//
+//     $.ajax({
+//         type: "POST",
+//         url: "search/",
+//         data: {
+//             searchText: inputValue
+//         },
+//         success: function(res) {
+//             $('#autocompleteList').empty();
+//             var data = res.data[0]; // 첫 번째 객체 선택
+//             console.log(data);
+//             //console.log(data.disk_use);
+//             res.data.forEach(function(data){
+//                 $('#autocompleteList').append('<option value="' + data.computer.computer_name + '">');
+//             });
+            //
+        //
+        //     var valueMap = {
+        //         '사용자': data.computer.computer_name,
+        //         '메모': data.computer.memo,
+        //         'IP 주소': data.computer.ip_address,
+        //         'Mac 주소': data.computer.mac_address,
+        //         'OS 종류': data.computer.os_simple,
+        //         'OS 버전': data.computer.os_version,
+        //         'Office 365 버전': data.essential2,
+        //         '메모리 사용량': data.mem_use,
+        //         '디스크 사용량': data.disk_use,
+        //         '최초 네트워크 접속일': data.first_network,
+        //         '내 컴퓨터 정보' :data.hw_cpu
+        //     };
+        //
+        //
+        //     // 각 <td> 요소에 값 설정
+        //     var ipAddressElement = document.getElementById("asset_ip_address");
+        //     if (ipAddressElement) {
+        //       ipAddressElement.textContent = valueMap['IP 주소'];
+        //     }
+        //     var computerNameElement = document.getElementById("asset_computer_name");
+        //     if (computerNameElement) {
+        //       computerNameElement.textContent = data.computer.computer_name;
+        //     }
+        //
+        //     var memoElement = document.getElementById("asset_memo");
+        //     if (memoElement) {
+        //       memoElement.textContent = data.computer.memo || "";
+        //     }
+        //
+        //     var ipAddressElement = document.getElementById("asset_ip_address");
+        //     if (ipAddressElement) {
+        //       ipAddressElement.textContent = data.computer.ip_address;
+        //     }
+        //     var macAddressElement = document.getElementById("asset_mac_address");
+        //     if (macAddressElement) {
+        //      macAddressElement.textContent = data.computer.mac_address;
+        //     }
+        //
+        //     var osTypeElement = document.getElementById("asset_os_simple");
+        //     if (osTypeElement) {
+        //      osTypeElement.textContent = data.computer.os_simple;
+        //     }
+        //
+        //     var osVersionElement = document.getElementById("asset_os_version");
+        //     if (osVersionElement) {
+        //      osVersionElement.textContent = data.computer.os_version;
+        //     }
+        //
+        //     var office365VersionElement= document.getElementById("asset_office_version");
+        //     if (office365VersionElement) {
+        //      office365VersionElement.textContent= data.essential2 || "";
+        //     }
+        //
+        //     var memoryUsageElement=document.getElementById('asset_mem_use');
+        //     if(memoryUsageElement){
+        //     memoryUsageElement.textContent=valueMap['메모리 사용량']||"";
+        //     }
+        //
+        //     var diskUsageElement=document.getElementById('asset_disk_use');
+        //     if(diskUsageElement){
+        //     diskUsageElement.textContent=valueMap['디스크 사용량']||"";
+        //     }
+        //
+        //     var firstNetworkAccessDateElement=document.getElementById('asset_first_network');
+        //     if(firstNetworkAccessDateElement){
+        //     firstNetworkAccessDateElement.textContent=data.first_network||"";
+        //     }
+        //
+        //
+        //     var myComputerInfoElemnt=document.getElementById('asset_hw_cpu');
+        //     if(myComputerInfoElemnt){
+        //      myComputerInfoElemnt.innerText="CPU: "+data.computer.hw_cpu + " \n RAM : "+data.computer.hw_ram+ " \n 메인보드 : "+data.computer.hw_mb+ " \n 디스크 : "+data.computer.hw_disk+ " \n 그래픽카드 : "+data.computer.hw_vga;
+        //    }
+
+    //     }
+    // });
+    // $.ajax({
+    //     url:
+    // })
+// });
 
 
 

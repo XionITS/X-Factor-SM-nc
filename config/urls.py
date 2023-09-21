@@ -70,14 +70,20 @@ urlpatterns = [
     #Asset 페이지
     path('asset/', views_asset.asset),
     path('asset/search/', views_asset.search),
+    path('asset/search_box/', views_asset.search_box),
 
     #history 페이지
-    path('history', views_history.history),
+    path('history/', views_history.history),
+    path('history/search_h/', views_history.search_h),
+    path('history/search_box_h/', views_history.search_box_h),
+    # path('history/history1/', views_history.select_date_l),
+    # path('history/history2/', views_history.select_date_r),
 
 
     #Setting 페이지
     path('user_management', views_user_management.user),
     path('group_management', views_group_management.group),
-    path('log_management', views_log_management.log),
+    path('log_management/', views_log_management.log),
+    path('log_management/paging/', views_log_management.log_paging),
 ]
 

@@ -31003,3 +31003,7 @@ input:checked+labl::before{
 
 .btn-group {
         margin-bottom: 10px;
+
+.asset-input-group > * {
+    margin-right: 0;  /* 모든 직계 자식 요소들의 오른쪽 마진을 제거합니다 */
+}

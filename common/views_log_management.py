@@ -1,3 +1,4 @@
+from django.db.models.expressions import RawSQL
 from django.http import HttpResponse
 import math
 import operator
@@ -30,3 +31,31 @@ def log(request):
     return render(request, 'log_management.html', context)
 
 
+@csrf_exempt
+def log_paging(request):
+    log = Xfactor_Log.objects.order_by('-log_date')
+    # Get start and length parameters from DataTables AJAX request
+    start = int(request.POST.get('start', 0))
+    length = int(request.POST.get('length', 10))  # Default to 10 items per page
+
+    # Paginate the queryset
+    paginator = Paginator(log, length)
+    page_number = (start // length) + 1
+
+    try:
+        page = paginator.page(page_number)
+    except EmptyPage:
+        page = paginator.page(paginator.num_pages)
+
+    # Serialize the paginated data
+    #user_list = LimitedCommonSerializer(page, many=True).data
+    user_list = XfactorLogserializer(page, many=True).data
+    # Prepare the response
+    response = {
+        'draw': int(request.POST.get('draw', 1)),  # Echo back the draw parameter from the request
+        'recordsTotal': paginator.count,  # Total number of items without filtering
+        'recordsFiltered': paginator.count,  # Total number of items after filtering (you can update this based on your filtering logic)
+        'data': user_list,  # Serialized data for the current page
+    }
+
+    return JsonResponse(response)
