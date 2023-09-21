@@ -183,23 +183,36 @@ var handleRenderChartNCOMG = function () {
 
 
 //############################### 전체 자산 수(Online OS) #######################################
-    function asset_all_os_chart1(divId, seriesData, labelsData) {
+    function asset_all_os_chart1(divId, a, b, c) {
+        // a, b, c 변수에서 각각의 카운트 값을 추출
+        var countA = a.map(function(item) {
+            return item.count;
+        });
+
+        var countB = b.map(function(item) {
+            return item.count;
+        });
+
+        var countC = c.map(function(item) {
+            return item.count;
+        });
+
         var asset_all_os_chart_options1 = {
             series: [
                 {
                     name: 'Desktop',
                     group: 'budget',
-                    data: [122, 343, 6543,]
+                    data: countA // a 변수의 카운트 값을 할당
                 },
                 {
                     name: 'Notebook',
                     group: 'budget',
-                    data: [112, 323, 123,]
+                    data: countB // b 변수의 카운트 값을 할당
                 },
                 {
                     name: 'Other',
                     group: 'budget',
-                    data: [112, 90, 82,]
+                    data: countC // c 변수의 카운트 값을 할당
                 }
             ],
             //   chart: {
@@ -299,28 +312,45 @@ var handleRenderChartNCOMG = function () {
         asset_all_os_chart1.render();
     }
 
-    hotfix_counts = dataList.hotfix_data_list[1]
-    hotfix_items = dataList.hotfix_data_list[0]
-    asset_all_os_chart1("asset_all_os_chart", hotfix_counts, hotfix_items);
+    desk_online_list = dataList.desk_online_list
+    note_online_list = dataList.note_online_list
+    other_online_list = dataList.other_online_list
+
+    asset_all_os_chart1("asset_all_os_chart", desk_online_list, note_online_list, other_online_list);
+
+
 
 //#######################################전체 자산 수(Total OS)#################################
-    function asset_all_os_chart2(divId, seriesData, labelsData) {
+    function asset_all_os_chart2(divId, a, b, c) {
+        // a, b, c 변수에서 각각의 카운트 값을 추출
+        var countA = a.map(function(item) {
+            return item.count;
+        });
+
+        var countB = b.map(function(item) {
+            return item.count;
+        });
+
+        var countC = c.map(function(item) {
+            return item.count;
+        });
+
         var asset_all_os_chart_options2 = {
             series: [
                 {
                     name: 'Desktop',
                     group: 'budget',
-                    data: [134, 543, 6678]
+                    data: countA // a 변수의 카운트 값을 할당
                 },
                 {
                     name: 'Notebook',
                     group: 'budget',
-                    data: [123, 432, 133]
+                    data: countB // b 변수의 카운트 값을 할당
                 },
                 {
                     name: 'Other',
                     group: 'budget',
-                    data: [132, 102, 99]
+                    data: countC // c 변수의 카운트 값을 할당
                 }
             ],
             chart: {
@@ -393,9 +423,12 @@ var handleRenderChartNCOMG = function () {
         asset_all_os_chart2.render();
     }
 
-    hotfix_counts = dataList.hotfix_data_list[1]
-    hotfix_items = dataList.hotfix_data_list[0]
-    asset_all_os_chart2("asset_all_os_chart2", hotfix_counts, hotfix_items);
+    desk_total_list = dataList.desk_total_list
+    note_total_list = dataList.note_total_list
+    other_total_list = dataList.other_total_list
+
+    asset_all_os_chart2("asset_all_os_chart2", desk_total_list, note_total_list, other_total_list);
+
 
     //--------------------------------------------------------------------------
     // 자산 관리 현황 미니도넛, 프로그레스 바 - DISK 사용률 초과 서버, MEMORY 사용률 초과 서버

@@ -55,6 +55,14 @@ def dashboard(request):
     hotfix_data_list = DCDL['hotfix_data_list']
     asset_all_chart_list = DCDL['asset_all_chart_list']
     office_data_list = DCDL['office_data_list']
+
+    desk_online_list = DCDL['desk_online_list']
+    note_online_list = DCDL['note_online_list']
+    other_online_list = DCDL['other_online_list']
+    desk_total_list = DCDL['desk_total_list']
+    note_total_list = DCDL['note_total_list']
+    other_total_list = DCDL['other_total_list']
+
     dataList = {
         'monthly_asset_data_list': monthly_asset_data_list,
         'cpu_data_list': cpu_data_list,
@@ -65,6 +73,12 @@ def dashboard(request):
         'hotfix_data_list': hotfix_data_list,
         'asset_all_chart_list': asset_all_chart_list,
         'office_data_list': office_data_list,
+        'desk_online_list': desk_online_list,
+        'note_online_list': note_online_list,
+        'other_online_list': other_online_list,
+        'desk_total_list': desk_total_list,
+        'note_total_list': note_total_list,
+        'other_total_list': other_total_list,
     }
 
     context = {'menu_list' : menu.data, 'dataList': dataList}
