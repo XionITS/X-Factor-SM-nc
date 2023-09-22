@@ -57,7 +57,7 @@ def Dashboard():
     office_data_old = asset.filter(classification='office_ver', item__in=['Office 15']).aggregate(total=Sum('item_count'))
     if office_data_old['total'] == None:
         office_data_old['total'] = 0
-    office_data_none = asset.filter(classification='office_ver', item__in=['unconfiremd', '오피스 없음', '']).aggregate(
+    office_data_none = asset.filter(classification='office_ver', item__in=['unconfirmed', '오피스 없음', '']).aggregate(
         total=Sum('item_count'))
     # office_items = [data['item'] for data in office_data]
     # office_item_counts = [data['item_count'] for data in office_data]
