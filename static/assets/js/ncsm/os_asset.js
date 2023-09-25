@@ -13,7 +13,7 @@ var checkedItems = {};
 var os_asset_list = function () {
     var os_asset_list_Data = $('#os_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
-		lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
 		pageLength: 10,
 		responsive: false,
 		searching: true,
@@ -103,7 +103,9 @@ var os_asset_list = function () {
 		    {targets: 4, width: "25%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.os_version+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 5, width: "15%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 6, width: "15%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                if (data === null || data === undefined || data.trim() === '') { return '';
+                } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';}}},
 		    		],
 		language: {
 			"decimal": "",

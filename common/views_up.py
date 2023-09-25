@@ -40,7 +40,7 @@ def up_asset_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(os_simple='Linux').exclude(os_simple='Mac')
+    user = Xfactor_Common.objects.filter(os_simple__icontains=default_os).exclude(os_simple='Linux').exclude(os_simple='Mac')
     hotfix_dates = user.values_list('hotfix_date', flat=True)
     # user = user.datetime.strptime(user.hotfix_date, '%m/%d/%Y %H:%M:%S')
     if filter_text and filter_column:

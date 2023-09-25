@@ -5,7 +5,7 @@ function user_list_popup() {
     var user_list_popup = function () {
         var user_list_popupData = $('#user_list_popupTable').DataTable({
             dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
-            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+            lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
             responsive: true,
             searching: true,
             ordering: false,

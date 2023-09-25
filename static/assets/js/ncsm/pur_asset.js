@@ -11,7 +11,7 @@ var checkedItems = {};
 var hw_pur_asset_list = function () {
 	var hw_pur_asset_list_Data = $('#hs_pur_asset_list').DataTable({
 		dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
-		lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
 		pageLength: 5,
 		responsive: false,
 		searching: true,
@@ -126,7 +126,9 @@ var hw_pur_asset_list = function () {
 		    {targets: 6, width: "5%", className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "5%", className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 8, width: "20%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 9, width: "5%", className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "5%", className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {
+                if (data === null || data === undefined || data.trim() === '') { return '';
+                } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';}}},
 		],
 		language: {
 			"decimal": "",
@@ -194,7 +196,7 @@ $('#search-input-hs').on('keyup', function(event) {
 var sw_pur_asset_list = function () {
 	var sw_pur_asset_list = $('#hs_pur_asset_list').DataTable({
 		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><''p>>",
-		lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
         pageLength: 5,
 		responsive: false,
 		searching: true,
@@ -328,7 +330,9 @@ var sw_pur_asset_list = function () {
 		        const swInstall= row.computer.sw_install;
 		        return '</span><br><div class="pur_swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-swinstall="' + swInstall + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
 
-		    {targets: 9, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                if (data === null || data === undefined || data.trim() === '') { return '';
+                } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';}}},
 		],
 		language: {
 			"decimal": "",

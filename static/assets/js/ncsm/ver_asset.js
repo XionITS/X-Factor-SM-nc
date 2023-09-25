@@ -13,7 +13,7 @@ var checkedItems = {};
 var all_asset_list = function () {
     var all_asset_list_Data = $('#ver_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
-        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+        lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
         pageLength: 10,
         responsive: false,
         searching: true,
@@ -169,8 +169,10 @@ var all_asset_list = function () {
                 targets: 7,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>'
+                render: function(data, type, row) {
+                    if (data === null || data === undefined || data.trim() === '') { return '';
+                    } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
+                    }
                 }
             },
         ],
@@ -244,7 +246,7 @@ var all_asset_list = function () {
 var win_asset_list = function () {
     var win_asset_list_Data = $('#ver_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
-        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+        lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
         pageLength: 10,
         responsive: false,
         searching: true,
@@ -401,8 +403,10 @@ var win_asset_list = function () {
                 targets: 7,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>'
+                render: function(data, type, row) {
+                    if (data === null || data === undefined || data.trim() === '') { return '';
+                    } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
+                    }
                 }
             },
         ],
@@ -474,7 +478,7 @@ var win_asset_list = function () {
 var mac_asset_list = function () {
     var mac_asset_list_Data = $('#ver_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
-        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+        lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
         pageLength: 10,
         responsive: false,
         searching: true,
@@ -628,8 +632,10 @@ var mac_asset_list = function () {
                 targets: 7,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>'
+                render: function(data, type, row) {
+                    if (data === null || data === undefined || data.trim() === '') { return '';
+                    } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
+                    }
                 }
             },
         ],
@@ -701,7 +707,7 @@ var mac_asset_list = function () {
 var other_asset_list = function () {
     var other_asset_list_Data = $('#ver_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
-        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+        lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
         pageLength: 10,
         responsive: false,
         searching: true,
@@ -855,8 +861,10 @@ var other_asset_list = function () {
                 targets: 7,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>'
+                render: function(data, type, row) {
+                    if (data === null || data === undefined || data.trim() === '') { return '';
+                    } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
+                    }
                 }
             },
         ],

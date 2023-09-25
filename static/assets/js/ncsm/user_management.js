@@ -11,7 +11,7 @@ var checkedItems = {};
 var um_user_list = function () {
 	var um_user_list_Data = $('#um_list').DataTable({
 		dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
-		lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
 		pageLength: 10,
 		responsive: false,
 		//searching: true,

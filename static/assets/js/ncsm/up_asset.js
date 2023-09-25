@@ -13,8 +13,8 @@ var checkedItems = {};
 var up_asset_list = function () {
     var up_asset_list_Data = $('#up_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
-		lengthMenu: [[15, 25, 50, 100], [15, 25, 50, 100]],
-		pageLength: 15,
+		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
+		pageLength: 10,
 		responsive: false,
 		searching: true,
 		ordering: true,
@@ -135,7 +135,9 @@ var up_asset_list = function () {
                     return '<a class="upmore swmore-font" data-date="' + date + '" data-hotfix="' + hotfix + '" data-computer_name="' + computer_name +'">' + date.split('<br>')[0]+ '</a>'
                 }
             }},
-		    {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                if (data === null || data === undefined || data.trim() === '') { return '';
+                } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';}}},
 		    		],
 		language: {
 			"decimal": "",

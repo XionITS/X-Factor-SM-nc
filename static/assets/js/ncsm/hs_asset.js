@@ -1411,7 +1411,7 @@
 var hw_asset_list = function () {
 	var hs_asset_list_Data = $('#hs_asset_list').DataTable({
 		dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
-		lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
 		pageLength: 10,
 		responsive: false,
 		searching: true,
@@ -1492,7 +1492,9 @@ var hw_asset_list = function () {
 		    {targets: 6, width: "3%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_ram+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_disk+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_gpu+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 9, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                if (data === null || data === undefined || data.trim() === '') { return '';
+                } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';}}},
 		],
 		language: {
 			"decimal": "",
@@ -1576,7 +1578,7 @@ $('#search-input-hs').on('keyup', function(event) {
 var sw_asset_list = function () {
 	var sw_asset_list_Data = $('#hs_asset_list').DataTable({
 		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><''p>>",
-		lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
         pageLength: 5,
 		responsive: false,
 		searching: true,
@@ -1650,7 +1652,9 @@ var sw_asset_list = function () {
 		        const swList = row.sw_list;
                 const swVer = row.sw_ver_list;
 		        return '<span data-toggle="tooltip">' + swList.split('<br>')[0]+'<br>'+swList.split('<br>')[1]+'<br>'+swList.split('<br>')[2]+'<br>'+swList.split('<br>')[3]+ '</span><br><div class="swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
-		    {targets: 5, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                if (data === null || data === undefined || data.trim() === '') { return '';
+                } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';}}},
 		],
 		language: {
 			"decimal": "",

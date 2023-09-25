@@ -13,7 +13,7 @@ var checkedItems = {};
 var sec_asset_list = function () {
     var sec_asset_list_Data = $('#sec_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
-		lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
 		pageLength: 10,
 		responsive: false,
 		searching: true,
@@ -137,7 +137,9 @@ var sec_asset_list = function () {
                     'data-computer_name="' + row.computer.computer_name + '" data-cososys="' + row.security1 + '" data-cososys_ver="' + row.security1_ver + '" ' +
                     'data-symantec="' + row.security2 +'" data-symantec_ver="' + row.security2_ver +'" data-cbr_ver="' + row.security3_ver +'" data-cbc="' + row.security4 +'" ' +
                     'data-cbc_ver="' + row.security4_ver +'" data-mcafee="' + row.security5 +'" data-mcafee_ver="' + row.security5_ver +'" data-ip_address="' + row.computer.ip_address + '" data-mac_address="' + row.computer.mac_address + '" data-os_total="' + row.computer.os_total + '"> 더보기 </a>'}},
-		    {targets: 10, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 10, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                if (data === null || data === undefined || data.trim() === '') { return '';
+                } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';}}},
 		    		],
 		language: {
 			"decimal": "",

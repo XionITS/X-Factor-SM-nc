@@ -50,7 +50,7 @@ def ver_asset_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common.objects.filter(os_total__icontains=default_os)
+    user = Xfactor_Common.objects.filter(os_simple__icontains=default_os)
 
     # # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
     # local_tz = pytz.timezone('Asia/Seoul')
@@ -209,7 +209,7 @@ def os_asset_paging(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
 
-    user = Xfactor_Common.objects.filter(os_total__icontains=default_os)
+    user = Xfactor_Common.objects.filter(os_simple__icontains=default_os)
     #user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(os_total='unconfirmed').exclude(ip_address='unconfirmed')
 
     if filter_text and filter_column:

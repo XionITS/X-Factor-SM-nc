@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html class="">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="robots" content="noindex, nofollow">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+	<title>
+		태니엄 통합대시보드 (STAGE) 로그인
+	</title>
+	<link rel="icon"
+		href="/resources/hgcmj/login/common-login/img/favicon.ico?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0" />
+	<link href="/resources/hgcmj/login/common-login/css/reset.css?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0"
+		rel="stylesheet" />
+	<link href="/resources/hgcmj/login/common-login/css/index.css?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0"
+		rel="stylesheet" />
+	<link href="/resources/hgcmj/login/common-login/css/alert.css?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0"
+		rel="stylesheet" />
+	<script src="/resources/hgcmj/login/common-login/js/jquery-3.1.1.min.js?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0"
+		type="text/javascript"></script>
+	<script src="/resources/hgcmj/login/common-login/js/findpwd.js?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0"
+		type="text/javascript"></script>
+	<script src="/resources/hgcmj/login/common-login/js/base64url.js?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0"
+		type="text/javascript"></script>
+	<script src="/resources/hgcmj/login/common-login/js/slick.min.js?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0"
+		type="text/javascript"></script>
+	<script src="/resources/hgcmj/login/common-login/js/index.js?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0"
+		type="text/javascript"></script>
+	<script src="/resources/hgcmj/login/common-login/js/lottie-player.js?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0"
+		type="text/javascript"></script>
+	<script src="https://www.google.com/recaptcha/api.js?hl=ko?v=64a78fea6a199a68eaab9d04a195f0d8075d2be0"
+		type="text/javascript"></script>
+</head>
+
+<body class="">
+	<div class="wrapper" data-client-id="stg-tanium-dashboard">
+		<article>
+			<div id="kc-header" class="">
+				<div id="kc-header-wrapper">
+					<div class="kc-logo-text">
+						<span>
+                        태니엄 통합대시보드 (STAGE)
+                        </span>
+					</div>
+				</div>
+			</div>
+			<div class="">
+				<header class="">
+
+
+				</header>
+				<div id="kc-content">
+					<div id="kc-content-wrapper" class="container">
+
+
+						<script
+							src="https://www.google.com/recaptcha/enterprise.js?render=6LdouXcnAAAAAFWWiBU6NijWCu9-11uORDjURJ_Q"
+							async defer></script>
+						<script>
+							function onClick(e) {
+          e.preventDefault();
+          grecaptcha.enterprise.ready(async () => {
+            const token = await grecaptcha.enterprise.execute('6LdouXcnAAAAAFWWiBU6NijWCu9-11uORDjURJ_Q', {action: 'LOGIN'});
+            // IMPORTANT: The 'token' that results from execute is an encrypted response sent by
+            // reCAPTCHA Enterprise to the end user's browser.
+            // This token must be validated by creating an assessment.
+            // See https://cloud.google.com/recaptcha-enterprise/docs/create-assessment
+            document.getElementById("g-recaptcha-response").value = token
+            document.getElementById("kc-form-login").submit()
+          });
+        }
+						</script>
+						<div id="kc-form">
+							<div id="kc-form-wrapper" class="form-wrapper">
+								<form id="kc-form-login" onsubmit="onClick(event); login.disabled = true; return true;"
+									class=""
+									action="https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/login-actions/authenticate?session_code=R7z1Kd4ryJTUDgkbGl3tu-sl_n4HrClXajDRvueLn3A&amp;execution=879308da-c371-4790-8231-7527ad3f0865&amp;client_id=stg-tanium-dashboard&amp;tab_id=0wgYgaYhTQo"
+									method="post">
+									<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response"/>
+									<div class="input_id">
+										<label for="username" class="">이메일</label>
+
+										<input tabindex="1" id="username" class="inp_login inp_id"  name="username" value="" placeholder="* 타인의 계정으로 로그인 금지"  type="text" autofocus autocomplete="off" required="required" aria-invalid="" oninvalid="this.setCustomValidity('입력정보를 확인하세요.')" oninput="setCustomValidity('')" autocapitalize="none"  />
+										<span>@ncsoft.com</span>
+									</div>
+
+									<div class="input_password">
+										<label for="password" class="">비밀번호</label>
+
+										<input tabindex="2" id="password" class="inp_login inp_pw" name="password" type="password" autocomplete="off" placeholder=""  required="required" aria-invalid="" oninvalid="this.setCustomValidity('입력정보를 확인하세요.')" oninput="setCustomValidity('')"  />
+                    </div>
+										<div class=" ">
+											<div id="kc-form-options" class="form-option ">
+												<div class="checkbox">
+													<label>
+                                        <input tabindex="4" id="rememberMe" name="rememberMe" type="checkbox"><span></span>로그인 유지
+                                </label>
+												</div>
+												<div class="reset-button">
+													<button type="button" class="btn-pass-search findpwd-button">
+                                    <span>비밀번호 재설정</span>
+                                </button>
+												</div>
+											</div>
+
+
+										</div>
+
+										<div id="kc-form-buttons" class="btn_login">
+											<input type="hidden" id="id-hidden-input" name="credentialId" />
+											<input tabindex="5" name="login" id="kc-login" type="submit" value="로그인"/>
+											<span style="background: #003569"></span>
+											<!-- Loading Spinner -->
+											<div class="loading-wrap">
+												<div class="loading-spinner">
+													<lottie-player
+														src="/resources/hgcmj/login/common-login/js/loading.json"
+														th:src="@{/resources/hgcmj/login/common-login/js/loading.json}"
+														background="transparent" speed="1"
+														style="width: 150px; height: 40px" loop autoplay>
+													</lottie-player>
+												</div>
+											</div>
+										</div>
+
+								</form>
+							</div>
+
+						</div>
+
+
+						<script
+							src="https://www.google.com/recaptcha/enterprise.js?render=6LdouXcnAAAAAFWWiBU6NijWCu9-11uORDjURJ_Q"
+							async defer></script>
+						<script>
+							function onClick(e) {
+          e.preventDefault();
+          grecaptcha.enterprise.ready(async () => {
+            const token = await grecaptcha.enterprise.execute('6LdouXcnAAAAAFWWiBU6NijWCu9-11uORDjURJ_Q', {action: 'LOGIN'});
+            // IMPORTANT: The 'token' that results from execute is an encrypted response sent by
+            // reCAPTCHA Enterprise to the end user's browser.
+            // This token must be validated by creating an assessment.
+            // See https://cloud.google.com/recaptcha-enterprise/docs/create-assessment
+            document.getElementById("g-recaptcha-response").value = token
+            document.getElementById("kc-form-login").submit()
+          });
+        }
+						</script>
+
+					</div>
+				</div>
+
+			</div>
+		</article>
+		<footer>
+			<div>
+				<p class="copyright">Copyright © NCSOFT Corporation. All Rights Reserved.</p>
+				<p class="footer-name">
+					<img src="/resources/hgcmj/login/common-login/img/logo-nano.png" alt="nano" />
+                통합인증
+
+            </p>
+					<div class="select-locale" id="kc-locale">
+						<div id="kc-locale-wrapper" class="">
+							<div id="kc-locale-dropdown" class="dropdown">
+								<a href="#" class="link" id="kc-current-locale-link">
+									한국어
+									<p></p>
+								</a>
+								<ul>
+									<li class="item">
+										<a class="active"
+											href="/realms/ncsoft/login-actions/authenticate?client_id=stg-tanium-dashboard&amp;tab_id=0wgYgaYhTQo&amp;execution=879308da-c371-4790-8231-7527ad3f0865&amp;kc_locale=ko">한국어</a>
+									</li>
+									<li class="item">
+										<a
+											href="/realms/ncsoft/login-actions/authenticate?client_id=stg-tanium-dashboard&amp;tab_id=0wgYgaYhTQo&amp;execution=879308da-c371-4790-8231-7527ad3f0865&amp;kc_locale=en">English</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<script>
+							initLang({
+                            lang: `한국어`
+                        })
+						</script>
+					</div>
+			</div>
+		</footer>
+	</div>
+	<section class="findpwd-view">
+		<!-- Step 1 -->
+		<section class="layer-login layer-box window step1">
+			<h1 class="layer-header">비밀번호 재설정</h1>
+			<div class="layer-content">
+				<div class="step-wrap">
+					<h2 class="tit-step tit-step1 active">
+						<img
+                src="/resources/hgcmj/login/common-login/img/check.svg"
+                th:src="@{/resources/hgcmj/login/common-login/img/check.svg}"
+                class="svg-check"
+            />
+						<span>정보입력</span>
+					</h2>
+					<span class="next-icon-wrap">
+            <img
+                src="/resources/hgcmj/login/common-login/img/steparrow.svg"
+                th:src="@{/resources/hgcmj/login/common-login/img/steparrow.svg}"
+                class="svg-arrow-right"
+            />
+            </span>
+					<h2 class="tit-step tit-step2">
+						<span>본인인증</span>
+					</h2>
+					<span class="next-icon-wrap">
+            <img
+                src="/resources/hgcmj/login/common-login/img/steparrow.svg"
+                th:src="@{/resources/hgcmj/login/common-login/img/steparrow.svg}"
+                class="svg-arrow-right"
+            />
+            </span>
+					<h2 class="tit-step tit-step3">
+						<span>비밀번호 재설정</span>
+					</h2>
+				</div>
+				<div class="step-content active">
+					<fieldset class="pass-search-step">
+						<legend class="blind">정보입력</legend>
+						<div class="description-box">
+							<p class="title">Step 01. 정보입력</p>
+							<p class="subtitle">이름, 계정, 사번을 입력해주세요.</p>
+						</div>
+						<div class="input-box">
+							<div class="input-row">
+								<label for="employeeName">전체 이름</label>
+								<input id="employeeName" name="namekor" class="focus" autocomplete="off" placeholder="김엔씨" />
+                </div>
+								<div class="input-row">
+									<label for="employeeId">계정</label>
+									<input id="employeeId" name="accountid" autocomplete="off" placeholder="nano" />
+                </div>
+									<div class="input-row">
+										<label for="employeeNum">사번</label>
+										<input id="employeeNum" name="sabun" autocomplete="off" placeholder="12345678" />
+                </div>
+									</div>
+									<div class="layer-btns actionbar">
+										<button type="button" class="btn-cancel button cancel">취소</button>
+										<button type="submit" class="btn-confirm button okay">다음</button>
+									</div>
+					</fieldset>
+				</div>
+			</div>
+			<button type="button" class="btn-close button close">
+        <img
+            src="/resources/hgcmj/login/common-login/img/cross.svg"
+            th:src="@{/resources/hgcmj/login/common-login/img/cross.svg}"
+            class="svg-close"
+        />
+        </button>
+		</section>
+		<!-- Step 2 -->
+		<section class="layer-login layer-box window step2">
+			<h1 class="layer-header">비밀번호 재설정</h1>
+			<div class="layer-content">
+				<div class="step-wrap">
+					<h2 class="tit-step tit-step1">
+						<span>정보입력</span>
+					</h2>
+					<span class="next-icon-wrap">
+            <img
+                src="/resources/hgcmj/login/common-login/img/steparrow.svg"
+                th:src="@{/resources/hgcmj/login/common-login/img/steparrow.svg}"
+                class="svg-arrow-right"
+            />
+            </span>
+					<h2 class="tit-step tit-step2 active">
+						<img
+                src="/resources/hgcmj/login/common-login/img/check.svg"
+                th:src="@{/resources/hgcmj/login/common-login/img/check.svg}"
+                class="svg-check"
+            />
+						<span>본인인증</span>
+					</h2>
+					<span class="next-icon-wrap">
+            <img
+                src="/resources/hgcmj/login/common-login/img/steparrow.svg"
+                th:src="@{/resources/hgcmj/login/common-login/img/steparrow.svg}"
+                class="svg-arrow-right"
+            />
+            </span>
+					<h2 class="tit-step tit-step3">
+						<span>비밀번호 재설정</span>
+					</h2>
+				</div>
+				<div class="step-content active">
+					<fieldset class="pass-search-step sms">
+						<legend class="blind">정보입력</legend>
+						<div class="description-box">
+							<p class="title">Step 02. 휴대폰 인증</p>
+							<p class="subtitle">전송 버튼을 누르면 휴대폰으로 인증번호가 전송됩니다.</p>
+							<p class="subtitle">전송된 번호를 ‘인증번호 확인’란에 입력해주세요.</p>
+						</div>
+						<div class="input-box second">
+							<div class="input-row">
+								<label for="phoneNum">인증번호 전송</label>
+								<div class="sms-send-wrap">
+									<input type="text" id="phoneNum" name="cellphonenumber" placeholder="010-0000-0000" readonly="readonly" />
+									<button type="button" class="btn-send button send">전송</button>
+								</div>
+							</div>
+							<div class="input-row">
+								<label for="phoneNumConfirm">인증번호 확인</label>
+								<input id="phoneNumConfirm" name="code" autocomplete="off" />
+                </div>
+							</div>
+							<div class="layer-btns actionbar">
+								<button type="button" class="btn-cancel button cancel">취소</button>
+								<button type="submit" class="btn-confirm button verify">다음</button>
+							</div>
+					</fieldset>
+				</div>
+			</div>
+			<button type="button" class="btn-close button close">
+        <img
+            src="/resources/hgcmj/login/common-login/img/cross.svg"
+            th:src="@{/resources/hgcmj/login/common-login/img/cross.svg}"
+            class="svg-close"
+        />
+        </button>
+		</section>
+		<!-- Step 3 -->
+		<section class="layer-login layer-box window step3">
+			<h1 class="layer-header">비밀번호 재설정</h1>
+			<div class="layer-content">
+				<div class="step-wrap">
+					<h2 class="tit-step tit-step1">
+						<span>정보입력</span>
+					</h2>
+					<span class="next-icon-wrap">
+            <img
+                src="/resources/hgcmj/login/common-login/img/steparrow.svg"
+                th:src="@{/resources/hgcmj/login/common-login/img/steparrow.svg}"
+                class="svg-arrow-right"
+            />
+            </span>
+					<h2 class="tit-step tit-step2">
+						<span>본인인증</span>
+					</h2>
+					<span class="next-icon-wrap">
+            <img
+                src="/resources/hgcmj/login/common-login/img/steparrow.svg"
+                th:src="@{/resources/hgcmj/login/common-login/img/steparrow.svg}"
+                class="svg-arrow-right"
+            />
+            </span>
+					<h2 class="tit-step tit-step3 active">
+						<img
+                src="/resources/hgcmj/login/common-login/img/check.svg"
+                th:src="@{/resources/hgcmj/login/common-login/img/check.svg}"
+                class="svg-check"
+            />
+						<span>비밀번호 재설정</span>
+					</h2>
+				</div>
+				<div class="step-content active">
+					<fieldset class="pass-search-step">
+						<legend class="blind">정보입력</legend>
+						<div class="description-box">
+							<p class="title">Step 03. 새 비밀번호 입력</p>
+							<p class="subtitle">영문+숫자+특수기호(예:!@#*)혼합, 8자 이상의 새 비밀번호를 설정 해주세요. </p>
+							<p class="subtitle">사용중인 비밀번호의 안내는 불가합니다.</p>
+						</div>
+						<div class="input-box">
+							<div class="input-row">
+								<label>계정</label>
+								<input type="text" name="accountid" placeholder="" readonly="readonly" class="right-area account accountid" />
+                </div>
+								<div class="input-row">
+									<label for="selectNetwork">망구분</label>
+									<select id="selectNetwork" name="domain">
+                    <option value="NC-KOREA">통합망</option>
+                    <!-- <option value="DEV">개발망</option> -->
+                    <option value="10LANPC">10랜망</option>
+                    <!-- <option value="MDEV">인터넷개발망</option> -->
+                    <option value="SANDBOX">샌드박스망</option>
+                </select>
+								</div>
+								<div class="input-row">
+									<label for="newPassword">새 비밀번호 입력</label>
+									<input type="password" id="newPassword" name="newpassword1" class="focus" autocomplete="off" />
+                </div>
+									<div class="input-row">
+										<label for="reNewPassword">새 비밀번호 확인</label>
+										<input type="password" id="reNewPassword" name="newpassword2" autocomplete="off" />
+                </div>
+									</div>
+									<div class="layer-btns actionbar">
+										<button type="button" class="btn-cancel button cancel">취소</button>
+										<button type="submit" class="btn-confirm button okay">확인</button>
+									</div>
+					</fieldset>
+				</div>
+			</div>
+			<button type="button" class="btn-close button close">
+        <img
+            src="/resources/hgcmj/login/common-login/img/cross.svg"
+            th:src="@{/resources/hgcmj/login/common-login/img/cross.svg}"
+            class="svg-close"
+        />
+        </button>
+		</section>
+
+		<!-- Alert -->
+		<div class="layer-info-box window alert">
+			<p class="info-box message"></p>
+			<div class="layer-btns actionbar">
+				<button type="submit" class="btn-confirm button okay">확인</button>
+			</div>
+		</div>
+		<!-- Confirm -->
+		<div class="layer-info-box window confirm">
+			<p class="info-box message"></p>
+			<div class="layer-btns actionbar">
+				<button type="button" class="btn-cancel button confirm-cancel">취소</button>
+				<button type="submit" class="btn-confirm button confirm-okay">확인</button>
+			</div>
+		</div>
+		<!-- Alert(Progress) -->
+		<div class="layer-info-box window progress">
+			<p class="info-box message">처리 중입니다.<br />잠시만 기다려 주십시오.</p>
+		</div>
+	</section>
+	<div class="dimmed"></div>
+	<script>
+		$('.findpwd-button').bindFindPwd('.findpwd-view')
+	</script>
+</body>
+
+</html>
