@@ -59,7 +59,7 @@ var sec_asset_list = function () {
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
-                console.log(orderColumn)
+                //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
                         2: 'computer.os_simple',
@@ -71,7 +71,7 @@ var sec_asset_list = function () {
                         8: 'security5',
                         9: 'computer.memo'
                         };
-                console.log(columnMap)
+                //console.log(columnMap)
                 data.filter = {
                     defaultColumn : defaultColumn,
                     column: column,

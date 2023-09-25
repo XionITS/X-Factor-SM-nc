@@ -38,8 +38,8 @@ def search_h(request):
         search_text = request.POST.get('searchText', None)
         date1 = request.POST.get('date1')
         date2 = request.POST.get('date2')
-        user1 = Xfactor_Daily.objects.filter(user_date__date=date1).filter(computer_name=search_text)
-        user2 = Xfactor_Daily.objects.filter(user_date__date=date2).filter(computer_name=search_text)
+        user1 = Xfactor_Daily.objects.filter(user_date__date=date1).filter(computer_name__icontains=search_text)
+        user2 = Xfactor_Daily.objects.filter(user_date__date=date2).filter(computer_name__icontains=search_text)
 
         user_data1 = XfactorDailyserializer(user1, many=True).data
         user_data2 = XfactorDailyserializer(user2, many=True).data
@@ -55,7 +55,7 @@ def search_box_h(request):
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
-        user_data = Xfactor_Common.objects.filter(computer_name__contains=search_text).values('computer_name')
+        user_data = Xfactor_Common.objects.filter(computer_name__icontains=search_text).values('computer_name')
         print(user_data)
         # user_data = XfactorServiceserializer(user, many=True).data
         return JsonResponse({'data': list(user_data)})

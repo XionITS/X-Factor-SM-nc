@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timedelta
 import json
 import logging
 
@@ -22,7 +22,7 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 def Dashboard():
     logger = logging.getLogger(__name__)
     monthly_asset = []
-    today_collect_date = timezone.now() - datetime.timedelta(minutes=DBSettingTime)
+    today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 
     asset = Daily_Statistics.objects.all()
     asset_log = Daily_Statistics_log.objects.all()
