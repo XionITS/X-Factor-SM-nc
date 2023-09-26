@@ -6,6 +6,7 @@ Author: Sean Ngu
 */
 
 
+
 // 전역 변수로 체크박스 값을 저장할 객체를 생성합니다.
 var checkedItems = {};
 
@@ -298,21 +299,27 @@ var up_asset_list = function () {
         //$("#swListModal .modal-body-2").html(swVerHTML);
         $("#upAssetModal").modal("show");
 
-        // Input 상자 값에 따라 해당 값을 노란색으로 처리
-        $("#searchInput").on("input", function () {
-            const searchValue = $(this).val().trim().toLowerCase();
-            $("#upAssetModal .uptbody tr").each(function () {
-                const rowData = $(this).text().toLowerCase();
-                if (rowData.includes(searchValue)) {
-                    $(this).addClass("highlight");
-                } else if (!rowData.includes(searchValue)) {
-                    $(this).removeClass("highlight");
-                } else {
-                    $("#upAssetModal .uptbody").removeClass("highlight");
-                }
-            });
+    // Input 상자 값에 따라 해당 값을 노란색으로 처리
+    $("#searchInput").on("input", function () {
+        const searchValue = $(this).val().trim().toLowerCase();
+        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+        if (searchValue === "") {
+            $("#upAssetModal .uptbody tr").removeClass("highlight");
+            return;
+        };
+        $("#upAssetModal .uptbody tr").each(function () {
+            const rowData = $(this).text().toLowerCase();
+            // 검색어가 rowData에 포함되면 highlight 클래스 추가
+            if (rowData.includes(searchValue)) {
+                $(this).addClass("highlight");
+            }
+            // 포함되지 않으면 highlight 클래스 제거
+            else {
+                $(this).removeClass("highlight");
+            }
         });
     });
+});
 
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
     dropdown_text();
@@ -354,6 +361,8 @@ var up_asset_list = function () {
     var customStyle = '<style>#nexts_up, #after_up {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
     $('head').append(customStyle);
 };
+
+
 
 
 // function os_checkbox_check(){

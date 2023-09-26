@@ -34,7 +34,6 @@ var sec_asset_list2 = function () {
                 var row = rows[i];
                 var data = api.row(row).data();
                 var computer_id = data.computer.computer_id;
-
                 if (checkedItems[computer_id]) {
                     $(row).find('input[type="checkbox"]').prop('checked', true);
                 } else {
@@ -305,6 +304,7 @@ var sec_asset_list2 = function () {
         }
 
 
+
         //console.log(swVer[1]);
         // Assuming you have a modal with the ID "swListModal" to display the detailed sw_list
         $("#ext_Modal .modal-title").html(computer_name + "의 브라우저 확장프로그램 및 버전");
@@ -315,11 +315,19 @@ var sec_asset_list2 = function () {
         // Input 상자 값에 따라 해당 값을 노란색으로 처리
         $("#searchInput_ext").on("input", function () {
             const searchValue = $(this).val().trim().toLowerCase();
+            // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+            if (searchValue === "") {
+                $("#ext_Modal .exttbody tr").removeClass("highlight");
+                return;
+            };
             $("#ext_Modal .exttbody tr").each(function () {
                 const rowData = $(this).text().toLowerCase();
+                // 검색어가 rowData에 포함되면 highlight 클래스 추가
                 if (rowData.includes(searchValue)) {
                     $(this).addClass("highlight");
-                } else {
+                }
+                // 포함되지 않으면 highlight 클래스 제거
+                else {
                     $(this).removeClass("highlight");
                 }
             });
@@ -355,21 +363,27 @@ var sec_asset_list2 = function () {
         //$("#swListModal .modal-body-2").html(swVerHTML);
         $("#hotModal").modal("show");
 
-        // Input 상자 값에 따라 해당 값을 노란색으로 처리
-        $("#searchInput_hot").on("input", function () {
-            const searchValue = $(this).val().trim().toLowerCase();
-            $("#hotModal .hottbody tr").each(function () {
-                const rowData = $(this).text().toLowerCase();
-                if (rowData.includes(searchValue)) {
-                    $(this).addClass("highlight");
-                } else if (!rowData.includes(searchValue)) {
-                    $(this).removeClass("highlight");
-                } else {
-                    $("#hotModal .hottbody").removeClass("highlight");
-                }
-            });
+     // Input 상자 값에 따라 해당 값을 노란색으로 처리
+    $("#searchInput_hot").on("input", function () {
+        const searchValue = $(this).val().trim().toLowerCase();
+        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+        if (searchValue === "") {
+            $("#hotModal .hottbody tr").removeClass("highlight");
+            return;
+        };
+        $("#hotModal .hottbody tr").each(function () {
+            const rowData = $(this).text().toLowerCase();
+            // 검색어가 rowData에 포함되면 highlight 클래스 추가
+            if (rowData.includes(searchValue)) {
+                $(this).addClass("highlight");
+            }
+            // 포함되지 않으면 highlight 클래스 제거
+            else {
+                $(this).removeClass("highlight");
+            }
         });
     });
+});
     //-----------------------------------------------------------------------------------
 
 
@@ -415,19 +429,25 @@ var sec_asset_list2 = function () {
         //$("#swListModal .modal-body-2").html(swVerHTML);
         $("#swList_Modal").modal("show");
 
-        // Input 상자 값에 따라 해당 값을 노란색으로 처리
-        $("#searchInput").on("input", function () {
-            const searchValue = $(this).val().trim().toLowerCase();
-            $("#pur_swListModal .hstbody tr").each(function () {
-                const rowData = $(this).text().toLowerCase();
-                if (rowData.includes(searchValue)) {
-                    $(this).addClass("highlight");
-                } else {
-                    $(this).removeClass("highlight");
-                }
-            });
+     // Input 상자 값에 따라 해당 값을 노란색으로 처리
+    $("#searchInput_swList").on("input", function () {
+        const searchValue = $(this).val().trim().toLowerCase();
+        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+        if (searchValue === "") {
+            $("#swList_Modal .swListtbody tr").removeClass("highlight");
+            return;
+        };
+        $("#swList_Modal .swListtbody tr").each(function () {
+
+            const rowData = $(this).text().toLowerCase();
+            if (rowData.includes(searchValue)) {
+                $(this).addClass("highlight");
+            } else {
+                $(this).removeClass("highlight");
+            }
         });
     });
+});
     //-----------------------------------------------------------------------------------
 
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경

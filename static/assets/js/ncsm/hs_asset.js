@@ -1816,11 +1816,19 @@ $(document).on("click",".swmore", function (e){
      // Input 상자 값에 따라 해당 값을 노란색으로 처리
     $("#searchInput").on("input", function () {
         const searchValue = $(this).val().trim().toLowerCase();
+        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+        if (searchValue === "") {
+            $("#swListModal .hstbody tr").removeClass("highlight");
+            return;
+        };
         $("#swListModal .hstbody tr").each(function () {
             const rowData = $(this).text().toLowerCase();
+            // 검색어가 rowData에 포함되면 highlight 클래스 추가
             if (rowData.includes(searchValue)) {
                 $(this).addClass("highlight");
-            } else {
+            }
+            // 포함되지 않으면 highlight 클래스 제거
+            else {
                 $(this).removeClass("highlight");
             }
         });
