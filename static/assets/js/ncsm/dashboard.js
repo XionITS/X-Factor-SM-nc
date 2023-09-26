@@ -185,15 +185,15 @@ var handleRenderChartNCOMG = function () {
 //############################### 전체 자산 수(Online OS) #######################################
     function asset_all_os_chart1(divId, a, b, c) {
         // a, b, c 변수에서 각각의 카운트 값을 추출
-        var countA = a.map(function(item) {
+        var countA = a.map(function (item) {
             return item.count;
         });
 
-        var countB = b.map(function(item) {
+        var countB = b.map(function (item) {
             return item.count;
         });
 
-        var countC = c.map(function(item) {
+        var countC = c.map(function (item) {
             return item.count;
         });
 
@@ -249,8 +249,8 @@ var handleRenderChartNCOMG = function () {
                 height: 110,
                 stacked: true,
                 toolbar: {
-                show: false
-            },
+                    show: false
+                },
             },
             responsive: [{
                 breakpoint: 480,
@@ -281,9 +281,9 @@ var handleRenderChartNCOMG = function () {
             },
             xaxis: {
                 type: 'category',
-                categories: ['other', 'Mac', 'Windows'],
+                categories: ['Other', 'Mac', 'Windows'],
                 labels: {
-                    show : false,
+                    show: false,
                     style: {
                         fontSize: "8px",
                     },
@@ -319,19 +319,18 @@ var handleRenderChartNCOMG = function () {
     asset_all_os_chart1("asset_all_os_chart", desk_online_list, note_online_list, other_online_list);
 
 
-
 //#######################################전체 자산 수(Total OS)#################################
     function asset_all_os_chart2(divId, a, b, c) {
         // a, b, c 변수에서 각각의 카운트 값을 추출
-        var countA = a.map(function(item) {
+        var countA = a.map(function (item) {
             return item.count;
         });
 
-        var countB = b.map(function(item) {
+        var countB = b.map(function (item) {
             return item.count;
         });
 
-        var countC = c.map(function(item) {
+        var countC = c.map(function (item) {
             return item.count;
         });
 
@@ -360,8 +359,8 @@ var handleRenderChartNCOMG = function () {
                 height: 112,
                 stacked: true,
                 toolbar: {
-                show: false
-            },
+                    show: false
+                },
             },
             responsive: [{
                 breakpoint: 480,
@@ -391,9 +390,9 @@ var handleRenderChartNCOMG = function () {
             },
             xaxis: {
                 type: 'category',
-                categories: ['other', 'Mac', 'Windows',],
+                categories: ['Other', 'Mac', 'Windows',],
                 labels: {
-                    show : false,
+                    show: false,
                     style: {
                         fontSize: "8px",
                     },
@@ -745,14 +744,13 @@ var handleRenderChartNCOMG = function () {
                 foreColor: 'rgba(255, 255, 255, 0.75)',
                 height: 200,
                 width: '100%',
-                type: 'bar',
                 toolbar: {
                     show: true,
                     tools: {
                         zoom: false,
                         pan: false
                     }
-                }
+                },
             },
             plotOptions: {
                 bar: {
@@ -772,13 +770,6 @@ var handleRenderChartNCOMG = function () {
             },
             dataLabels: {
                 enabled: true,
-                // background: {
-                //   enabled: true,
-                //   foreColor: 'rgba(29, 40, 53, 0.95)'
-                // },
-                // dropShadow: {
-                //   enabled: false,
-                // },
                 style: {
                     fontSize: '13px',
                     colors: ["#fff"],
@@ -789,6 +780,7 @@ var handleRenderChartNCOMG = function () {
             },
             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
             series: [{
+                name: '',
                 data: seriesData
             }],
             grid: {
@@ -830,14 +822,13 @@ var handleRenderChartNCOMG = function () {
                 foreColor: 'rgba(255, 255, 255, 0.75)',
                 height: 200,
                 width: '100%',
-                type: 'bar',
                 toolbar: {
                     show: true,
                     tools: {
                         zoom: false,
                         pan: false
                     }
-                }
+                },
             },
             plotOptions: {
                 bar: {
@@ -857,13 +848,6 @@ var handleRenderChartNCOMG = function () {
             },
             dataLabels: {
                 enabled: true,
-                // background: {
-                //   enabled: true,
-                //   foreColor: 'rgba(29, 40, 53, 0.95)'
-                // },
-                // dropShadow: {
-                //   enabled: false,
-                // },
                 style: {
                     fontSize: '13px',
                     colors: ["#fff"],
@@ -874,7 +858,8 @@ var handleRenderChartNCOMG = function () {
             },
             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
             series: [{
-                data: seriesData
+                name: '',
+                data: seriesData,
             }],
             grid: {
                 borderColor: 'rgba(144, 164, 174, 0.5)'
@@ -897,6 +882,7 @@ var handleRenderChartNCOMG = function () {
                 }
             }
         };
+        console.log()
         var asset_office_chart = new ApexCharts(document.querySelector('#office_donut'), asset_office_chart_options);
         asset_office_chart.render();
     }
@@ -1194,6 +1180,7 @@ var handleRenderChartNCOMG = function () {
 $("#datepickerD").datepicker({
     format: 'yyyy-mm-dd',
     autoclose: true,
+    todayHighlight: true,
 }).on('changeDate', function (e) {
     date1 = e.format()
 });

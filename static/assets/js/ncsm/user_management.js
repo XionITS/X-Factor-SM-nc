@@ -9,20 +9,22 @@ var checkedItems = {};
 
 
 var um_user_list = function () {
-	var um_user_list_Data = $('#um_list').DataTable({
-		dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
-		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
-		pageLength: 10,
-		responsive: false,
-		//searching: true,
-		ordering: true,
-		serverSide: true,
-		displayLength: false,
+    var um_user_list_Data = $('#um_list').DataTable({
+        dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
+        lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
+        pageLength: 10,
+        responsive: false,
+        //searching: true,
+        ordering: true,
+        serverSide: true,
+        displayLength: false,
 
-		drawCallback: function (settings) {
+        drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({ page: 'current' }).nodes();
+            var rows = api.rows({page: 'current'}).nodes();
+            var allCheckedOnCurrentPage = rows.length > 0;
+
 
             // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
             for (var i = 0; i < rows.length; i++) {
@@ -34,33 +36,36 @@ var um_user_list = function () {
                     $(row).find('input[type="checkbox"]').prop('checked', true);
                 } else {
                     $(row).find('input[type="checkbox"]').prop('checked', false);
+                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
+
                 }
             }
+            $('#select-all').prop('checked', allCheckedOnCurrentPage);
             var current_page_um_user = um_user_list_Data.page();
             var total_pages_um_user = um_user_list_Data.page.info().pages;
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_um_user > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-            $('<button type="button" class="btn" id="nexts_um_user">10≫</button>')
-            .insertAfter('#um_list_paginate .paginate_button:last');
-            $('<button type="button" class="btn" id="after_um_user">≪10</button>')
-            .insertBefore('#um_list_paginate .paginate_button:first');
+            if (total_pages_um_user > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+                $('<button type="button" class="btn" id="nexts_um_user">10≫</button>')
+                    .insertAfter('#um_list_paginate .paginate_button:last');
+                $('<button type="button" class="btn" id="after_um_user">≪10</button>')
+                    .insertBefore('#um_list_paginate .paginate_button:first');
             }
         },
-		ajax: {
-			url: 'userpaging/',
-			type: "POST",
+        ajax: {
+            url: 'userpaging/',
+            type: "POST",
             data: function (data) {
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                            2: 'x_id',
-                            3: 'x_name',
-                            4: 'x_email',
-                            5: 'x_auth',
-                        };
+                    2: 'x_id',
+                    3: 'x_name',
+                    4: 'x_email',
+                    5: 'x_auth',
+                };
 //                data.filter = {
 //                    column: column,
 //                    columnmap: columnMap[orderColumn],
@@ -72,22 +77,26 @@ var um_user_list = function () {
                 data.page = (data.start / data.length) + 1;
                 data.page_length = data.length;
             },
-			dataSrc: function (res) {
-				var data = res.data;
-				return data;
-			}
-		},
+            dataSrc: function (res) {
+                var data = res.data;
+                return data;
+            }
+        },
 
-		columns: [
-		    { data: '', title: '선택', searchable: false },
-            { data: '', title: 'No', searchable: true },
-			{ data: 'x_id', title: ' 아이디', searchable: true },
-			{ data: 'x_name', title: '사용자 이름', searchable: true },
-            { data: 'x_email', title: '이메일' , searchable: true},
-			{ data: 'x_auth', title: '권한', searchable: true },
-			{ data: 'x_user_auth', title: '권한 관리', searchable: false },
-		],
-		rowCallback: function (row, data, index) {
+        columns: [
+            {
+                data: '',
+                title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>&nbsp;선택</span>',
+                searchable: false
+            },
+            {data: '', title: 'No', searchable: true},
+            {data: 'x_id', title: ' 아이디', searchable: true},
+            {data: 'x_name', title: '사용자 이름', searchable: true},
+            {data: 'x_email', title: '이메일', searchable: true},
+            {data: 'x_auth', title: '권한', searchable: true},
+            {data: 'x_user_auth', title: '권한 관리', searchable: false},
+        ],
+        rowCallback: function (row, data, index) {
             var api = this.api();
             var page = api.page.info().page;
             var pageLength = api.page.info().length;
@@ -102,78 +111,165 @@ var um_user_list = function () {
 //		    {targets: 4, width: "40%", className: 'text-start text-truncate'},
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
-		columnDefs: [
-		    {targets: 0, width: "5%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-		        const x_id = row.x_id;
-		        return '<input type="checkbox" class="form-check-input" name="'+row.x_name+'" id="'+row.x_id+'" data-x-id="' + x_id + '" data-x-name="' + row.x_name + '">'
-		        }},
-            {targets: 1, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "20%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'text-center text-truncate flex-cloumn column_hidden align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 6, width: "10%", className: 'text-center text-truncate flex-cloumn column_hidden', render: function(data, type, row) {
-		        const x_id  = row.x_id;
-		        return '<div class="ummore swmore-font" data-x_id="' + x_id + '" >권한 관리 설정</div>'}},
-		],
-		language: {
-			"decimal": "",
-			"info": "전체 _TOTAL_건",
-			"infoEmpty": "데이터가 없습니다.",
-			"emptyTable": "데이터가 없습니다.",
-			"thousands": ",",
-			"lengthMenu": "페이지당 _MENU_ 개씩 보기",
-			"loadingRecords": "로딩 중입니다.",
-			"processing": "",
-			"zeroRecords": "검색 결과 없음",
-			"paginate": {
-				"first": "처음",
-				"last": "끝",
-				"next": "다음",
-				"previous": "이전"
-			},
-			"search": "검색:",
-			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
-			"infoPostFix": "",
+        columnDefs: [
+            {
+                targets: 0,
+                width: "4%",
+                orderable: false,
+                searchable: false,
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    const x_id = row.x_id;
+                    return '<input type="checkbox" class="form-check-input" name="' + row.x_name + '" id="' + row.x_id + '" data-x-id="' + x_id + '" data-x-name="' + row.x_name + '">'
+                }
             },
-            pagingType: 'numbers',//이전 다음 버튼 히든처리
-});
+            {
+                targets: 1,
+                width: "3%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + row.index + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 2,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
+                render: function (data, type, row) {
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 4,
+                width: "20%",
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
+                render: function (data, type, row) {
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 5,
+                width: "5%",
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
+                render: function (data, type, row) {
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center text-truncate flex-cloumn column_hidden',
+                render: function (data, type, row) {
+                    const x_id = row.x_id;
+                    return '<div class="ummore swmore-font" data-x_id="' + x_id + '" >권한 관리 설정</div>'
+                }
+            },
+        ],
+        language: {
+            "decimal": "",
+            "info": "전체 _TOTAL_건",
+            "infoEmpty": "데이터가 없습니다.",
+            "emptyTable": "데이터가 없습니다.",
+            "thousands": ",",
+            "lengthMenu": "페이지당 _MENU_ 개씩 보기",
+            "loadingRecords": "로딩 중입니다.",
+            "processing": "",
+            "zeroRecords": "검색 결과 없음",
+            "paginate": {
+                "first": "처음",
+                "last": "끝",
+                "next": "다음",
+                "previous": "이전"
+            },
+            "search": "검색:",
+            "infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
+            "infoPostFix": "",
+        },
+        pagingType: 'numbers',//이전 다음 버튼 히든처리
+    });
     //체크박스 저장하기
     um_checkbox_check($('#um_list tbody'))
 
-/*      // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
-    dropdown_text();
+    //전체선택
+    $('#um_list').on('click', '#select-all', function () {
+        var isChecked = $(this).prop('checked');
 
-  // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button-hs').click(function() {
-        var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input-hs').val().trim();
+        $('#sec_asset_list2 tbody input[type="checkbox"]').each(function () {
+            $(this).prop('checked', isChecked);
+            var computer_id = $(this).data('computer-id');
+            var computer_name = $(this).data('computer-name'); // 컴퓨터 이름도 가져옵니다.
 
-        performSearch(column, searchValue, um_user_list_Data)
+            if (isChecked) {
+                checkedItems[computer_id] = computer_name;
+            } else {
+                delete checkedItems[computer_id];
+            }
+        });
+    });
+    //개별선택
+    $('#um_list tbody').on('click', 'input[type="checkbox"]', function () {
+        var isChecked = $(this).prop('checked');
+        var computer_id = $(this).data('computer-id');
+        var computer_name = $(this).data('computer-name');
+
+        if (isChecked) {
+            checkedItems[computer_id] = computer_name;
+        } else {
+            delete checkedItems[computer_id];
+        }
+
+        var allChecked = true;
+        $('#um_list tbody input[type="checkbox"]').each(function () {
+            if (!$(this).prop('checked')) {
+                allChecked = false;
+                return false;
+            }
+        });
+
+        $('#select-all').prop('checked', allChecked);
     });
 
-$('#search-input-hs').on('keyup', function(event) {
-        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+    /*      // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
+        dropdown_text();
+
+      // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
+        $('#search-button-hs').click(function() {
             var column = $('#column-dropdown').data('column');
             var searchValue = $('#search-input-hs').val().trim();
 
-            performSearch(column, searchValue, um_user_list_Data);
-        }
-    });*/
+            performSearch(column, searchValue, um_user_list_Data)
+        });
 
-	$(document).on('click', '#nexts_um_user, #after_um_user', function() {
+    $('#search-input-hs').on('keyup', function(event) {
+            if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+                var column = $('#column-dropdown').data('column');
+                var searchValue = $('#search-input-hs').val().trim();
+
+                performSearch(column, searchValue, um_user_list_Data);
+            }
+        });*/
+
+    $(document).on('click', '#nexts_um_user, #after_um_user', function () {
         var current_page_um_user = um_user_list_Data.page();
         var total_pages_um_user = um_user_list_Data.page.info().pages;
         if ($(this).attr('id') == 'nexts_um_user') {
-                if (current_page_um_user + 10 < total_pages_um_user) {
-                    um_user_list_Data.page(current_page_um_user + 10).draw('page');
-                } else {
-                    um_user_list_Data.page(total_pages_um_user - 1).draw('page');
-                }
-                } else {
-                    um_user_list_Data.page(Math.max(current_page_um_user - 10, 0)).draw('page');
-                }
-});
+            if (current_page_um_user + 10 < total_pages_um_user) {
+                um_user_list_Data.page(current_page_um_user + 10).draw('page');
+            } else {
+                um_user_list_Data.page(total_pages_um_user - 1).draw('page');
+            }
+        } else {
+            um_user_list_Data.page(Math.max(current_page_um_user - 10, 0)).draw('page');
+        }
+    });
     var customStyle = '<style>#nexts_um_user, #after_um_user {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
     $('head').append(customStyle);
 };
@@ -341,7 +437,7 @@ $('#search-input-hs').on('keyup', function(event) {
 //            pagingType: 'numbers',//이전 다음 버튼 히든처리
 //});
 //    //체크박스 저장하기
-    //um_checkbox_check($('#um_list tbody'))
+//um_checkbox_check($('#um_list tbody'))
 //
 //    // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
 //    dropdown_text();
@@ -423,10 +519,6 @@ $(document).ready(function () {
 });
 
 
-
-
-
-
 //$('html').click(function(e){
 //const appElement = document.getElementById('app');
 //        var sidebar = $('#sidebar');
@@ -440,10 +532,10 @@ $(document).ready(function () {
 //            sidebar.css({'display':'block'});
 //        }
 //    });
-$(document).on("click",".ummore", function (e){
+$(document).on("click", ".ummore", function (e) {
     const x_id = $(this).data("x_id");
     var modalbody = "";
-    modalbody += '권한' +  x_id ;
+    modalbody += '권한' + x_id;
     $("#um_auth_modal .hstbody").html(modalbody);
 //    $("#swListModal .modal-title").htlbody);
     $("#um_auth_modal").modal("show");
@@ -451,59 +543,59 @@ $(document).on("click",".ummore", function (e){
     //$("#swListModal .modal-body-2").html(swVerHTML);
 });
 
-    var insert_modal = document.getElementById("um_insert_modal");
-    var delete_modal = document.getElementById("um_delete_modal");
-    var auth_modal = document.getElementById("um_auth_modal");
+var insert_modal = document.getElementById("um_insert_modal");
+var delete_modal = document.getElementById("um_delete_modal");
+var auth_modal = document.getElementById("um_auth_modal");
 
 // insert 모달 열기 버튼 클릭 이벤트 핸들러
-$(document).on("click","#um_insert", function (e){
-  insert_modal.style.display = "block";
+$(document).on("click", "#um_insert", function (e) {
+    insert_modal.style.display = "block";
 });
 
 // delete 모달 열기 버튼 클릭 이벤트 핸들러
-$(document).on("click","#um_delete", function (e){
-  delete_modal.style.display = "block";
-  const x_id = [];
-  const x_name = [];
-  var modalbody = "";
-  for (const x_id in checkedItems) {
+$(document).on("click", "#um_delete", function (e) {
+    delete_modal.style.display = "block";
+    const x_id = [];
+    const x_name = [];
+    var modalbody = "";
+    for (const x_id in checkedItems) {
         const x_name = checkedItems[x_id];
         //modalbody += '<div><input type="hidden" name="'+computer_id+'" id="'+computer_id+'" value="'+computer_id+'">'+computer_name+'</div>'
         //modalbody += '<input type="hidden" name="'+computer_name+'" id="'+computer_name+'" value="'+computer_name+'">'
         //modalbody += '컴퓨터아이디'+computer_id + '<br/>';
 
-        modalbody += '<input type="hidden" class="delete_hidden" id="'+x_id+'" value="'+x_id+'"><label class="form-check-label" for="x_id">'+x_id+'</label><br>'
+        modalbody += '<input type="hidden" class="delete_hidden" id="' + x_id + '" value="' + x_id + '"><label class="form-check-label" for="x_id">' + x_id + '</label><br>'
     }
     $("#um_delete_form .form-check").html(modalbody);
     //$("#um_delete_form").modal("show");
 });
 
 // insert 모달 닫기 버튼 클릭 이벤트 핸들러
-$(document).on("click","#closeBtn", function (e){
-  insert_modal.style.display = "none";
+$(document).on("click", "#closeBtn", function (e) {
+    insert_modal.style.display = "none";
 });
 // delete 모달 닫기 버튼 클릭 이벤트 핸들러
-$(document).on("click","#closeBtn2", function (e){
-  delete_modal.style.display = "none";
+$(document).on("click", "#closeBtn2", function (e) {
+    delete_modal.style.display = "none";
 });
 // auth 모달 닫기 버튼 클릭 이벤트 핸들러
-$(document).on("click","#closeBtn3", function (e){
-  $("#um_auth_modal").modal("hide");
-  auth_modal.style.display = "none";
+$(document).on("click", "#closeBtn3", function (e) {
+    $("#um_auth_modal").modal("hide");
+    auth_modal.style.display = "none";
 });
 // 모달 외부 클릭 시 닫기 이벤트 핸들러
-window.onclick = function(event) {
-  if (event.target == insert_modal) {
-    insert_modal.style.display = "none";
-  } else if (event.target == delete_modal) {
-    delete_modal.style.display = "none";
-  } else if (event.target == auth_modal) {
-    auth_modal.style.display = "none";
-  }
+window.onclick = function (event) {
+    if (event.target == insert_modal) {
+        insert_modal.style.display = "none";
+    } else if (event.target == delete_modal) {
+        delete_modal.style.display = "none";
+    } else if (event.target == auth_modal) {
+        auth_modal.style.display = "none";
+    }
 };
 
 
-function um_checkbox_check($tbody){
+function um_checkbox_check($tbody) {
     $tbody.on('click', 'input[type="checkbox"]', function (event) {
         event.stopPropagation(); // Prevent the row click event from firing when clicking the checkbox
         var x_id = $(this).data('x-id');
@@ -518,11 +610,11 @@ function um_checkbox_check($tbody){
 }
 
 //삭제하기 체크
-$(document).on("click","#user_delete", function(event) {
+$(document).on("click", "#user_delete", function (event) {
     event.preventDefault(); // 기본 제출 동작을 막습니다.
     var x_ids = [];
 
-    $(".delete_hidden").each(function() {
+    $(".delete_hidden").each(function () {
         var value = $(this).val(); // 각 hidden 요소의 값을 가져오기
         x_ids.push(value); // 값을 배열에 추가
     });
@@ -534,7 +626,7 @@ $(document).on("click","#user_delete", function(event) {
             'x_id': x_ids.join(',')
 
         }, // x_id 값을 서버로 전송
-        success: function(response) {
+        success: function (response) {
             if (response.result === 'success') {
                 $("#delete_modal").modal("hide"); // 모달 창 닫기
                 alert("유저가 삭제되었습니다.")
@@ -544,7 +636,7 @@ $(document).on("click","#user_delete", function(event) {
                 // 실패한 경우 처리
             }
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error("Error:", error);
             // 오류 처리
         }
@@ -564,46 +656,51 @@ function um_check() {
 
     var uidCheck = /^[a-zA-z0-9]{4,12}$/;
     if (!uidCheck.test(uid.value)) {
-    alert("아이디는 영문 대소문자와 숫자 4~12자리로 입력해야합니다.");
-    uid.focus(); //focus(): 커서가 깜빡이는 현상, blur(): 커서가 사라지는 현상
-    return false;
-    };
+        alert("아이디는 영문 대소문자와 숫자 4~12자리로 입력해야합니다.");
+        uid.focus(); //focus(): 커서가 깜빡이는 현상, blur(): 커서가 사라지는 현상
+        return false;
+    }
+    ;
 
     if (pwd.value == "") {
-    alert("비밀번호를 입력하세요.");
-    pwd.focus();
-    return false;
-    };
+        alert("비밀번호를 입력하세요.");
+        pwd.focus();
+        return false;
+    }
+    ;
 
     //비밀번호 영문자+숫자+특수조합(8~25자리 입력) 정규식
     var pwdCheck = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
 
     if (!pwdCheck.test(pwd.value)) {
-    alert("비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리 사용해야 합니다.");
-    pwd.focus();
-    return false;
-    };
+        alert("비밀번호는 영문자+숫자+특수문자 조합으로 8~25자리 사용해야 합니다.");
+        pwd.focus();
+        return false;
+    }
+    ;
 
     if (repwd.value !== pwd.value) {
-    alert("비밀번호가 일치하지 않습니다..");
-    repwd.focus();
-    return false;
-    };
+        alert("비밀번호가 일치하지 않습니다..");
+        repwd.focus();
+        return false;
+    }
+    ;
 
 
-    if (uname.value == ""){
-    alert("이름을 입력해 주세요");
-    uname.focus();
-    return false;
-    };
+    if (uname.value == "") {
+        alert("이름을 입력해 주세요");
+        uname.focus();
+        return false;
+    }
+    ;
 
 
-    var email_idCheck=/^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+    var email_idCheck = /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
 
     if (!email_idCheck.test(email_id.value)) {
-    alert("이메일 형식이 올바르지 않습니다.");
-    email_id.focus();
-    return false;
+        alert("이메일 형식이 올바르지 않습니다.");
+        email_id.focus();
+        return false;
     }
 
     //입력 값 전송

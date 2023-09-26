@@ -23,10 +23,12 @@ var all_asset_list = function () {
         order: [
             [2, "desc"]
         ],
+
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
             var rows = api.rows({page: 'current'}).nodes();
+            var allCheckedOnCurrentPage = rows.length > 0;
 
             // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
             for (var i = 0; i < rows.length; i++) {
@@ -38,12 +40,17 @@ var all_asset_list = function () {
                     $(row).find('input[type="checkbox"]').prop('checked', true);
                 } else {
                     $(row).find('input[type="checkbox"]').prop('checked', false);
+                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
                 }
             }
+            // 현재 페이지의 모든 체크박스가 선택된 경우에만
+            // 전체 선택 체크박스를 활성화합니다.
+            $('#select-all').prop('checked', allCheckedOnCurrentPage);
             var current_page_all = all_asset_list_Data.page();
             var total_pages_all = all_asset_list_Data.page.info().pages;
             $('#nexts').remove();
             $('#after').remove();
+
 
             if (total_pages_all > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_all">10≫</button>')
@@ -52,6 +59,7 @@ var all_asset_list = function () {
                     .insertBefore('#ver_asset_list_paginate .paginate_button:first');
             }
         },
+
         ajax: {
             url: 'paging/',
             type: "POST",
@@ -85,9 +93,12 @@ var all_asset_list = function () {
                 return data;
             }
         },
-
         columns: [
-            {data: '', title: '선택', searchable: false},
+            {
+                data: '',
+                title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>&nbsp;선택</span>',
+                searchable: false
+            },
             {data: '', title: 'No', searchable: true},
             {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
             {data: 'ip_address', title: 'IPv4', searchable: true},
@@ -103,6 +114,7 @@ var all_asset_list = function () {
             var index = (page * pageLength) + (index + 1);
             $('td:eq(1)', row).html(index);
         },
+
         columnDefs: [
             {
                 targets: 0,
@@ -152,7 +164,7 @@ var all_asset_list = function () {
             {
                 targets: 5,
                 width: "17%",
-                className: 'text-center new-text-truncate flex-cloumn column_hidden',
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.os_version + '" data-toggle="tooltip">' + data + '</span>'
                 }
@@ -169,9 +181,11 @@ var all_asset_list = function () {
                 targets: 7,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function(data, type, row) {
-                    if (data === null || data === undefined || data.trim() === '') { return '';
-                    } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
+                render: function (data, type, row) {
+                    if (data === null || data === undefined || data.trim() === '') {
+                        return '';
+                    } else {
+                        return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
                     }
                 }
             },
@@ -200,6 +214,44 @@ var all_asset_list = function () {
 
 
     });
+    //전체선택
+    $('#ver_asset_list').on('click', '#select-all', function () {
+        var isChecked = $(this).prop('checked');
+
+        $('#ver_asset_list tbody input[type="checkbox"]').each(function () {
+            $(this).prop('checked', isChecked);
+            var computer_id = $(this).data('computer-id');
+            var computer_name = $(this).data('computer-name'); // 컴퓨터 이름도 가져옵니다.
+
+            if (isChecked) {
+                checkedItems[computer_id] = computer_name;
+            } else {
+                delete checkedItems[computer_id];
+            }
+        });
+    });
+    $('#ver_asset_list tbody').on('click', 'input[type="checkbox"]', function () {
+        var isChecked = $(this).prop('checked');
+        var computer_id = $(this).data('computer-id');
+        var computer_name = $(this).data('computer-name');
+
+        if (isChecked) {
+            checkedItems[computer_id] = computer_name;
+        } else {
+            delete checkedItems[computer_id];
+        }
+
+        var allChecked = true;
+        $('#ver_asset_list tbody input[type="checkbox"]').each(function () {
+            if (!$(this).prop('checked')) {
+                allChecked = false;
+                return false;
+            }
+        });
+
+        $('#select-all').prop('checked', allChecked);
+    });
+
 
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
     dropdown_text();
@@ -242,7 +294,7 @@ var all_asset_list = function () {
     $('head').append(customStyle);
 };
 
-
+//############  Windows ###############
 var win_asset_list = function () {
     var win_asset_list_Data = $('#ver_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
@@ -260,6 +312,7 @@ var win_asset_list = function () {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
             var rows = api.rows({page: 'current'}).nodes();
+            var allCheckedOnCurrentPage = rows.length > 0;
 
             // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
             for (var i = 0; i < rows.length; i++) {
@@ -271,8 +324,12 @@ var win_asset_list = function () {
                     $(row).find('input[type="checkbox"]').prop('checked', true);
                 } else {
                     $(row).find('input[type="checkbox"]').prop('checked', false);
+                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
                 }
             }
+            // 현재 페이지의 모든 체크박스가 선택된 경우에만
+            // 전체 선택 체크박스를 활성화합니다.
+            $('#select-all').prop('checked', allCheckedOnCurrentPage);
             var current_page_win = win_asset_list_Data.page();
             var total_pages_win = win_asset_list_Data.page.info().pages;
             $('#nexts').remove();
@@ -321,7 +378,11 @@ var win_asset_list = function () {
 
 
         columns: [
-            {data: '', title: '선택', searchable: false},
+            {
+                data: '',
+                title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>선택</span>',
+                searchable: false
+            },
             {data: '', title: 'No', searchable: true},
             {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
             {data: 'ip_address', title: 'IPv4', searchable: true},
@@ -370,7 +431,7 @@ var win_asset_list = function () {
             {
                 targets: 3,
                 width: "8%",
-                className: 'sorting_asc new-text-center new-text-truncate flex-cloumn align-middle',
+                className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.ip_address + '" data-toggle="tooltip">' + data + '</span>'
                 }
@@ -386,7 +447,7 @@ var win_asset_list = function () {
             {
                 targets: 5,
                 width: "17%",
-                className: 'text-start new-text-truncate flex-cloumn column_hidden',
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.os_version + '" data-toggle="tooltip">' + data + '</span>'
                 }
@@ -403,9 +464,11 @@ var win_asset_list = function () {
                 targets: 7,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function(data, type, row) {
-                    if (data === null || data === undefined || data.trim() === '') { return '';
-                    } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
+                render: function (data, type, row) {
+                    if (data === null || data === undefined || data.trim() === '') {
+                        return '';
+                    } else {
+                        return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
                     }
                 }
             },
@@ -432,6 +495,43 @@ var win_asset_list = function () {
         },
         pagingType: 'numbers',//이전 다음 버튼 히든처리
 
+    });
+    //전체선택
+    $('#ver_asset_list').on('click', '#select-all', function () {
+        var isChecked = $(this).prop('checked');
+
+        $('#ver_asset_list tbody input[type="checkbox"]').each(function () {
+            $(this).prop('checked', isChecked);
+            var computer_id = $(this).data('computer-id');
+            var computer_name = $(this).data('computer-name'); // 컴퓨터 이름도 가져옵니다.
+
+            if (isChecked) {
+                checkedItems[computer_id] = computer_name;
+            } else {
+                delete checkedItems[computer_id];
+            }
+        });
+    });
+    $('#ver_asset_list tbody').on('click', 'input[type="checkbox"]', function () {
+        var isChecked = $(this).prop('checked');
+        var computer_id = $(this).data('computer-id');
+        var computer_name = $(this).data('computer-name');
+
+        if (isChecked) {
+            checkedItems[computer_id] = computer_name;
+        } else {
+            delete checkedItems[computer_id];
+        }
+
+        var allChecked = true;
+        $('#ver_asset_list tbody input[type="checkbox"]').each(function () {
+            if (!$(this).prop('checked')) {
+                allChecked = false;
+                return false;
+            }
+        });
+
+        $('#select-all').prop('checked', allChecked);
     });
 
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
@@ -475,6 +575,7 @@ var win_asset_list = function () {
     $('head').append(customStyle);
 };
 
+//############  Mac  #############
 var mac_asset_list = function () {
     var mac_asset_list_Data = $('#ver_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
@@ -492,6 +593,7 @@ var mac_asset_list = function () {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
             var rows = api.rows({page: 'current'}).nodes();
+            var allCheckedOnCurrentPage = rows.length > 0;
 
             // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
             for (var i = 0; i < rows.length; i++) {
@@ -503,8 +605,12 @@ var mac_asset_list = function () {
                     $(row).find('input[type="checkbox"]').prop('checked', true);
                 } else {
                     $(row).find('input[type="checkbox"]').prop('checked', false);
+                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
                 }
             }
+            // 현재 페이지의 모든 체크박스가 선택된 경우에만
+            // 전체 선택 체크박스를 활성화합니다.
+            $('#select-all').prop('checked', allCheckedOnCurrentPage);
             var current_page_mac = mac_asset_list_Data.page();
             var total_pages_mac = mac_asset_list_Data.page.info().pages;
             $('#nexts').remove();
@@ -550,7 +656,11 @@ var mac_asset_list = function () {
         },
 
         columns: [
-            {data: '', title: '선택', searchable: false},
+            {
+                data: '',
+                title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>선택</span>',
+                searchable: false
+            },
             {data: '', title: 'No', searchable: true},
             {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
             {data: 'ip_address', title: 'IPv4', searchable: true},
@@ -615,7 +725,7 @@ var mac_asset_list = function () {
             {
                 targets: 5,
                 width: "17%",
-                className: 'text-center new-text-truncate flex-cloumn column_hidden',
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.os_version + '" data-toggle="tooltip">' + data + '</span>'
                 }
@@ -632,9 +742,11 @@ var mac_asset_list = function () {
                 targets: 7,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function(data, type, row) {
-                    if (data === null || data === undefined || data.trim() === '') { return '';
-                    } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
+                render: function (data, type, row) {
+                    if (data === null || data === undefined || data.trim() === '') {
+                        return '';
+                    } else {
+                        return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
                     }
                 }
             },
@@ -661,6 +773,43 @@ var mac_asset_list = function () {
         },
         pagingType: 'numbers',//이전 다음 버튼 히든처리
 
+    });
+    //전체선택
+    $('#ver_asset_list').on('click', '#select-all', function () {
+        var isChecked = $(this).prop('checked');
+
+        $('#ver_asset_list tbody input[type="checkbox"]').each(function () {
+            $(this).prop('checked', isChecked);
+            var computer_id = $(this).data('computer-id');
+            var computer_name = $(this).data('computer-name'); // 컴퓨터 이름도 가져옵니다.
+
+            if (isChecked) {
+                checkedItems[computer_id] = computer_name;
+            } else {
+                delete checkedItems[computer_id];
+            }
+        });
+    });
+     $('#ver_asset_list tbody').on('click', 'input[type="checkbox"]', function () {
+        var isChecked = $(this).prop('checked');
+        var computer_id = $(this).data('computer-id');
+        var computer_name = $(this).data('computer-name');
+
+        if (isChecked) {
+            checkedItems[computer_id] = computer_name;
+        } else {
+            delete checkedItems[computer_id];
+        }
+
+        var allChecked = true;
+        $('#ver_asset_list tbody input[type="checkbox"]').each(function () {
+            if (!$(this).prop('checked')) {
+                allChecked = false;
+                return false;
+            }
+        });
+
+        $('#select-all').prop('checked', allChecked);
     });
 
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
@@ -704,6 +853,8 @@ var mac_asset_list = function () {
     $('head').append(customStyle);
 };
 
+
+//######## Other #########
 var other_asset_list = function () {
     var other_asset_list_Data = $('#ver_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><'mb-0 col-md-6'p>>",
@@ -721,6 +872,7 @@ var other_asset_list = function () {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
             var rows = api.rows({page: 'current'}).nodes();
+            var allCheckedOnCurrentPage = rows.length > 0;
 
             // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
             for (var i = 0; i < rows.length; i++) {
@@ -732,8 +884,12 @@ var other_asset_list = function () {
                     $(row).find('input[type="checkbox"]').prop('checked', true);
                 } else {
                     $(row).find('input[type="checkbox"]').prop('checked', false);
+                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
                 }
             }
+            // 현재 페이지의 모든 체크박스가 선택된 경우에만
+            // 전체 선택 체크박스를 활성화합니다.
+            $('#select-all').prop('checked', allCheckedOnCurrentPage);
             var current_page_other = other_asset_list_Data.page();
             var total_pages_other = other_asset_list_Data.page.info().pages;
             $('#nexts').remove();
@@ -779,7 +935,11 @@ var other_asset_list = function () {
         },
 
         columns: [
-            {data: '', title: '선택', searchable: false},
+            {
+                data: '',
+                title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>&nbsp;선택</span>',
+                searchable: false
+            },
             {data: '', title: 'No', searchable: true},
             {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
             {data: 'ip_address', title: 'IPv4', searchable: true},
@@ -844,7 +1004,7 @@ var other_asset_list = function () {
             {
                 targets: 5,
                 width: "17%",
-                className: 'text-center new-text-truncate flex-cloumn column_hidden',
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.os_version + '" data-toggle="tooltip">' + data + '</span>'
                 }
@@ -861,9 +1021,11 @@ var other_asset_list = function () {
                 targets: 7,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function(data, type, row) {
-                    if (data === null || data === undefined || data.trim() === '') { return '';
-                    } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
+                render: function (data, type, row) {
+                    if (data === null || data === undefined || data.trim() === '') {
+                        return '';
+                    } else {
+                        return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
                     }
                 }
             },
@@ -891,6 +1053,45 @@ var other_asset_list = function () {
         pagingType: 'numbers',//이전 다음 버튼 히든처리
 
     });
+    //전체선택
+    $('#ver_asset_list').on('click', '#select-all', function () {
+        var isChecked = $(this).prop('checked');
+
+        $('#ver_asset_list tbody input[type="checkbox"]').each(function () {
+            $(this).prop('checked', isChecked);
+            var computer_id = $(this).data('computer-id');
+            var computer_name = $(this).data('computer-name'); // 컴퓨터 이름도 가져옵니다.
+
+            if (isChecked) {
+                checkedItems[computer_id] = computer_name;
+            } else {
+                delete checkedItems[computer_id];
+            }
+        });
+    });
+    //개별선택
+     $('#ver_asset_list tbody').on('click', 'input[type="checkbox"]', function () {
+        var isChecked = $(this).prop('checked');
+        var computer_id = $(this).data('computer-id');
+        var computer_name = $(this).data('computer-name');
+
+        if (isChecked) {
+            checkedItems[computer_id] = computer_name;
+        } else {
+            delete checkedItems[computer_id];
+        }
+
+        var allChecked = true;
+        $('#ver_asset_list tbody input[type="checkbox"]').each(function () {
+            if (!$(this).prop('checked')) {
+                allChecked = false;
+                return false;
+            }
+        });
+
+        $('#select-all').prop('checked', allChecked);
+    });
+
 
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
     dropdown_text();
