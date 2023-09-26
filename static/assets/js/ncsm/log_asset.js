@@ -57,7 +57,7 @@ var log_popupTable_list = function () {
                         4: 'log_user',
                         5: 'log_date'
                         };
-                console.log(columnMap)
+                // console.log(columnMap)
                 data.page = (data.start / data.length) + 1;
                 data.page_length = data.length;
             },
@@ -79,12 +79,12 @@ var log_popupTable_list = function () {
             $('td:eq(0)', row).html(index);
         },
 		columnDefs: [
-            {targets: 0, width: "3%",orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 1, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.log_func+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "20%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.log_item+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.log_result+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.log_user+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.log_date+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 0, width: "3%",orderable: false, searchable:false, className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 1, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.log_func+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "20%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.log_item+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.log_result+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.log_user+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.log_date+'" data-toggle="tooltip">'+data+'</span>'}},
 		    		],
 		language: {
 			"decimal": "",
