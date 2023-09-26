@@ -31094,3 +31094,19 @@ input:checked+labl::before{
 .asset-input-group > * {
     margin-right: 0;  /* 모든 직계 자식 요소들의 오른쪽 마진을 제거합니다 */
 }
+
+.discover-text {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.discover-count {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FF8A00;
+}
+
+.discover-state-per {
+    font-size: 15px;
+    font-weight: bold;
+}

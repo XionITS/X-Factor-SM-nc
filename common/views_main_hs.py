@@ -41,6 +41,10 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 
 @csrf_exempt
 def dashboard(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        selected_date = request.POST.get('selected_date')
+        DCDL = Dashboard(selected_date)
+        return JsonResponse(DCDL)
     DCDL = Dashboard()
     # print(Xfactor_Xuser_Auth.objects.all())
     #session을 computer_id에 넣기
