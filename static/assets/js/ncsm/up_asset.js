@@ -190,17 +190,23 @@ $(document).on("click",".upmore", function (e){
     //$("#swListModal .modal-body-2").html(swVerHTML);
     $("#upAssetModal").modal("show");
 
-     // Input 상자 값에 따라 해당 값을 노란색으로 처리
+    // Input 상자 값에 따라 해당 값을 노란색으로 처리
     $("#searchInput").on("input", function () {
         const searchValue = $(this).val().trim().toLowerCase();
+        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+        if (searchValue === "") {
+            $("#upAssetModal .uptbody tr").removeClass("highlight");
+            return;
+        };
         $("#upAssetModal .uptbody tr").each(function () {
             const rowData = $(this).text().toLowerCase();
+            // 검색어가 rowData에 포함되면 highlight 클래스 추가
             if (rowData.includes(searchValue)) {
                 $(this).addClass("highlight");
-            } else if(!rowData.includes(searchValue)) {
+            }
+            // 포함되지 않으면 highlight 클래스 제거
+            else {
                 $(this).removeClass("highlight");
-            } else {
-                $("#upAssetModal .uptbody").removeClass("highlight");
             }
         });
     });
