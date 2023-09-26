@@ -73,12 +73,6 @@ class XfactorPurchaseSerializer(serializers.ModelSerializer):
         model = Xfactor_Purchase
         fields = ['computer', 'mem_use', 'disk_use', 'user_date']
 
-class XfactorServiceserializer(serializers.ModelSerializer):
-    computer = CommonSerializer()
-
-    class Meta:
-        model = Xfactor_Service
-        fields = '__all__'
 
 class XfactorDailyserializer(serializers.ModelSerializer):
 

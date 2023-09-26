@@ -11,7 +11,7 @@ from django.utils import timezone
 # from datetime import datetime
 from django.utils.timezone import now
 
-from common.models import Xfactor_Common, Daily_Statistics, Daily_Statistics_log, Xfactor_Service
+from common.models import Xfactor_Common, Daily_Statistics, Daily_Statistics_log
 from django.core.serializers import serialize
 from common.models import *
 
@@ -35,7 +35,7 @@ def Dashboard(selected_date=None):
     else:
         asset = Daily_Statistics.objects.all()
         asset_log = Daily_Statistics_log.objects.all()
-    service = Xfactor_Service.objects.all()
+    #service = Xfactor_Service.objects.all()
     common = Xfactor_Common.objects.all()
 
 

@@ -216,7 +216,7 @@ $(document).ready(function(){
         success: function(data){
           // 데이터 변환 후 반환
           var autocompleteData = data.data.map(function(item) {
-            return item.computer__computer_name;
+            return item.computer_name;
           });
           response(autocompleteData);
         }
@@ -255,16 +255,16 @@ function searchPer(inputValue){
                 var data = res.data[0]; // 첫 번째 객체 선택
 
                 var valueMap = {
-                    '사용자': data.computer.computer_name,
-                    '메모': data.computer.memo,
-                    'IP 주소': data.computer.ip_address,
-                    'Mac 주소': data.computer.mac_address,
-                    'OS 종류': data.computer.os_simple,
-                    'OS 버전': data.computer.os_version,
+                    '사용자': data.computer_name,
+                    '메모': data.memo,
+                    'IP 주소': data.ip_address,
+                    'Mac 주소': data.mac_address,
+                    'OS 종류': data.os_simple,
+                    'OS 버전': data.os_version,
                     'Office 365 버전': data.essential5,
                     '메모리 사용량': data.mem_use,
                     '디스크 사용량': data.disk_use,
-                    '최초 네트워크 접속일': data.computer.first_network,
+                    '최초 네트워크 접속일': data.first_network,
                     '내 컴퓨터 정보' :data.hw_cpu
                 };
 
@@ -275,31 +275,31 @@ function searchPer(inputValue){
             }
             var computerNameElement = document.getElementById("asset_computer_name");
             if (computerNameElement) {
-              computerNameElement.textContent = data.computer.computer_name;
+              computerNameElement.textContent = data.computer_name;
             }
 
             var memoElement = document.getElementById("asset_memo");
             if (memoElement) {
-              memoElement.textContent = data.computer.memo || "";
+              memoElement.textContent = data.memo || "";
             }
 
             var ipAddressElement = document.getElementById("asset_ip_address");
             if (ipAddressElement) {
-              ipAddressElement.textContent = data.computer.ip_address;
+              ipAddressElement.textContent = data.ip_address;
             }
             var macAddressElement = document.getElementById("asset_mac_address");
             if (macAddressElement) {
-             macAddressElement.textContent = data.computer.mac_address;
+             macAddressElement.textContent = data.mac_address;
             }
 
             var osTypeElement = document.getElementById("asset_os_simple");
             if (osTypeElement) {
-             osTypeElement.textContent = data.computer.os_simple;
+             osTypeElement.textContent = data.os_simple;
             }
 
             var osVersionElement = document.getElementById("asset_os_version");
             if (osVersionElement) {
-             osVersionElement.textContent = data.computer.os_version;
+             osVersionElement.textContent = data.os_version;
             }
 
             var office365VersionElement= document.getElementById("asset_office_version");
@@ -319,13 +319,13 @@ function searchPer(inputValue){
 
             var firstNetworkAccessDateElement=document.getElementById('asset_first_network');
             if(firstNetworkAccessDateElement){
-            firstNetworkAccessDateElement.textContent=data.computer.first_network||"";
+            firstNetworkAccessDateElement.textContent=data.first_network||"";
             }
 
 
             var myComputerInfoElemnt=document.getElementById('asset_hw_cpu');
             if(myComputerInfoElemnt){
-             myComputerInfoElemnt.innerText="CPU: "+data.computer.hw_cpu + " \n RAM : "+data.computer.hw_ram+ " \n 메인보드 : "+data.computer.hw_mb+ " \n 디스크 : "+data.computer.hw_disk+ " \n 그래픽카드 : "+data.computer.hw_gpu;
+             myComputerInfoElemnt.innerText="CPU: "+data.hw_cpu + " \n RAM : "+data.hw_ram+ " \n 메인보드 : "+data.hw_mb+ " \n 디스크 : "+data.hw_disk+ " \n 그래픽카드 : "+data.hw_gpu;
            }
         } else {
                 return

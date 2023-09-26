@@ -27,6 +27,14 @@ class Xfactor_Common(models.Model):
     hotfix_date = models.TextField(null=True)
     subnet = models.TextField(null=True)
     memo = models.TextField(null=True)
+    essential1 = models.CharField(max_length=100, null=True)
+    essential2 = models.CharField(max_length=100, null=True)
+    essential3 = models.CharField(max_length=100, null=True)
+    essential4 = models.CharField(max_length=100, null=True)
+    essential5 = models.CharField(max_length=100, null=True)
+    mem_use = models.CharField(max_length=100, null=True)
+    disk_use = models.CharField(max_length=100, null=True)
+    t_cpu = models.CharField(max_length=100, null=True)
     user_date = models.DateTimeField(auto_now_add=True)
 
 
@@ -81,21 +89,6 @@ class Xfactor_Daily(models.Model):
     ext_edg_ver = models.TextField()
     ext_fir = models.TextField()
     ext_fir_ver = models.TextField()
-    user_date = models.DateTimeField(auto_now_add=True)
-
-
-
-class Xfactor_Service(models.Model):
-    computer = models.ForeignKey(Xfactor_Common, on_delete=models.CASCADE)
-    essential1 = models.CharField(max_length=100)
-    essential2 = models.CharField(max_length=100)
-    essential3 = models.CharField(max_length=100)
-    essential4 = models.CharField(max_length=100)
-    essential5 = models.CharField(max_length=100)
-    subnet = models.CharField(max_length=100)
-    mem_use = models.CharField(max_length=100)
-    disk_use = models.CharField(max_length=100)
-    t_cpu = models.CharField(max_length=100)
     user_date = models.DateTimeField(auto_now_add=True)
 
 

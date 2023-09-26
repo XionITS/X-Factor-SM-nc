@@ -37,10 +37,10 @@ def search(request):
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
-        user = Xfactor_Service.objects.select_related('computer').filter(user_date__gte=today_collect_date).filter(computer__computer_name__icontains=search_text)
+        user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date).filter(computer_name__icontains=search_text)
         #print(user)
         #print("11")
-        user_data = XfactorServiceserializer(user, many=True).data
+        user_data = CommonSerializer(user, many=True).data
         #print(user_data.data)
         # response = {
         #     'data': user_data,  # Serialized data for the current page
@@ -53,6 +53,6 @@ def search_box(request):
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
-        user_data = Xfactor_Service.objects.select_related('computer').filter(user_date__gte=today_collect_date).filter(computer__computer_name__icontains=search_text).values('computer__computer_name')
+        user_data = Xfactor_Common.objects.filter(user_date__gte=today_collect_date).filter(computer_name__icontains=search_text).values('computer_name')
         # user_data = XfactorServiceserializer(user, many=True).data
         return JsonResponse({'data': list(user_data)})
