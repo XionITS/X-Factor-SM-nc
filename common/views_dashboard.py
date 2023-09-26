@@ -19,23 +19,32 @@ with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
 
-def Dashboard():
+def Dashboard(selected_date=None):
     logger = logging.getLogger(__name__)
     monthly_asset = []
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+    if selected_date:
+        start_date_naive = datetime.strptime(selected_date, "%Y-%m-%d")
+        end_date_naive = start_date_naive + timedelta(days=1) - timedelta(seconds=1)
 
-    asset = Daily_Statistics.objects.all()
-    asset_log = Daily_Statistics_log.objects.all()
+        start_date = timezone.make_aware(start_date_naive)
+        end_date = timezone.make_aware(end_date_naive)
+
+        asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=start_date, statistics_collection_date__lte=end_date)
+        asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_date, statistics_collection_date__lte=end_date)
+    else:
+        asset = Daily_Statistics.objects.all()
+        asset_log = Daily_Statistics_log.objects.all()
     service = Xfactor_Service.objects.all()
     common = Xfactor_Common.objects.all()
-    daily = Daily_Statistics.objects.all()
 
 
     #미관리 자산현황
-    discover_data = asset.filter(classification='discover').filter(item='장기 미접속 자산').values('item', 'item_count')
-    discover_items = [data['item'] for data in discover_data]
-    discover_item_counts = [data['item_count'] for data in discover_data]
-    discover_data_list = [discover_items, discover_item_counts]
+    discover_min = asset.filter(classification='discover').filter(item='장기 미접속 자산').values('item', 'item_count')
+    discover_min_list = [[data['item'], data['item_count']] for data in discover_min]
+    discover_day = asset_log.filter(classification='discover').filter(item='150_day_ago').values('item', 'item_count')
+    discover_day_list = [[data['item'], data['item_count']] for data in discover_day]
+    discover_data_list = discover_min_list + discover_day_list
 
     #위치별 자산현황
     location_data = asset.filter(classification='subnet').order_by('item').values('item', 'item_count')
@@ -210,15 +219,15 @@ def Dashboard():
     monthly_asset_data_list = [minutely_asset_ditem_count, minutely_asset_litem_count, minutely_asset_date]
     # CPU 사용량 차트
     try:
-        used_tcpu = daily.filter(classification='t_cpu').filter(item='True').values('item_count')
-        notused_tcpu = daily.filter(classification='t_cpu').filter(item='False').values('item_count')
+        used_tcpu = asset.filter(classification='t_cpu').filter(item='True').values('item_count')
+        notused_tcpu = asset.filter(classification='t_cpu').filter(item='False').values('item_count')
         cpu_data_list = [used_tcpu[0]['item_count'], notused_tcpu[0]['item_count']]
     except:
         cpu_data_list = [0, 0]
 
     # os버전별 자산 현황
     try:
-        os_asset = daily.filter(classification='win_os_build').values('item', 'item_count')
+        os_asset = asset.filter(classification='win_os_build').values('item', 'item_count')
         # print(os_asset)
         half_index = len(os_asset) // 2
         first_half = os_asset[:half_index]
@@ -229,7 +238,7 @@ def Dashboard():
 
     # os버전별 자산 통계 차트
     try:
-        os_up = daily.filter(classification='os_version_up').values('item', 'item_count')
+        os_up = asset.filter(classification='os_version_up').values('item', 'item_count')
         os_up_data_list = [entry['item_count'] for entry in os_up]
     except:
         os_up_data_list = ['-', '-']

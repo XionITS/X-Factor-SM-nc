@@ -79,6 +79,7 @@ var handleRenderChartNCOMG = function () {
 
 
 //############################### 전체 자산 수 #######################################
+    var assetAllChartInstance;
     function asset_all_chart(divId, notebook, desktop, other) {
         // 데이터 포인트의 총합을 계산
         const totalData1 = [
@@ -153,25 +154,13 @@ var handleRenderChartNCOMG = function () {
                     fontSize: '13px',
                     colors: ["#fff"],
                 }
-            },
-            // legend: {
-            //     markers: {
-            //         fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', ]
-            //     },
-            //     itemMargin: {
-            //         horizontal: 20
-            //     },
-            //     fill: {
-            //         opacity: 1
-            //     },
-            //     labels: {
-            //         colors: 'rgba(255, 255, 255, 0.75)',
-            //     },
-            //     position: 'bottom'
-            // }
+            }
         };
-        var asset_all_chart = new ApexCharts(document.querySelector('#asset_all_chart'), asset_all_chart_options);
-        asset_all_chart.render();
+        if (assetAllChartInstance) {
+            assetAllChartInstance.destroy();
+        }
+        assetAllChartInstance = new ApexCharts(document.querySelector('#asset_all_chart'), asset_all_chart_options);
+        assetAllChartInstance.render();
     }
 
     asset_all_notebook = dataList.asset_all_chart_list[0]
@@ -317,6 +306,7 @@ var handleRenderChartNCOMG = function () {
     other_online_list = dataList.other_online_list
 
     asset_all_os_chart1("asset_all_os_chart", desk_online_list, note_online_list, other_online_list);
+
 
 
 //#######################################전체 자산 수(Total OS)#################################
@@ -593,87 +583,115 @@ var handleRenderChartNCOMG = function () {
 //    createDonutChart("discover_donut", discover_counts, discover_items);
 
 
-    function apexnotconChart(divId, seriesData, labelsData) {
-        var apexnotconOptions = {
-            series: [100],
-            chart: {
-                height: 250,
-                type: 'radialBar',
-                events: {
-                    mounted: (chart) => {
-                        chart.windowResizeHandler();
-                    }
-                },
-            },
-            plotOptions: {
-                radialBar: {
-                    startAngle: -135,
-                    endAngle: 225,
-                    hollow: {
-                        margin: 0,
-                        size: '57%',
-                        background: 'transparent',
-                        image: undefined,
-                        imageOffsetX: 0,
-                        imageOffsetY: 0,
-                        position: 'front',
-                        dropShadow: {
-                            enabled: true,
-                            top: 3,
-                            left: 0,
-                            blur: 4,
-                            opacity: 0.24
-                        }
-                    },
-                    track: {
-                        background: ['rgba(' + app.color.whiteRgb + ', .30)'],
-                        strokeWidth: '100%',
-                        margin: 0, // margin is in pixels
-                        dropShadow: {
-                            enabled: true,
-                            top: -3,
-                            left: 0,
-                            blur: 4,
-                            opacity: 0.35
-                        }
-                    },
-                    dataLabels: {
-                        show: true,
-                        name: {
-                            offsetY: -10,
-                            show: true,
-                            color: '#fff',
-                            fontSize: '20px'
-                        },
-                        value: {
-                            formatter: function (val) {
-                                return '장기 미접속 자산';
-                            },
-                            color: '#fff',
-                            fontSize: '14px',
-                            show: true,
-                        }
-                    }
-                }
-            },
-            fill: {
-                type: 'gradient',
-                colors: 'rgba(' + app.color.themeRgb + ', 1)',
-            },
-            stroke: {
-                lineCap: 'round'
-            },
-            labels: [seriesData + ' 대'],
-        };
-        var apexnotconChart = new ApexCharts(document.querySelector("#" + divId), apexnotconOptions);
-        apexnotconChart.render();
+    var discover_data = dataList.discover_data_list;
+    var discover_data_day = discover_data.find(item => item[0] === '150_day_ago')[1];
+    var discover_data_min = discover_data.find(item => item[0] === '장기 미접속 자산')[1];
+
+    var discover_sub = parseInt(discover_data_min) - parseInt(discover_data_day);
+    var discover_per = (parseInt(discover_data_min) - parseInt(discover_data_day)) / parseInt(discover_data_day) * 100;
+
+    var discover_per_round = Math.abs(discover_per.toFixed(2));
+
+    if (discover_sub > 0) {
+        discover_sub = '+ ' + discover_sub;
+        discover_per_round = '▲ ' + discover_per_round + '%';
+    } else if (discover_sub < 0) {
+        discover_sub = '- ' + Math.abs(discover_sub);
+        discover_per_round = '▼ ' + discover_per_round + '%';
+    } else {
+        discover_per_round += '%';
     }
 
-    // createDonutChart("os_donut", os_pieDataCount, os_pieDataItem);
-    var discover_name = dataList.discover_data_list[0][1]
-    var discover_value = dataList.discover_data_list[1][0]
-    apexnotconChart("apexnotconChart", discover_value, discover_name);
+    var discover_sub_data = document.querySelector('#apexnotconChart_sub');
+    discover_sub_data.textContent = discover_sub;
 
+    var discover_per_data = document.querySelector('#apexnotconChart_per');
+    discover_per_data.textContent = discover_per_round;
+
+    var apexnotconChartOptions = {
+		chart: {
+			width: '100%',
+			height: 200,
+			type: 'bar',
+			toolbar: {
+				show: false
+			},
+		},
+		plotOptions: {
+			bar: {
+				horizontal: false,
+				columnWidth: '70%',
+				distributed: true,
+				endingShape: 'rounded'
+
+			},
+		},
+		dataLabels: {
+            enabled: true,
+            formatter: function (value) {
+                return value;
+            },
+            style: {
+                colors: ['#ffffff']
+            }
+        },
+		legend: {
+			show: false
+		},
+		stroke: {
+			show: true,
+			width: 1,
+			colors: ['transparent']
+		},
+		colors: [app.color.orange],
+		series: [{
+			data: [discover_data_day, discover_data_min]
+		}],
+		grid: {
+			show: true
+		},
+		xaxis: {
+			categories: [
+				'1일 전', '현재'
+			],
+			labels: {
+				show: true,
+
+			},
+			crosshairs: {
+                show: false
+            }
+		},
+		yaxis: {
+			labels: {
+				show: true,
+				formatter: function (value) {
+                    return value;
+                }
+			}
+		},
+		fill: {
+			opacity: 1
+		},
+		tooltip: {
+			theme: 'dark',
+			x: {
+				show: true
+			},
+			y: {
+				title: {
+					formatter: function (seriesName) {
+						return ''
+					}
+				},
+				formatter: function (value) {
+                    return value;
+                }
+			}
+		},
+	};
+	var apexnotconChart = new ApexCharts(document.querySelector('#apexnotconChart'), apexnotconChartOptions);
+    apexnotconChart.render();
 
 //############################# 보안패치 차트#################################################
     function createPieChart(divId, seriesData, labelsData) {
@@ -718,7 +736,10 @@ var handleRenderChartNCOMG = function () {
 
     hotfix_counts = dataList.hotfix_data_list[1]
     hotfix_items = dataList.hotfix_data_list[0]
-    createPieChart("hotfix_donut", hotfix_counts, hotfix_items);
+    const hotfix_filteredIndices = hotfix_counts.map((count, idx) => count !== 0 ? idx : -1).filter(index => index !== -1);
+    const hotfix_filtered_counts = hotfix_filteredIndices.map(idx => hotfix_counts[idx]);
+    const hotfix_filtered_items = hotfix_filteredIndices.map(idx => hotfix_items[idx]);
+    createPieChart("hotfix_donut", hotfix_filtered_counts, hotfix_filtered_items);
 
 
     //--------------------------------------------------------------------------
@@ -793,6 +814,9 @@ var handleRenderChartNCOMG = function () {
                     style: {
                         fontSize: '13px'
                     }
+                },
+                crosshairs: {
+                    show: false
                 }
             },
             yaxis: {
@@ -866,6 +890,9 @@ var handleRenderChartNCOMG = function () {
             },
             xaxis: {
                 categories: labelsData,
+                crosshairs: {
+                    show: false
+                  },
                 labels: {
                     show: true,
                     style: {
@@ -882,7 +909,6 @@ var handleRenderChartNCOMG = function () {
                 }
             }
         };
-        console.log()
         var asset_office_chart = new ApexCharts(document.querySelector('#office_donut'), asset_office_chart_options);
         asset_office_chart.render();
     }
@@ -1177,20 +1203,31 @@ var handleRenderChartNCOMG = function () {
 
 
 ///////////////////////Datepicker////////////////////
-$("#datepickerD").datepicker({
-    format: 'yyyy-mm-dd',
-    autoclose: true,
-    todayHighlight: true,
-}).on('changeDate', function (e) {
-    date1 = e.format()
-});
 $(document).ready(function () {
     $("button.input-group-text").click(function () {
-        $("#datepickerD").focus(); // input에 포커스를 줍니다. 이로써 데이터피커가 표시될 수 있습니다.
+        $("#datepickerD").focus();
     });
-});
+    $("#datepickerD").datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayHighlight: true,
+    }).on('changeDate', function (e) {
+        date1 = e.format()
+         $.ajax({
+            type: "POST",
+            url: "/dashboard/",
+            data: {
+                selected_date: date1
+            },
+            success: function(response) {
+                //console.log(response);
+            },
+            error: function(error) {
+                console.error("Error:", error);
+            }
+        });
+    });
 
-
-$(document).ready(function () {
+///////////////////////Chart////////////////////
     handleRenderChartNCOMG();
 });
