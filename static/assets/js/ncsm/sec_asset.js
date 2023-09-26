@@ -7,7 +7,7 @@ Author: Sean Ngu
 
 
 
-// 전역 변수로 체크박스 값을 저장할 객체를 생성합니다.
+// 전역 변수로 체크박스 값을 저장할 객체를 생성합니다..
 var checkedItems = {};
 
 var sec_asset_list = function () {
