@@ -467,6 +467,47 @@ var handleRenderChartNCOMG = function () {
         var chart = new ApexCharts(container, om_disk_chartOptions);
         chart.render();
     });
+
+    //--------------------------------------------------------------------------
+    // windows 버전별 자산목록 - windowAsset_pie 차트
+    //--------------------------------------------------------------------------
+     function osPieChart(divId, seriesData, labelsData) {
+        var donutOptions = {
+            series: seriesData,
+            chart: {
+                type: 'pie',
+                width: '100%',
+                height: 240
+            },
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
+            labels: labelsData,
+            dataLabels: {
+                enabled: true,
+                style: {
+                    colors: ["rgba(" + app.color.whiteRgb + ", 1)"],
+                    fontSize: '13px',
+                    fontWeight: '300'
+                },
+                formatter(val, opts) {
+                    const name = opts.w.globals.labels[opts.seriesIndex];
+                    return [name + ' ' + val.toFixed(1) + '%'];
+                }
+            },
+            stroke: {
+                width: 0
+            },
+            fill: {
+                type: 'gradient'
+            },
+        };
+        var os_pie_chart = new ApexCharts(document.querySelector("#" + divId), donutOptions);
+        os_pie_chart.render();
+    }
+
+    // createDonutChart("os_donut", os_pieDataCount, os_pieDataItem);
+    osPieChart("windowAsset_pie", dataList.os_up_data_list, ['업데이트 완료', '업데이트 필요']);
+
+
     //--------------------------------------------------------------------------
     // os 설치 현황, 유/무선 연결 현황, 물리/가상 자산 현황
     //--------------------------------------------------------------------------

@@ -43,7 +43,7 @@
                                 <div id="totalDataDiv" style="font-size:14px"></div>
                             </div>
                         </div>
-<!--                        <div class='text-end mx-50px' style="font-size:14px;" id="totalDataDiv"></div>-->
+                        <!--                        <div class='text-end mx-50px' style="font-size:14px;" id="totalDataDiv"></div>-->
                         <div id="asset_all_chart"></div>
                     </div>
                     <div class="col-6">
@@ -334,47 +334,79 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-6 col-l-3 pr-2">
+        <!--        <div class="col-xl-6 col-l-3 pr-2">-->
+        <!--            <div class="card mb-3" style="height:267px;">-->
+        <!--                <div class="card-body">-->
+        <!--                    <div class="d-flex fw-bold fs-12px ">-->
+        <!--                        <div class="flex-grow-1" style="font-size: 17px">OS버전별 자산 현황</div>-->
+        <!--                    </div>-->
+        <!--                    <br>-->
+        <!--                    <div class="d-flex align-items-center justify-content-sm-between">-->
+        <!--                        <div class="col-3" >-->
+        <!--                            <div class="mt-n2 mb-n2" id="os_pie"></div>-->
+        <!--                        </div>-->
+        <!--                        <div class="d-flex col-11" >-->
+        <!--                            <div class="col-4 small text-white text-opacity-50 new-text-truncate ps-3" style="font-size: 15px" >-->
+        <!--                                {% for data in dataList.os_asset_data_list.first_half %}-->
+        <!--                                <i class="fas fa-server fa-fw me-1"></i>-->
+        <!--                                <span title="{{data.item}}">{{data.item}}</span>-->
+        <!--                                <br>-->
+        <!--                                <br>-->
+        <!--                                {% endfor %}-->
+        <!--                            </div>-->
+        <!--                            <div class="col-1"  style="font-size: 16px">-->
+        <!--                                {% for data in dataList.os_asset_data_list.first_half %}-->
+        <!--                                <div class="small text-white text-opacity-50 new-text-truncate text-center" title="{{data.value}}">{{data.item_count}}</div>-->
+        <!--                                <br>-->
+        <!--                                {% endfor %}-->
+        <!--                            </div>-->
+        <!--                            <div class="col-4 small text-white text-opacity-50 new-text-truncate ps-3" style="font-size: 15px">-->
+        <!--                                {% for data in dataList.os_asset_data_list.second_half %}-->
+        <!--                                <i class="fas fa-server fa-fw me-1" ></i>-->
+        <!--                                <span title="{{data.item}}">{{data.item}}</span>-->
+        <!--                                <br>-->
+        <!--                                <br>-->
+        <!--                                {% endfor %}-->
+        <!--                            </div>-->
+        <!--                            <div class="col-1" style="font-size: 16px">-->
+        <!--                                {% for data in dataList.os_asset_data_list.second_half %}-->
+        <!--                                <div class="small text-white text-opacity-50 new-text-truncate text-center" title="{{data.value}}" >{{data.item_count}}</div>-->
+        <!--                                <br>-->
+        <!--                                {% endfor %}-->
+        <!--                            </div>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--                <div class="card-arrow">-->
+        <!--                    <div class="card-arrow-top-left"></div>-->
+        <!--                    <div class="card-arrow-top-right"></div>-->
+        <!--                    <div class="card-arrow-bottom-left"></div>-->
+        <!--                    <div class="card-arrow-bottom-right"></div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <div class="col-xl-4 col-l-4 pr-2 flex-fill">
             <div class="card mb-3" style="height:267px;">
                 <div class="card-body">
-                    <div class="d-flex fw-bold fs-12px ">
-                        <div class="flex-grow-1" style="font-size: 17px">OS버전별 자산 현황</div>
+                    <div class="d-flex fw-bold fs-12px">
+                        <div class="flex-grow-1" style="font-size: 17px">Windows 버전별 자산 목록 (Top 6)</div>
                     </div>
-                    <br>
-                    <div class="d-flex align-items-center justify-content-sm-between">
-                        <div class="col-3" >
-                            <div class="mt-n2 mb-n2" id="os_pie"></div>
-                        </div>
-                        <div class="d-flex col-11" >
-                            <div class="col-4 small text-white text-opacity-50 new-text-truncate ps-3" style="font-size: 15px" >
-                                {% for data in dataList.os_asset_data_list.first_half %}
-                                <i class="fas fa-server fa-fw me-1"></i>
-                                <span title="{{data.item}}">{{data.item}}</span>
-                                <br>
-                                <br>
-                                {% endfor %}
-                            </div>
-                            <div class="col-1"  style="font-size: 16px">
-                                {% for data in dataList.os_asset_data_list.first_half %}
-                                <div class="small text-white text-opacity-50 new-text-truncate text-center" title="{{data.value}}">{{data.item_count}}</div>
-                                <br>
-                                {% endfor %}
-                            </div>
-                            <div class="col-4 small text-white text-opacity-50 new-text-truncate ps-3" style="font-size: 15px">
-                                {% for data in dataList.os_asset_data_list.second_half %}
-                                <i class="fas fa-server fa-fw me-1" ></i>
-                                <span title="{{data.item}}">{{data.item}}</span>
-                                <br>
-                                <br>
-                                {% endfor %}
-                            </div>
-                            <div class="col-1" style="font-size: 16px">
-                                {% for data in dataList.os_asset_data_list.second_half %}
-                                <div class="small text-white text-opacity-50 new-text-truncate text-center" title="{{data.value}}" >{{data.item_count}}</div>
-                                <br>
-                                {% endfor %}
+                    <div class="d-flex col-xl-12">
+                        <div class="d-flex w-50 mt-3">
+                            <div class="d-flex w-100">
+                                <div class="w-75 align-items-center small text-white text-opacity-50 new-text-truncate fs-14px">
+                                    <i class="fas fa-server fa-fw me-1"></i>
+                                    <span>Windows 11 Pro 22621</span>
+                                    <br>
+                                    <br>
+                                </div>
+                                <div class="w-25 small text-white text-opacity-50 new-text-truncate text-center fs-15px">
+                                    <span title="">120</span>
+                                    <br>
+                                </div>
                             </div>
                         </div>
+                        <div id="windowAsset_pie" class="w-50"></div>
                     </div>
                 </div>
                 <div class="card-arrow">
@@ -385,7 +417,23 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-l-3 pr-2">
+        <div class="col-xl-2 col-l-2 pr-2 flex-fill">
+            <div class="card mb-3" style="height:267px;">
+                <div class="card-body">
+                    <div class="d-flex fw-bold fs-12px ">
+                        <div class="flex-grow-1" style="font-size: 17px">Windows 버전별 자산 현황</div>
+                    </div>
+                    <div id="os_pie"></div>
+                </div>
+                <div class="card-arrow">
+                    <div class="card-arrow-top-left"></div>
+                    <div class="card-arrow-top-right"></div>
+                    <div class="card-arrow-bottom-left"></div>
+                    <div class="card-arrow-bottom-right"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-l-2 pr-2 flex-fill">
             <div class="card mb-3" style="height:267px;">
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px mb-2">
@@ -402,7 +450,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-3 col-l-3 pr-2">
+        <div class="col-xl-2 col-l-2 pr-2 flex-fill">
             <div class="card mb-3" style="height:267px;">
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px mb-2">
