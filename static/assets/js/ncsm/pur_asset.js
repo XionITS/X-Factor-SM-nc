@@ -18,7 +18,9 @@ var hw_pur_asset_list = function () {
         ordering: true,
         serverSide: true,
         displayLength: false,
-
+        order: [
+            [3, "desc"]
+        ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
@@ -327,7 +329,9 @@ var sw_pur_asset_list = function () {
         ordering: true,
         serverSide: true,
         displayLength: false,
-
+        order: [
+            [3, "desc"]
+        ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();

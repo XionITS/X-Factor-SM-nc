@@ -9,16 +9,16 @@ import requests
 
 def nano_auth_code():
     #클라이언트 아이디받기
-    client_id = 'your_client_id'
+    client_id = 'stg-tanium-dashboard'
 
     #보낼 URI주소 입력
-    redirect_uri = 'your_redirect_uri'
+    redirect_uri = 'https://tanium.ncsoft.com:8000/'
 
     #받고 싶은 권한범위 또는 scope=profile
     scope = 'openid'
 
     # 사용자를 인증 및 인가하는 URL
-    authorization_url = 'https://{host}/realms/ncsoft/protocol/openidconnect/auth'
+    authorization_url = 'https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth'
 
     # 파라미터 설정
     params = {
@@ -30,10 +30,10 @@ def nano_auth_code():
 
     # 사용자를 인증 및 인가하는 페이지로 리디렉션
     response = requests.get(authorization_url, params=params)
-
+    print(response)
     # 인증 코드를 추출
-    # authorization_code = extract_authorization_code(response.url)
-    # return authorization_code
+    #authorization_code = extract_authorization_code(response.url)
+    #return authorization_code
 
 def nano_access_token(authorization_code) :
     #클라이언트 아이디받기

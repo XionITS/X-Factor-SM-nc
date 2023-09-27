@@ -149,7 +149,6 @@ def hs_asset_paginghw(request):
         query = Q(**{f'{filter_column}__icontains': filter_text})
         user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
         users = user.values('chassistype').annotate(count=Count('chassistype'))
-        print(users)
         user = user.filter(query)
         if filter_value:
             if ' and ' in filter_value:

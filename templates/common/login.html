@@ -66,9 +66,11 @@
 					</div>
 					<button type="submit" class="btn btn-outline-theme btn-lg d-block w-100 fw-500 mb-3">확인</button>
 
-					<a href="https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth?client_id=stg-tanium-dashboard&response_type=code&redirect_uri=https://tanium.ncsoft.com:8000/&scope=openid">
-						<button class="btn btn-outline-rinfo btn-lg d-block w-100 fw-500 mb-3">NANO 로그인</button>
-					</a>
+<!--					<a class="btn btn-outline-rinfo btn-lg d-block w-100 fw-500 mb-3" href="https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth?client_id=stg-tanium-dashboard&response_type=code&redirect_uri=https://tanium.ncsoft.com:8000/&scope=openid">-->
+<!--						NANO 로그인-->
+<!--					</a>-->
+
+					<button id="NANO_login" class="btn btn-outline-theme btn-lg d-block w-100 fw-500 mb-3">NANO 로그인</button>
 						{% if Login_Method != 'Tanium'%}
 						<div class="text-center text-white text-opacity-50">
 							새로운 계정을 생성하겠습니까? <a href="{% url 'signup' %}">회원가입</a>

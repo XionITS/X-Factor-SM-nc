@@ -31,7 +31,7 @@
     "DBName" : "ncsm",
     "DBUser" : "postgres",
     "DBPwd" : "psql",
-    "DBSelectTime" : 70,
+    "DBSelectTime" : 60,
     "AssetTNM" : "daily_asset",
     "StatisticsTNM" : "daily_statistics",
     "MenuTNM": "web_menusetting",
