@@ -53,6 +53,7 @@ def dashboard(request):
     monthly_asset_data_list = DCDL['monthly_asset_data_list']
     cpu_data_list = DCDL['cpu_data_list']
     os_asset_data_list = DCDL['os_asset_data_list']
+    os_asset_data_count_list = DCDL['os_asset_data_count_list']
     os_up_data_list = DCDL['os_up_data_list']
     discover_data_list = DCDL['discover_data_list']
     location_data_list = DCDL['location_data_list']
@@ -71,6 +72,7 @@ def dashboard(request):
         'monthly_asset_data_list': monthly_asset_data_list,
         'cpu_data_list': cpu_data_list,
         'os_asset_data_list': os_asset_data_list,
+        'os_asset_data_count_list': os_asset_data_count_list,
         'os_up_data_list': os_up_data_list,
         'discover_data_list': discover_data_list,
         'location_data_list': location_data_list,

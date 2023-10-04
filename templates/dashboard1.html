@@ -395,14 +395,21 @@
                         <div class="d-flex w-50 mt-3">
                             <div class="d-flex w-100">
                                 <div class="w-75 align-items-center small text-white text-opacity-50 new-text-truncate fs-14px">
-                                    <i class="fas fa-server fa-fw me-1"></i>
-                                    <span>Windows 11 Pro 22621</span>
-                                    <br>
-                                    <br>
+                                    {% for data in  dataList.os_asset_data_list %}
+                                    <div class="mb-2">
+                                        <i class="fas fa-server fa-fw me-1"></i>
+                                        <span>{{data.item}}</span>
+                                    </div>
+
+                                    {% endfor %}
                                 </div>
                                 <div class="w-25 small text-white text-opacity-50 new-text-truncate text-center fs-15px">
-                                    <span title="">120</span>
-                                    <br>
+                                    {% for data in dataList.os_asset_data_list %}
+                                    <div class="mb-2">
+                                        <span title="">{{data.item_count}}</span>
+                                    </div>
+
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>

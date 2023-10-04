@@ -471,7 +471,7 @@ var handleRenderChartNCOMG = function () {
     //--------------------------------------------------------------------------
     // windows 버전별 자산목록 - windowAsset_pie 차트
     //--------------------------------------------------------------------------
-     function osPieChart(divId, seriesData, labelsData) {
+     function oslistPieChart(divId, seriesData, labelsData) {
         var donutOptions = {
             series: seriesData,
             chart: {
@@ -480,7 +480,7 @@ var handleRenderChartNCOMG = function () {
                 height: 240
             },
             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
-            labels: labelsData,
+            labels: [],
             dataLabels: {
                 enabled: true,
                 style: {
@@ -500,12 +500,12 @@ var handleRenderChartNCOMG = function () {
                 type: 'gradient'
             },
         };
-        var os_pie_chart = new ApexCharts(document.querySelector("#" + divId), donutOptions);
-        os_pie_chart.render();
+        var os_list_pie_chart = new ApexCharts(document.querySelector("#" + divId), donutOptions);
+        os_list_pie_chart.render();
     }
 
     // createDonutChart("os_donut", os_pieDataCount, os_pieDataItem);
-    osPieChart("windowAsset_pie", dataList.os_up_data_list, ['업데이트 완료', '업데이트 필요']);
+    oslistPieChart("windowAsset_pie", dataList.os_asset_data_count_list[0], dataList.os_asset_data_count_list[1]);
 
 
     //--------------------------------------------------------------------------
@@ -963,11 +963,11 @@ var handleRenderChartNCOMG = function () {
         series: [
             {
                 name: 'Desktop',
-                data: [0, 0, 0, 0, 0, dataList.monthly_asset_data_list[0]]
+                data: dataList.monthly_asset_data_list[0]
             },
             {
                 name: 'Notebook',
-                data: [0, 0, 0, 0, 0, dataList.monthly_asset_data_list[1]]
+                data: dataList.monthly_asset_data_list[1]
             }
         ],
         chart: {
@@ -1007,7 +1007,7 @@ var handleRenderChartNCOMG = function () {
         },
         xaxis: {
             type: 'category',
-            categories: ['4월', '5월', '6월', '7월', '8월', dataList.monthly_asset_data_list[2]]
+            categories: dataList.monthly_asset_data_list[2]
         },
         yaxis: {
             title: {
