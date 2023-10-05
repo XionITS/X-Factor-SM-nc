@@ -380,7 +380,7 @@ var win_asset_list = function () {
         columns: [
             {
                 data: '',
-                title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>선택</span>',
+                title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>&nbsp;선택</span>',
                 searchable: false
             },
             {data: '', title: 'No', searchable: true},
@@ -658,7 +658,7 @@ var mac_asset_list = function () {
         columns: [
             {
                 data: '',
-                title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>선택</span>',
+                title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>&nbsp;선택</span>',
                 searchable: false
             },
             {data: '', title: 'No', searchable: true},
