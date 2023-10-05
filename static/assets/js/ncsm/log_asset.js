@@ -16,13 +16,10 @@ var log_popupTable_list = function () {
 		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
 		pageLength: 10,
 		responsive: false,
-		searching: true,
-		ordering: true,
+		searching: false,
+		ordering: false,
 		serverSide: true,
 		displayLength: false,
-		order : [
-		    [2, "desc"]
-		],
 		drawCallback: function (settings) {
                 // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
@@ -44,19 +41,7 @@ var log_popupTable_list = function () {
 			url: 'paging/',
 			type: "POST",
             data: function (data) {
-                var defaultColumn = ''
-                var column = $('#column-dropdown').data('column');
-                var orderColumn = data.order[0].column;
-                console.log(orderColumn)
-                var orderDir = data.order[0].dir;
-                var columnMap = {
-                        0: 'id',
-                        1: 'log_func',
-                        2: 'log_item',
-                        3: 'log_result',
-                        4: 'log_user',
-                        5: 'log_date'
-                        };
+
                 // console.log(columnMap)
                 data.page = (data.start / data.length) + 1;
                 data.page_length = data.length;

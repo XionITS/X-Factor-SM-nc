@@ -205,22 +205,24 @@ def Dashboard(selected_date=None):
     lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
     lastMonth = pd.date_range(lastDay, periods=5, freq='M').strftime("%Y-%m-%d")
     LM = tuple(lastMonth)
-    daily_asset_desktop = asset_log.filter(classification='chassis_type', item='Desktop', statistics_collection_date__date__in=LM)\
+    daily_asset_desktop = asset_log.filter(classification='Desktop_chassis_total', item='Desktop', statistics_collection_date__date__in=LM)\
         .values('item_count', 'statistics_collection_date').order_by('statistics_collection_date')
-    daily_asset_laptop = asset_log.filter(classification='chassis_type', item='Notebook', statistics_collection_date__date__in=LM)\
+    daily_asset_laptop = asset_log.filter(classification='Notebook_chassis_total', item='Notebook', statistics_collection_date__date__in=LM)\
         .values('item_count', 'statistics_collection_date').order_by('statistics_collection_date')
-    minutely_asset_desktop = asset.filter(classification='chassis_type').filter(item='Desktop').values('item_count', 'statistics_collection_date')
-    minutely_asset_laptop = asset.filter(classification='chassis_type').filter(item='Notebook').values('item_count', 'statistics_collection_date')
+    minutely_asset_desktop = asset.filter(classification='Desktop_chassis_total').aggregate(total_item_count=Sum('item_count'))
+    minutely_asset_laptop = asset.filter(classification='Notebook_chassis_total').aggregate(total_item_count=Sum('item_count'))
+    minutely_asset_date = asset.filter(classification='Notebook_chassis_total').values('statistics_collection_date').first()
     monthly_asset_ditem_count = [entry['item_count'] for entry in daily_asset_desktop]
     # monthly_asset_ditem_count = list(daily_asset_desktop.values_list('item_count', 'statistics_collection_date'))
     monthly_asset_litem_count = [entry['item_count'] for entry in daily_asset_laptop]
-    minutely_asset_ditem_count = [entry['item_count'] for entry in minutely_asset_desktop]
-    minutely_asset_litem_count = [entry['item_count'] for entry in minutely_asset_laptop]
+    # minutely_asset_ditem_count = [entry['total_item_count'] for entry in minutely_asset_desktop]
+    # minutely_asset_litem_count = [entry['total_item_count'] for entry in minutely_asset_laptop]
 
     monthly_asset_date = [entry['statistics_collection_date'].strftime('%m') + "월" for entry in daily_asset_desktop]
-    minutely_asset_date = [entry['statistics_collection_date'].strftime('%m') + "월" for entry in minutely_asset_desktop]
+    minutely_asset_date = minutely_asset_date['statistics_collection_date'].strftime('%m') + "월"
     # monthly_asset_data_list = [monthly_asset_ditem_count + minutely_asset_ditem_count, monthly_asset_litem_count + minutely_asset_litem_count, monthly_asset_date + minutely_asset_date]
-    monthly_asset_data_list = [monthly_asset_ditem_count+minutely_asset_ditem_count, monthly_asset_litem_count+minutely_asset_litem_count, monthly_asset_date+minutely_asset_date]
+    monthly_asset_data_list = [monthly_asset_ditem_count+[minutely_asset_desktop['total_item_count']], monthly_asset_litem_count+[minutely_asset_laptop['total_item_count']], monthly_asset_date+[minutely_asset_date]]
+
     # CPU 사용량 차트
     try:
         used_tcpu = asset.filter(classification='t_cpu').filter(item='True').values('item_count')
