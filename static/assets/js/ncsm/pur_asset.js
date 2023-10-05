@@ -130,7 +130,7 @@ var hw_pur_asset_list = function () {
         columnDefs: [
             {
                 targets: 0,
-                width: "2%",
+                width: "4%",
                 orderable: false,
                 searchable: false,
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
