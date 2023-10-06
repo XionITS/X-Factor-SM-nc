@@ -16,7 +16,7 @@
             <div class="card-body">
                 <ul class="nav nav-tabs2 nav-tabs-v2 px-3" role="tablist">
                     <li class="nav-item me-3" role="presentation"><a href="#" id="um_user" class="nav-link active px-2" data-bs-toggle="tab" aria-selected="true" role="tab" value="USER" onclick="um_userbutton(this);" >USER</a></li>
-                    <li class="nav-item me-3" style="display:none;" role="presentation"><a href="#" id="um_group" class="nav-link px-2" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab" value="GROUP" onclick="um_groupbutton(this);">GROUP</a></li>
+                    <li class="nav-item me-3" role="presentation"><a href="#" id="um_group" class="nav-link px-2" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab" value="GROUP" onclick="um_groupbutton(this);">GROUP</a></li>
                 </ul>
                 <br>
                 <br>
@@ -28,9 +28,9 @@
                 <!-- 검색어 필터  -->
                 <div class="search-dropdown">
                     <div class="dropdown">
-                      <button class="btn btn-outline-warning" type="button" id="um_insert" >
-                        추가 하기
-                      </button>
+<!--                      <button class="btn btn-outline-warning" type="button" id="um_insert" >-->
+<!--                        추가 하기-->
+<!--                      </button>-->
                       <button class="btn btn-outline-warning" type="button" id="um_delete">
                         삭제 하기
                       </button>
@@ -78,7 +78,7 @@
       <div class="modal-body">
           <table class="table hstable" style="overflow-y: auto;">
               <thead class="hsthead">
-                    <th scope="col">SW Name</th>
+                    <th scope="col">권한 변경하기</th>
 
               </thead>
               <tbody class="hstbody"></tbody>
@@ -86,6 +86,7 @@
       </div>
 
       <div class="modal-footer">
+        <button type="submit" class="btn btn-warning" id="submit">SAVE</button>
         <button type="button" class="btn btn-secondary" id="closeBtn3">Close</button>
       </div>
     </div>

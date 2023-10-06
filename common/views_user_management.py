@@ -68,7 +68,6 @@ def um_user(request):
     # Serialize the paginated data
 
     user_list = XuserSerializer(page, many=True).data
-
     # Prepare the response
     response = {
         'draw': int(request.POST.get('draw', 1)),  # Echo back the draw parameter from the request
@@ -79,3 +78,10 @@ def um_user(request):
 
     return JsonResponse(response)
 
+@csrf_exempt
+def user_auth(request):
+    x_id = request.POST.get("x_id")
+    xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=x_id)
+    auth_list= XuserAuthSerializer(xuser_auths, many=True).data
+    response = {'auth_list': auth_list}
+    return JsonResponse(response)
