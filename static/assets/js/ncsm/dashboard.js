@@ -112,6 +112,9 @@ var handleRenderChartNCOMG = function () {
                 foreColor: 'rgba(255, 255, 255, 0.75)',
                 height: 225,
                 stacked: true,
+                toolbar: {
+                    show: false
+                },
             },
             responsive: [{
                 breakpoint: 480,
@@ -807,7 +810,7 @@ var handleRenderChartNCOMG = function () {
                 height: 200,
                 width: '100%',
                 toolbar: {
-                    show: true,
+                    show: false,
                     tools: {
                         zoom: false,
                         pan: false
@@ -888,7 +891,7 @@ var handleRenderChartNCOMG = function () {
                 height: 200,
                 width: '100%',
                 toolbar: {
-                    show: true,
+                    show: false,
                     tools: {
                         zoom: false,
                         pan: false
@@ -977,7 +980,7 @@ var handleRenderChartNCOMG = function () {
             height: 200,
             width: '100%',
             toolbar: {
-                show: true,
+                show: false,
                 tools: {
                     zoom: false,
                     pan: false
