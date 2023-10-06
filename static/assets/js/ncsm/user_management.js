@@ -274,209 +274,209 @@ var um_user_list = function () {
     $('head').append(customStyle);
 };
 
-//
-//var um_group_list = function () {
-//	var um_group_list = $('#um_list').DataTable({
-//		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><''p>>",
-//		lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
-//        pageLength: 5,
-//		responsive: false,
-////		searching: true,
-//		ordering: true,
-//		serverSide: true,
-//		displayLength: false,
-//
-//		drawCallback: function (settings) {
-//            // 페이지 변경시 체크박스 값을 설정합니다.
-//            var api = this.api();
-//            var rows = api.rows({ page: 'current' }).nodes();
-//
-//            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-//            for (var i = 0; i < rows.length; i++) {
-//                var row = rows[i];
-//                var data = api.row(row).data();
-//                var computer_id = data.computer.computer_id;
-//
-//                if (checkedItems[computer_id]) {
-//                    $(row).find('input[type="checkbox"]').prop('checked', true);
-//                } else {
-//                    $(row).find('input[type="checkbox"]').prop('checked', false);
-//                }
-//            }
-//            var current_page_um_groupr = um_group_list.page();
-//            var total_pages_um_groupr = um_group_list.page.info().pages;
-//            $('#nexts').remove();
-//            $('#after').remove();
-//
-//            if (total_pages_um_group > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-//            $('<button type="button" class="btn" id="nexts_um_group">10≫</button>')
-//            .insertAfter('#um_list_paginate .paginate_button:last');
-//            $('<button type="button" class="btn" id="after_um_group">≪10</button>')
-//            .insertBefore('#um_list_paginate .paginate_button:first');
-//            }
-//        },
-//
-//		ajax: {
-//			url: 'grouppaging/',
-//			type: "POST",
-//            data: function (data) {
-//                var column = $('#column-dropdown').data('column');
-//                var orderColumn = data.order[0].column;
-//                var orderDir = data.order[0].dir;
-//                var columnMap = {
-//                            2: 'chassistype',
-//                            3: 'computer_name',
-//                            4: 'ip_address',
-//                            5: 'sw_list',
-//                            6: 'sw_ver_list',
-//                            7: 'sw_install',
-//                            8: 'more',
-//                            9: 'memo',
-//
-//                        };
-//                data.filter = {
-//                    column: column,
-//                    value : $('#search-input-hs').val(),
-//                    value2 : $('#um_list_filter input[type="search"]').val(),
-//                    regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
-//                };
-//                data.page = (data.start / data.length) + 1;
-//                data.page_length = data.length;
-//            },
-//			dataSrc: function (res) {
-//				var data = res.data;
-//				return data;
-//			}
-//		},
-//
-//		columns: [
-//            { data: '', title: '선택', searchable: false },
-//		    { data: '', title: 'No', searchable: true },
-//			{ data: 'computer.chassistype', title: '구분', searchable: true },
-//			{ data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true },
-//            { data: 'computer.ip_address', title: 'IPv4' , searchable: true},
-//			{ data: 'computer.sw_list', title: '소프트웨어 목록', searchable: true },
-//			{ data: 'computer.sw_ver_list', title: '소프트웨어 버전', searchable: true },
-//			{ data: 'computer.sw_install', title: '설치 일자', searchable: true },
-//			{ data: '', title: '더보기', searchable: false },
-//			{ data: 'computer.memo', title: '메모', searchable: true },
-//
+
+var um_group_list = function () {
+	var um_group_list = $('#um_list').DataTable({
+		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><''p>>",
+		lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+        pageLength: 5,
+		responsive: false,
+//		searching: true,
+		ordering: true,
+		serverSide: true,
+		displayLength: false,
+
+		drawCallback: function (settings) {
+            // 페이지 변경시 체크박스 값을 설정합니다.
+            var api = this.api();
+            var rows = api.rows({ page: 'current' }).nodes();
+
+            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var data = api.row(row).data();
+                var computer_id = data.computer.computer_id;
+
+                if (checkedItems[computer_id]) {
+                    $(row).find('input[type="checkbox"]').prop('checked', true);
+                } else {
+                    $(row).find('input[type="checkbox"]').prop('checked', false);
+                }
+            }
+            var current_page_um_groupr = um_group_list.page();
+            var total_pages_um_groupr = um_group_list.page.info().pages;
+            $('#nexts').remove();
+            $('#after').remove();
+
+            if (total_pages_um_group > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            $('<button type="button" class="btn" id="nexts_um_group">10≫</button>')
+            .insertAfter('#um_list_paginate .paginate_button:last');
+            $('<button type="button" class="btn" id="after_um_group">≪10</button>')
+            .insertBefore('#um_list_paginate .paginate_button:first');
+            }
+        },
+
+		ajax: {
+			url: 'grouppaging/',
+			type: "POST",
+            data: function (data) {
+                var column = $('#column-dropdown').data('column');
+                var orderColumn = data.order[0].column;
+                var orderDir = data.order[0].dir;
+                var columnMap = {
+                            2: 'chassistype',
+                            3: 'computer_name',
+                            4: 'ip_address',
+                            5: 'sw_list',
+                            6: 'sw_ver_list',
+                            7: 'sw_install',
+                            8: 'more',
+                            9: 'memo',
+
+                        };
+                data.filter = {
+                    column: column,
+                    value : $('#search-input-hs').val(),
+                    value2 : $('#um_list_filter input[type="search"]').val(),
+                    regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
+                };
+                data.page = (data.start / data.length) + 1;
+                data.page_length = data.length;
+            },
+			dataSrc: function (res) {
+				var data = res.data;
+				return data;
+			}
+		},
+
+		columns: [
+            { data: '', title: '선택', searchable: false },
+		    { data: '', title: 'No', searchable: true },
+			{ data: 'computer.chassistype', title: '구분', searchable: true },
+			{ data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true },
+            { data: 'computer.ip_address', title: 'IPv4' , searchable: true},
+			{ data: 'computer.sw_list', title: '소프트웨어 목록', searchable: true },
+			{ data: 'computer.sw_ver_list', title: '소프트웨어 버전', searchable: true },
+			{ data: 'computer.sw_install', title: '설치 일자', searchable: true },
+			{ data: '', title: '더보기', searchable: false },
+			{ data: 'computer.memo', title: '메모', searchable: true },
+
+		],
+		rowCallback: function (row, data, index) {
+            var api = this.api();
+            var page = api.page.info().page;
+            var pageLength = api.page.info().length;
+            var index = (page * pageLength) + (index + 1);
+            $('td:eq(1)', row).html(index);
+        },
+//        columnDefs: [
+//		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
+//		    {targets: 1, width: "20%", className: 'text-start text-truncate'},
+//		    {targets: 2, width: "10%", className: 'text-start text-truncate'},
+//            {targets: 3, width: "10%", className: 'text-start text-truncate'},
+//		    {targets: 4, width: "40%", className: 'text-start text-truncate'},
+//		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
-//		rowCallback: function (row, data, index) {
-//            var api = this.api();
-//            var page = api.page.info().page;
-//            var pageLength = api.page.info().length;
-//            var index = (page * pageLength) + (index + 1);
-//            $('td:eq(1)', row).html(index);
-//        },
-////        columnDefs: [
-////		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
-////		    {targets: 1, width: "20%", className: 'text-start text-truncate'},
-////		    {targets: 2, width: "10%", className: 'text-start text-truncate'},
-////            {targets: 3, width: "10%", className: 'text-start text-truncate'},
-////		    {targets: 4, width: "40%", className: 'text-start text-truncate'},
-////		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
-////		],
-//		columnDefs: [
-//            {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-//		        const computer_id = row.computer.computer_id;
-//		        return '<input type="checkbox" class="form-check-input" name="'+row.computer.computer_name+'" id="'+row.computer.computer_id+'" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
-//            }},
-//            {targets: 1, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 2, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 3, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 4, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 5, width: "15%", className: 'text-start text-truncate flex-cloumn column_hidden',
-//		    render: function(data, type, row) {
-//		        const swList = row.computer.sw_list;
-//                const swListArray = swList ? swList.split('<br>') : [];
-//		        return '<span data-toggle="tooltip">' + (swListArray[0] || '') + '<br>' + (swListArray[1] || '') + '<br>' + (swListArray[2] || '') + '<br>' + (swListArray[3] || '')}},
-//
-//		    {targets: 6, width: "10%", className: 'text-start text-truncate flex-cloumn column_hidden',
-//		    render: function(data, type, row) {
-//                const swVer = row.computer.sw_ver_list;
-//                const swVerArray = swVer ? swVer.split('<br>') : [];
-//		        return '<span data-toggle="tooltip">' + (swVerArray[0] || '') + '<br>' + (swVerArray[1] || '') + '<br>' + (swVerArray[2] || '') + '<br>' + (swVerArray[3] || '')}},
-//
-//		    {targets: 7, width: "10%", className: 'text-start text-truncate flex-cloumn column_hidden',
-//		    render: function(data, type, row) {
-//		        const swInstall= row.computer.sw_install;
-//		        const swInstallArray = swInstall ? swInstall.split('<br>') : [];
-//		        return '<span data-toggle="tooltip">' + (swInstallArray[0] || '') + '<br>' + (swInstallArray[1] || '') + '<br>' + (swInstallArray[2] || '') + '<br>' + (swInstallArray[3] || '')}},
-//
-//		    {targets: 8, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden',
-//		    render: function(data, type, row) {
-//		        const computer_name = row.computer.computer_name;
-//		        const swList = row.computer.sw_list;
-//		        const swVer = row.computer.sw_ver_list;
-//		        const swInstall= row.computer.sw_install;
-//		        return '</span><br><div class="pur_swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-swinstall="' + swInstall + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
-//
-//		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
-//		],
-//		language: {
-//			"decimal": "",
-//			"info": "전체 _TOTAL_건",
-//			"infoEmpty": "데이터가 없습니다.",
-//			"emptyTable": "데이터가 없습니다.",
-//			"thousands": ",",
-//			"lengthMenu": "페이지당 _MENU_ 개씩 보기",
-//			"loadingRecords": "로딩 중입니다.",
-//			"processing": "",
-//			"zeroRecords": "검색 결과 없음",
-//			"paginate": {
-//				"first": "처음",
-//				"last": "끝",
-//				"next": "다음",
-//				"previous": "이전"
-//			},
-//			"search": "검색:",
-//			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
-//			"infoPostFix": "",
-//            },
-//            pagingType: 'numbers',//이전 다음 버튼 히든처리
-//});
-//    //체크박스 저장하기
-//um_checkbox_check($('#um_list tbody'))
-//
-//    // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
-//    dropdown_text();
-//
-//
-//      // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-//    $('#search-button-up').click(function() {
-//        var column = $('#column-dropdown').data('column');
-//        var searchValue = $('#search-input').val().trim();
-//
-//        performSearch(column, searchValue, um_group_list_Data);
-//    });
-//
-//    // 검색창 enter 작동
-//    $('#search-input').on('keyup', function(event) {
-//        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
-//            var column = $('#column-dropdown').data('column');
-//            var searchValue = $('#search-input').val().trim();
-//
-//            performSearch(column, searchValue, um_group_list_Data);
-//        }
-//    });
-//
-//	$(document).on('click', '#nexts_um_group, #after_um_group', function() {
-//        var current_page_um_group = um_group_list.page();
-//        var total_pages_um_group = um_group_list.page.info().pages;
-//        if ($(this).attr('id') == 'nexts_um_group') {
-//                if (current_page_um_group + 10 < total_pages_um_group) {
-//                    um_group_list.page(current_page_um_group + 10).draw('page');
-//                } else {
-//                    um_group_list.page(total_pages_um_group - 1).draw('page');
-//                }
-//                } else {
-//                    um_group_list.page(Math.max(current_page_um_group- 10, 0)).draw('page');
-//                }
-//});
-//    var customStyle = '<style>#nexts_um_group, #after_um_group {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
-//    $('head').append(customStyle);
-//};
+		columnDefs: [
+            {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+		        const computer_id = row.computer.computer_id;
+		        return '<input type="checkbox" class="form-check-input" name="'+row.computer.computer_name+'" id="'+row.computer.computer_id+'" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
+            }},
+            {targets: 1, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 3, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 4, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "15%", className: 'text-start text-truncate flex-cloumn column_hidden',
+		    render: function(data, type, row) {
+		        const swList = row.computer.sw_list;
+                const swListArray = swList ? swList.split('<br>') : [];
+		        return '<span data-toggle="tooltip">' + (swListArray[0] || '') + '<br>' + (swListArray[1] || '') + '<br>' + (swListArray[2] || '') + '<br>' + (swListArray[3] || '')}},
+
+		    {targets: 6, width: "10%", className: 'text-start text-truncate flex-cloumn column_hidden',
+		    render: function(data, type, row) {
+                const swVer = row.computer.sw_ver_list;
+                const swVerArray = swVer ? swVer.split('<br>') : [];
+		        return '<span data-toggle="tooltip">' + (swVerArray[0] || '') + '<br>' + (swVerArray[1] || '') + '<br>' + (swVerArray[2] || '') + '<br>' + (swVerArray[3] || '')}},
+
+		    {targets: 7, width: "10%", className: 'text-start text-truncate flex-cloumn column_hidden',
+		    render: function(data, type, row) {
+		        const swInstall= row.computer.sw_install;
+		        const swInstallArray = swInstall ? swInstall.split('<br>') : [];
+		        return '<span data-toggle="tooltip">' + (swInstallArray[0] || '') + '<br>' + (swInstallArray[1] || '') + '<br>' + (swInstallArray[2] || '') + '<br>' + (swInstallArray[3] || '')}},
+
+		    {targets: 8, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden',
+		    render: function(data, type, row) {
+		        const computer_name = row.computer.computer_name;
+		        const swList = row.computer.sw_list;
+		        const swVer = row.computer.sw_ver_list;
+		        const swInstall= row.computer.sw_install;
+		        return '</span><br><div class="pur_swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-swinstall="' + swInstall + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
+
+		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
+		],
+		language: {
+			"decimal": "",
+			"info": "전체 _TOTAL_건",
+			"infoEmpty": "데이터가 없습니다.",
+			"emptyTable": "데이터가 없습니다.",
+			"thousands": ",",
+			"lengthMenu": "페이지당 _MENU_ 개씩 보기",
+			"loadingRecords": "로딩 중입니다.",
+			"processing": "",
+			"zeroRecords": "검색 결과 없음",
+			"paginate": {
+				"first": "처음",
+				"last": "끝",
+				"next": "다음",
+				"previous": "이전"
+			},
+			"search": "검색:",
+			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
+			"infoPostFix": "",
+            },
+            pagingType: 'numbers',//이전 다음 버튼 히든처리
+});
+    //체크박스 저장하기
+um_checkbox_check($('#um_list tbody'))
+
+    // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
+    dropdown_text();
+
+
+      // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
+    $('#search-button-up').click(function() {
+        var column = $('#column-dropdown').data('column');
+        var searchValue = $('#search-input').val().trim();
+
+        performSearch(column, searchValue, um_group_list_Data);
+    });
+
+    // 검색창 enter 작동
+    $('#search-input').on('keyup', function(event) {
+        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var column = $('#column-dropdown').data('column');
+            var searchValue = $('#search-input').val().trim();
+
+            performSearch(column, searchValue, um_group_list_Data);
+        }
+    });
+
+	$(document).on('click', '#nexts_um_group, #after_um_group', function() {
+        var current_page_um_group = um_group_list.page();
+        var total_pages_um_group = um_group_list.page.info().pages;
+        if ($(this).attr('id') == 'nexts_um_group') {
+                if (current_page_um_group + 10 < total_pages_um_group) {
+                    um_group_list.page(current_page_um_group + 10).draw('page');
+                } else {
+                    um_group_list.page(total_pages_um_group - 1).draw('page');
+                }
+                } else {
+                    um_group_list.page(Math.max(current_page_um_group- 10, 0)).draw('page');
+                }
+});
+    var customStyle = '<style>#nexts_um_group, #after_um_group {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
+    $('head').append(customStyle);
+};
 
 function um_userbutton(btn) {
     let newTableContent = '';
@@ -488,17 +488,17 @@ function um_userbutton(btn) {
     //$('.hsbutton').not(btn).removeClass('active');
     checkedItems = {};
 };
-//
-//function pur_swbutton(btn) {
-//    let newTableContent = '';
-//    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>소프트웨어 목록</th><th>소프트웨어 버전</th><th>설치 일자</th><th>더보기</th><th>메모</th></tr></thead><tbody></tbody>';
-//    $('#um_list').DataTable().destroy();
-//    $('#um_list').html(newTableContent);
-//    um_group_list();
-//    $(btn).addClass('active');
-//    $('.hsbutton').not(btn).removeClass('active');
-//    checkedItems = {};
-//};
+
+function um_groupbutton(btn) {
+    let newTableContent = '';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>그룹명</th><th>그룹 설명</th><th>권한</th></thead><tbody></tbody>';
+    $('#um_list').DataTable().destroy();
+    $('#um_list').html(newTableContent);
+    um_group_list();
+    $(btn).addClass('active');
+    //$('.um_userbutton').not(btn).removeClass('active');
+    checkedItems = {};
+};
 
 //// 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
 //function dropdown_text(){
@@ -534,13 +534,37 @@ $(document).ready(function () {
 //    });
 $(document).on("click", ".ummore", function (e) {
     const x_id = $(this).data("x_id");
-    var modalbody = "";
-    modalbody += '권한' + x_id;
-    $("#um_auth_modal .hstbody").html(modalbody);
-//    $("#swListModal .modal-title").htlbody);
-    $("#um_auth_modal").modal("show");
-//    $("#swListModal .hstbody").html(tableHTML);
-    //$("#swListModal .modal-body-2").html(swVerHTML);
+    $.ajax({
+        url: 'user_auth/',
+        method:'POST',
+        data:{
+            x_id: x_id
+        },
+        success: function (res) {
+            var data = res;
+            // AJAX 요청이 성공한 후에 modalbody를 설정하고 모달을 열기
+            var modalbody = '<div>'+x_id+' 권한</div>';
+            modalbody += '<form id="authForm">';
+
+            // data.auth_list 배열의 각 항목을 반복하며 체크박스 생성
+            data.auth_list.forEach(function (authItem) {
+                console.log(authItem)
+                modalbody += '<label class="form-check-label">';
+                modalbody += '<input class="form-check-input" type="checkbox" name="' + authItem.auth_id + '" value="' + authItem.auth_id + '"';
+                if (authItem.auth_use === 'true') {
+                    modalbody += ' checked';
+                }
+                modalbody += '>';
+                modalbody += authItem.xfactor_auth.auth_name;
+                modalbody += '</label><br>';
+            });
+
+            modalbody += '</form>';
+
+            $("#um_auth_modal .hstbody").html(modalbody);
+            $("#um_auth_modal").modal("show");
+        },
+    })
 });
 
 var insert_modal = document.getElementById("um_insert_modal");

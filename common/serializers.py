@@ -86,3 +86,10 @@ class XfactorLogserializer(serializers.ModelSerializer):
     class Meta:
         model = Xfactor_Log
         fields = '__all__'
+
+class XuserSerializer2(serializers.ModelSerializer):
+    xfactor_xuser_auth = XuserAuthSerializer()
+
+    class Meta:
+        model = Xfactor_Xuser
+        fields = '__all__'
