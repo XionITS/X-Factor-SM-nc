@@ -542,79 +542,64 @@
     </div>
     <!-- END row -->
 </div>
+
+<div class="modal" name="DashModal" id="DashModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content" style="background-color:#1d2835;">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <a class="btn btn-outline-warning export" onclick="exportToExcel()">Export to Excel</a>
+                    </div>
+                    <div class="modal-body">
+
+                        <table id="all_asset_detail1" class="table " style="width: 100%">
+                            <thead class="allAthead">
+                            <tr class="">
+                                <th style="text-align: center">No</th>
+                                <th style="text-align: center">컴퓨터이름</th>
+                                <th style="text-align: center">IP</th>
+                                <th style="text-align: center">MAC</th>
+<!--                                <th scope="col" style="text-align: center">Email</th>-->
+                            </tr>
+<!--                            <th scope="col" style="text-align: center">업데이트 날짜</th>-->
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+<!--                            <tbody class="allAtbody"></tbody>-->
+                        </table>
+                    </div>
+                    <input type="hidden" id="categoryName" value="">
+                    <input type="hidden" id="seriesName" value="">
+                    <input type="hidden" id="chartName" value="">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 <!-- END #content -->
 <script>
-    <!--$(document).ready(function() {-->
-    <!--// 대시보드 하단 리포트 달력-->
-        <!--    $('#report_calendar').datepicker({-->
-        <!--      format: 'yyyy-mm-dd',-->
-        <!--      endDate: new Date(),-->
-        <!--    }).on('changeDate', function(e) {-->
-        <!--      var date = e.format();-->
-        <!--      var width = 1200;-->
-        <!--      var height = 900;-->
-        <!--      var left = (screen.width - width) / 2;-->
-        <!--      var top = (screen.height - height) / 2;-->
-        <!--      var options = `width=${width}, height=${height}, left=${left}, top=${top}, scrollbars=yes`;-->
-        <!--      window.open("/report_date/?date=" + date, "_blank", options);-->
-        <!--    });-->
+    function exportToExcel() {
+    // seriesName의 값을 가져옵니다.
+    var seriesName = document.getElementById('seriesName').value;
+    var categoryName = document.getElementById('categoryName').value;
+    var chartName = document.getElementById('chartName').value;
 
-    <!--// 최대 리소스 점유 프로세스 fade in 효과-->
-    <!--    var numRowsToShow = 7;-->
-    <!--    var animationSpeed = 3000;-->
-    <!--    var pauseOnHover = true;-->
-    <!--    var loopCpuProc = setInterval(rotateRowsCpuProc, animationSpeed);-->
-    <!--    var allRowsCpuProc = $('#table-cpuProc-body tr').get();-->
-    <!--    $(allRowsCpuProc).slice(numRowsToShow).hide();-->
-    <!--    var loopMemProc = setInterval(rotateRowsMemProc, animationSpeed);-->
-    <!--    var allRowsMemProc = $('#table-memProc-body tr').get();-->
-    <!--    $(allRowsMemProc).slice(numRowsToShow).hide();-->
-    <!--    var loopDiskApp = setInterval(rotateRowsDiskApp, animationSpeed);-->
-    <!--    var allRowsDiskApp = $('#table-diskApp-body tr').get();-->
-    <!--    $(allRowsDiskApp).slice(numRowsToShow).hide();-->
-    <!--    if (pauseOnHover) {-->
-    <!--        $("#table-cpuProc-body").hover(function() {-->
-    <!--            clearInterval(loopCpuProc);-->
-    <!--        }, function() {-->
-    <!--            loopCpuProc = setInterval(rotateRowsCpuProc, animationSpeed);-->
-    <!--        });-->
-    <!--        $("#table-memProc-body").hover(function() {-->
-    <!--            clearInterval(loopMemProc);-->
-    <!--        }, function() {-->
-    <!--            loopMemProc = setInterval(rotateRowsMemProc, animationSpeed);-->
-    <!--        });-->
-    <!--        $("#table-diskApp-body").hover(function() {-->
-    <!--            clearInterval(loopDiskApp);-->
-    <!--        }, function() {-->
-    <!--            loopDiskApp = setInterval(rotateRowsDiskApp, animationSpeed);-->
-    <!--        });-->
-    <!--    }-->
-    <!--    function rotateRowsCpuProc() {-->
-    <!--        rotateRowsGeneral('#table-cpuProc-body', allRowsCpuProc);-->
-    <!--    }-->
-    <!--    function rotateRowsMemProc() {-->
-    <!--        rotateRowsGeneral('#table-memProc-body', allRowsMemProc);-->
-    <!--    }-->
-    <!--    function rotateRowsDiskApp() {-->
-    <!--        rotateRowsGeneral('#table-diskApp-body', allRowsDiskApp);-->
-    <!--    }-->
-    <!--    function rotateRowsGeneral(tableBodySelector, allRows) {-->
-    <!--        var firstSet = $(tableBodySelector + ' tr:visible');-->
-    <!--        var nextSet = firstSet.last().nextAll().slice(0, numRowsToShow);-->
-    <!--        if (nextSet.length === 0) {-->
-    <!--            nextSet = $(allRows).slice(0, numRowsToShow);-->
-    <!--        }-->
-    <!--        firstSet.fadeOut('slow', function() {-->
-    <!--            nextSet.fadeIn('slow');-->
-    <!--            if (nextSet.last().next().length === 0) {-->
-    <!--                $(allRows).prependTo(tableBodySelector);-->
-    <!--            }-->
-    <!--        });-->
-    <!--    }-->
+    // Django가 반환하는 상대 URL에 원점을 추가하여 절대 URL을 만듭니다.
+    var relativeUrl = "{% url 'export' model='Xfactor_Common' %}";
+    var absoluteUrl = window.location.origin + relativeUrl;
 
-    <!--    window.setTimeout('window.location.reload()',600000);-->
+    // 절대 URL으로 'URL' 객체를 생성합니다.
+    var url = new URL(absoluteUrl);
 
-    <!--});-->
+    url.searchParams.set('parameter_name', chartName);
+    url.searchParams.set('seriesName', seriesName);
+    url.searchParams.set('categoryName', categoryName);
+
+    // 변경된 URL로 이동합니다.
+    window.location.href = url.toString();
+}
 
 </script>
 {% endblock %}

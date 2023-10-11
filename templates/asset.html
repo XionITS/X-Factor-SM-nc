@@ -38,15 +38,15 @@
                             <td id="asset_computer_name">-</td>
                         </tr>
                         <tr>
-<!--                            <td class="first-column">메모</td>-->
-<!--                            <td class="center-column">-->
-<!--                                <div class="asset-input-group">-->
-<!--                                    <input type="search" class="asset-form-control" id="" value="" placeholder="저장할 메모를 입력하세요">-->
-<!--                                    <div>-->
-<!--                                      <button class="btn btn-outline-info " type="button" id="">저장</button>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </td>-->
+                            <td class="first-column">메모</td>
+                            <td class="center-column">
+                                <div class="asset-input-group">
+                                    <input type="search" class="asset-form-control" id="asset_memo" value="" placeholder="저장할 메모를 입력하세요">
+                                    <div>
+                                        <button class="btn btn-outline-info " type="button" id="memo_save">저장</button>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                         <tr>
                             <td class="first-column">IP 주소</td>
@@ -101,4 +101,30 @@
     </div>
 </div>
 
+<script>
+// $(document).ready(function() {
+  // $('#memo_save').click(function() {
+  //   var memoValue = $('#asset_memo').val();
+  //   var computernameValue = $('#asset_computer_name').val();
+  //   var macaddressValue = $('#asset_mac_address').val();
+  //
+  //   $.ajax({
+  //     url: 'save_memo/',  // 저장할 URL 주소로 변경해야 합니다.
+  //     method: 'POST',
+  //     data: { memo: memoValue,
+  //               computername: computernameValue,
+  //               macaddress: macaddressValue
+  //                           },
+  //     success: function(response) {
+  //       console.log('메모가 성공적으로 저장되었습니다.');
+  //       // 원하는 작업 수행
+  //     },
+  //     error: function(xhr, status, error) {
+  //       console.error('메모 저장 중 오류가 발생했습니다:', error);
+  //       // 에러 처리 로직 추가
+  //     }
+  //   });
+  // });
+// });
+</script>
 {% endblock %}

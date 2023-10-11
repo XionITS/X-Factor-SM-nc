@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path
-from common import views_user, views_sec
+from common import views_user, views_sec, views_dashboard_detail
 from common import views_main_hs
 from common import views_os_ver
 from common import views_up
@@ -29,6 +29,9 @@ urlpatterns = [
     ############################################
     path('dashboard/', views_main_hs.dashboard),
     path('dashboard1/', views_main_hs.dashboard1),
+
+    path('dashboard/all_asset_paging1/', views_dashboard_detail.all_asset_paging1),
+
     #path('admin/', admin.site.urls),
     #path('index/', views_main_hs.index),
     #path('index/paging/', views_main_hs.index_paging),
@@ -71,6 +74,7 @@ urlpatterns = [
     path('asset/', views_asset.asset),
     path('asset/search/', views_asset.search),
     path('asset/search_box/', views_asset.search_box),
+    path('asset/save_memo/', views_asset.save_memo),
 
     #history 페이지
     path('history/', views_history.history),

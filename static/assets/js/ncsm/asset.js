@@ -202,7 +202,6 @@
 
 
 
-var search = document.getElementById('asset_search_result');
 
 $(document).ready(function(){
   $('#asset_search_result').autocomplete({
@@ -228,6 +227,7 @@ $(document).ready(function(){
 
 
 $('#asset_search').on('click', function(event) {
+    console.log(searchInput)
     var searchInput = document.getElementById('asset_search_result');
     var inputValue = searchInput.value;
     searchPer(inputValue)
@@ -280,7 +280,7 @@ function searchPer(inputValue){
 
             var memoElement = document.getElementById("asset_memo");
             if (memoElement) {
-              memoElement.textContent = data.memo || "";
+              memoElement.value = data.memo || "";
             }
 
             var ipAddressElement = document.getElementById("asset_ip_address");
@@ -441,4 +441,26 @@ function searchPer(inputValue){
 $(document).ready(function () {
     user_list_popup();
     //asset_list();
+    $('#memo_save').click(function() {
+    var memoValue = $('#asset_memo').val();
+    var computernameValue = $('#asset_computer_name').text();
+    var macaddressValue = $('#asset_mac_address').text();
+
+    $.ajax({
+      url: 'save_memo/',  // 저장할 URL 주소로 변경해야 합니다.
+      method: 'POST',
+      data: { memo: memoValue,
+                computername: computernameValue,
+                macaddress: macaddressValue
+                            },
+      success: function(response) {
+        console.log('메모가 성공적으로 저장되었습니다.');
+        // 원하는 작업 수행
+      },
+      error: function(xhr, status, error) {
+        console.error('메모 저장 중 오류가 발생했습니다:', error);
+        // 에러 처리 로직 추가
+      }
+    });
+  });
 });

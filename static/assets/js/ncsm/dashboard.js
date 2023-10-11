@@ -115,6 +115,23 @@ var handleRenderChartNCOMG = function () {
                 toolbar: {
                     show: false
                 },
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#all_asset_detail1').DataTable().destroy();
+                        var dataPointIndex = config.dataPointIndex;
+                        var seriesIndex = config.seriesIndex;
+                        var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+                        var categoryName = config.w.config.xaxis.categories[dataPointIndex];
+                        var seriesName = config.w.config.series[seriesIndex].name;
+                        document.getElementById('categoryName').value = categoryName;
+                        document.getElementById('seriesName').value = seriesName;
+                        document.getElementById('chartName').value = 'all_asset1';
+                        $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
+                        all_asset_detail_list1(categoryName, seriesName);
+                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                        $("#DashModal").modal("show");
+                    }
+                }
             },
             responsive: [{
                 breakpoint: 480,
@@ -242,6 +259,23 @@ var handleRenderChartNCOMG = function () {
                 stacked: true,
                 toolbar: {
                     show: false
+                },
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#all_asset_detail1').DataTable().destroy();
+                        var dataPointIndex = config.dataPointIndex;
+                        var seriesIndex = config.seriesIndex;
+                        var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+                        var categoryName = config.w.config.xaxis.categories[dataPointIndex];
+                        var seriesName = config.w.config.series[seriesIndex].name;
+                        document.getElementById('categoryName').value = categoryName;
+                        document.getElementById('seriesName').value = seriesName;
+                        document.getElementById('chartName').value = 'all_asset1';
+                        $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
+                        all_asset_detail_list1(categoryName, seriesName);
+                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                        $("#DashModal").modal("show");
+                    }
                 },
             },
             responsive: [{

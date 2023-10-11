@@ -18,6 +18,7 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 def export(request, model):
     columns =[]
     parameter_value = request.GET.get('parameter_name')
+    parameter_value2 = request.GET.get('parameter_value')
     # 파라미터 값에 따라 조건 처리
 
     if parameter_value == 'hs_asset':
@@ -51,6 +52,22 @@ def export(request, model):
         columns = ['computer__computer_name','computer__chassistype','computer__ip_address','computer__mac_address'
             ,'ext_chr','ext_chr_ver','ext_edg','ext_edg_ver','ext_fir','ext_fir_ver','uuid','user_date']
         data = model_class.objects.filter(user_date__gte=today_collect_date).values(*columns)
+    elif parameter_value == 'all_asset1':
+        print(model)
+        model_class = apps.get_model('common', model)
+        print(model_class)
+        columns = ['computer_name', 'chassistype', 'ip_address', 'mac_address', 'user_date']
+        if request.GET.get('categoryName') == 'Online':
+            if request.GET.get('seriesName') == 'Other':
+                data = model_class.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).values(*columns)
+            else:
+                data = model_class.objects.filter(user_date__gte=today_collect_date, chassistype=request.GET.get('seriesName')).values(*columns)
+        if request.GET.get('categoryName') == 'Total':
+            if request.GET.get('seriesName') == 'Other':
+                data = model_class.objects.exclude(chassistype__in=['Notebook', 'Desktop']).values(*columns)
+            else:
+                data = model_class.objects.filter(chassistype=request.GET.get('seriesName')).values(*columns)
+
     # 전체컬럼 조회
     # 동적으로 모델에서 컬럼명 추출
     # model_class = apps.get_model('common', model)  # 앱 이름과 모델명을 지정하여 모델 클래스를 가져옵니다

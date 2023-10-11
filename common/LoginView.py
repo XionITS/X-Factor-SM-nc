@@ -8,7 +8,6 @@ from django.views import View
 
 
 class LoginView(View):
-    print("1111111111111111111111111")
     def get(self, request):
         # NCSoft의 OpenID Provider 주소
         auth_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
