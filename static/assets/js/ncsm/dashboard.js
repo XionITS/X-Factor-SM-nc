@@ -514,10 +514,10 @@ var handleRenderChartNCOMG = function () {
             chart: {
                 type: 'pie',
                 width: '100%',
-                height: 240
+                height: 200
             },
             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
-            labels: [],
+            labels: labelsData,
             dataLabels: {
                 enabled: true,
                 style: {
@@ -527,7 +527,7 @@ var handleRenderChartNCOMG = function () {
                 },
                 formatter(val, opts) {
                     const name = opts.w.globals.labels[opts.seriesIndex];
-                    return [name + ' ' + val.toFixed(1) + '%'];
+                    return [val.toFixed(1) + '%'];
                 }
             },
             stroke: {
@@ -536,6 +536,9 @@ var handleRenderChartNCOMG = function () {
             fill: {
                 type: 'gradient'
             },
+            legend: {
+                show: false
+            }
         };
         var os_list_pie_chart = new ApexCharts(document.querySelector("#" + divId), donutOptions);
         os_list_pie_chart.render();
@@ -778,7 +781,7 @@ var handleRenderChartNCOMG = function () {
             chart: {
                 type: 'pie',
                 width: '100%',
-                height: 220
+                height: 240
             },
             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
             labels: labelsData,
