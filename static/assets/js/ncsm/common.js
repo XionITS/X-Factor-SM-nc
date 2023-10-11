@@ -153,7 +153,7 @@ $(document).on("click","#groupCreate", function(event) {
     computerElements.each(function () {
         const computer_id = $(this).attr("id");
 
-        console.log(computer_id);
+        //console.log(computer_id);
         const computer_name = $(this).attr('computer-name');
         computerIds.push(computer_id);
         computerNames.push(computer_name);

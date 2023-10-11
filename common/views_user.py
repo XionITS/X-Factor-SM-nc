@@ -9,8 +9,8 @@ import hashlib
 import psycopg2
 import json
 from django.http import JsonResponse
-
-from common.models import Xfactor_Log
+from urllib.parse import urlencode
+from common.models import Xfactor_Log,Xfactor_Xuser
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -130,7 +130,7 @@ def login(request):
                         log_date=date
                     )
                     Xfactor_log.save()
-                    return redirect('../dashboard')
+                    return redirect('../home')
     elif Login_Method == "Tanium":
         if request.method == 'GET':
             returnData = {'Login_Method': Login_Method}
@@ -156,7 +156,9 @@ def login(request):
                     return render(request, 'common/login.html', res_data)
                 else:
                     request.session['sessionid'] = x_id
-                    return redirect('../dashboard')
+                    return redirect('../home')
+    if Login_Method == "NANO":
+        return redirect('../nano')
 
 @csrf_exempt
 def updateform(request):
@@ -233,7 +235,7 @@ def update(request):
             if RS == "1":
                 request.session['sessionname'] = x_name
                 request.session['sessionemail'] = x_email
-                return redirect('../dashboard')
+                return redirect('../home')
             else:
                 res_data['error'] = '회원정보 변경이 실패했습니다.'
                 return render(request, 'common/update.html', res_data)
@@ -289,7 +291,35 @@ def selectUsers(x_id, x_pw):
             where
                 x_id = '""" + x_id + """'
             and
-                x_pw = '""" + hashpassword + """'   
+                x_pw = '""" + hashpassword + """'
+                
+            """
+
+        Cur.execute(query)
+        RS = Cur.fetchone()
+        # print(RS)
+        return RS
+    except:
+        print(UserTNM + ' Table connection(Select) Failure')
+
+
+@csrf_exempt
+def selectUsers_nano(x_id):
+    try:
+        #hashpassword = hashlib.sha256(x_pw.encode()).hexdigest()
+        # print(hashpassword)
+
+        Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+        Cur = Conn.cursor()
+
+        query = """
+            select 
+                *
+            from
+                """ + UserTNM + """
+            where
+                x_id = '""" + x_id + """'
+
 
             """
 
@@ -321,13 +351,62 @@ def createUsers(x_id, x_pw, x_name, x_email, x_auth):
         Cur.execute(query)
         Conn.commit()
         Conn.close()
-        a = "1"
-        return a
+        # Auth 자동생성
+        RS = AutoAuth(x_id)
+        if RS == "1":
+            a = "1"
+            return a
     except:
         print(UserTNM + ' Table connection(Select) Failure')
         a = "0"
         return a
 
+@csrf_exempt
+def AutoAuth(x_id):
+    Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+    Cur = Conn.cursor()
+    query = """ 
+           INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'HS_asset', '""" + x_id + """');
+
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'VER_asset', '""" + x_id + """');
+
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'UP_asset', '""" + x_id + """');
+
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES( 'false', 'PUR_asset', '""" + x_id + """');
+
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'SEC_asset', '""" + x_id + """');
+
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'SEC_asset_list', '""" + x_id + """');
+
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'Asset', '""" + x_id + """');
+
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'History', '""" + x_id + """');
+
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'settings', '""" + x_id + """');
+           """
+    Cur.execute(query)
+    Conn.commit()
+    Conn.close()
+    a= '1'
+    return a
 
 @csrf_exempt
 def updateUsers(x_id, x_pw, x_name, x_email, x_auth):
@@ -386,12 +465,18 @@ def delete(request):
         for x_id in x_ids:
             query = """ 
                     DELETE FROM
+                        common_xfactor_xuser_auth
+                    WHERE
+                        xfactor_xuser_id = %s;
+                    """
+            Cur.execute(query, (x_id,))
+            query = """ 
+                    DELETE FROM
                         common_xfactor_xuser
                     WHERE
                         x_id = %s;
                     """
             Cur.execute(query, (x_id,))
-
         Conn.commit()
         Conn.close()
 
@@ -415,3 +500,75 @@ def delete(request):
     except Exception as e:
         print(str(e))  # 에러 메시지 출력 (디버깅 용)
         return JsonResponse({'result': 'failure'}, status=400)  # 삭제 중 오류가 발생했을 때 응답
+
+
+def nano(request):
+    auth_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
+    client_id = "stg-tanium-dashboard"
+    redirect_uri = "localhost:8000/dashboard/"
+
+    # 사용자를 인증 페이지로 리디렉션합니다.
+    return redirect(f"{auth_url}?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope=openid")
+
+
+def nano_user(request):
+    code = requests.GET.get('code')
+    print(code)
+    access_token = exchange_code_for_token(code)
+    print(access_token)
+    userinfo_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
+
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+
+    response = requests.get(userinfo_url, headers=headers)
+    userinfo_data = response.json()
+    sub = userinfo_data.get("sub")
+    email = userinfo_data.get("email")
+    print("User Sub:", sub)
+    
+    #유저 체크
+    RS_user = selectUsers_nano(sub)
+    if RS_user=='0':
+        RS = createUsers(sub, sub, sub, email, sub)
+        # xuser_instance = Xfactor_Xuser(
+        #     x_id=sub,
+        #     x_email=email,
+        # )
+        # xuser_instance.save()
+    else :
+        print("생성되어 있는 ID입니다.")
+    request.session['sessionid']=sub
+    request.session['sessionname']=sub
+    request.session['sessionemail']=email
+    return redirect('../home')
+
+
+def exchange_code_for_token(code):
+    token_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
+    client_id = "stg-tanium-dashboard"
+    client_secret = "whLXIZvLEZsAWfqbQIsiwSkhVpgKGJWP"  # 클라이언트 시크릿 키
+
+    # 토큰 요청 파라미터 설정
+    token_payload = {
+        "grant_type": "authorization_code",
+        "code": code,
+        "redirect_uri": "http://tanium.ncsoft.com:8000/",
+        "client_id": client_id,
+        "client_secret": client_secret
+    }
+    token_payload_encoded = urlencode(token_payload)
+    # 토큰 요청 보내기
+    headers = {
+        "Content-Type": "application/x-www-form-urlencoded"  # 헤더에 Content-Type 설정
+    }
+    response = requests.post(token_url, data=token_payload_encoded, headers=headers)
+
+    # 토큰 요청의 응답을 확인합니다.
+    if response.status_code == 200:
+        token_data = response.json()
+        access_token = token_data["access_token"]
+        return access_token
+    else:
+        return None

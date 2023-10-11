@@ -1,20 +1,15 @@
-/*
-Template Name: HUD - Responsive Bootstrap 5 Admin Template
-Version: 1.8.0
-Author: Sean Ngu
 
-*/
 // 전역 변수로 체크박스 값을 저장할 객체를 생성합니다.
 var checkedItems = {};
 
 
 var um_user_list = function () {
-    var um_user_list_Data = $('#um_list').DataTable({
+    var um_user_list = $('#um_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
         pageLength: 10,
         responsive: false,
-        //searching: true,
+        searching: false,
         ordering: true,
         serverSide: true,
         displayLength: false,
@@ -41,8 +36,8 @@ var um_user_list = function () {
                 }
             }
             $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_um_user = um_user_list_Data.page();
-            var total_pages_um_user = um_user_list_Data.page.info().pages;
+            var current_page_um_user = um_user_list.page();
+            var total_pages_um_user = um_user_list.page.info().pages;
             $('#nexts').remove();
             $('#after').remove();
 
@@ -86,7 +81,8 @@ var um_user_list = function () {
         columns: [
             {
                 data: '',
-                title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>&nbsp;선택</span>',
+                //title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>&nbsp;선택</span>',
+                title: '<span>선택</span>',
                 searchable: false
             },
             {data: '', title: 'No', searchable: true},
@@ -103,14 +99,6 @@ var um_user_list = function () {
             var index = (page * pageLength) + (index + 1);
             $('td:eq(1)', row).html(index);
         },
-//        columnDefs: [
-//		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
-//		    {targets: 1, width: "20%", className: 'text-start text-truncate'},
-//		    {targets: 2, width: "10%", className: 'text-start text-truncate'},
-//            {targets: 3, width: "10%", className: 'text-start text-truncate'},
-//		    {targets: 4, width: "40%", className: 'text-start text-truncate'},
-//		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
-//		],
         columnDefs: [
             {
                 targets: 0,
@@ -120,7 +108,7 @@ var um_user_list = function () {
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const x_id = row.x_id;
-                    return '<input type="checkbox" class="form-check-input" name="' + row.x_name + '" id="' + row.x_id + '" data-x-id="' + x_id + '" data-x-name="' + row.x_name + '">'
+                    return '<input type="checkbox" class="form-check-input"  id="' + x_id + '" data-x-id="' + x_id + '" >'
                 }
             },
             {
@@ -198,44 +186,29 @@ var um_user_list = function () {
     //체크박스 저장하기
     um_checkbox_check($('#um_list tbody'))
 
-    //전체선택
-    $('#um_list').on('click', '#select-all', function () {
-        var isChecked = $(this).prop('checked');
 
-        $('#sec_asset_list2 tbody input[type="checkbox"]').each(function () {
-            $(this).prop('checked', isChecked);
-            var computer_id = $(this).data('computer-id');
-            var computer_name = $(this).data('computer-name'); // 컴퓨터 이름도 가져옵니다.
-
-            if (isChecked) {
-                checkedItems[computer_id] = computer_name;
-            } else {
-                delete checkedItems[computer_id];
-            }
-        });
-    });
-    //개별선택
-    $('#um_list tbody').on('click', 'input[type="checkbox"]', function () {
-        var isChecked = $(this).prop('checked');
-        var computer_id = $(this).data('computer-id');
-        var computer_name = $(this).data('computer-name');
-
-        if (isChecked) {
-            checkedItems[computer_id] = computer_name;
-        } else {
-            delete checkedItems[computer_id];
-        }
-
-        var allChecked = true;
-        $('#um_list tbody input[type="checkbox"]').each(function () {
-            if (!$(this).prop('checked')) {
-                allChecked = false;
-                return false;
-            }
-        });
-
-        $('#select-all').prop('checked', allChecked);
-    });
+//    //개별선택
+//    $('#um_list tbody').on('click', 'input[type="checkbox"]', function () {
+//        var isChecked = $(this).prop('checked');
+//        var x_id = $(this).data('x_id');
+//
+//
+//        if (isChecked) {
+//            checkedItems[x_id] = x_id;
+//        } else {
+//            delete checkedItems[x_id];
+//        }
+//
+//        var allChecked = true;
+//        $('#um_list tbody input[type="checkbox"]').each(function () {
+//            if (!$(this).prop('checked')) {
+//                allChecked = false;
+//                return false;
+//            }
+//        });
+//
+//        $('#select-all').prop('checked', allChecked);
+//    });
 
     /*      // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
         dropdown_text();
@@ -258,16 +231,16 @@ var um_user_list = function () {
         });*/
 
     $(document).on('click', '#nexts_um_user, #after_um_user', function () {
-        var current_page_um_user = um_user_list_Data.page();
-        var total_pages_um_user = um_user_list_Data.page.info().pages;
+        var current_page_um_user = um_user_list.page();
+        var total_pages_um_user = um_user_list.page.info().pages;
         if ($(this).attr('id') == 'nexts_um_user') {
             if (current_page_um_user + 10 < total_pages_um_user) {
-                um_user_list_Data.page(current_page_um_user + 10).draw('page');
+                um_user_list.page(current_page_um_user + 10).draw('page');
             } else {
-                um_user_list_Data.page(total_pages_um_user - 1).draw('page');
+                um_user_list.page(total_pages_um_user - 1).draw('page');
             }
         } else {
-            um_user_list_Data.page(Math.max(current_page_um_user - 10, 0)).draw('page');
+            um_user_list.page(Math.max(current_page_um_user - 10, 0)).draw('page');
         }
     });
     var customStyle = '<style>#nexts_um_user, #after_um_user {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
@@ -278,10 +251,10 @@ var um_user_list = function () {
 var um_group_list = function () {
 	var um_group_list = $('#um_list').DataTable({
 		dom: "<'d-flex justify-content-between mb-3'<'col-md-4 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-6 mb-md-0 mt-n2 'i><''p>>",
-		lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
-        pageLength: 5,
+        lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
+        pageLength: 10,
 		responsive: false,
-//		searching: true,
+     	searching: false,
 		ordering: true,
 		serverSide: true,
 		displayLength: false,
@@ -295,16 +268,16 @@ var um_group_list = function () {
             for (var i = 0; i < rows.length; i++) {
                 var row = rows[i];
                 var data = api.row(row).data();
-                var computer_id = data.computer.computer_id;
+                var xuser_group = data.xuser_group;
 
-                if (checkedItems[computer_id]) {
+                if (checkedItems[xuser_group]) {
                     $(row).find('input[type="checkbox"]').prop('checked', true);
                 } else {
                     $(row).find('input[type="checkbox"]').prop('checked', false);
                 }
             }
-            var current_page_um_groupr = um_group_list.page();
-            var total_pages_um_groupr = um_group_list.page.info().pages;
+            var current_page_um_group = um_group_list.page();
+            var total_pages_um_group = um_group_list.page.info().pages;
             $('#nexts').remove();
             $('#after').remove();
 
@@ -324,44 +297,41 @@ var um_group_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                            2: 'chassistype',
-                            3: 'computer_name',
-                            4: 'ip_address',
-                            5: 'sw_list',
-                            6: 'sw_ver_list',
-                            7: 'sw_install',
-                            8: 'more',
-                            9: 'memo',
-
+                            2: 'xgroup_name',
+                            3: 'xgroup_note',
+                            4: 'xuser_id_list',
                         };
-                data.filter = {
-                    column: column,
-                    value : $('#search-input-hs').val(),
-                    value2 : $('#um_list_filter input[type="search"]').val(),
-                    regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
-                };
+//                data.filter = {
+//                    column: column,
+//                    value : $('#search-input-hs').val(),
+//                    value2 : $('#um_list_filter input[type="search"]').val(),
+//                    regex : false // OR 조건을 사용하지 않을 경우에는 false로 설정
+//                };
                 data.page = (data.start / data.length) + 1;
                 data.page_length = data.length;
             },
 			dataSrc: function (res) {
 				var data = res.data;
+				//console.log(data);
 				return data;
 			}
 		},
 
-		columns: [
-            { data: '', title: '선택', searchable: false },
-		    { data: '', title: 'No', searchable: true },
-			{ data: 'computer.chassistype', title: '구분', searchable: true },
-			{ data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true },
-            { data: 'computer.ip_address', title: 'IPv4' , searchable: true},
-			{ data: 'computer.sw_list', title: '소프트웨어 목록', searchable: true },
-			{ data: 'computer.sw_ver_list', title: '소프트웨어 버전', searchable: true },
-			{ data: 'computer.sw_install', title: '설치 일자', searchable: true },
-			{ data: '', title: '더보기', searchable: false },
-			{ data: 'computer.memo', title: '메모', searchable: true },
+        columns: [
+            {
+                data: '',
+                //title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>&nbsp;선택</span>',
+                title: '<span>선택</span>',
+                searchable: false
+            },
+            {data: '', title: 'No', searchable: true},
+            {data: 'xgroup_name', title: '그룹 이름', searchable: true},
+            {data: 'xgroup_note', title: '그룹 설명', searchable: true},
+            {data: 'xuser_id_list', title: '그룹원', searchable: true},
+            {data: 'id', title: '권한 관리', searchable: false},
 
-		],
+        ],
+
 		rowCallback: function (row, data, index) {
             var api = this.api();
             var page = api.page.info().page;
@@ -377,43 +347,63 @@ var um_group_list = function () {
 //		    {targets: 4, width: "40%", className: 'text-start text-truncate'},
 //		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
 //		],
-		columnDefs: [
-            {targets: 0, width: "2%", orderable: false, searchable:false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-		        const computer_id = row.computer.computer_id;
-		        return '<input type="checkbox" class="form-check-input" name="'+row.computer.computer_name+'" id="'+row.computer.computer_id+'" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
-            }},
-            {targets: 1, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 2, width: "3%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'sorting_asc text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "15%", className: 'text-start text-truncate flex-cloumn column_hidden',
-		    render: function(data, type, row) {
-		        const swList = row.computer.sw_list;
-                const swListArray = swList ? swList.split('<br>') : [];
-		        return '<span data-toggle="tooltip">' + (swListArray[0] || '') + '<br>' + (swListArray[1] || '') + '<br>' + (swListArray[2] || '') + '<br>' + (swListArray[3] || '')}},
-
-		    {targets: 6, width: "10%", className: 'text-start text-truncate flex-cloumn column_hidden',
-		    render: function(data, type, row) {
-                const swVer = row.computer.sw_ver_list;
-                const swVerArray = swVer ? swVer.split('<br>') : [];
-		        return '<span data-toggle="tooltip">' + (swVerArray[0] || '') + '<br>' + (swVerArray[1] || '') + '<br>' + (swVerArray[2] || '') + '<br>' + (swVerArray[3] || '')}},
-
-		    {targets: 7, width: "10%", className: 'text-start text-truncate flex-cloumn column_hidden',
-		    render: function(data, type, row) {
-		        const swInstall= row.computer.sw_install;
-		        const swInstallArray = swInstall ? swInstall.split('<br>') : [];
-		        return '<span data-toggle="tooltip">' + (swInstallArray[0] || '') + '<br>' + (swInstallArray[1] || '') + '<br>' + (swInstallArray[2] || '') + '<br>' + (swInstallArray[3] || '')}},
-
-		    {targets: 8, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden',
-		    render: function(data, type, row) {
-		        const computer_name = row.computer.computer_name;
-		        const swList = row.computer.sw_list;
-		        const swVer = row.computer.sw_ver_list;
-		        const swInstall= row.computer.sw_install;
-		        return '</span><br><div class="pur_swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-swinstall="' + swInstall + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
-
-		    {targets: 9, width: "5%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.memo+'" data-toggle="tooltip">'+data+'</span>'}},
-		],
+        columnDefs: [
+            {
+                targets: 0,
+                width: "4%",
+                orderable: false,
+                searchable: false,
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    const xgroup_name = row.xgroup_name;
+                    return '<input type="checkbox" class="form-check-input"  id="' + xgroup_name + '" data-xgroup_name="' + xgroup_name + '" >'
+                }
+            },
+            {
+                targets: 1,
+                width: "3%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + row.index + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 2,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
+                render: function (data, type, row) {
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 4,
+                width: "20%",
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
+                render: function (data, type, row) {
+                    const xuser_id_list = row.xuser_id_list.replace(/'/g, '').replace(']','').replace('[','').split(', ');
+                    return '<span data-toggle="tooltip">' + xuser_id_list + '</span>'
+                }
+            },
+            {
+                targets: 5,
+                width: "10%",
+                className: 'text-center text-truncate flex-cloumn column_hidden',
+                render: function (data, type, row) {
+                    const xgroup_name = row.xgroup_name;
+                    const id = row.id;
+                    const xuser_id_list = row.xuser_id_list;
+                    return '<div class="um_groupmore swmore-font" data-xgroup_name="' + xgroup_name + '" data-id="'+ id +'" data-xuser_id_list="'+ xuser_id_list +'">권한 관리 설정</div>'
+                }
+            },
+        ],
 		language: {
 			"decimal": "",
 			"info": "전체 _TOTAL_건",
@@ -437,29 +427,29 @@ var um_group_list = function () {
             pagingType: 'numbers',//이전 다음 버튼 히든처리
 });
     //체크박스 저장하기
-um_checkbox_check($('#um_list tbody'))
+    //um_checkbox_check($('#um_list tbody'))
 
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
-    dropdown_text();
+    //dropdown_text();
 
 
-      // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button-up').click(function() {
-        var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val().trim();
-
-        performSearch(column, searchValue, um_group_list_Data);
-    });
-
-    // 검색창 enter 작동
-    $('#search-input').on('keyup', function(event) {
-        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
-            var column = $('#column-dropdown').data('column');
-            var searchValue = $('#search-input').val().trim();
-
-            performSearch(column, searchValue, um_group_list_Data);
-        }
-    });
+//      // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
+//    $('#search-button-up').click(function() {
+//        var column = $('#column-dropdown').data('column');
+//        var searchValue = $('#search-input').val().trim();
+//
+//        performSearch(column, searchValue, um_group_list_Data);
+//    });
+//
+//    // 검색창 enter 작동
+//    $('#search-input').on('keyup', function(event) {
+//        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+//            var column = $('#column-dropdown').data('column');
+//            var searchValue = $('#search-input').val().trim();
+//
+//            performSearch(column, searchValue, um_group_list_Data);
+//        }
+//    });
 
 	$(document).on('click', '#nexts_um_group, #after_um_group', function() {
         var current_page_um_group = um_group_list.page();
@@ -480,58 +470,53 @@ um_checkbox_check($('#um_list tbody'))
 
 function um_userbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>아이디</th><th>사용자 이름</th><th>이메일</th><th>권한</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>아이디</th><th>사용자 이름</th><th>이메일</th><th>권한</th><th>권한 관리</th></tr></thead><tbody></tbody>';
     $('#um_list').DataTable().destroy();
     $('#um_list').html(newTableContent);
     um_user_list();
     $(btn).addClass('active');
+    $('#um_creategroup').removeClass('hidden');
     //$('.hsbutton').not(btn).removeClass('active');
     checkedItems = {};
 };
 
 function um_groupbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>그룹명</th><th>그룹 설명</th><th>권한</th></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>그룹명</th><th>그룹 설명</th><th>그룹원</th><th>권한 관리</th></thead><tbody></tbody>';
     $('#um_list').DataTable().destroy();
     $('#um_list').html(newTableContent);
     um_group_list();
     $(btn).addClass('active');
-    //$('.um_userbutton').not(btn).removeClass('active');
+    $('#um_creategroup').addClass('hidden');
+    //$('.hsbutton').not(btn).removeClass('active');
     checkedItems = {};
 };
 
-//// 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
-//function dropdown_text(){
-//    $('.dropdown-menu a').click(function() {
-//        var column = $(this).data('column');
-//        $('#column-dropdown').text($(this).text());
-//        $('#column-dropdown').data('column', column);
-//    });
-//};
+
+//################# 컴퓨터 체크하기 ##########################################
+function um_checkbox_check($tbody) {
+    $tbody.on('click', 'input[type="checkbox"]', function (event) {
+        event.stopPropagation(); // Prevent the row click event from firing when clicking the checkbox
+        var x_id = $(this).data('x-id');
+        //console.log(x_id)
+        if ($(this).prop('checked')) {
+            checkedItems[x_id] = x_id;
+        } else {
+            delete checkedItems[x_id];
+        }
+    });
+};
+
 
 $(document).ready(function () {
     user_list_popup();
     um_user_list();
-    //sidebar();
-    //initEvent();
-    //initializeDataTable();
 
 });
 
 
-//$('html').click(function(e){
-//const appElement = document.getElementById('app');
-//        var sidebar = $('#sidebar');
-//        var app = $('#app');
-//    	if(!$(e.target).hasClass('app-sidebar-content') && !$(e.target).hasClass('menu-toggler') && !$(e.target).hasClass('app-sidebar')){
-//            sidebar.css({'display':'none'});
-//            app.removeClass("app-sidebar-toggled");
-//            app.addClass("app-sidebar-collapsed");
-//        }
-//        else{
-//            sidebar.css({'display':'block'});
-//        }
-//    });
+
+//################ USER 권한관리 설정 JS ######################################
 $(document).on("click", ".ummore", function (e) {
     const x_id = $(this).data("x_id");
     $.ajax({
@@ -545,12 +530,12 @@ $(document).on("click", ".ummore", function (e) {
             // AJAX 요청이 성공한 후에 modalbody를 설정하고 모달을 열기
             var modalbody = '<div>'+x_id+' 권한</div>';
             modalbody += '<form id="authForm">';
-
+            modalbody += '<input type="hidden" class="form-check-label" name="x_id" value="' + x_id + '">';
             // data.auth_list 배열의 각 항목을 반복하며 체크박스 생성
             data.auth_list.forEach(function (authItem) {
-                console.log(authItem)
                 modalbody += '<label class="form-check-label">';
-                modalbody += '<input class="form-check-input" type="checkbox" name="' + authItem.auth_id + '" value="' + authItem.auth_id + '"';
+                modalbody += '<input class="form-check-input" type="checkbox" name="' + authItem.xfactor_auth.auth_id + '" value="' + authItem.auth_use + '"';
+                //modalbody += '<input class="form-check-input" type="checkbox" name="auth_id" value="' + authItem.xfactor_auth.auth_id + '"';
                 if (authItem.auth_use === 'true') {
                     modalbody += ' checked';
                 }
@@ -563,10 +548,129 @@ $(document).on("click", ".ummore", function (e) {
 
             $("#um_auth_modal .hstbody").html(modalbody);
             $("#um_auth_modal").modal("show");
+
+
+            //User페이지 권한 SAVE저장시 실행
+            $(document).off("click", "#user_auth_save").on("click", "#user_auth_save", function (e) {
+                e.preventDefault(); // 기본 폼 제출 동작을 막음
+                var authInfo = []; // 각 체크박스 정보를 저장할 배열
+                data.auth_list.forEach(function (authItem) {
+                    const checkbox = $('[name="' + authItem.xfactor_auth.auth_id + '"]');
+                    authInfo.push({
+                        auth_id: authItem.xfactor_auth.auth_id,
+                        auth_use: checkbox.is(":checked") ? 'true' : 'false'
+                    });
+                });
+                //console.log(authInfo)
+                // 서버에 체크된 auth_ids와 x_id를 전달하여 DB에 저장 요청 보냄
+                $.ajax({
+                    url: 'save_user_auth/',
+                    method: 'POST',
+                    data: {
+                        x_id: x_id,
+                        auth_info: JSON.stringify(authInfo) // authInfo 배열을 JSON 문자열로 변환하여 전송
+                    },
+                    success: function (res) {
+                        // 저장 완료 후 어떤 작업을 수행할 수 있음
+                        console.log("권한이 저장되었습니다.");
+                        alert("권한이 저장되었습니다.")
+                        $("#um_auth_modal").modal("hide");
+                    },
+                    error: function (err) {
+                        // 저장 중 에러 발생 시 처리
+                        console.error("권한 저장 중 에러가 발생했습니다.", err);
+                        alert("권한 저장 중 에러가 발생했습니다.")
+                    },
+                });
+            });
+        },
+    })
+});
+//###############################################################################
+
+//################ Group 권한관리 설정 JS ######################################
+$(document).on("click", ".um_groupmore", function (e) {
+    const xgroup_name = $(this).data("xgroup_name");
+    const id = $(this).data("id");
+    const xuser_id_list = $(this).data("xuser_id_list");
+
+    //console.log(xuser_id_list)
+    $.ajax({
+        url: 'group_auth/',
+        method:'POST',
+        data:{
+            xgroup_name: xgroup_name
+        },
+        success: function (res) {
+            var data = res;
+           // console.log(data)
+            // AJAX 요청이 성공한 후에 modalbody를 설정하고 모달을 열기
+            var modalbody = '<div>'+xgroup_name+' 권한</div>';
+            modalbody += '<form id="authForm">';
+            modalbody += '<input type="hidden" class="form-check-label" name="x_id" value="' + id + '">';
+            modalbody += '<input type="hidden" class="form-check-label" name="xuser_id_list" value="' + xuser_id_list + '">';
+            // data.auth_list 배열의 각 항목을 반복하며 체크박스 생성
+            data.auth_list.forEach(function (authItem) {
+                modalbody += '<label class="form-check-label">';
+                modalbody += '<input class="form-check-input" type="checkbox" name="' + authItem.auth_id + '" value=""';
+                //modalbody += '<input class="form-check-input" type="checkbox" name="auth_id" value="' + authItem.xfactor_auth.auth_id + '"';
+//                if (authItem.auth_use === 'true') {
+//                    modalbody += ' checked';
+//                }
+                modalbody += '>';
+                modalbody += authItem.auth_name;
+                modalbody += '</label><br>';
+            });
+
+            modalbody += '</form>';
+
+            $("#um_auth_modal .hstbody").html(modalbody);
+            $("#um_auth_modal").modal("show");
+
+
+            //User페이지 권한 SAVE저장시 실행
+            $(document).off("click", "#user_auth_save").on("click", "#user_auth_save", function (e) {
+                e.preventDefault(); // 기본 폼 제출 동작을 막음
+                var xuser_id_list_value = $('[name="xuser_id_list"]').val();
+                var x_id_array = JSON.parse(xuser_id_list_value.replace(/'/g, '"'));
+                var authInfo = [];
+                //console.log(x_id_array)
+                data.auth_list.forEach(function (authItem) {
+                    const checkbox = $('[name="' + authItem.auth_id + '"]');
+                    authInfo.push({
+                        auth_id: authItem.auth_id,
+                        auth_use: checkbox.is(":checked") ? 'true' : 'false'
+                    });
+                });
+                console.log(x_id_array)
+                // 서버에 체크된 auth_ids와 x_id를 전달하여 DB에 저장 요청 보냄
+                $.ajax({
+                    url: 'save_group_auth/',
+                    method: 'POST',
+                    data: {
+                        x_id_array: JSON.stringify(x_id_array),
+                        auth_info: JSON.stringify(authInfo) // authInfo 배열을 JSON 문자열로 변환하여 전송
+                    },
+                    success: function (res) {
+                        // 저장 완료 후 어떤 작업을 수행할 수 있음
+                        console.log("권한이 저장되었습니다.");
+                        alert("권한이 저장되었습니다.")
+                        $("#um_auth_modal").modal("hide");
+                    },
+                    error: function (err) {
+                        // 저장 중 에러 발생 시 처리
+                        console.error("권한 저장 중 에러가 발생했습니다.", err);
+                        alert("권한 저장 중 에러가 발생했습니다.")
+                    },
+                });
+            });
         },
     })
 });
 
+
+
+//######################################### 모달창 열고닫기 JS ##############################
 var insert_modal = document.getElementById("um_insert_modal");
 var delete_modal = document.getElementById("um_delete_modal");
 var auth_modal = document.getElementById("um_auth_modal");
@@ -578,20 +682,23 @@ $(document).on("click", "#um_insert", function (e) {
 
 // delete 모달 열기 버튼 클릭 이벤트 핸들러
 $(document).on("click", "#um_delete", function (e) {
-    delete_modal.style.display = "block";
-    const x_id = [];
-    const x_name = [];
     var modalbody = "";
-    for (const x_id in checkedItems) {
-        const x_name = checkedItems[x_id];
-        //modalbody += '<div><input type="hidden" name="'+computer_id+'" id="'+computer_id+'" value="'+computer_id+'">'+computer_name+'</div>'
-        //modalbody += '<input type="hidden" name="'+computer_name+'" id="'+computer_name+'" value="'+computer_name+'">'
-        //modalbody += '컴퓨터아이디'+computer_id + '<br/>';
+    const checkedIds = Object.keys(checkedItems); // Assuming checkedItems is an object with IDs as keys
 
-        modalbody += '<input type="hidden" class="delete_hidden" id="' + x_id + '" value="' + x_id + '"><label class="form-check-label" for="x_id">' + x_id + '</label><br>'
+    if (checkedIds.length === 0) {
+        // 체크된 체크박스가 없는 경우 알람 창을 띄우고 삭제 동작을 수행하지 않습니다.
+        alert("적어도 하나의 항목을 선택하세요.");
+    } else {
+        delete_modal.style.display = "block";
+
+        checkedIds.forEach(function (x_id) {
+            const x_name = checkedItems[x_id];
+            modalbody += '<label class="form-check-label" for="x_id"><input type="hidden" class="delete_hidden" id="' + x_id + '" value="' + x_id + '">' + x_id + '</label><br>';
+        });
+
+        $("#um_delete_form .form-check").html(modalbody);
+        // $("#um_delete_form").modal("show"); // Uncomment this line if needed
     }
-    $("#um_delete_form .form-check").html(modalbody);
-    //$("#um_delete_form").modal("show");
 });
 
 // insert 모달 닫기 버튼 클릭 이벤트 핸들러
@@ -617,23 +724,10 @@ window.onclick = function (event) {
         auth_modal.style.display = "none";
     }
 };
+//##########################################################################################
 
 
-function um_checkbox_check($tbody) {
-    $tbody.on('click', 'input[type="checkbox"]', function (event) {
-        event.stopPropagation(); // Prevent the row click event from firing when clicking the checkbox
-        var x_id = $(this).data('x-id');
-        var x_name = $(this).data('x-name');
-        console.log("Clicked checkbox for computer ID:", x_id);
-        if ($(this).prop('checked')) {
-            checkedItems[x_id] = x_id;
-        } else {
-            delete checkedItems[x_id];
-        }
-    });
-}
-
-//삭제하기 체크
+//####################################유저 삭제하기 ##########################
 $(document).on("click", "#user_delete", function (event) {
     event.preventDefault(); // 기본 제출 동작을 막습니다.
     var x_ids = [];
@@ -648,7 +742,6 @@ $(document).on("click", "#user_delete", function (event) {
         method: "POST", // 또는 "GET" 등 HTTP 요청 메서드 선택
         data: {
             'x_id': x_ids.join(',')
-
         }, // x_id 값을 서버로 전송
         success: function (response) {
             if (response.result === 'success') {
@@ -666,8 +759,79 @@ $(document).on("click", "#user_delete", function (event) {
         }
     });
 });
+//############################################################################
 
-//추가하기 체크
+
+//############################### Group 생성하기 ###############################
+$(document).on("click","#um_creategroup", function (e){
+    //console.log("aaa");
+    $("#groupName_auth").val("");
+    $("#groupDescription_auth").val("");
+    const check_id = [];
+
+    var modalbody = "";
+    //console.log(checkedItems)
+    for (const x_id in checkedItems) {
+        modalbody += '<input class="form-check-input" type="checkbox" value="'+x_id+'" id="'+x_id+'" checked><label class="form-check-label" for="'+x_id+'">'+x_id+'</label><br>'
+    }
+    $("#group_insert_modal .modal-title").html("그룹 생성 팝업창");
+    $("#group_insert_modal .form-check").html(modalbody);
+    $("#group_insert_modal").modal("show");
+});
+
+$(document).on("click","#group_insert", function(e) {
+    event.preventDefault(); // 기본 제출 동작을 막습니다.
+//    const x_id = $(this).data("x_id");
+//    console.log(x_id);
+
+    var form = document.getElementById("GroupCreateForm_auth");
+    //console.log(form)
+    var xgroup_name = form.elements.groupName_auth.value;
+    var xgroup_description = form.elements.groupDescription_auth.value;
+    let xuserIds = []
+    const xuserElements = $('#group_insert_modal .form-check').find('.form-check-input');
+    //console.log(xuserElements)
+    xuserElements.each(function () {
+        const x_id = $(this).attr("id");
+        xuserIds.push(x_id);
+    });
+
+    $.ajax({
+    url: 'groupcreate_auth/', // views.py 파일의 URL을 여기에 넣으세요.
+    type: 'POST',
+    dataType: 'json',
+    data:  {
+         'xgroup_name' : xgroup_name,
+         'xgroup_description' : xgroup_description,
+         'xuserIds' : JSON.stringify(xuserIds),
+    },
+
+    success: function (response) {
+    // response에 따른 처리 - 예: 경고창 띄우기
+        if (response.success == "success") {
+            alert(response.message);
+            $('#group_insert_modal').modal('hide');
+            //Group으로 페이지이동
+            //um_group_list()
+        } else {
+            alert('실패 : ' + response.message);
+        }
+    }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+//추가하기 회원가입 체크
 function um_check() {
     var uid = document.getElementById("x_id");
     var pwd = document.getElementById("x_pw");
@@ -710,14 +874,12 @@ function um_check() {
     }
     ;
 
-
     if (uname.value == "") {
         alert("이름을 입력해 주세요");
         uname.focus();
         return false;
     }
     ;
-
 
     var email_idCheck = /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
 

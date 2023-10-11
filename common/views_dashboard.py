@@ -48,7 +48,7 @@ def Dashboard(selected_date=None):
     discover_day = asset_log.filter(classification='discover').filter(item='150_day_ago').values('item', 'item_count')
     discover_day_list = [[data['item'], data['item_count']] for data in discover_day]
     discover_data_list = discover_min_list + discover_day_list
-    print(discover_data_list)
+    #print(discover_data_list)
     #위치별 자산현황
     location_data = asset.filter(classification='subnet').order_by('item').values('item', 'item_count')
     location_items = [data['item'] for data in location_data]

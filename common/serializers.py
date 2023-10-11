@@ -93,3 +93,8 @@ class XuserSerializer2(serializers.ModelSerializer):
     class Meta:
         model = Xfactor_Xuser
         fields = '__all__'
+
+class XgroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Xfactor_Xuser_Group
+        fields = '__all__'

@@ -20,15 +20,18 @@ from common.CallbackView import CallbackView
 from common.LoginView import LoginView
 
 urlpatterns = [
+    #path('', views_user.nano, name=''),
     path('', views_user.login, name=''),
     path('login/', views_user.login, name='login'),
+    path('nano/', views_user.nano),
+    path('dashboard/', views_user.nano_user),
     path('signup/', views_user.signup, name='signup'),
     path('logout/', views_user.logout, name='logout/'),
     path('updateform/', views_user.updateform, name='updateform'),
     path('update/', views_user.update, name='update'),
     ############################################
-    path('dashboard/', views_main_hs.dashboard),
-    path('dashboard1/', views_main_hs.dashboard1),
+    path('home/', views_main_hs.dashboard),
+    path('home1/', views_main_hs.dashboard1),
     #path('admin/', admin.site.urls),
     #path('index/', views_main_hs.index),
     #path('index/paging/', views_main_hs.index_paging),
@@ -83,10 +86,14 @@ urlpatterns = [
     #Setting 페이지
     path('user_management/', views_user_management.um, name='user_management'),
     path('user_management/user_auth/', views_user_management.user_auth, name='user_auth'),
+    path('user_management/group_auth/', views_user_management.group_auth, name='group_auth'),
+    path('user_management/save_user_auth/', views_user_management.save_user_auth, name='save_user_auth'),
+    path('user_management/save_group_auth/', views_user_management.save_group_auth, name='save_group_auth'),
+    path('user_management/groupcreate_auth/', views_user_management.create_auth, name='create_auth'),
     #path('user_management/signup/', views_user.signup, name='um_signup'),
     path('user_management/um_delete/', views_user.delete, name='um_delete'),
     path('user_management/userpaging/', views_user_management.um_user),
-    #path('user_management/grouppaging/', views_user_management.user),
+    path('user_management/grouppaging/', views_user_management.um_group),
     #path('group_management', views_group_management.group),
     path('log_management/', views_log_management.log),
     path('log_management/paging/', views_log_management.log_paging),

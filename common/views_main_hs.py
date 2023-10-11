@@ -41,6 +41,7 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 
 @csrf_exempt
 def dashboard(request):
+
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         selected_date = request.POST.get('selected_date')
         DCDL = Dashboard(selected_date)
@@ -49,6 +50,7 @@ def dashboard(request):
     # print(Xfactor_Xuser_Auth.objects.all())
     #session을 computer_id에 넣기
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
+    #xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id='admin', auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
     monthly_asset_data_list = DCDL['monthly_asset_data_list']
     cpu_data_list = DCDL['cpu_data_list']
