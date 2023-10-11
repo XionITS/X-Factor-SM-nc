@@ -15,8 +15,8 @@
             <!--BEGIN card-body-->
             <div class="card-body">
                 <ul class="nav nav-tabs2 nav-tabs-v2 px-3" role="tablist">
-                    <li class="nav-item me-3" role="presentation"><a href="#" id="um_user" class="nav-link active px-2" data-bs-toggle="tab" aria-selected="true" role="tab" value="USER" onclick="um_userbutton(this);" >USER</a></li>
-                    <li class="nav-item me-3" role="presentation"><a href="#" id="um_group" class="nav-link px-2" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab" value="GROUP" onclick="um_groupbutton(this);">GROUP</a></li>
+                    <li class="nav-item me-3" role="presentation"><a href="#" class="nav-link active px-2" data-bs-toggle="tab" aria-selected="true" role="tab" value="USER" onclick="um_userbutton(this);" >USER</a></li>
+                    <li class="nav-item me-3" role="presentation"><a href="#"  class="nav-link px-2" data-bs-toggle="tab" aria-selected="false" tabindex="-1" role="tab" value="GROUP" onclick="um_groupbutton(this);">GROUP</a></li>
                 </ul>
                 <br>
                 <br>
@@ -24,6 +24,10 @@
                     <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="um_creategroup" aria-expanded="false">
                     그룹 생성
                     </button>
+                    &nbsp;
+                    <button class="btn btn-outline-danger groupdeploy" type="button" id="um_delete">
+                        USER/GROUP 삭제 하기
+                      </button>
                 </div>
                 <!-- 검색어 필터  -->
                 <div class="search-dropdown">
@@ -31,9 +35,7 @@
 <!--                      <button class="btn btn-outline-warning" type="button" id="um_insert" >-->
 <!--                        추가 하기-->
 <!--                      </button>-->
-                      <button class="btn btn-outline-warning" type="button" id="um_delete">
-                        삭제 하기
-                      </button>
+
                     </div>
                 </div>
                 <br>
@@ -86,7 +88,7 @@
       </div>
 
       <div class="modal-footer">
-        <button type="submit" class="btn btn-warning" id="submit">SAVE</button>
+        <button type="button" class="btn btn-warning" id="user_auth_save">SAVE</button>
         <button type="button" class="btn btn-secondary" id="closeBtn3">Close</button>
       </div>
     </div>
@@ -181,6 +183,36 @@
         </div>
       </div>
   </div>
+
+
+<!-- 그룹 생성 모달 창 -->
+<div class="modal" name="group_insert_modal" id="group_insert_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content" style="background-color:#1d2835;">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+            </div>
+            <form id="GroupCreateForm_auth" class="d-flex">
+                <div class="modal-body col-md-8">
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="groupName_auth">Group Name</label>
+                        <input class="form-control form-control-lg mb-3" id="groupName_auth" name="groupName_auth" type="text" placeholder="">
+                    </div>
+                    <label class="form-label" for="groupDescription_auth">Group Description</label>
+                    <textarea class="form-control" id="groupDescription_auth" name="groupDescription_auth" rows="5"></textarea>
+                </div>
+                <div class="modal-body col-md-4">
+                    <div class="form-check"></div>
+                </div>
+            </form>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary groupCreate" id="group_insert">Create</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 <script>
 
