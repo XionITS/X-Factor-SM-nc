@@ -1,7 +1,6 @@
 var randomNo = function () {
     return Math.floor(Math.random() * 60) + 30
 };
-
 var handleRenderChartNCOMG = function () {
     // global apexchart settings
     Apex = {
@@ -665,8 +664,8 @@ var handleRenderChartNCOMG = function () {
 
 
     var discover_data = dataList.discover_data_list;
-    var discover_data_day = discover_data.find(item => item[0] === '150_day_ago')[1];
-    var discover_data_min = discover_data.find(item => item[0] === '장기 미접속 자산')[1];
+    var discover_data_day = discover_data.find(item => item[0] === '150_day_ago_day')[1];
+    var discover_data_min = discover_data.find(item => item[0] === '150_day_ago_min')[1];
 
     var discover_sub = parseInt(discover_data_min) - parseInt(discover_data_day);
     var discover_per = (parseInt(discover_data_min) - parseInt(discover_data_day)) / parseInt(discover_data_day) * 100;
@@ -1282,32 +1281,38 @@ var handleRenderChartNCOMG = function () {
 
 };
 
-
-///////////////////////Datepicker////////////////////
 $(document).ready(function () {
-    $("button.input-group-text").click(function () {
-        $("#datepickerD").focus();
-    });
-    $("#datepickerD").datepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        todayHighlight: true,
-    }).on('changeDate', function (e) {
-        date1 = e.format()
-         $.ajax({
-            type: "POST",
-            url: "/dashboard/",
-            data: {
-                selected_date: date1
-            },
-            success: function(response) {
-                //console.log(response);
-            },
-            error: function(error) {
-                console.error("Error:", error);
-            }
-        });
-    });
+///////////////////////Datepicker////////////////////
+var previousValue = "";
+var now = new Date();
+var defaultHour = now.getHours();
+var dateTimeSelected = false;
+$("#datepickerD").datetimepicker({
+    format: 'Y-m-d H시',
+    formatTime: 'H시',
+    defaultDate: now,
+    defaultTime: defaultHour + '시',
+    closeOnWithoutClick: false,
+    onGenerate:function(current_time, $input){
+        if(!dateTimeSelected){
+            $(".xdsoft_time").on("click", function(){
+                dateTimeSelected = true;
+            });
+        }
+    },
+    onChangeDateTime: function(dp, $input) {
+        var currentValue = $input.val();
+        if (previousValue !== currentValue && dateTimeSelected) {
+            previousValue = currentValue;
+            var newURL = "/home/?datetime=" + encodeURIComponent(currentValue);
+            window.location.href = newURL;
+        }
+    }
+});
+
+$("button.input-group-text").click(function() {
+    $("#datepickerD").datetimepicker('show');
+});
 
 ///////////////////////Chart////////////////////
     handleRenderChartNCOMG();
