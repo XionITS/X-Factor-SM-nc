@@ -140,8 +140,8 @@ class Xfactor_Nano(models.Model):
 
 class Xfactor_Xuser(models.Model):
     x_id = models.CharField(max_length=500, primary_key=True)
-    x_pw = models.CharField(max_length=500)
-    x_name = models.CharField(max_length=50)
+    x_pw = models.CharField(max_length=500, null=True)
+    x_name = models.CharField(max_length=50, null=True)
     x_email = models.CharField(max_length=500, null=True)
     x_auth = models.CharField(max_length=500, null=True)
 

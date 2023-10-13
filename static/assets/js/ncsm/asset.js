@@ -454,6 +454,12 @@ $(document).ready(function () {
                 macaddress: macaddressValue
                             },
       success: function(response) {
+          console.log(computernameValue)
+          console.log(response)
+          if (computernameValue == '-'){
+              return
+          }
+        alert('저장 완료')
         console.log('메모가 성공적으로 저장되었습니다.');
         // 원하는 작업 수행
       },

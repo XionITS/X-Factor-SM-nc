@@ -71,10 +71,9 @@ def save_memo(request):
             # memo 필드 값 설정 및 저장
             xfactor_common.memo = memo
             xfactor_common.save()
-
-            return JsonResponse({'success': True})
+            computer_name = xfactor_common.computer_name
+            return JsonResponse({'success': computer_name})
 
         except Xfactor_Common.DoesNotExist:
             return JsonResponse({'error': 'X-Factor_Common 오브젝트가 존재하지 않습니다.'})
 
-        return JsonResponse({'data': memo})

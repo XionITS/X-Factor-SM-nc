@@ -89,7 +89,7 @@ var um_user_list = function () {
             {data: 'x_id', title: ' 아이디', searchable: true},
             {data: 'x_name', title: '사용자 이름', searchable: true},
             {data: 'x_email', title: '이메일', searchable: true},
-            {data: 'x_auth', title: '권한', searchable: true},
+            {data: 'x_auth', title: '부서', searchable: true},
             {data: 'x_user_auth', title: '권한 관리', searchable: false},
         ],
         rowCallback: function (row, data, index) {
@@ -470,7 +470,7 @@ var um_group_list = function () {
 
 function um_userbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>아이디</th><th>사용자 이름</th><th>이메일</th><th>권한</th><th>권한 관리</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>아이디</th><th>사용자 이름</th><th>이메일</th><th>부서</th><th>권한 관리</th></tr></thead><tbody></tbody>';
     $('#um_list').DataTable().destroy();
     $('#um_list').html(newTableContent);
     um_user_list();

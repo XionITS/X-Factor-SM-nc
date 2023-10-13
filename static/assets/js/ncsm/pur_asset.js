@@ -66,12 +66,12 @@ var hw_pur_asset_list = function () {
                 var columnMap = {
                     2: 'chassistype',
                     3: 'computer_name',
-                    4: 'ip_address',
-                    5: 'first_network',
-                    6: 'mem_use',
-                    7: 'disk_use',
-                    8: 'hw',
-                    9: 'memo',
+                    5: 'ip_address',
+                    6: 'first_network',
+                    7: 'mem_use',
+                    8: 'disk_use',
+                    9: 'hw',
+                    10: 'memo',
 
                 };
                 data.filter = {
@@ -100,6 +100,7 @@ var hw_pur_asset_list = function () {
             {data: '', title: 'No', searchable: true},
             {data: 'computer.chassistype', title: '구분', searchable: true},
             {data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true},
+            {data: '', title: '사용자', searchable: true},
             {data: 'computer.ip_address', title: 'IPv4', searchable: true},
             {data: 'computer.first_network', title: '최초 네트워크 접속일', searchable: true},
             {data: 'mem_use', title: '메모리 사용률', searchable: true},
@@ -107,7 +108,7 @@ var hw_pur_asset_list = function () {
             {
                 data: 'hw', title: '부품 목록',
                 render: function (data, type, row) {
-                    return "CPU : " + row.computer.hw_cpu + "<br>메인보드 : " + row.computer.hw_mb + "<br>RAM : " + row.computer.hw_ram + "<br>디스크 : " + row.computer.hw_disk + "<br>VGA : " + row.computer.hw_vga;
+                    return "CPU : " + row.computer.hw_cpu + "<br>메인보드 : " + row.computer.hw_mb + "<br>RAM : " + row.computer.hw_ram + "<br>디스크 : " + row.computer.hw_disk + "<br>VGA : " + row.computer.hw_gpu;
                 }, searchable: true
             },
             {data: 'computer.memo', title: '메모', searchable: true},
@@ -157,7 +158,7 @@ var hw_pur_asset_list = function () {
             },
             {
                 targets: 3,
-                width: "10%",
+                width: "7%",
                 className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.computer.computer_name + '" data-toggle="tooltip">' + data + '</span>'
@@ -165,6 +166,14 @@ var hw_pur_asset_list = function () {
             },
             {
                 targets: 4,
+                width: "10%",
+                className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + row.computer.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 5,
                 width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
@@ -172,16 +181,8 @@ var hw_pur_asset_list = function () {
                 }
             },
             {
-                targets: 5,
-                width: "5%",
-                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
-                render: function (data, type, row) {
-                    return '<span data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
                 targets: 6,
-                width: "5%",
+                width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     return '<span data-toggle="tooltip">' + data + '</span>'
@@ -189,7 +190,7 @@ var hw_pur_asset_list = function () {
             },
             {
                 targets: 7,
-                width: "5%",
+                width: "7%",
                 className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     return '<span data-toggle="tooltip">' + data + '</span>'
@@ -197,15 +198,23 @@ var hw_pur_asset_list = function () {
             },
             {
                 targets: 8,
-                width: "20%",
-                className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
+                width: "7%",
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
                 targets: 9,
-                width: "5%",
+                width: "15%",
+                className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
+                render: function (data, type, row) {
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 10,
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     if (data === null || data === undefined || data.trim() === '') {
@@ -356,7 +365,7 @@ var sw_pur_asset_list = function () {
             }
             // 현재 페이지의 모든 체크박스가 선택된 경우에만
             // 전체 선택 체크박스를 활성화합니다.
-            $('#select-all').prop('checked', allChecked);
+            $('#select-all').prop('checked', allCheckedOnCurrentPage);
             var current_page_sw_pur = sw_pur_asset_list.page();
             var total_pages_sw_pur = sw_pur_asset_list.page.info().pages;
             $('#nexts').remove();
@@ -380,12 +389,12 @@ var sw_pur_asset_list = function () {
                 var columnMap = {
                     2: 'chassistype',
                     3: 'computer_name',
-                    4: 'ip_address',
-                    5: 'sw_list',
-                    6: 'sw_ver_list',
-                    7: 'sw_install',
-                    8: 'more',
-                    9: 'memo',
+                    5: 'ip_address',
+                    6: 'sw_list',
+                    7: 'sw_ver_list',
+                    8: 'sw_install',
+                    9: 'more',
+                    10: 'memo',
 
                 };
                 data.filter = {
@@ -412,6 +421,7 @@ var sw_pur_asset_list = function () {
             {data: '', title: 'No', searchable: true},
             {data: 'computer.chassistype', title: '구분', searchable: true},
             {data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true},
+            {data: '', title: '사용자', searchable: true},
             {data: 'computer.ip_address', title: 'IPv4', searchable: true},
             {data: 'computer.sw_list', title: '소프트웨어 목록', searchable: true},
             {data: 'computer.sw_ver_list', title: '소프트웨어 버전', searchable: true},
@@ -480,7 +490,15 @@ var sw_pur_asset_list = function () {
                 }
             },
             {
-                targets: 5, width: "15%", className: 'text-start new-text-truncate flex-cloumn column_hidden',
+                targets: 5,
+                width: "5%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + row.computer.ip_address + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 6, width: "15%", className: 'text-start new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const swList = row.computer.sw_list;
                     const swListArray = swList ? swList.split('<br>') : [];
@@ -489,7 +507,7 @@ var sw_pur_asset_list = function () {
             },
 
             {
-                targets: 6, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden',
+                targets: 7, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     const swVer = row.computer.sw_ver_list;
                     const swVerArray = swVer ? swVer.split('<br>') : [];
@@ -498,7 +516,7 @@ var sw_pur_asset_list = function () {
             },
 
             {
-                targets: 7, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden',
+                targets: 8, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     const swInstall = row.computer.sw_install;
                     const swInstallArray = swInstall ? swInstall.split('<br>') : [];
@@ -507,7 +525,7 @@ var sw_pur_asset_list = function () {
             },
 
             {
-                targets: 8, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden',
+                targets: 9, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer.computer_name;
                     const swList = row.computer.sw_list;
@@ -518,7 +536,7 @@ var sw_pur_asset_list = function () {
             },
 
             {
-                targets: 9,
+                targets: 10,
                 width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
@@ -635,7 +653,7 @@ var sw_pur_asset_list = function () {
 
 function pur_hwbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>first_network</th><th>mem_use</th><th>disk_use</th><th>hw</th><th>메모</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>사용자</th><th>IPv4</th><th>first_network</th><th>mem_use</th><th>disk_use</th><th>hw</th><th>메모</th></tr></thead><tbody></tbody>';
     $('#hs_pur_asset_list').DataTable().destroy();
     $('#hs_pur_asset_list').html(newTableContent);
     hw_pur_asset_list();
@@ -646,7 +664,7 @@ function pur_hwbutton(btn) {
 
 function pur_swbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>IPv4</th><th>소프트웨어 목록</th><th>소프트웨어 버전</th><th>설치 일자</th><th>더보기</th><th>메모</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>사용자</th><th>IPv4</th><th>소프트웨어 목록</th><th>소프트웨어 버전</th><th>설치 일자</th><th>더보기</th><th>메모</th></tr></thead><tbody></tbody>';
     $('#hs_pur_asset_list').DataTable().destroy();
     $('#hs_pur_asset_list').html(newTableContent);
     sw_pur_asset_list();

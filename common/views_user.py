@@ -274,6 +274,26 @@ def logout(request):
         else:
             return render(request, 'common/login.html')
 
+    elif Login_Method == "NANO":
+        if 'sessionid' in request.session:
+            function = 'Logout'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+            item = 'admin 계정'
+            result = '성공'
+            user = request.session.get('sessionid')
+            date = timezone.now()
+            Xfactor_log = Xfactor_Log(
+                log_func=function,
+                log_item=item,
+                log_result=result,
+                log_user=user,
+                log_date=date
+            )
+            Xfactor_log.save()
+        del (request.session['sessionid'])
+        del (request.session['sessionname'])
+        del (request.session['sessionemail'])
+        return redirect("https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout")
+
 @csrf_exempt
 def selectUsers(x_id, x_pw):
     try:
@@ -505,14 +525,14 @@ def delete(request):
 def nano(request):
     auth_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
     client_id = "stg-tanium-dashboard"
-    redirect_uri = "localhost:8000/dashboard/"
+    redirect_uri = "http://tanium.ncsoft.com:8000/dashboard/"
 
     # 사용자를 인증 페이지로 리디렉션합니다.
     return redirect(f"{auth_url}?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope=openid")
 
 
 def nano_user(request):
-    code = requests.GET.get('code')
+    code = request.GET.get('code')
     print(code)
     access_token = exchange_code_for_token(code)
     print(access_token)
@@ -525,13 +545,15 @@ def nano_user(request):
     response = requests.get(userinfo_url, headers=headers)
     userinfo_data = response.json()
     sub = userinfo_data.get("sub")
+    name = userinfo_data.get("display_name").split("(")[0]
+    dept = userinfo_data.get("display_department")
     email = userinfo_data.get("email")
     print("User Sub:", sub)
     
     #유저 체크
     RS_user = selectUsers_nano(sub)
-    if RS_user=='0':
-        RS = createUsers(sub, sub, sub, email, sub)
+    if RS_user==None:
+        RS = createUsers(sub, sub, name, email, dept)
         # xuser_instance = Xfactor_Xuser(
         #     x_id=sub,
         #     x_email=email,
@@ -540,7 +562,7 @@ def nano_user(request):
     else :
         print("생성되어 있는 ID입니다.")
     request.session['sessionid']=sub
-    request.session['sessionname']=sub
+    request.session['sessionname']=name
     request.session['sessionemail']=email
     return redirect('../home')
 
@@ -554,7 +576,7 @@ def exchange_code_for_token(code):
     token_payload = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": "http://tanium.ncsoft.com:8000/",
+        "redirect_uri": "http://tanium.ncsoft.com:8000/dashboard/",
         "client_id": client_id,
         "client_secret": client_secret
     }
