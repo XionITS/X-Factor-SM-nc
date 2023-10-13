@@ -24,29 +24,41 @@ def Dashboard(selected_date=None):
     monthly_asset = []
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     yesterday_collect_date = timezone.now() - timedelta(days=1)
+    asset = Daily_Statistics.objects.all()
     if selected_date:
-        start_date_naive = datetime.strptime(selected_date, "%Y-%m-%d")
-        end_date_naive = start_date_naive + timedelta(days=1) - timedelta(seconds=1)
-
+        start_date_naive = datetime.strptime(selected_date, "%Y-%m-%d %H시")
         start_date = timezone.make_aware(start_date_naive)
-        end_date = timezone.make_aware(end_date_naive)
+        end_date = start_date + timedelta(hours=1)
 
-        asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=start_date, statistics_collection_date__lte=end_date)
-        asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_date, statistics_collection_date__lte=end_date)
+        asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_date, statistics_collection_date__lt=end_date)
+        asset_log_prev = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_date - timedelta(days=1), statistics_collection_date__lt=end_date - timedelta(days=1))
+        #print("selected_Date있음")
     else:
-        asset = Daily_Statistics.objects.all()
-        asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date)
-        # asset_log = Daily_Statistics_log.objects.all()
-    #service = Xfactor_Service.objects.all()
-    common = Xfactor_Common.objects.all()
+        latest_date = Daily_Statistics_log.objects.latest('statistics_collection_date').statistics_collection_date
+        previous_date = latest_date - timedelta(days=1)
 
+        asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__lte=latest_date).order_by('-statistics_collection_date')
+        asset_log_prev = Daily_Statistics_log.objects.filter(statistics_collection_date__date=previous_date)
+        #print("selected_Date없음")
 
-    #미관리 자산현황
-    # asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=yesterday_collect_date)
-    discover_min = asset.filter(classification='discover').filter(item='장기 미접속 자산').values('item', 'item_count')
-    discover_min_list = [[data['item'], data['item_count']] for data in discover_min]
-    discover_day = asset_log.filter(classification='discover').filter(item='150_day_ago').values('item', 'item_count')
-    discover_day_list = [[data['item'], data['item_count']] for data in discover_day]
+    discover_min = asset_log.filter(item='150_day_ago').first()
+    discover_min_list = []
+    if discover_min:
+        discover_min_datetime = timezone.localtime(discover_min.statistics_collection_date)
+        target_datetime = discover_min_datetime - timedelta(days=1)
+        target_date = target_datetime.date()
+        target_hour = target_datetime.hour
+        discover_min_list = [[discover_min.item + '_min', discover_min.item_count]]
+    else:
+        target_datetime = timezone.localtime() - timedelta(days=1)
+        target_date = target_datetime.date()
+        target_hour = target_datetime.hour
+
+    discover_day = asset_log_prev.filter(statistics_collection_date__date=target_date, statistics_collection_date__hour=target_hour, item='150_day_ago').first()
+    discover_day_list = []
+    if discover_day:
+        discover_day_list = [[discover_day.item + '_day', discover_day.item_count]]
+
     discover_data_list = discover_min_list + discover_day_list
     #print(discover_data_list)
     #위치별 자산현황
@@ -205,7 +217,7 @@ def Dashboard(selected_date=None):
 
 
     # 월별 자산 변화 수 차트
-    asset_log = Daily_Statistics_log.objects.all()
+    #asset_log = Daily_Statistics_log.objects.all()
     lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
     lastMonth = pd.date_range(lastDay, periods=5, freq='M').strftime("%Y-%m-%d")
     LM = tuple(lastMonth)

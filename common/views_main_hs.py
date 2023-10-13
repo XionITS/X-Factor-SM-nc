@@ -41,16 +41,11 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 
 @csrf_exempt
 def dashboard(request):
-
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        selected_date = request.POST.get('selected_date')
-        DCDL = Dashboard(selected_date)
-        return JsonResponse(DCDL)
-    DCDL = Dashboard()
-    # print(Xfactor_Xuser_Auth.objects.all())
-    #session을 computer_id에 넣기
+    selected_date = None
+    if 'datetime' in request.GET:
+        selected_date = request.GET['datetime']
+    DCDL = Dashboard(selected_date)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
-    #xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id='admin', auth_use='true')
     menu = XuserAuthSerializer(xuser_auths, many=True)
     monthly_asset_data_list = DCDL['monthly_asset_data_list']
     cpu_data_list = DCDL['cpu_data_list']
@@ -71,27 +66,81 @@ def dashboard(request):
     other_total_list = DCDL['other_total_list']
 
     dataList = {
-        'monthly_asset_data_list': monthly_asset_data_list,
-        'cpu_data_list': cpu_data_list,
-        'os_asset_data_list': os_asset_data_list,
-        'os_asset_data_count_list': os_asset_data_count_list,
-        'os_up_data_list': os_up_data_list,
-        'discover_data_list': discover_data_list,
-        'location_data_list': location_data_list,
-        'hotfix_data_list': hotfix_data_list,
-        'asset_all_chart_list': asset_all_chart_list,
-        'office_data_list': office_data_list,
-        'desk_online_list': desk_online_list,
-        'note_online_list': note_online_list,
-        'other_online_list': other_online_list,
-        'desk_total_list': desk_total_list,
-        'note_total_list': note_total_list,
-        'other_total_list': other_total_list,
+                'monthly_asset_data_list': monthly_asset_data_list,
+                'cpu_data_list': cpu_data_list,
+                'os_asset_data_list': os_asset_data_list,
+                'os_asset_data_count_list': os_asset_data_count_list,
+                'os_up_data_list': os_up_data_list,
+                'discover_data_list': discover_data_list,
+                'location_data_list': location_data_list,
+                'hotfix_data_list': hotfix_data_list,
+                'asset_all_chart_list': asset_all_chart_list,
+                'office_data_list': office_data_list,
+                'desk_online_list': desk_online_list,
+                'note_online_list': note_online_list,
+                'other_online_list': other_online_list,
+                'desk_total_list': desk_total_list,
+                'note_total_list': note_total_list,
+                'other_total_list': other_total_list,
     }
 
     context = {'menu_list' : menu.data, 'dataList': dataList}
     return render(request, 'dashboard1.html', context)
 
+# @csrf_exempt
+# def dashboard(request):
+#     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+#         selected_date = request.POST.get('selected_date')
+#         DCDL = Dashboard(selected_date)
+#         return JsonResponse(DCDL)
+#
+#
+#
+#     DCDL = Dashboard()
+#     # print(Xfactor_Xuser_Auth.objects.all())
+#     #session을 computer_id에 넣기
+#     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
+#     #xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id='admin', auth_use='true')
+#     menu = XuserAuthSerializer(xuser_auths, many=True)
+#     monthly_asset_data_list = DCDL['monthly_asset_data_list']
+#     cpu_data_list = DCDL['cpu_data_list']
+#     os_asset_data_list = DCDL['os_asset_data_list']
+#     os_asset_data_count_list = DCDL['os_asset_data_count_list']
+#     os_up_data_list = DCDL['os_up_data_list']
+#     discover_data_list = DCDL['discover_data_list']
+#     location_data_list = DCDL['location_data_list']
+#     hotfix_data_list = DCDL['hotfix_data_list']
+#     asset_all_chart_list = DCDL['asset_all_chart_list']
+#     office_data_list = DCDL['office_data_list']
+#
+#     desk_online_list = DCDL['desk_online_list']
+#     note_online_list = DCDL['note_online_list']
+#     other_online_list = DCDL['other_online_list']
+#     desk_total_list = DCDL['desk_total_list']
+#     note_total_list = DCDL['note_total_list']
+#     other_total_list = DCDL['other_total_list']
+#
+#     dataList = {
+#         'monthly_asset_data_list': monthly_asset_data_list,
+#         'cpu_data_list': cpu_data_list,
+#         'os_asset_data_list': os_asset_data_list,
+#         'os_asset_data_count_list': os_asset_data_count_list,
+#         'os_up_data_list': os_up_data_list,
+#         'discover_data_list': discover_data_list,
+#         'location_data_list': location_data_list,
+#         'hotfix_data_list': hotfix_data_list,
+#         'asset_all_chart_list': asset_all_chart_list,
+#         'office_data_list': office_data_list,
+#         'desk_online_list': desk_online_list,
+#         'note_online_list': note_online_list,
+#         'other_online_list': other_online_list,
+#         'desk_total_list': desk_total_list,
+#         'note_total_list': note_total_list,
+#         'other_total_list': other_total_list,
+#     }
+#
+#     context = {'menu_list' : menu.data, 'dataList': dataList}
+#     return render(request, 'dashboard1.html', context)
 
 def dashboard1(request):
     # print(Xfactor_Xuser_Auth.objects.all())
