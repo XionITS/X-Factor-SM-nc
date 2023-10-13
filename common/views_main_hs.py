@@ -240,13 +240,14 @@ def hs_asset_paginghw(request):
     order_column_map = {
         1: 'chassistype',
         2: 'computer_name',
-        3: 'ip_address',
-        4: 'hw_cpu',
-        5: 'hw_mb',
-        6: 'hw_ram',
-        7: 'hw_disk',
-        8: 'hw_gpu',
-        9: 'memo'
+        3: 'logged_name',
+        4: 'ip_address',
+        5: 'hw_cpu',
+        6: 'hw_mb',
+        7: 'hw_ram',
+        8: 'hw_disk',
+        9: 'hw_gpu',
+        10: 'memo'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -260,6 +261,7 @@ def hs_asset_paginghw(request):
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
 
     # Paginate the queryset
+    #user=user.filter(logged_name__in=Xfactor_ncdb.objects.values('userId'))
     paginator = Paginator(user, length)
     page_number = (start // length) + 1
 
@@ -270,6 +272,7 @@ def hs_asset_paginghw(request):
 
     # Serialize the paginated data
     user_list = CommonSerializer(page, many=True).data
+
 
     # Prepare the response
     response = {
@@ -387,9 +390,10 @@ def hs_asset_pagingsw(request):
     order_column_map = {
         1: 'chassistype',
         2: 'computer_name',
-        3: 'ip_address',
-        4: 'sw_list',
-        5: 'memo'
+        3: 'logged_name',
+        4: 'ip_address',
+        5: 'sw_list',
+        6: 'memo'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -411,8 +415,10 @@ def hs_asset_pagingsw(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    #user_list = LimitedCommonSerializer(page, many=True).data
+
+    #user_list = CommonSerializer(page, many=True).data
     user_list = CommonSerializer(page, many=True).data
+
 
     # Prepare the response
     response = {
