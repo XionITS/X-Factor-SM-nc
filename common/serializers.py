@@ -1,12 +1,28 @@
 from rest_framework import serializers
 from .models import *
 
+class NcdbSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Xfactor_ncdb
+        fields = '__all__'
 
 class CommonSerializer(serializers.ModelSerializer):  #user 정보
+    ncdb_data = serializers.SerializerMethodField()
+
     class Meta:
-        #추후에 history부분 제거
         model = Xfactor_Common
         fields = '__all__'
+
+    def get_ncdb_data(self, obj):
+        try:
+            # logged_name과 관련된 Xfactor_ncdb 인스턴스를 검색
+            ncdb_instance = Xfactor_ncdb.objects.get(userId=obj.logged_name)
+            # Xfactor_ncdbSerializer를 사용하여 관련 인스턴스를 직렬화
+            ncdb_serializer = NcdbSerializer(ncdb_instance)
+            return ncdb_serializer.data
+        except Xfactor_ncdb.DoesNotExist:
+            # 일치하는 데이터가 없을 경우 빈 값을 반환
+            return {}
 
 class CommonHistorySerializer(serializers.ModelSerializer):  #user 정보
     class Meta:
@@ -98,3 +114,5 @@ class XgroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Xfactor_Xuser_Group
         fields = '__all__'
+
+

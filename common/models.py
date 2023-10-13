@@ -2,6 +2,21 @@ from django.db import models
 #
 
 
+class Xfactor_ncdb(models.Model):
+    companyCode = models.CharField(max_length=100, null=True)
+    userName = models.CharField(max_length=100, null=True)
+    userNameEn = models.CharField(max_length=100, null=True)
+    userId = models.CharField(primary_key=True, max_length=100)
+    email = models.CharField(max_length=100, null=True)
+    empNo = models.CharField(max_length=100, null=True)
+    joinDate = models.CharField(max_length=100, null=True)
+    retireDate = models.CharField(max_length=100, null=True)
+    deptCode = models.CharField(max_length=100, null=True)
+    deptName = models.CharField(max_length=100, null=True)
+    managerUserName = models.CharField(max_length=100, null=True)
+    managerUserId = models.CharField(max_length=100, null=True)
+    managerEmpNo = models.CharField(max_length=100, null=True)
+
 class Xfactor_Common(models.Model):
     computer_id = models.CharField(max_length=100, primary_key=True)
     computer_name = models.CharField(max_length=100)
@@ -208,18 +223,3 @@ class Xfactor_Log(models.Model):
     log_user = models.CharField(max_length=100)
     log_date = models.DateTimeField(auto_now_add=True)
 
-
-class Xfactor_ncdb(models.Model):
-    companyCode = models.CharField(max_length=100, null=True)
-    userName = models.CharField(max_length=100, null=True)
-    userNameEn = models.CharField(max_length=100, null=True)
-    userId = models.CharField(primary_key=True, max_length=100)
-    email = models.CharField(max_length=100, null=True)
-    empNo = models.CharField(max_length=100, null=True)
-    joinDate = models.CharField(max_length=100, null=True)
-    retireDate = models.CharField(max_length=100, null=True)
-    deptCode = models.CharField(max_length=100, null=True)
-    deptName = models.CharField(max_length=100, null=True)
-    managerUserName = models.CharField(max_length=100, null=True)
-    managerUserId = models.CharField(max_length=100, null=True)
-    managerEmpNo = models.CharField(max_length=100, null=True)
