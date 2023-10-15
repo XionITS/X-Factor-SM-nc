@@ -185,7 +185,7 @@ var handleRenderChartNCOMG = function () {
     asset_all_notebook = dataList.asset_all_chart_list[0]
     asset_all_desktop = dataList.asset_all_chart_list[1]
     asset_all_other = dataList.asset_all_chart_list[2]
-
+    console.log(asset_all_notebook)
 
     asset_all_chart("asset_all_chart", asset_all_notebook, asset_all_desktop, asset_all_other);
 
@@ -261,7 +261,7 @@ var handleRenderChartNCOMG = function () {
                 },
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
-                        $('#all_asset_detail1').DataTable().destroy();
+                        // $('#asset_all_os_chart1').DataTable().destroy();
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
@@ -271,7 +271,7 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'all_asset1';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
-                        all_asset_detail_list1(categoryName, seriesName);
+                        asset_all_os_chart1(categoryName, seriesName);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -664,7 +664,7 @@ var handleRenderChartNCOMG = function () {
 
 
     var discover_data = dataList.discover_data_list;
-    var discover_data_day = discover_data.find(item => item[0] === '150_day_ago_day')[1];
+    var discover_data_day = discover_data.find(item => item[0] === '150_day_ago_min')[1];
     var discover_data_min = discover_data.find(item => item[0] === '150_day_ago_min')[1];
 
     var discover_sub = parseInt(discover_data_min) - parseInt(discover_data_day);

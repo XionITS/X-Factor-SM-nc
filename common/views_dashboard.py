@@ -98,6 +98,8 @@ def Dashboard(selected_date=None):
     notebook_data_cache_list = [{'item': data['item'], 'count': data['item_count']} for data in notebook_data_cache]
     if len(notebook_data_list) == 0:
         notebook_data_list = [{'item': 'Notebook', 'count': 0}]
+    if len(notebook_data_cache_list) == 0:
+        notebook_data_cache_list = [{'item': 'Notebook', 'count': 0}]
     notebook = [notebook_data_list, notebook_data_cache_list]
     #print(notebook)
     #데스크탑
@@ -291,7 +293,9 @@ def Dashboard(selected_date=None):
     monthly_asset_litem_count = [latest_dates_laptop1C, latest_dates_laptop2C, latest_dates_laptop3C, latest_dates_laptop4C, latest_dates_laptop5C]
     minutely_asset_desktop = asset.filter(classification='Desktop_chassis_total').aggregate(total_item_count=Sum('item_count'))
     minutely_asset_laptop = asset.filter(classification='Notebook_chassis_total').aggregate(total_item_count=Sum('item_count'))
-    minutely_asset_date = asset.filter(classification='Notebook_chassis_total').values('statistics_collection_date').first()
+    if minutely_asset_laptop['total_item_count'] == None:
+        minutely_asset_laptop['total_item_count'] = 0
+    minutely_asset_date = asset.filter(classification='Desktop_chassis_total').values('statistics_collection_date').first()
     date1 = datetime.strptime(LM[0], '%Y-%m-%d').strftime('%m')+'월'
     date2 = datetime.strptime(LM[1], '%Y-%m-%d').strftime('%m')+'월'
     date3 = datetime.strptime(LM[2], '%Y-%m-%d').strftime('%m')+'월'
@@ -301,7 +305,6 @@ def Dashboard(selected_date=None):
     # monthly_asset_date = [entry['max_date'].strftime('%m') + "월" for entry in latest_dates_desktop]
     minutely_asset_date = minutely_asset_date['statistics_collection_date'].strftime('%m') + "월"
     monthly_asset_data_list = [monthly_asset_ditem_count+[minutely_asset_desktop['total_item_count']], monthly_asset_litem_count+[minutely_asset_laptop['total_item_count']], monthly_asset_date+[minutely_asset_date]]
-
     # CPU 사용량 차트
     try:
         used_tcpu = asset.filter(classification='t_cpu').filter(item='True').values('item_count')
