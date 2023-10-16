@@ -521,6 +521,53 @@ def delete(request):
         print(str(e))  # 에러 메시지 출력 (디버깅 용)
         return JsonResponse({'result': 'failure'}, status=400)  # 삭제 중 오류가 발생했을 때 응답
 
+@csrf_exempt
+def group_delete(request):
+    xgroup_ids_str = request.POST.get('group_ids')  # 쉼표로 구분된 문자열을 얻음
+    xgroup_ids = xgroup_ids_str.split(',')
+
+    try:
+        Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+        Cur = Conn.cursor()
+        for xgroup_id in xgroup_ids:
+            query = """ 
+                    DELETE FROM
+                        common_xfactor_xuser_group
+                    WHERE
+                        id = %s;
+                    """
+            Cur.execute(query, (xgroup_id,))
+            query = """ 
+                    DELETE FROM
+                        common_xfactor_xuser_group
+                    WHERE
+                        id = %s;
+                    """
+            Cur.execute(query, (xgroup_id,))
+        Conn.commit()
+        Conn.close()
+
+        function = 'Group Delete'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+        item = 'Delete group ' + xgroup_id
+        result = '성공'
+        user = request.session.get('sessionid')
+        now = datetime.now().replace(microsecond=0)
+        date = now.strftime("%Y-%m-%d %H:%M:%S")
+        print(date)
+        Xfactor_log = Xfactor_Log(
+            log_func=function,
+            log_item=item,
+            log_result=result,
+            log_user=user,
+            log_date=date
+        )
+        Xfactor_log.save()
+
+        return JsonResponse({'result': 'success'}, status=200)  # 성공적으로 삭제되었을 때 응답
+    except Exception as e:
+        print(str(e))  # 에러 메시지 출력 (디버깅 용)
+        return JsonResponse({'result': 'failure'}, status=400)  # 삭제 중 오류가 발생했을 때 응답
+
 
 def nano(request):
     auth_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"

@@ -13,7 +13,9 @@ var um_user_list = function () {
         ordering: true,
         serverSide: true,
         displayLength: false,
-
+        order: [
+            [6, "desc"]
+        ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
@@ -90,6 +92,7 @@ var um_user_list = function () {
             {data: 'x_name', title: '사용자 이름', searchable: true},
             {data: 'x_email', title: '이메일', searchable: true},
             {data: 'x_auth', title: '부서', searchable: true},
+            {data: 'create_date', title: '가입 날짜', searchable: true},
             {data: 'x_user_auth', title: '권한 관리', searchable: false},
         ],
         rowCallback: function (row, data, index) {
@@ -153,6 +156,15 @@ var um_user_list = function () {
             },
             {
                 targets: 6,
+                width: "10%",
+                className: 'text-center text-truncate flex-cloumn column_hidden',
+                render: function (data, type, row) {
+                    data = data.replace("T", " ").substring(0, 16);
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 7,
                 width: "10%",
                 className: 'text-center text-truncate flex-cloumn column_hidden',
                 render: function (data, type, row) {
@@ -258,7 +270,6 @@ var um_group_list = function () {
 		ordering: true,
 		serverSide: true,
 		displayLength: false,
-
 		drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
@@ -328,6 +339,7 @@ var um_group_list = function () {
             {data: 'xgroup_name', title: '그룹 이름', searchable: true},
             {data: 'xgroup_note', title: '그룹 설명', searchable: true},
             {data: 'xuser_id_list', title: '그룹원', searchable: true},
+            {data: 'create_date', title: '생성 날짜', searchable: true},
             {data: 'id', title: '권한 관리', searchable: false},
 
         ],
@@ -356,7 +368,8 @@ var um_group_list = function () {
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const xgroup_name = row.xgroup_name;
-                    return '<input type="checkbox" class="form-check-input"  id="' + xgroup_name + '" data-xgroup_name="' + xgroup_name + '" >'
+                    const id = row.id;
+                    return '<input type="checkbox" class="form-check-input"  id="' + id + '" data-xgroup_name="' + xgroup_name + '"  data-x_group_id="' + id + '">'
                 }
             },
             {
@@ -372,7 +385,11 @@ var um_group_list = function () {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span data-toggle="tooltip">' + data + '</span>'
+                    const xgroup_name = row.xgroup_name;
+                    const xgroup_note = row.xgroup_note;
+                    const xuser_id_list = row.xuser_id_list;
+                    const id = row.id;
+                    return '<div class="um_groupalter swmore-font" data-xgroup_name="' + xgroup_name + '" data-id="'+ id +'" data-xuser_id_list="'+ xuser_id_list +'">'+data+'</div>'
                 }
             },
             {
@@ -394,6 +411,15 @@ var um_group_list = function () {
             },
             {
                 targets: 5,
+                width: "10%",
+                className: 'text-center text-truncate flex-cloumn column_hidden',
+                render: function (data, type, row) {
+                    data = data.replace("T", " ").substring(0, 16);
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 6,
                 width: "10%",
                 className: 'text-center text-truncate flex-cloumn column_hidden',
                 render: function (data, type, row) {
@@ -427,7 +453,7 @@ var um_group_list = function () {
             pagingType: 'numbers',//이전 다음 버튼 히든처리
 });
     //체크박스 저장하기
-    //um_checkbox_check($('#um_list tbody'))
+    um_checkbox_check($('#um_list tbody'))
 
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
     //dropdown_text();
@@ -470,10 +496,11 @@ var um_group_list = function () {
 
 function um_userbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>아이디</th><th>사용자 이름</th><th>이메일</th><th>부서</th><th>권한 관리</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>아이디</th><th>사용자 이름</th><th>이메일</th><th>부서</th><th>가입 날짜</th><th>권한 관리</th></tr></thead><tbody></tbody>';
     $('#um_list').DataTable().destroy();
     $('#um_list').html(newTableContent);
     um_user_list();
+    $('#um_creategroup').text("그룹 생성");
     $(btn).addClass('active');
     $('#um_creategroup').removeClass('hidden');
     //$('.hsbutton').not(btn).removeClass('active');
@@ -482,10 +509,11 @@ function um_userbutton(btn) {
 
 function um_groupbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>그룹명</th><th>그룹 설명</th><th>그룹원</th><th>권한 관리</th></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>그룹명</th><th>그룹 설명</th><th>그룹원</th><th>생성 날짜</th><th>권한 관리</th></thead><tbody></tbody>';
     $('#um_list').DataTable().destroy();
     $('#um_list').html(newTableContent);
     um_group_list();
+    //$('#um_creategroup').text("그룹 생성/수정");
     $(btn).addClass('active');
     $('#um_creategroup').addClass('hidden');
     //$('.hsbutton').not(btn).removeClass('active');
@@ -498,14 +526,31 @@ function um_checkbox_check($tbody) {
     $tbody.on('click', 'input[type="checkbox"]', function (event) {
         event.stopPropagation(); // Prevent the row click event from firing when clicking the checkbox
         var x_id = $(this).data('x-id');
-        //console.log(x_id)
-        if ($(this).prop('checked')) {
-            checkedItems[x_id] = x_id;
-        } else {
-            delete checkedItems[x_id];
+        var x_group_id = $(this).data('x_group_id');
+        var xgroup_name = $(this).data('xgroup_name');
+
+        if (x_id) {
+            //console.log(x_id);
+            if ($(this).prop('checked')) {
+                checkedItems[x_id] = x_id;
+            } else {
+                delete checkedItems[x_id];
+            }
+        } else if (x_group_id) {
+            //console.log(x_group_id);
+            if ($(this).prop('checked')) {
+                // Add the group value to checkedItems
+                checkedItems[x_group_id] = xgroup_name;
+                console.log(checkedItems)
+                //checkedItems['xgroup_name'] = xgroup_name;
+            } else {
+                // Remove the group value from checkedItems
+                delete checkedItems[x_group_id];
+                //delete checkedItems['xgroup_name'];
+            }
         }
     });
-};
+}
 
 
 $(document).ready(function () {
@@ -692,8 +737,24 @@ $(document).on("click", "#um_delete", function (e) {
         delete_modal.style.display = "block";
 
         checkedIds.forEach(function (x_id) {
-            const x_name = checkedItems[x_id];
-            modalbody += '<label class="form-check-label" for="x_id"><input type="hidden" class="delete_hidden" id="' + x_id + '" value="' + x_id + '">' + x_id + '</label><br>';
+            // Check if x_id is a string
+            if (typeof x_id === "string") {
+                console.log(x_id);
+                if (!isNaN(x_id)) {
+                    // If x_id is a numeric string (e.g., "1")
+                    const x_group_id = x_id;
+                    const xgroup_name = checkedItems[x_id];
+                    modalbody += `
+                        <label class="form-check-label" for="${x_group_id}">
+                            <input type="hidden" class="delete_hidden" id="${x_group_id}" value="${x_group_id}">
+                            ${xgroup_name}
+                        </label><br>`;
+                } else {
+                    // If x_id is a regular string (e.g., "Test Group")
+                    const x_name = x_id;
+                    modalbody += '<label class="form-check-label" for="x_id"><input type="hidden" class="delete_hidden" id="' + x_id + '" value="' + x_id + '">' + x_name + '</label><br>';
+                }
+            }
         });
 
         $("#um_delete_form .form-check").html(modalbody);
@@ -736,6 +797,33 @@ $(document).on("click", "#user_delete", function (event) {
         var value = $(this).val(); // 각 hidden 요소의 값을 가져오기
         x_ids.push(value); // 값을 배열에 추가
     });
+    var hasGroupItems = x_ids.some(function (id) {
+        return !isNaN(id);
+    });
+    if (hasGroupItems) {
+        // 그룹 처리를 위한 AJAX
+        $.ajax({
+            url: "/user_management/group_delete/", // 그룹 삭제를 처리하는 URL
+            method: "POST",
+            data: {
+                'group_ids': x_ids.filter(id => !isNaN(id)).join(',')
+            },
+            success: function (response) {
+                if (response.result === 'success') {
+                    // 그룹 삭제 성공 처리
+                    alert("그룹이 삭제되었습니다.");
+                } else {
+                    console.error("Group delete failure");
+                    // 그룹 삭제 실패 처리
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Group delete error:", error);
+                // 그룹 삭제 오류 처리
+            }
+        });
+    }
+
 
     $.ajax({
         url: "/user_management/um_delete/", // 서버의 URL을 여기에 입력
@@ -770,7 +858,8 @@ $(document).on("click","#um_creategroup", function (e){
     const check_id = [];
 
     var modalbody = "";
-    //console.log(checkedItems)
+    console.log(checkedItems)
+
     for (const x_id in checkedItems) {
         modalbody += '<input class="form-check-input" type="checkbox" value="'+x_id+'" id="'+x_id+'" checked><label class="form-check-label" for="'+x_id+'">'+x_id+'</label><br>'
     }
@@ -821,8 +910,68 @@ $(document).on("click","#group_insert", function(e) {
 });
 
 
+//############################### Group 수정하기 ###############################
+$(document).on("click",".um_groupalter", function (e){
+    console.log("aaa");
+//    $("#groupNameAlter_auth").val("");
+//    $("#groupDescriptionAlter_auth").val("");
 
+    const xgroup_name = $(this).data("xgroup_name");
+    const id = $(this).data("id");
+    const xuser_id_list = $(this).data("xuser_id_list");
+//    const check_id = [];
 
+    var modalbody = "";
+//    console.log(checkedItems)
+
+    for (const x_id in checkedItems) {
+        modalbody += '<input class="form-check-input" type="checkbox" value="'+x_id+'" id="'+x_id+'" checked><label class="form-check-label" for="'+x_id+'">'+x_id+'</label><br>'
+    }
+    $("#group_alter_modal .modal-title").html("그룹 수정 팝업창");
+    $("#group_alter_modal .form-check").html(modalbody);
+    $("#group_alter_modal").modal("show");
+});
+
+$(document).on("click","#group_alter", function(e) {
+    event.preventDefault(); // 기본 제출 동작을 막습니다.
+//    const x_id = $(this).data("x_id");
+//    console.log(x_id);
+
+    var form = document.getElementById("GroupalterForm_auth");
+    //console.log(form)
+    var xgroup_name = form.elements.groupName_auth.value;
+    var xgroup_description = form.elements.groupDescription_auth.value;
+    let xuserIds = []
+    const xuserElements = $('#group_insert_modal .form-check').find('.form-check-input');
+    //console.log(xuserElements)
+    xuserElements.each(function () {
+        const x_id = $(this).attr("id");
+        xuserIds.push(x_id);
+    });
+
+    $.ajax({
+    url: 'groupcreate_auth/', // views.py 파일의 URL을 여기에 넣으세요.
+    type: 'POST',
+    dataType: 'json',
+    data:  {
+         'xgroup_name' : xgroup_name,
+         'xgroup_description' : xgroup_description,
+         'xuserIds' : JSON.stringify(xuserIds),
+    },
+
+    success: function (response) {
+    // response에 따른 처리 - 예: 경고창 띄우기
+        if (response.success == "success") {
+            alert(response.message);
+            $('#group_insert_modal').modal('hide');
+            //Group으로 페이지이동
+            //um_group_list()
+        } else {
+            alert('실패 : ' + response.message);
+        }
+    }
+    });
+});
 
 
 
