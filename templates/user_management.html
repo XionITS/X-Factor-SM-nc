@@ -50,6 +50,7 @@
                             <th class="text-center">사용자 이름</th>
                             <th class="text-center" >이메일</th>
                             <th class="text-center" >부서</th>
+                            <th class="text-center" >가입 날짜</th>
                             <th class="text-center" >권한 관리</th>
 
                         </tr>
@@ -208,6 +209,35 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary groupCreate" id="group_insert">Create</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 그룹 수정 모달 창 -->
+<div class="modal" name="group_alter_modal" id="group_alter_modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content" style="background-color:#1d2835;">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+            </div>
+            <form id="GroupalterForm_auth" class="d-flex">
+                <div class="modal-body col-md-8">
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="groupNameAlter_auth">Group Name</label>
+                        <input class="form-control form-control-lg mb-3" id="groupNameAlter_auth" name="groupNameAlter_auth" type="text" placeholder="">
+                    </div>
+                    <label class="form-label" for="groupDescriptionAlter_auth">Group Description</label>
+                    <textarea class="form-control" id="groupDescriptionAlter_auth" name="groupDescriptionAlter_auth" rows="5"></textarea>
+                </div>
+                <div class="modal-body col-md-4">
+                    <div class="form-check"></div>
+                </div>
+            </form>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary groupCreate" id="group_alter">Create</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>

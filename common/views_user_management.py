@@ -56,8 +56,8 @@ def um_user(request):
         # Add mappings for other columns here
     }
 
-    order_column = order_column_map.get(order_column_index, 'x_id')
-    if order_column_dir == 'asc':
+    order_column = order_column_map.get(order_column_index, 'create_date')
+    if order_column_dir == 'desc':
         user = user.order_by(order_column)
     else:
         user = user.order_by('-' + order_column)
@@ -249,8 +249,8 @@ def um_group(request):
         # Add mappings for other columns here
     }
 
-    order_column = order_column_map.get(order_column_index, 'xgroup_name')
-    if order_column_dir == 'asc':
+    order_column = order_column_map.get(order_column_index, 'create_date')
+    if order_column_dir == 'desc':
         user = user.order_by(order_column)
     else:
         user = user.order_by('-' + order_column)

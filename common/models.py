@@ -159,11 +159,13 @@ class Xfactor_Xuser(models.Model):
     x_name = models.CharField(max_length=50, null=True)
     x_email = models.CharField(max_length=500, null=True)
     x_auth = models.CharField(max_length=500, null=True)
+    create_date = models.DateTimeField(auto_now_add=True, null=True)
 
 class Xfactor_Xuser_Group(models.Model):
     xgroup_name = models.CharField(max_length=500)
     xgroup_note = models.TextField(null=True)
     xuser_id_list = models.TextField(null=True)
+    create_date = models.DateTimeField(auto_now_add=True, null=True)
 
 class Xfactor_Auth(models.Model):
     auth_id = models.CharField(max_length=500, primary_key=True)
