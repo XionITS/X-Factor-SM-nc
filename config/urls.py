@@ -36,6 +36,8 @@ urlpatterns = [
     path('home/asset_os_paging1/', views_dashboard_detail.asset_os_paging1),
     path('home/asset_os_paging2/', views_dashboard_detail.asset_os_paging2),
     path('home/oslistPieChart/', views_dashboard_detail.oslistPieChart),
+    path('home/osVerPieChart/', views_dashboard_detail.osVerPieChart),
+    path('home/office_chart/', views_dashboard_detail.office_chart),
     #path('admin/', admin.site.urls),
     #path('index/', views_main_hs.index),
     #path('index/paging/', views_main_hs.index_paging),

@@ -120,6 +120,7 @@ var handleRenderChartNCOMG = function () {
                         $('#asset_os_detail1').DataTable().destroy();
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'all_asset_detail1';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
@@ -268,6 +269,7 @@ var handleRenderChartNCOMG = function () {
                         $('#asset_os_detail1').DataTable().destroy();
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'asset_os_detail1';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
@@ -402,6 +404,7 @@ var handleRenderChartNCOMG = function () {
                         $('#all_asset_detail1').DataTable().destroy();
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'asset_os_detail2';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
@@ -495,44 +498,44 @@ var handleRenderChartNCOMG = function () {
     // document.querySelector("#mem-bar").style.width = mem_widthPercentage + "%";
     // var cpu_widthPercentage = (dataList.cpu_donutData / dataList.allOnline_donutData) * 100;
     // document.querySelector("#cpu-bar").style.width = cpu_widthPercentage + "%";
-    var om_disk_chartOptions = {
-        series: [20, 20, 20, 20, 20],
-        chart: {
-            width: 100,
-            height: 100,
-            type: 'donut',
-            toolbar: {
-                show: false
-            }
-        },
-        colors: ['rgba(223, 224, 223, .2)', 'rgba(223, 224, 223, .4)', 'rgba(223, 224, 223, .5)', 'rgba(223, 224, 223, .8)', 'rgba(223, 224, 223, 1)'],
-        plotOptions: {
-            pie: {
-                donut: {
-                    labels: {
-                        show: false
-                    }
-                }
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        legend: {
-            show: false
-        },
-        stroke: {
-            show: false
-        },
-        tooltip: {
-            enabled: false
-        }
-    };
-    var chartContainers = document.querySelectorAll('.om_disk_chart');
-    chartContainers.forEach(function (container) {
-        var chart = new ApexCharts(container, om_disk_chartOptions);
-        chart.render();
-    });
+    // var om_disk_chartOptions = {
+    //     series: [20, 20, 20, 20, 20],
+    //     chart: {
+    //         width: 100,
+    //         height: 100,
+    //         type: 'donut',
+    //         toolbar: {
+    //             show: false
+    //         }
+    //     },
+    //     colors: ['rgba(223, 224, 223, .2)', 'rgba(223, 224, 223, .4)', 'rgba(223, 224, 223, .5)', 'rgba(223, 224, 223, .8)', 'rgba(223, 224, 223, 1)'],
+    //     plotOptions: {
+    //         pie: {
+    //             donut: {
+    //                 labels: {
+    //                     show: false
+    //                 }
+    //             }
+    //         }
+    //     },
+    //     dataLabels: {
+    //         enabled: false
+    //     },
+    //     legend: {
+    //         show: false
+    //     },
+    //     stroke: {
+    //         show: false
+    //     },
+    //     tooltip: {
+    //         enabled: false
+    //     }
+    // };
+    // var chartContainers = document.querySelectorAll('.om_disk_chart');
+    // chartContainers.forEach(function (container) {
+    //     var chart = new ApexCharts(container, om_disk_chartOptions);
+    //     chart.render();
+    // });
 
     //--------------------------------------------------------------------------
     // windows 버전별 자산목록 - windowAsset_pie 차트
@@ -546,7 +549,11 @@ var handleRenderChartNCOMG = function () {
                 height: 200,
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
-
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'oslistPieChart';
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
@@ -615,13 +622,32 @@ var handleRenderChartNCOMG = function () {
     //     virtual_pieDataCount.push(dataList.virtual_pieData[i]['count']);
     // };
 
-    function osPieChart(divId, seriesData, labelsData) {
+    function osVerPieChart(divId, seriesData, labelsData) {
         var donutOptions = {
             series: seriesData,
             chart: {
                 type: 'pie',
                 width: '100%',
-                height: 240
+                height: 240,
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#osVerPieChart').DataTable().destroy();
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'osVerPieChart';
+                        var dataPointIndex = config.dataPointIndex;
+                        var labelsName = config.w.config.labels[dataPointIndex];
+                        console.log(labelsName)
+                        document.getElementById('categoryName').value = labelsName;
+                        document.getElementById('chartName').value = 'all_asset2';
+                        $("#DashModal .modal-title").html(labelsName+' List');
+                        osVerPieChart_list(labelsName, seriesName);
+                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                        $("#DashModal").modal("show");
+                    }
+                },
             },
             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
             labels: labelsData,
@@ -656,7 +682,7 @@ var handleRenderChartNCOMG = function () {
     }
 
     // createDonutChart("os_donut", os_pieDataCount, os_pieDataItem);
-    osPieChart("os_pie", dataList.os_up_data_list, ['업데이트 완료', '업데이트 필요']);
+    osVerPieChart("os_pie", dataList.os_up_data_list, ['업데이트 완료', '업데이트 필요']);
 
 
 //##################################장기 접속/미접속 차트 #################################################
@@ -977,6 +1003,28 @@ var handleRenderChartNCOMG = function () {
                         pan: false
                     }
                 },
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'all_asset_detail1';
+                        var dataPointIndex = config.dataPointIndex;
+                        var seriesIndex = config.seriesIndex;
+                        var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+                        var categoryName = config.w.config.xaxis.categories[dataPointIndex];
+                        var seriesName = config.w.config.series[seriesIndex].name;
+                        document.getElementById('categoryName').value = categoryName;
+                        document.getElementById('seriesName').value = seriesName;
+                        document.getElementById('chartName').value = 'all_asset1';
+                        $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
+                        all_asset_detail_list1(categoryName, seriesName);
+                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                        $("#DashModal").modal("show");
+                    }
+                }
             },
             plotOptions: {
                 bar: {
