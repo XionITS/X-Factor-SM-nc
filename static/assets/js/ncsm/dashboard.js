@@ -117,6 +117,10 @@ var handleRenderChartNCOMG = function () {
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
                         $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'all_asset_detail1';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
@@ -185,7 +189,6 @@ var handleRenderChartNCOMG = function () {
     asset_all_notebook = dataList.asset_all_chart_list[0]
     asset_all_desktop = dataList.asset_all_chart_list[1]
     asset_all_other = dataList.asset_all_chart_list[2]
-    console.log(asset_all_notebook)
 
     asset_all_chart("asset_all_chart", asset_all_notebook, asset_all_desktop, asset_all_other);
 
@@ -261,17 +264,23 @@ var handleRenderChartNCOMG = function () {
                 },
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
-                        // $('#asset_all_os_chart1').DataTable().destroy();
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'asset_os_detail1';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
                         var categoryName = config.w.config.xaxis.categories[dataPointIndex];
                         var seriesName = config.w.config.series[seriesIndex].name;
+                        console.log(categoryName)
+                        console.log(seriesName)
                         document.getElementById('categoryName').value = categoryName;
                         document.getElementById('seriesName').value = seriesName;
-                        document.getElementById('chartName').value = 'all_asset1';
+                        document.getElementById('chartName').value = 'asset_os_detail1';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
-                        asset_all_os_chart1(categoryName, seriesName);
+                        asset_os_detail_list1(categoryName, seriesName);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -386,6 +395,27 @@ var handleRenderChartNCOMG = function () {
                 stacked: true,
                 toolbar: {
                     show: false
+                },
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'asset_os_detail2';
+                        var dataPointIndex = config.dataPointIndex;
+                        var seriesIndex = config.seriesIndex;
+                        var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+                        var categoryName = config.w.config.xaxis.categories[dataPointIndex];
+                        var seriesName = config.w.config.series[seriesIndex].name;
+                        document.getElementById('categoryName').value = categoryName;
+                        document.getElementById('seriesName').value = seriesName;
+                        document.getElementById('chartName').value = 'all_asset2';
+                        $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
+                        asset_os_detail_list2(categoryName, seriesName);
+                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                        $("#DashModal").modal("show");
+                    }
                 },
             },
             responsive: [{
@@ -513,7 +543,21 @@ var handleRenderChartNCOMG = function () {
             chart: {
                 type: 'pie',
                 width: '100%',
-                height: 200
+                height: 200,
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+
+                        document.getElementsByClassName('table m')[0].id = 'oslistPieChart';
+                        var dataPointIndex = config.dataPointIndex;
+                        var labelsName = config.w.config.labels[dataPointIndex];
+                        document.getElementById('categoryName').value = labelsName;
+                        document.getElementById('chartName').value = 'all_asset2';
+                        $("#DashModal .modal-title").html(labelsName+' List');
+                        oslistPieChart_list(labelsName, seriesName);
+                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                        $("#DashModal").modal("show");
+                    }
+                },
             },
             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
             labels: labelsData,
