@@ -217,6 +217,7 @@ $(document).ready(function(){
           var autocompleteData = data.data.map(function(item) {
             return item.computer_name;
           });
+          console.log(autocompleteData)
           response(autocompleteData);
         }
       });

@@ -21,6 +21,7 @@ with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
 
+#전체 자산 수 차트
 @csrf_exempt
 def all_asset_paging1(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
@@ -109,6 +110,7 @@ def all_asset_paging1(request):
 
     return JsonResponse(response)
 
+#전체 자산 수 os별 차트1
 @csrf_exempt
 def asset_os_paging1(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
@@ -227,7 +229,7 @@ def asset_os_paging1(request):
 
     return JsonResponse(response)
 
-
+#전체 자산 수 os별 차트1
 @csrf_exempt
 def asset_os_paging2(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
@@ -400,7 +402,7 @@ def oslistPieChart(request):
 
     return JsonResponse(response)
 
-
+#Windows 버전별 자산 현황 차트
 @csrf_exempt
 def osVerPieChart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
@@ -463,20 +465,27 @@ def osVerPieChart(request):
 
     return JsonResponse(response)
 
-
+#Office 버전별 자산 형황 차트
 @csrf_exempt
 def office_chart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-    if request.POST.get('categoryName') == '업데이트 완료':
-        user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__gte='19044')
+    if request.POST.get('categoryName') == 'Office 16 이상':
+        user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date, essential5__in=['Office 21', 'Office 19', 'Office 16'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
-    if request.POST.get('categoryName') == '업데이트 필요':
-        user = Xfactor_Common.objects.filter(os_simple='Windows', os_build__lt='19044', user_date__gte=today_collect_date)
+    if request.POST.get('categoryName') == 'Office 16 미만':
+        user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date, essential5__in='Office 15')
+        if filter_text:
+            query = (Q(computer_name__icontains=filter_text) |
+                     Q(ip_address__icontains=filter_text) |
+                     Q(mac_address__icontains=filter_text))
+            user = user.filter(query)
+    if request.POST.get('categoryName') == 'Office 설치 안됨':
+        user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date, essential5__in=['unconfirmed', '오피스 없음', ''])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |

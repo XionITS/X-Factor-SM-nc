@@ -121,6 +121,7 @@ var handleRenderChartNCOMG = function () {
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'all_asset_detail1';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
@@ -270,14 +271,13 @@ var handleRenderChartNCOMG = function () {
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'asset_os_detail1';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
                         var categoryName = config.w.config.xaxis.categories[dataPointIndex];
                         var seriesName = config.w.config.series[seriesIndex].name;
-                        console.log(categoryName)
-                        console.log(seriesName)
                         document.getElementById('categoryName').value = categoryName;
                         document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'asset_os_detail1';
@@ -405,6 +405,7 @@ var handleRenderChartNCOMG = function () {
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'asset_os_detail2';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
@@ -554,6 +555,7 @@ var handleRenderChartNCOMG = function () {
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'oslistPieChart';
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
@@ -636,10 +638,10 @@ var handleRenderChartNCOMG = function () {
                         $('#all_asset_detail1').DataTable().destroy();
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'osVerPieChart';
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
-                        console.log(labelsName)
                         document.getElementById('categoryName').value = labelsName;
                         document.getElementById('chartName').value = 'all_asset2';
                         $("#DashModal .modal-title").html(labelsName+' List');
@@ -1005,12 +1007,13 @@ var handleRenderChartNCOMG = function () {
                 },
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
+                        $('#office_chart').DataTable().destroy();
                         $('#all_asset_detail1').DataTable().destroy();
                         $('#asset_os_detail1').DataTable().destroy();
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
-                        document.getElementsByClassName('table m')[0].id = 'all_asset_detail1';
+                        document.getElementsByClassName('table m')[0].id = 'office_chart';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
@@ -1018,9 +1021,9 @@ var handleRenderChartNCOMG = function () {
                         var seriesName = config.w.config.series[seriesIndex].name;
                         document.getElementById('categoryName').value = categoryName;
                         document.getElementById('seriesName').value = seriesName;
-                        document.getElementById('chartName').value = 'all_asset1';
+                        document.getElementById('chartName').value = 'office_chart';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
-                        all_asset_detail_list1(categoryName, seriesName);
+                        office_chart_list(categoryName, seriesName);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }

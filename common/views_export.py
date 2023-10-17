@@ -8,6 +8,7 @@ import json
 from datetime import datetime, timedelta
 from django.utils import timezone
 
+from common.serializers import CommonSerializer
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -52,21 +53,31 @@ def export(request, model):
         columns = ['computer__computer_name','computer__chassistype','computer__ip_address','computer__mac_address'
             ,'ext_chr','ext_chr_ver','ext_edg','ext_edg_ver','ext_fir','ext_fir_ver','uuid','user_date']
         data = model_class.objects.filter(user_date__gte=today_collect_date).values(*columns)
+
     elif parameter_value == 'all_asset1':
         print(model)
         model_class = apps.get_model('common', model)
         print(model_class)
-        columns = ['computer_name', 'chassistype', 'ip_address', 'mac_address', 'user_date']
-        if request.GET.get('categoryName') == 'Online':
-            if request.GET.get('seriesName') == 'Other':
-                data = model_class.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).values(*columns)
-            else:
-                data = model_class.objects.filter(user_date__gte=today_collect_date, chassistype=request.GET.get('seriesName')).values(*columns)
-        if request.GET.get('categoryName') == 'Total':
-            if request.GET.get('seriesName') == 'Other':
-                data = model_class.objects.exclude(chassistype__in=['Notebook', 'Desktop']).values(*columns)
-            else:
-                data = model_class.objects.filter(chassistype=request.GET.get('seriesName')).values(*columns)
+        columns = ['ncdb_data__deptName', 'computer_name', 'ncdb_data__userId', 'chassistype', 'ip_address', 'mac_address', 'user_date']
+        data_list = model_class.objects.filter(user_date__gte=today_collect_date, chassistype='Notebook')
+        print(data_list)
+        data = CommonSerializer(data_list, many=True).data
+        print(data)
+        # column_data = {}
+        # for column in columns:
+        #     column_data[column] = [item[column] for item in data.data]
+        # print(column_data)
+        # if request.GET.get('categoryName') == 'Online':
+        #     if request.GET.get('seriesName') == 'Other':
+        #         data = model_class.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).values(*columns)
+        #     else:
+        #         data = model_class.objects.filter(user_date__gte=today_collect_date, chassistype=request.GET.get('seriesName')).values(*columns)
+        # if request.GET.get('categoryName') == 'Total':
+        #     if request.GET.get('seriesName') == 'Other':
+        #         data = model_class.objects.exclude(chassistype__in=['Notebook', 'Desktop']).values(*columns)
+        #     else:
+        #         data = model_class.objects.filter(chassistype=request.GET.get('seriesName')).values(*columns)
+    # elif parameter_value == 'asset_os_detail1':
 
     # 전체컬럼 조회
     # 동적으로 모델에서 컬럼명 추출
@@ -91,11 +102,16 @@ def export(request, model):
 
     # 데이터 추가
     for item in data:
-        # Modify the date format before appending it to the worksheet
+        row_data = []
         for column in columns:
-            if isinstance(item[column], datetime):
-                item[column] = item[column].strftime('%Y-%m-%d %H:%M:%S')  # Modify the date format as desired
-        row_data = [item[column] for column in columns]
+            if column in item:  # Check if the column exists in the item
+                # Modify the date format before appending it to the worksheet
+                if isinstance(item[column], datetime):
+                    row_data.append(item[column].strftime('%Y-%m-%d %H:%M:%S'))  # Modify the date format as desired
+                else:
+                    row_data.append(item[column])
+            else:
+                row_data.append(None)  # Or any other default value you want to use for missing data
         ws.append(row_data)
 
     # 파일 저장
