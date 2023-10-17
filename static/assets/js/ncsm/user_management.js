@@ -389,7 +389,7 @@ var um_group_list = function () {
                     const xgroup_note = row.xgroup_note;
                     const xuser_id_list = row.xuser_id_list;
                     const id = row.id;
-                    return '<div class="um_groupalter swmore-font" data-xgroup_name="' + xgroup_name + '" data-id="'+ id +'" data-xuser_id_list="'+ xuser_id_list +'">'+data+'</div>'
+                    return '<div class="um_groupalter swmore-font" data-xgroup_name="' + xgroup_name + '" data-id="'+ id +'" data-xgroup_note="'+ xgroup_note +'" data-xuser_id_list="'+ xuser_id_list +'">'+data+'</div>'
                 }
             },
             {
@@ -868,6 +868,7 @@ $(document).on("click","#um_creategroup", function (e){
     $("#group_insert_modal").modal("show");
 });
 
+
 $(document).on("click","#group_insert", function(e) {
     event.preventDefault(); // 기본 제출 동작을 막습니다.
 //    const x_id = $(this).data("x_id");
@@ -881,8 +882,10 @@ $(document).on("click","#group_insert", function(e) {
     const xuserElements = $('#group_insert_modal .form-check').find('.form-check-input');
     //console.log(xuserElements)
     xuserElements.each(function () {
-        const x_id = $(this).attr("id");
-        xuserIds.push(x_id);
+        if ($(this).prop('checked')) {
+            const x_id = $(this).attr("id");
+            xuserIds.push(x_id);
+        }
     });
 
     $.ajax({
@@ -912,25 +915,69 @@ $(document).on("click","#group_insert", function(e) {
 
 //############################### Group 수정하기 ###############################
 $(document).on("click",".um_groupalter", function (e){
-    console.log("aaa");
-//    $("#groupNameAlter_auth").val("");
-//    $("#groupDescriptionAlter_auth").val("");
-
     const xgroup_name = $(this).data("xgroup_name");
+    const xgroup_note = $(this).data("xgroup_note");
     const id = $(this).data("id");
     const xuser_id_list = $(this).data("xuser_id_list");
-//    const check_id = [];
+    let xuser_id_array;
 
-    var modalbody = "";
-//    console.log(checkedItems)
+    if (xuser_id_list.length===0){
+        xuser_id_array = [];
+    }else{
+        const cleanedString = xuser_id_list.replace(/[\[\]']/g, ' ');
+        xuser_id_array = cleanedString.split(',').map(item => item.trim());
+    };
 
-    for (const x_id in checkedItems) {
+    var modalbody = `<div class="asset-input-group">
+                        <input type="search" class="asset-form-control" id="group_search_result" placeholder="추가할 계정을 입력하세요">
+                        <div>
+                          <button class="btn btn-outline-warning" type="button" id="group_search">추가</button>
+                        </div>
+                    </div>`;
+    for (const x_id of xuser_id_array) {
         modalbody += '<input class="form-check-input" type="checkbox" value="'+x_id+'" id="'+x_id+'" checked><label class="form-check-label" for="'+x_id+'">'+x_id+'</label><br>'
     }
+    $("#groupNameAlter_auth").val(xgroup_name);
+    $("#groupDescriptionAlter_auth").val(xgroup_note);
     $("#group_alter_modal .modal-title").html("그룹 수정 팝업창");
     $("#group_alter_modal .form-check").html(modalbody);
     $("#group_alter_modal").modal("show");
+
+    //###################################### Group User 추가할 JS#####################################
+    $(document).ready(function(){
+      $('#group_search_result').autocomplete({
+        source: function(request, response) {
+          $.ajax({
+            url: 'search_box/',
+            method: 'POST',
+            data: {
+              searchText: request.term
+            },
+            success: function(data){
+              var autocompleteData = data.data.map(function(item) {
+                return item.x_id;
+              });
+              response(autocompleteData);
+              console.log(autocompleteData)
+              console.log(response)
+
+            }
+          });
+        },
+        minLength: 2  // 최소 문자 수 설정
+      });
+    });
+    $('#group_search').on('click', function(event) {
+        console.log("aaaa")
+
+        var searchInput = document.getElementById('group_search_result');
+        var inputValue = searchInput.value;
+        console.log(inputValue)
+        searchPer(inputValue)
+    });
 });
+
+
 
 $(document).on("click","#group_alter", function(e) {
     event.preventDefault(); // 기본 제출 동작을 막습니다.
@@ -945,8 +992,10 @@ $(document).on("click","#group_alter", function(e) {
     const xuserElements = $('#group_insert_modal .form-check').find('.form-check-input');
     //console.log(xuserElements)
     xuserElements.each(function () {
-        const x_id = $(this).attr("id");
-        xuserIds.push(x_id);
+        if ($(this).prop('checked')) {
+            const x_id = $(this).attr("id");
+            xuserIds.push(x_id);
+        }
     });
 
     $.ajax({

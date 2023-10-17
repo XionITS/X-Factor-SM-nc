@@ -280,3 +280,11 @@ def um_group(request):
     }
 
     return JsonResponse(response)
+
+@csrf_exempt
+def search_box(request):
+    if request.method == "POST":
+        search_text = request.POST.get('searchText', None)
+        user_data =Xfactor_Xuser.objects.filter(x_id__icontains=search_text).values('x_id')
+        # user_data = XfactorServiceserializer(user, many=True).data
+        return JsonResponse({'data': list(user_data)})
