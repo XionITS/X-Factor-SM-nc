@@ -46,7 +46,12 @@ def dashboard(request):
         selected_date = request.GET['datetime']
     DCDL = Dashboard(selected_date)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
-    menu = XuserAuthSerializer(xuser_auths, many=True)
+    menu_user = XuserAuthSerializer(xuser_auths, many=True)
+    xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
+    menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
+    all_menu = menu_user.data + menu_group.data
+    unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
+
     monthly_asset_data_list = DCDL['monthly_asset_data_list']
     cpu_data_list = DCDL['cpu_data_list']
     os_asset_data_list = DCDL['os_asset_data_list']
@@ -84,7 +89,7 @@ def dashboard(request):
                 'other_total_list': other_total_list,
     }
 
-    context = {'menu_list' : menu.data, 'dataList': dataList}
+    context = {'menu_list' : unique_items, 'dataList': dataList}
     return render(request, 'dashboard1.html', context)
 
 # @csrf_exempt
@@ -146,15 +151,12 @@ def dashboard1(request):
     # print(Xfactor_Xuser_Auth.objects.all())
     #session을 computer_id에 넣기
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
-    menu = XuserAuthSerializer(xuser_auths, many=True)
-    # user_auths = Xfactor_CommonAuth.objects.filter(xfactor_user__computer_id='123', auth_use='true')  # 사용자의 권한 목록 가져오기
-    # menu_list = []
-    # for user_auth in user_auths:
-    #     menu_list.append(user_auth.xfactor_auth)
-    # menu_list = serialize('json', menu_list)
-    # print(menu_list)
-    #menu_list = list(Xfactor_CommonAuth.objects.values().filter(xfactor_user__computer_id='123', auth_use='true'))
-    context = {'menu_list' : menu.data}
+    menu_user = XuserAuthSerializer(xuser_auths, many=True)
+    xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
+    menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
+    all_menu = menu_user.data + menu_group.data
+    unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
+    context = {'menu_list': unique_items}
     return render(request, 'dashboard1.html', context)
 
 
@@ -163,7 +165,11 @@ def hs_asset(request):
     #메뉴
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
-    menu = XuserAuthSerializer(xuser_auths, many=True)
+    menu_user = XuserAuthSerializer(xuser_auths, many=True)
+    xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
+    menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
+    all_menu = menu_user.data + menu_group.data
+    unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
     #테이블아래 자산현황
 
     # # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
@@ -179,7 +185,7 @@ def hs_asset(request):
     total_asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(total_asset.values_list('item_count', flat=True))
 
-    context = {'menu_list' : menu.data, 'asset' : asset, 'total_item_count' : total_item_count}
+    context = {'menu_list' : unique_items, 'asset' : asset, 'total_item_count' : total_item_count}
     return render(request, 'hs_asset.html', context)
 
 @csrf_exempt

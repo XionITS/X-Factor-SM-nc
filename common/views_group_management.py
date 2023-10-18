@@ -23,10 +23,12 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 def group(request):
     #메뉴
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
-    menu = XuserAuthSerializer(xuser_auths, many=True)
-
-
-    context = {'menu_list': menu.data}
+    menu_user = XuserAuthSerializer(xuser_auths, many=True)
+    xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
+    menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
+    all_menu = menu_user.data + menu_group.data
+    unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
+    context = {'menu_list': unique_items}
     return render(request, 'group_management.html', context)
 
 

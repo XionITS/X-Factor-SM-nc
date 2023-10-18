@@ -97,6 +97,7 @@ urlpatterns = [
     path('user_management/save_user_auth/', views_user_management.save_user_auth, name='save_user_auth'),
     path('user_management/save_group_auth/', views_user_management.save_group_auth, name='save_group_auth'),
     path('user_management/groupcreate_auth/', views_user_management.create_auth, name='create_auth'),
+    path('user_management/groupalter_auth/', views_user_management.alter_auth, name='alter_auth'),
     #path('user_management/signup/', views_user.signup, name='um_signup'),
     path('user_management/um_delete/', views_user.delete, name='um_delete'),
     path('user_management/group_delete/', views_user.group_delete, name='group_delete'),

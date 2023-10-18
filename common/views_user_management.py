@@ -16,6 +16,7 @@ from .serializers import *
 import pytz
 import psycopg2
 from django.shortcuts import get_object_or_404
+from common.views_user import Group_AutoAuth, DeleteAuth, Group_modifyAuth
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -37,8 +38,12 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 def um(request):
     #메뉴
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
-    menu = XuserAuthSerializer(xuser_auths, many=True)
-    context = {'menu_list': menu.data}
+    menu_user = XuserAuthSerializer(xuser_auths, many=True)
+    xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
+    menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
+    all_menu = menu_user.data + menu_group.data
+    unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
+    context = {'menu_list': unique_items}
     return render(request, 'user_management.html', context)
 
 @csrf_exempt
@@ -98,9 +103,10 @@ def user_auth(request):
 
 @csrf_exempt
 def group_auth(request):
-    xgroup_name = request.POST.get("xgroup_name")
-    xfactor_auth = Xfactor_Auth.objects.all()
-    auth_list= AuthSerializer(xfactor_auth, many=True).data
+    id = request.POST.get("id")
+    xgroup_auth = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=id).distinct('auth_use', 'xfactor_auth_id', 'xgroup_id')
+    auth_list = XgroupAuthSerializer(xgroup_auth, many=True).data
+    #auth_list= XgroupAuthSerializer(xgroup_auth, many=True).data
     response = {'auth_list': auth_list}
     return JsonResponse(response)
 
@@ -155,18 +161,18 @@ def save_user_auth(request):
 
 @csrf_exempt
 def save_group_auth(request):
+    xgroup_id = request.POST.get('id')
     x_ids_str = request.POST.get('x_id_array')  # 쉼표로 구분된 문자열을 얻음
     x_ids = x_ids_str.replace('[', '').replace(']', '').replace('"', '').split(',')
-    print(type(x_ids))
+
     auth_infos = request.POST.get('auth_info')
     auth_infos = json.loads(auth_infos)
-    print(auth_infos)
     try:
         for x_id in x_ids:
             for item in auth_infos:
                 auth_id = item["auth_id"]
                 auth_use = item["auth_use"]
-                Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=x_id, xfactor_auth_id=auth_id).update(auth_use=auth_use)
+                Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=x_id, xfactor_auth_id=auth_id, xgroup_id=xgroup_id).update(auth_use=auth_use)
 
         function = 'Group Auth Change'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
         item = 'Group Auth Change ' + x_ids_str
@@ -212,12 +218,77 @@ def create_auth(request):
     xgroup_insert.xgroup_note = xgroup_description
     xgroup_insert.xuser_id_list = xuserIds
     xgroup_insert.save()
+    id = xgroup_insert.pk
+
+    RS = Group_AutoAuth(xuserIds,str(id))
+
+
     message_code = "success"
 
     message = "Group이 생성되었습니다. \n 그룹이름 : " +xgroup_name+""
 
     function = 'Xuser_Group Create'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
     item = 'Xuser_Group Create for the '+ xgroup_name
+    result = '성공'
+    user = request.session.get('sessionid')
+    date = timezone.now()
+    Xfactor_log = Xfactor_Log(
+        log_func=function,
+        log_item=item,
+        log_result=result,
+        log_user=user,
+        log_date=date
+    )
+    Xfactor_log.save()
+
+    return JsonResponse({"success":message_code, "message": message})
+
+@csrf_exempt
+def alter_auth(request):
+    xgroup_name = request.POST['xgroup_name']
+    id = request.POST['id']
+    xgroup_description = request.POST['xgroup_description']
+    xuserIds = json.loads(request.POST['xuserIds'])
+
+    xgroup_auth = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=id).distinct('auth_use','xfactor_auth_id','xgroup_id')
+    #print(xgroup_auth)
+    #first_set = xgroup_auth[0:9]
+    #first_set = list(set(xgroup_auth))
+    auth_list = XgroupAuthSerializer(xgroup_auth, many=True).data
+    auth = []
+    for item in auth_list:
+        auth_data = item['xfactor_auth']  # 'xfactor_auth' 키의 값을 가져옴
+        auth_id = auth_data['auth_id']  # 'auth_id' 키의 값을 가져옴
+        auth_use = item['auth_use']  # 'auth_user' 키의 값을 가져옴
+        # auth_id와 auth_user만 따로 저장하거나 활용
+        auth.append({'auth_id': auth_id, 'auth_use': auth_use})
+
+    #auth_id =
+    # Computer Group 만들기
+    text = ""
+    # for index, xuser_id in enumerate(xuserIds):
+    #     if index == len(xuser_id) - 1:
+    #         text += f'Computer ID matches \\"{xuser_id}\\"'
+    #     else:
+    #         text += f'Computer ID matches \\"{xuser_id}\\" or '
+
+    #DB넣기
+    xgroup_update = Xfactor_Xuser_Group.objects.get(pk=id)
+    xgroup_update.id = id
+    xgroup_update.xgroup_name = xgroup_name
+    xgroup_update.xgroup_note = xgroup_description
+    xgroup_update.xuser_id_list = xuserIds
+    xgroup_update.save()
+
+    DeleteAuth(str(id))
+    RS = Group_modifyAuth(xuserIds, str(id), auth)
+
+    message_code = "success"
+
+    message = "Group이 수정되었습니다. \n 그룹이름 : " +xgroup_name+""
+
+    function = 'Xuser_Group Modify'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+    item = 'Xuser_Group Modify for the '+ xgroup_name
     result = '성공'
     user = request.session.get('sessionid')
     date = timezone.now()
