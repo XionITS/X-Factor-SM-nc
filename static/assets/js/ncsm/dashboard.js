@@ -736,15 +736,19 @@ var handleRenderChartNCOMG = function () {
 
 
     var discover_data = dataList.discover_data_list;
-    var discover_data_day = discover_data.find(item => item[0] === '150_day_ago_min')[1];
-    var discover_data_min = discover_data.find(item => item[0] === '150_day_ago_min')[1];
+    var discover_data_day_obj = discover_data.find(item => item[0] === '150_day_ago_day');
+    var discover_data_min_obj = discover_data.find(item => item[0] === '150_day_ago_min');
+    var discover_data_day = discover_data_day_obj ? discover_data_day_obj[1] : 0;
+    var discover_data_min = discover_data_min_obj ? discover_data_min_obj[1] : 0;
 
     var discover_sub = parseInt(discover_data_min) - parseInt(discover_data_day);
     var discover_per = (parseInt(discover_data_min) - parseInt(discover_data_day)) / parseInt(discover_data_day) * 100;
 
     var discover_per_round = Math.abs(discover_per.toFixed(2));
-
-    if (discover_sub > 0) {
+    if (isNaN(discover_sub) || isNaN(discover_per_round)) {
+        discover_sub = '0';
+        discover_per_round = '0%';
+    } else if (discover_sub > 0) {
         discover_sub = '+ ' + discover_sub;
         discover_per_round = '▲ ' + discover_per_round + '%';
     } else if (discover_sub < 0) {
@@ -753,7 +757,6 @@ var handleRenderChartNCOMG = function () {
     } else {
         discover_per_round += '%';
     }
-
     var discover_sub_data = document.querySelector('#apexnotconChart_sub');
     discover_sub_data.textContent = discover_sub;
 
@@ -1377,37 +1380,37 @@ var handleRenderChartNCOMG = function () {
 };
 
 $(document).ready(function () {
-///////////////////////Datepicker////////////////////
-var previousValue = "";
-var now = new Date();
-var defaultHour = now.getHours();
-var dateTimeSelected = false;
-$("#datepickerD").datetimepicker({
-    format: 'Y-m-d H시',
-    formatTime: 'H시',
-    defaultDate: now,
-    defaultTime: defaultHour + '시',
-    closeOnWithoutClick: false,
-    onGenerate:function(current_time, $input){
-        if(!dateTimeSelected){
-            $(".xdsoft_time").on("click", function(){
-                dateTimeSelected = true;
-            });
+    ///////////////////////Datepicker////////////////////
+    var previousValue = "";
+    var now = new Date();
+    var defaultHour = now.getHours();
+    var dateTimeSelected = false;
+    $("#datepickerD").datetimepicker({
+        format: 'Y-m-d H시',
+        formatTime: 'H시',
+        defaultDate: now,
+        defaultTime: defaultHour + '시',
+        closeOnWithoutClick: false,
+        onGenerate:function(current_time, $input){
+            if(!dateTimeSelected){
+                $(".xdsoft_time").on("click", function(){
+                    dateTimeSelected = true;
+                });
+            }
+        },
+        onChangeDateTime: function(dp, $input) {
+            var currentValue = $input.val().replace(' ', '-').replace('시', '');
+            if (previousValue !== currentValue && dateTimeSelected) {
+                previousValue = currentValue;
+                var newURL = "/home/?datetime=" + currentValue;
+                window.location.href = newURL;
+            }
         }
-    },
-    onChangeDateTime: function(dp, $input) {
-        var currentValue = $input.val();
-        if (previousValue !== currentValue && dateTimeSelected) {
-            previousValue = currentValue;
-            var newURL = "/home/?datetime=" + encodeURIComponent(currentValue);
-            window.location.href = newURL;
-        }
-    }
-});
+    });
 
-$("button.input-group-text").click(function() {
-    $("#datepickerD").datetimepicker('show');
-});
+    $("button.input-group-text").click(function() {
+        $("#datepickerD").datetimepicker('show');
+    });
 
 ///////////////////////Chart////////////////////
     handleRenderChartNCOMG();

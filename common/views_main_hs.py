@@ -82,6 +82,7 @@ def dashboard(request):
                 'desk_total_list': desk_total_list,
                 'note_total_list': note_total_list,
                 'other_total_list': other_total_list,
+                'selected_date': selected_date if selected_date is not None else "select date..."
     }
 
     context = {'menu_list' : menu.data, 'dataList': dataList}
