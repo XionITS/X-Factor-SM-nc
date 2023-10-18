@@ -62,6 +62,12 @@ class XuserAuthSerializer(serializers.ModelSerializer): #User별 auth정보
         model = Xfactor_Xuser_Auth
         fields = '__all__'
 
+class XgroupAuthSerializer(serializers.ModelSerializer): #User별 auth정보
+    xfactor_auth = AuthSerializer()
+    class Meta:
+        model = Xfactor_Xgroup_Auth
+        fields = '__all__'
+
 class StatisticsSerializer(serializers.ModelSerializer): #User별 auth정보
     class Meta:
         model = Daily_Statistics

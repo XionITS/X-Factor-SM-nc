@@ -359,13 +359,14 @@ def createUsers(x_id, x_pw, x_name, x_email, x_auth):
         query = """ 
         INSERT INTO 
             common_xfactor_xuser
-            (x_id, x_pw, x_name, x_email, x_auth) 
+            (x_id, x_pw, x_name, x_email, x_auth, create_date) 
         VALUES ( 
                 '""" + x_id + """',
                 '""" + hashpassword + """' ,
                 '""" + x_name + """',
                 '""" + x_email + """',
-                '""" + x_auth + """'
+                '""" + x_auth + """',
+                now()
                 );
         """
         Cur.execute(query)
@@ -426,6 +427,92 @@ def AutoAuth(x_id):
     Conn.commit()
     Conn.close()
     a= '1'
+    return a
+
+
+
+@csrf_exempt
+def DeleteAuth(id):
+    Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+    Cur = Conn.cursor()
+    query = """ 
+        DELETE FROM public.common_xfactor_xgroup_auth
+        WHERE xgroup_id = '""" + id +"""';
+       """
+    Cur.execute(query)
+    Conn.commit()
+    Conn.close()
+
+
+@csrf_exempt
+def Group_AutoAuth(xuser_id_list,id):
+
+    Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+    Cur = Conn.cursor()
+    for xgroup_id in xuser_id_list:
+        query = """ 
+               INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'HS_asset', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'VER_asset', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'UP_asset', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES( 'false', 'PUR_asset', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'SEC_asset', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'SEC_asset_list', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'Asset', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'History', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'settings', '""" + xgroup_id + """', '""" + id + """');
+               """
+        Cur.execute(query)
+        Conn.commit()
+    Conn.close()
+    a= '1'
+    return a
+
+
+@csrf_exempt
+def Group_modifyAuth(xuser_id_list, id, auths):
+    Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+    Cur = Conn.cursor()
+
+    print(xuser_id_list)
+    for auth in auths:
+        auth_use = auth['auth_use']
+        xfactor_auth_id = auth['auth_id']
+        for xgroup_id in xuser_id_list:
+            query = """ 
+               INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('""" + auth_use + """','""" + xfactor_auth_id + """', '""" + xgroup_id + """', '""" + id + """');           
+               """
+            Cur.execute(query)
+            Conn.commit()
+    Conn.close()
+    a = '1'
     return a
 
 @csrf_exempt
@@ -539,9 +626,9 @@ def group_delete(request):
             Cur.execute(query, (xgroup_id,))
             query = """ 
                     DELETE FROM
-                        common_xfactor_xuser_group
+                        common_xfactor_xgroup_auth
                     WHERE
-                        id = %s;
+                        xgroup_id = %s;
                     """
             Cur.execute(query, (xgroup_id,))
         Conn.commit()

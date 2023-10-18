@@ -24,11 +24,15 @@ def sec_asset(request):
     #메뉴
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
-    menu = XuserAuthSerializer(xuser_auths, many=True)
+    menu_user = XuserAuthSerializer(xuser_auths, many=True)
+    xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
+    menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
+    all_menu = menu_user.data + menu_group.data
+    unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
     #테이블아래 자산현황
     asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(asset.values_list('item_count', flat=True))
-    context = {'menu_list': menu.data}
+    context = {'menu_list': unique_items}
     return render(request, 'sec_asset.html', context)
 
 @csrf_exempt
@@ -174,12 +178,16 @@ def sec_asset_list(request):
     # 메뉴
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
-    menu = XuserAuthSerializer(xuser_auths, many=True)
+    menu_user = XuserAuthSerializer(xuser_auths, many=True)
+    xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
+    menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
+    all_menu = menu_user.data + menu_group.data
+    unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
     # 테이블아래 자산현황
     asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(asset.values_list('item_count', flat=True))
 
-    context = {'menu_list': menu.data}
+    context = {'menu_list': unique_items}
     return render(request, 'sec_asset_list.html', context)
 
 

@@ -16,47 +16,48 @@
                 </a>
                 <div class="menu-submenu">
                     {% if menu_list %}
-                        {% for menu in menu_list|dictsort:'xfactor_auth.auth_num'  %}
-                            {% if menu.xfactor_auth.auth_id == "HS_asset" %}
+                        {% for item in menu_list|dictsort:3%}
+                            {% if item.0 == "HS_asset" %}
                                 <div class="menu-item">
-                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
-                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    <a href="../{{item.2}}" class="menu-link">
+
+                                        <span class="menu-text">{{ item.1 }}</span>
                                     </a>
                                 </div>
-                            {% elif menu.xfactor_auth.auth_id == "VER_asset" %}
+                            {% elif item.0 == "VER_asset" %}
                                 <div class="menu-item">
-                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
-                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    <a href="../{{item.2}}" class="menu-link">
+                                        <span class="menu-text">{{ item.1 }}</span>
                                     </a>
                                 </div>
-                            {% elif menu.xfactor_auth.auth_id == "UP_asset" %}
+                            {% elif item.0 == "UP_asset" %}
                                 <div class="menu-item">
-                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
-                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    <a href="../{{item.2}}" class="menu-link">
+                                        <span class="menu-text">{{ item.1 }}</span>
                                     </a>
                                 </div>
-                            {% elif menu.xfactor_auth.auth_id == "EP_asset" %}
+                            {% elif item.0 == "EP_asset" %}
                                 <div class="menu-item">
-                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
-                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    <a href="../{{item.2}}" class="menu-link">
+                                        <span class="menu-text">{{ item.1 }}</span>
                                     </a>
                                 </div>
-                            {% elif menu.xfactor_auth.auth_id == "PUR_asset" %}
+                            {% elif item.0 == "PUR_asset" %}
                                 <div class="menu-item">
-                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
-                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    <a href="../{{item.2}}" class="menu-link">
+                                        <span class="menu-text">{{ item.1 }}</span>
                                     </a>
                                 </div>
-                            {% elif menu.xfactor_auth.auth_id == "SEC_asset" %}
+                            {% elif item.0 == "SEC_asset" %}
                                 <div class="menu-item">
-                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
-                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    <a href="../{{item.2}}" class="menu-link">
+                                        <span class="menu-text">{{ item.1 }}</span>
                                     </a>
                                 </div>
-                            {% elif menu.xfactor_auth.auth_id == "SEC_asset_list" %}
+                            {% elif item.0 == "SEC_asset_list" %}
                                 <div class="menu-item">
-                                    <a href="../{{menu.xfactor_auth.auth_url}}" class="menu-link">
-                                        <span class="menu-text">{{ menu.xfactor_auth.auth_name }}</span>
+                                    <a href="../{{item.2}}" class="menu-link">
+                                        <span class="menu-text">{{ item.1 }}</span>
                                     </a>
                                 </div>
                             {% endif %}
@@ -64,22 +65,22 @@
                     {% endif %}
                 </div> <!-- menu-submenu 닫는 태그 추가 -->
             </div>
-            {% for menu2 in menu_list|dictsort:'xfactor_auth.auth_num' %}
-                {% if menu2.xfactor_auth.auth_id == "Asset" %}
+            {% for item2 in menu_list|dictsort:3%}
+                {% if item2.0 == "Asset" %}
                     <div class="menu-item">
-                        <a href="../{{menu2.xfactor_auth.auth_url}}" class="menu-link">
+                        <a href="../{{item2.2}}" class="menu-link">
                             <span class="menu-icon"><i class="bi bi-collection"></i></span>
                             <span class="menu-text">Asset</span>
                         </a>
                     </div>
-                {% elif menu2.xfactor_auth.auth_id == "History" %}
+                {% elif item2.0 == "History" %}
                     <div class="menu-item">
-                        <a href="../{{menu2.xfactor_auth.auth_url}}" class="menu-link">
+                        <a href="../{{item2.2}}" class="menu-link">
                             <span class="menu-icon"><i class="bi bi-collection"></i></span>
                             <span class="menu-text">History</span>
                         </a>
                     </div>
-                {% elif menu2.xfactor_auth.auth_id == "settings" %}
+                {% elif item2.0 == "settings" %}
                     <div class="menu-item has-sub active">
                         <a href="#" class="menu-link">
                             <span class="menu-icon">

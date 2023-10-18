@@ -179,6 +179,12 @@ class Xfactor_Xuser_Auth(models.Model):
     xfactor_xuser = models.ForeignKey(Xfactor_Xuser, on_delete=models.CASCADE, related_name='xuser', to_field='x_id')
     xfactor_auth = models.ForeignKey(Xfactor_Auth, on_delete=models.CASCADE, related_name='auth', to_field='auth_id')
 
+class Xfactor_Xgroup_Auth(models.Model):
+    auth_use = models.CharField(max_length=500)
+    xfactor_xgroup = models.TextField(null=True)
+    xgroup = models.ForeignKey(Xfactor_Xuser_Group, on_delete=models.CASCADE, related_name='xgroup', to_field='id')
+    xfactor_auth = models.ForeignKey(Xfactor_Auth, on_delete=models.CASCADE, related_name='group_auth', to_field='auth_id')
+
 
 class Daily_Statistics(models.Model):
     daily_statistics_num = models.BigAutoField(auto_created=True, primary_key=True, serialize=False)
