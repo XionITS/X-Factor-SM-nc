@@ -1,5 +1,7 @@
 from django.apps import apps
 from django.conf import settings
+from django.db.models import Value
+from django.db.models.functions import Concat
 from django.http import FileResponse
 from django.views.decorators.csrf import csrf_exempt
 from openpyxl import Workbook
@@ -55,29 +57,76 @@ def export(request, model):
         data = model_class.objects.filter(user_date__gte=today_collect_date).values(*columns)
 
     elif parameter_value == 'all_asset1':
+        data_list = []
         print(model)
         model_class = apps.get_model('common', model)
-        print(model_class)
-        columns = ['ncdb_data__deptName', 'computer_name', 'ncdb_data__userId', 'chassistype', 'ip_address', 'mac_address', 'user_date']
-        data_list = model_class.objects.filter(user_date__gte=today_collect_date, chassistype='Notebook')
-        print(data_list)
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        if request.GET.get('categoryName') == 'Online':
+            if request.GET.get('seriesName') == 'Other':
+                data_list = model_class.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
+            else:
+                data_list = model_class.objects.filter(user_date__gte=today_collect_date, chassistype=request.GET.get('seriesName'))
+        if request.GET.get('categoryName') == 'Total':
+            if request.GET.get('seriesName') == 'Other':
+                data_list = model_class.objects.exclude(chassistype__in=['Notebook', 'Desktop'])
+            else:
+                data_list = model_class.objects.filter(chassistype=request.GET.get('seriesName'))
         data = CommonSerializer(data_list, many=True).data
-        print(data)
-        # column_data = {}
-        # for column in columns:
-        #     column_data[column] = [item[column] for item in data.data]
-        # print(column_data)
-        # if request.GET.get('categoryName') == 'Online':
-        #     if request.GET.get('seriesName') == 'Other':
-        #         data = model_class.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).values(*columns)
-        #     else:
-        #         data = model_class.objects.filter(user_date__gte=today_collect_date, chassistype=request.GET.get('seriesName')).values(*columns)
-        # if request.GET.get('categoryName') == 'Total':
-        #     if request.GET.get('seriesName') == 'Other':
-        #         data = model_class.objects.exclude(chassistype__in=['Notebook', 'Desktop']).values(*columns)
-        #     else:
-        #         data = model_class.objects.filter(chassistype=request.GET.get('seriesName')).values(*columns)
-    # elif parameter_value == 'asset_os_detail1':
+    elif parameter_value == 'asset_os_detail1':
+        data_list = []
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        model_class = apps.get_model('common', model)
+        print(request.GET.get('categoryName'))
+        print(request.GET.get('seriesName'))
+        if request.GET.get('categoryName') == 'Other':
+            if request.GET.get('seriesName') == 'Other':
+                print("asd")
+                data_list = model_class.objects.filter(user_date__gte=today_collect_date).exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop, Notebook'])
+            else:
+                data_list = model_class.objects.filter(user_date__gte=today_collect_date, chassistype=request.GET.get('categoryName')).exclude(os_simple__in=['Windows', 'Mac'])
+        else:
+            if request.GET.get('seriesName') == 'Other':
+                data_list = model_class.objects.filter(user_date__gte=today_collect_date, os_simple=request.GET.get('categoryName')).exclude(chassistype__in=['Desktop, Notebook'])
+            else:
+                data_list = model_class.objects.filter(user_date__gte=today_collect_date, os_simple=request.GET.get('categoryName'), chassistype=request.GET.get('seriesName'))
+        data = CommonSerializer(data_list, many=True).data
+    elif parameter_value == 'asset_os_detail2':
+        data_list = []
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        model_class = apps.get_model('common', model)
+        print(request.GET.get('categoryName'))
+        print(request.GET.get('seriesName'))
+        if request.GET.get('categoryName') == 'Other':
+            if request.GET.get('seriesName') == 'Other':
+                data_list = model_class.objects.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop, Notebook'])
+                print(data_list)
+            else:
+                data_list = model_class.objects.filter(chassistype=request.GET.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
+        else:
+            if request.GET.get('seriesName') == 'Other':
+                data_list = model_class.objects.filter(os_simple=request.GET.get('categoryName')).exclude(chassistype__in=['Desktop, Notebook'])
+            else:
+                data_list = model_class.objects.filter(os_simple=request.GET.get('categoryName'), chassistype=request.GET.get('seriesName'))
+        data = CommonSerializer(data_list, many=True).data
+    elif parameter_value == 'office_chart':
+        print(request.GET.get('categoryName'))
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        data_list = []
+        model_class = apps.get_model('common', model)
+        if request.GET.get('categoryName') == 'Office 16 이상':
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date, essential5__in=['Office 21', 'Office 19', 'Office 16'])
+        if request.GET.get('categoryName') == 'Office 16 미만':
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date, essential5='Office 15')
+        if request.GET.get('categoryName') == 'Office 설치 안됨':
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date, essential5__in=['unconfirmed', '오피스 없음', ''])
+        data = CommonSerializer(data_list, many=True).data
+    elif parameter_value == 'oslistPieChart':
+        data_list = []
+        print(request.GET.get('categoryName'))
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        model_class = apps.get_model('common', model)
+        data_list = model_class.objects.filter(user_date__gte=today_collect_date).annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build__contains=request.GET.get('categoryName'))
+        data = CommonSerializer(data_list, many=True).data
 
     # 전체컬럼 조회
     # 동적으로 모델에서 컬럼명 추출
@@ -104,7 +153,13 @@ def export(request, model):
     for item in data:
         row_data = []
         for column in columns:
-            if column in item:  # Check if the column exists in the item
+            if "__" in column:  # Check if the column name contains "__"
+                field_name, sub_field_name = column.split("__")
+                # If the field is 'ncdb_data', extract 'userId' or 'deptName'
+                if field_name == 'ncdb_data' and isinstance(item[field_name], dict):
+                    sub_field_value = item[field_name].get(sub_field_name, None)  # Default to None if not found
+                    row_data.append(sub_field_value)
+            elif column in item:  # Check if the column exists in the item
                 # Modify the date format before appending it to the worksheet
                 if isinstance(item[column], datetime):
                     row_data.append(item[column].strftime('%Y-%m-%d %H:%M:%S'))  # Modify the date format as desired
@@ -112,6 +167,7 @@ def export(request, model):
                     row_data.append(item[column])
             else:
                 row_data.append(None)  # Or any other default value you want to use for missing data
+
         ws.append(row_data)
 
     # 파일 저장

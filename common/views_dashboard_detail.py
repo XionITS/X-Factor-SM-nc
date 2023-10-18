@@ -233,6 +233,8 @@ def asset_os_paging1(request):
 @csrf_exempt
 def asset_os_paging2(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+    print(request.POST.get('categoryName'))
+    print(request.POST.get('seriesName'))
     filter_text = request.POST.get('search[value]')
     if request.POST.get('categoryName') == 'Other':
         if request.POST.get('seriesName') == 'Desktop':
@@ -250,7 +252,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Common.objects.exclude(chassistype__in=['Notebook', 'Desktop']).exclude( os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Common.objects.exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |

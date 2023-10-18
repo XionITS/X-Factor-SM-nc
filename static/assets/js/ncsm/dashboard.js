@@ -414,7 +414,7 @@ var handleRenderChartNCOMG = function () {
                         var seriesName = config.w.config.series[seriesIndex].name;
                         document.getElementById('categoryName').value = categoryName;
                         document.getElementById('seriesName').value = seriesName;
-                        document.getElementById('chartName').value = 'all_asset2';
+                        document.getElementById('chartName').value = 'asset_os_detail2';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
                         asset_os_detail_list2(categoryName, seriesName);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
@@ -560,7 +560,7 @@ var handleRenderChartNCOMG = function () {
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
                         document.getElementById('categoryName').value = labelsName;
-                        document.getElementById('chartName').value = 'all_asset2';
+                        document.getElementById('chartName').value = 'oslistPieChart';
                         $("#DashModal .modal-title").html(labelsName+' List');
                         oslistPieChart_list(labelsName, seriesName);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
@@ -643,7 +643,7 @@ var handleRenderChartNCOMG = function () {
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
                         document.getElementById('categoryName').value = labelsName;
-                        document.getElementById('chartName').value = 'all_asset2';
+                        document.getElementById('chartName').value = 'osVerPieChart';
                         $("#DashModal .modal-title").html(labelsName+' List');
                         osVerPieChart_list(labelsName, seriesName);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
