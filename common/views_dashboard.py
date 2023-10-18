@@ -26,18 +26,18 @@ def Dashboard(selected_date=None):
     yesterday_collect_date = timezone.now() - timedelta(days=1)
     asset = Daily_Statistics.objects.all()
     if selected_date:
-        start_date_naive = datetime.strptime(selected_date, "%Y-%m-%d %H시")
+        start_date_naive = datetime.strptime(selected_date, "%Y-%m-%d-%H")
         start_date = timezone.make_aware(start_date_naive)
         end_date = start_date + timedelta(hours=1)
-
         asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_date, statistics_collection_date__lt=end_date)
         asset_log_prev = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_date - timedelta(days=1), statistics_collection_date__lt=end_date - timedelta(days=1))
         #print("selected_Date있음")
     else:
         latest_date = Daily_Statistics_log.objects.latest('statistics_collection_date').statistics_collection_date
         previous_date = latest_date - timedelta(days=1)
-
-        asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__lte=latest_date).order_by('-statistics_collection_date')
+        start_time = timezone.datetime(latest_date.year, latest_date.month, latest_date.day, latest_date.hour, tzinfo=timezone.utc)
+        end_time = start_time + timedelta(hours=1)
+        asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_time, statistics_collection_date__lt=end_time)
         asset_log_prev = Daily_Statistics_log.objects.filter(statistics_collection_date__date=previous_date)
         #print("selected_Date없음")
 
@@ -62,26 +62,30 @@ def Dashboard(selected_date=None):
     discover_data_list = discover_min_list + discover_day_list
     #print(discover_data_list)
     #위치별 자산현황
-    location_data = asset.filter(classification='subnet').order_by('item').values('item', 'item_count')
+    location_data = asset_log.filter(classification='subnet').order_by('item').values('item', 'item_count')
     location_items = [data['item'] for data in location_data]
     location_item_counts = [data['item_count'] for data in location_data]
     location_data_list = [location_items, location_item_counts]
 
     # 보안패치 자산현황
-    hotfix_data = asset.filter(classification='hotfix').order_by('-item_count').values('item', 'item_count')
-    hotfix_items = [data['item'] for data in hotfix_data]
+    hotfix_rename = {
+        'unnecessery': '보안패치 불필요',
+        'necessery': '보안패치 필요'
+    }
+    hotfix_data = asset_log.filter(classification='hotfix').order_by('-item_count').values('item', 'item_count')
+    hotfix_items = [hotfix_rename.get(data['item'], data['item']) for data in hotfix_data]
     hotfix_item_counts = [data['item_count'] for data in hotfix_data]
     hotfix_data_list = [hotfix_items, hotfix_item_counts]
 
     # Office 버전
     # office_data = asset.filter(classification='office_ver').exclude(item='').order_by('-item_count').values('item', 'item_count')
-    office_data_new = asset.filter(classification='office_ver', item__in=['Office 21', 'Office 19', 'Office 16']).aggregate(total=Sum('item_count'))
+    office_data_new = asset_log.filter(classification='office_ver', item__in=['Office 21', 'Office 19', 'Office 16']).aggregate(total=Sum('item_count'))
     if office_data_new['total'] == None:
         office_data_new['total'] = 0
-    office_data_old = asset.filter(classification='office_ver', item__in=['Office 15']).aggregate(total=Sum('item_count'))
+    office_data_old = asset_log.filter(classification='office_ver', item__in=['Office 15']).aggregate(total=Sum('item_count'))
     if office_data_old['total'] == None:
         office_data_old['total'] = 0
-    office_data_none = asset.filter(classification='office_ver', item__in=['unconfirmed', '오피스 없음', '']).aggregate(
+    office_data_none = asset_log.filter(classification='office_ver', item__in=['unconfirmed', '오피스 없음', '']).aggregate(
         total=Sum('item_count'))
     # office_items = [data['item'] for data in office_data]
     # office_item_counts = [data['item_count'] for data in office_data]
