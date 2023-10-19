@@ -82,7 +82,7 @@ def Dashboard(selected_date=None):
     office_data_new = asset_log.filter(classification='office_ver', item__in=['Office 21', 'Office 19', 'Office 16']).aggregate(total=Sum('item_count'))
     if office_data_new['total'] == None:
         office_data_new['total'] = 0
-    office_data_old = asset_log.filter(classification='office_ver', item__in=['Office 15']).aggregate(total=Sum('item_count'))
+    office_data_old = asset_log.filter(classification='office_ver', item='Office 15').aggregate(total=Sum('item_count'))
     if office_data_old['total'] == None:
         office_data_old['total'] = 0
     office_data_none = asset_log.filter(classification='office_ver', item__in=['unconfirmed', '오피스 없음', '']).aggregate(
