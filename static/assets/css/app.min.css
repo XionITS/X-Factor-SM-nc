@@ -31152,3 +31152,21 @@ input:checked+labl::before{
     z-index:999999 !important;
 }
 
+.color-1 {
+    color: #009D83;
+}
+.color-2 {
+    color: rgb(255, 159, 12);
+}
+.color-3 {
+    color: #B8A89A;
+}
+.color-4 {
+    color: #46537B;
+}
+.color-5 {
+    color: #2F4858;
+}
+.color-6 {
+    color: #4B778D2;
+}

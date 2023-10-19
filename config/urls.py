@@ -16,6 +16,7 @@ from common import views_history
 from common import views_user_management
 from common import views_group_management
 from common import views_log_management
+from common import views_report
 from common.CallbackView import CallbackView
 from common.LoginView import LoginView
 
@@ -107,6 +108,10 @@ urlpatterns = [
     #path('group_management', views_group_management.group),
     path('log_management/', views_log_management.log),
     path('log_management/paging/', views_log_management.log_paging),
+
+    #Report
+    path('report/', views_report.create, name='report_date'),
+
 
     # path('login/', LoginView.as_view(), name='login'),
     # path('callback/', CallbackView.as_view(), name='callback'),

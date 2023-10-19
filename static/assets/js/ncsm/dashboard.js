@@ -568,7 +568,7 @@ var handleRenderChartNCOMG = function () {
                     }
                 },
             },
-            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858', '#4B778D'],
             labels: labelsData,
             dataLabels: {
                 enabled: true,
@@ -679,6 +679,9 @@ var handleRenderChartNCOMG = function () {
                 }
             }
         };
+        if (seriesData.length === 0) {
+            donutOptions.legend.show = false;
+        }
         var os_pie_chart = new ApexCharts(document.querySelector("#" + divId), donutOptions);
         os_pie_chart.render();
     }
@@ -891,10 +894,23 @@ var handleRenderChartNCOMG = function () {
 
     hotfix_counts = dataList.hotfix_data_list[1]
     hotfix_items = dataList.hotfix_data_list[0]
-    const hotfix_filteredIndices = hotfix_counts.map((count, idx) => count !== 0 ? idx : -1).filter(index => index !== -1);
-    const hotfix_filtered_counts = hotfix_filteredIndices.map(idx => hotfix_counts[idx]);
-    const hotfix_filtered_items = hotfix_filteredIndices.map(idx => hotfix_items[idx]);
-    createPieChart("hotfix_donut", hotfix_filtered_counts, hotfix_filtered_items);
+
+    // 순서를 조정합니다.
+    const order = ['보안패치 불필요', '보안패치 필요'];
+
+    const sortedItems = [];
+    const sortedCounts = [];
+
+    order.forEach(label => {
+        const idx = hotfix_items.indexOf(label);
+        if(idx !== -1) {
+            sortedItems.push(hotfix_items[idx]);
+            sortedCounts.push(hotfix_counts[idx]);
+        }
+    });
+
+    createPieChart("hotfix_donut", sortedCounts, sortedItems);
+
 
 
     //--------------------------------------------------------------------------
@@ -1095,7 +1111,7 @@ var handleRenderChartNCOMG = function () {
     office_items = dataList.office_data_list[0]
     office_chart("office_donut", office_counts, office_items);
 
-//############################################################################################################################
+//#######월별 자산 변화 수##############################
     var asset_ch_chart_options = {
         series: [
             {
@@ -1414,4 +1430,6 @@ $(document).ready(function () {
 
 ///////////////////////Chart////////////////////
     handleRenderChartNCOMG();
+    //console.log(dataList);
+
 });
