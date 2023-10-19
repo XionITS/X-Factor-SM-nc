@@ -60,16 +60,18 @@ def Dashboard(selected_date=None):
         discover_day_list = [[discover_day.item + '_day', discover_day.item_count]]
 
     discover_data_list = discover_min_list + discover_day_list
-    #print(discover_data_list)
     #위치별 자산현황
     location_data = asset_log.filter(classification='subnet').order_by('item').values('item', 'item_count')
-    location_items = [data['item'] for data in location_data]
-    location_item_counts = [data['item_count'] for data in location_data]
+    if location_data:
+        location_items = [data['item'] for data in location_data]
+        location_item_counts = [data['item_count'] for data in location_data]
+    else:
+        location_items = [0]
+        location_item_counts = [0]
     location_data_list = [location_items, location_item_counts]
-
     # 보안패치 자산현황
     hotfix_rename = {
-        'unnecessery': '보안패치 불필요',
+        'unncessery': '보안패치 불필요',
         'necessery': '보안패치 필요'
     }
     hotfix_data = asset_log.filter(classification='hotfix').order_by('-item_count').values('item', 'item_count')
@@ -87,6 +89,8 @@ def Dashboard(selected_date=None):
         office_data_old['total'] = 0
     office_data_none = asset_log.filter(classification='office_ver', item__in=['unconfirmed', '오피스 없음', '']).aggregate(
         total=Sum('item_count'))
+    if office_data_none['total'] == None:
+        office_data_none['total'] = 0
     # office_items = [data['item'] for data in office_data]
     # office_item_counts = [data['item_count'] for data in office_data]
     office_items = ['Office 16 이상', 'Office 16 미만', 'Office 설치 안됨']
@@ -224,7 +228,12 @@ def Dashboard(selected_date=None):
 
     # 월별 자산 변화 수 차트
     #asset_log = Daily_Statistics_log.objects.all()
-    lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
+    #lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
+    if selected_date:
+        lastDay = (start_date_naive - relativedelta(months=5)).strftime("%Y-%m-%d")
+    else:
+        lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
+        selected_date = str(now())
     lastMonth = pd.date_range(lastDay, periods=5, freq='M').strftime("%Y-%m-%d")
     LM = tuple(lastMonth)
     latest_dates_desktop1 = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date__date=LM[0]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
@@ -295,31 +304,33 @@ def Dashboard(selected_date=None):
     latest_dates_desktop = latest_dates_desktop1 | latest_dates_desktop2 | latest_dates_desktop3 | latest_dates_desktop4| latest_dates_desktop5
     monthly_asset_ditem_count = [latest_dates_desktop1C, latest_dates_desktop2C, latest_dates_desktop3C, latest_dates_desktop4C, latest_dates_desktop5C]
     monthly_asset_litem_count = [latest_dates_laptop1C, latest_dates_laptop2C, latest_dates_laptop3C, latest_dates_laptop4C, latest_dates_laptop5C]
-    minutely_asset_desktop = asset.filter(classification='Desktop_chassis_total').aggregate(total_item_count=Sum('item_count'))
-    minutely_asset_laptop = asset.filter(classification='Notebook_chassis_total').aggregate(total_item_count=Sum('item_count'))
+    minutely_asset_desktop = asset_log.filter(classification='Desktop_chassis_total').aggregate(total_item_count=Sum('item_count'))
+    minutely_asset_laptop = asset_log.filter(classification='Notebook_chassis_total').aggregate(total_item_count=Sum('item_count'))
     if minutely_asset_laptop['total_item_count'] == None:
         minutely_asset_laptop['total_item_count'] = 0
-    minutely_asset_date = asset.filter(classification='Desktop_chassis_total').values('statistics_collection_date').first()
+    if minutely_asset_desktop['total_item_count'] == None:
+        minutely_asset_desktop['total_item_count'] = 0
     date1 = datetime.strptime(LM[0], '%Y-%m-%d').strftime('%m')+'월'
     date2 = datetime.strptime(LM[1], '%Y-%m-%d').strftime('%m')+'월'
     date3 = datetime.strptime(LM[2], '%Y-%m-%d').strftime('%m')+'월'
     date4 = datetime.strptime(LM[3], '%Y-%m-%d').strftime('%m')+'월'
     date5 = datetime.strptime(LM[4], '%Y-%m-%d').strftime('%m')+'월'
     monthly_asset_date = [date1, date2, date3, date4, date5]
-    # monthly_asset_date = [entry['max_date'].strftime('%m') + "월" for entry in latest_dates_desktop]
-    minutely_asset_date = minutely_asset_date['statistics_collection_date'].strftime('%m') + "월"
+    minutely_asset_date = selected_date[5:7] + "월"
     monthly_asset_data_list = [monthly_asset_ditem_count+[minutely_asset_desktop['total_item_count']], monthly_asset_litem_count+[minutely_asset_laptop['total_item_count']], monthly_asset_date+[minutely_asset_date]]
-    # CPU 사용량 차트
-    try:
-        used_tcpu = asset.filter(classification='t_cpu').filter(item='True').values('item_count')
-        notused_tcpu = asset.filter(classification='t_cpu').filter(item='False').values('item_count')
-        cpu_data_list = [used_tcpu[0]['item_count'], notused_tcpu[0]['item_count']]
-    except:
-        cpu_data_list = [0, 0]
+
+    # 태니엄 프로세스 CPU 사용량 차트
+    used_tcpu = asset_log.filter(classification='t_cpu').filter(item='True').values('item_count')
+    notused_tcpu = asset_log.filter(classification='t_cpu').filter(item='False').values('item_count')
+    used_tcpu_count = used_tcpu[0]['item_count'] if used_tcpu else 0
+    notused_tcpu_count = notused_tcpu[0]['item_count'] if notused_tcpu else 0
+    cpu_data_list = [used_tcpu_count, notused_tcpu_count]
 
     # os버전별 자산 현황
     try:
-        os_asset_data_list = asset.filter(classification='win_os_build').values('item', 'item_count')
+        os_asset_data_list = asset_log.filter(classification='win_os_build').values('item', 'item_count')
+        if not os_asset_data_list:
+            os_asset_data_list = [{'item': 0, 'item_count': 0}]
         os_asset_data_name_list = [entry['item'] for entry in os_asset_data_list]
         os_asset_data_count_list = [[entry['item_count'] for entry in os_asset_data_list]] + [os_asset_data_name_list]
         # print(os_asset_data_count_list)
@@ -328,7 +339,7 @@ def Dashboard(selected_date=None):
 
     # os버전별 자산 통계 차트
     try:
-        os_up = asset.filter(classification='os_version_up').values('item', 'item_count')
+        os_up = asset_log.filter(classification='os_version_up').values('item', 'item_count')
         os_up_data_list = [entry['item_count'] for entry in os_up]
     except:
         os_up_data_list = ['-', '-']

@@ -9,6 +9,9 @@
 <div id="content" class="dashboard-content">
     <div class="row justify-content-sm-between">
         <div class="d-flex justify-content-end mb-2">
+            <button id="reportPop" class="btn btn-secondary" type="button" data-bs-display="static" aria-expanded="false">
+                    Report
+            </button>
             <!--데이터피커-->
             <div class="me-3">
                 <div class="input-group">
@@ -396,7 +399,7 @@
                                 <div class="w-75 align-items-center small text-white text-opacity-50 new-text-truncate fs-14px">
                                     {% for data in  dataList.os_asset_data_list %}
                                     <div class="mb-2">
-                                        <i class="fas fa-server fa-fw me-1"></i>
+                                        <i class="fas fa-server fa-fw me-1 color-{{ forloop.counter }}"></i>
                                         <span>{{data.item}}</span>
                                     </div>
 
@@ -581,6 +584,10 @@
         </div>
 <!-- END #content -->
 <script>
+/*document.getElementById('reportPop').addEventListener('click', function() {
+    window.open('../report', 'PopupWindowName', 'width=600,height=400,scrollbars=no,resizable=no');
+});
+
     function exportToExcel() {
     // seriesName의 값을 가져옵니다.
     var seriesName = document.getElementById('seriesName').value;
@@ -600,7 +607,7 @@
 
     // 변경된 URL로 이동합니다.
     window.location.href = url.toString();
-}
+}*/
 
 </script>
 {% endblock %}
