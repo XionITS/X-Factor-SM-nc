@@ -132,12 +132,14 @@ def ver_asset_paging(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
+        1: 'chassistype',
         2: 'computer_name',
-        3: 'ip_address',
-        4: 'os_total',
-        5: 'os_version',
-        6: 'os_build',
-        7: 'memo'
+        3: 'logged_name',
+        4: 'ip_address',
+        5: 'os_total',
+        6: 'os_version',
+        7: 'os_build',
+        8: 'memo'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')

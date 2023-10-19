@@ -446,7 +446,6 @@ def DeleteAuth(id):
 
 @csrf_exempt
 def Group_AutoAuth(xuser_id_list,id):
-
     Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
     Cur = Conn.cursor()
     for xgroup_id in xuser_id_list:

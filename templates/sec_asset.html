@@ -19,9 +19,13 @@
                     <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="creategroup" aria-expanded="false">
                     그룹 생성
                     </button>
-                    <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="createdeploy" aria-expanded="false">
-                    배포 하기
-                    </button>
+                    {% for item in menu_list %}
+                        {% if item.0 == 'settings' %}
+                            <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="createdeploy" aria-expanded="false">
+                            배포 하기
+                            </button>
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 <table id="sec_total_list" class="table fs-14px mb-12 text-center text-white text-opacity-2 nc-12 table-hover" style="width: 700px; text-align: center;">
                     <thead>
@@ -46,14 +50,24 @@
                         </button>
                             <div class="dropdown-menu" aria-labelledby="column-dropdown" id="search-dropdown">
                             <!-- 드롭다운 메뉴 아이템들 -->
-                                <a class="dropdown-item" href="#" data-column="computer__computer_name">컴퓨터 이름</a>
-                                <a class="dropdown-item" href="#" data-column="computer__os_simple">구분</a>
-                                <a class="dropdown-item" href="#" data-column="security1">Cososys</a>
-                                <a class="dropdown-item" href="#" data-column="security2">Symantec</a>
-                                <a class="dropdown-item" href="#" data-column="security3">CBR</a>
-                                <a class="dropdown-item" href="#" data-column="security4">CBC</a>
-                                <a class="dropdown-item" href="#" data-column="security5">McAfee</a>
-                                <a class="dropdown-item" href="#" data-column="computer__memo">메모</a>
+                                <!--                            <a class="dropdown-item" href="#" data-column="depName">부서</a>-->
+<!--                            <a class="dropdown-item" href="#" data-column="ncdb_data__userName">이름</a>-->
+<!--                            <a class="dropdown-item" href="#" data-column="ncdb_data__userId">계정</a>-->
+                            <a class="dropdown-item" href="#" data-column="ip_address">IP주소</a>
+                            <a class="dropdown-item" href="#" data-column="mac_address">MAC주소</a>
+                            <a class="dropdown-item" href="#" data-column="computer_name">컴퓨터 이름</a>
+                            <a class="dropdown-item" href="#" data-column="memo">메모</a>
+<!--                                <a class="dropdown-item" href="#" data-column="computer__ncdb_data__deptName">부서</a>-->
+<!--                                <a class="dropdown-item" href="#" data-column="computer__ncdb_data__userName">이름</a>-->
+<!--                                <a class="dropdown-item" href="#" data-column="computer__ncdb_data__userId">계정</a>-->
+<!--                                <a class="dropdown-item" href="#" data-column="computer__computer_name">컴퓨터 이름</a>-->
+<!--                                <a class="dropdown-item" href="#" data-column="computer__chassistype">구분</a>-->
+<!--                                <a class="dropdown-item" href="#" data-column="security1">Cososys</a>-->
+<!--                                <a class="dropdown-item" href="#" data-column="security2">Symantec</a>-->
+<!--                                <a class="dropdown-item" href="#" data-column="security3">CBR</a>-->
+<!--                                <a class="dropdown-item" href="#" data-column="security4">CBC</a>-->
+<!--                                <a class="dropdown-item" href="#" data-column="security5">McAfee</a>-->
+<!--                                <a class="dropdown-item" href="#" data-column="computer__memo">메모</a>-->
                             </div>
                     </div>
                     <div class="input-group">
@@ -69,10 +83,13 @@
                 <table id="sec_asset_list" class="table fs-14px mb-0 text-center text-white text-opacity-60 m-auto nc-12 table-hover">
                     <thead>
                         <tr class="table-active text-white text-opacity-75">
+                            <th class="text-center">선택</th>
                             <th class="text-center">No</th>
-                            <th class="text-center">구분</th>
+                            <th class="text-center">OS</th>
+                            <th class="text-center">부서</th>
+                            <th class="text-center">이름</th>
+                            <th class="text-center">계정</th>
                             <th class="text-center">컴퓨터 이름</th>
-<!--                            <th class="text-center">사용자</th>-->
                             <th class="text-center">Cososys</th>
                             <th class="text-center">Symantec</th>
                             <th class="text-center">CarbonBlack CBR</th>
@@ -80,7 +97,6 @@
                             <th class="text-center">McAfee VSE</th>
                             <th class="text-center">더보기</th>
                             <th class="text-center">메모</th>
-                            <th class="text-center">선택</th>
                         </tr>
                     </thead>
                     <tbody>

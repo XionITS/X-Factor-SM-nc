@@ -202,7 +202,10 @@ def create_auth(request):
     xgroup_name = request.POST['xgroup_name']
     xgroup_description = request.POST['xgroup_description']
     xuserIds = json.loads(request.POST['xuserIds'])
-
+    print(xuserIds)
+    if not xuserIds:
+        print("abv")
+        xuserIds = ['']
 
     # Computer Group 만들기
     text = ""

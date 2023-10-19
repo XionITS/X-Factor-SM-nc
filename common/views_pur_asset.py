@@ -172,10 +172,11 @@ def pur_asset_paginghw(request):
         3: 'computer__computer_name',
         4: 'computer__ip_address',
         5: 'computer__first_network',
-        6: 'mem_use',
-        7: 'disk_use',
-        8: 'hw',
-        9: 'computer__memo',
+        6: 'computer__logged_name',
+        7: 'mem_use',
+        8: 'disk_use',
+        9: 'hw',
+        10: 'computer__memo',
         # Add mappings for other columns here
     }
 

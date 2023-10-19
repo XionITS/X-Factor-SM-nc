@@ -119,12 +119,13 @@ def up_asset_paging(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        2: 'chassistype',
-        3: 'computer_name',
-        4: 'mac_address',
-        5: 'ip_address',
-        6: 'hotfix',
-        7: 'hotfix_date',
+        1: 'chassistype',
+        2: 'computer_name',
+        3: 'logged_name',
+        4: 'ip_address',
+        5: 'os_total',
+        6: 'os_version',
+        7: 'os_build',
         8: 'memo'
         # Add mappings for other columns here
     }
@@ -151,8 +152,8 @@ def up_asset_paging(request):
     user_list = CommonSerializer(page, many=True).data
     # Prepare the response
 
-    hotfix_list = user.values_list('hotfix', flat=True)
-    hotfix_date_list = user.values_list('hotfix_date', flat=True)
+    #hotfix_list = user.values_list('hotfix', flat=True)
+    #hotfix_date_list = user.values_list('hotfix_date', flat=True)
     # print(hotfix_date_list)
 
     response = {

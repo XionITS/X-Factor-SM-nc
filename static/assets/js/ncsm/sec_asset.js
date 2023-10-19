@@ -109,7 +109,10 @@ var sec_asset_list = function () {
                 searchable: false
             },
             {data: '', title: 'No', searchable: true},
-            {data: 'computer.os_simple', title: '구분', searchable: true},
+            {data: 'computer.os_simple', title: 'OS', searchable: true},
+            { data: 'computer.ncdb_data.deptName', title: '부서', searchable: true },
+			{ data: 'computer.ncdb_data.userName', title: '이름', searchable: true },
+	        { data: 'computer.ncdb_data.userId', title: '계정', searchable: true },
             {data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true},
             {data: 'security1', title: 'Cososys', searchable: true},
             {data: 'security2', title: 'Symantec', searchable: true},
@@ -150,62 +153,58 @@ var sec_asset_list = function () {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.computer.os_simple + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            {targets: 3, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
             {
-                targets: 3,
-                width: "10%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 4,
-                width: "10%",
+                targets: 7,
+                width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
-                targets: 5,
-                width: "10%",
+                targets: 8,
+                width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.security2 + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
-                targets: 6,
-                width: "10%",
+                targets: 9,
+                width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.security3 + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
-                targets: 7,
-                width: "10%",
+                targets: 10,
+                width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.security4 + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
-                targets: 8,
-                width: "10%",
+                targets: 11,
+                width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.security5 + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
-                targets: 9,
+                targets: 12,
                 width: "5%",
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
@@ -216,8 +215,8 @@ var sec_asset_list = function () {
                 }
             },
             {
-                targets: 10,
-                width: "10%",
+                targets: 13,
+                width: "5%",
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     if (data === null || data === undefined || data.trim() === '') {
