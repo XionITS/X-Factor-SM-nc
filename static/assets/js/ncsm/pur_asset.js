@@ -64,14 +64,14 @@ var hw_pur_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    2: 'chassistype',
-                    3: 'computer_name',
-                    5: 'ip_address',
-                    6: 'first_network',
-                    7: 'mem_use',
-                    8: 'disk_use',
-                    9: 'hw',
-                    10: 'memo',
+                    1: 'chassistype',
+                    2: 'dep',
+                    3: 'name',
+                    4: 'logged_name',
+                    5: 'computer_name',
+                    6: 'ip_address',
+                    7: 'mac_address',
+                    8: 'memo'
 
                 };
                 data.filter = {
@@ -99,8 +99,10 @@ var hw_pur_asset_list = function () {
             },
             {data: '', title: 'No', searchable: true},
             {data: 'computer.chassistype', title: '구분', searchable: true},
+            { data: 'computer.ncdb_data.deptName', title: '부서', searchable: true },
+			{ data: 'computer.ncdb_data.userName', title: '이름', searchable: true },
+			{ data: 'computer.ncdb_data.userId', title: '계정', searchable: true },
             {data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true},
-            {data: '', title: '사용자', searchable: true},
             {data: 'computer.ip_address', title: 'IPv4', searchable: true},
             {data: 'computer.first_network', title: '최초 네트워크 접속일', searchable: true},
             {data: 'mem_use', title: '메모리 사용률', searchable: true},
@@ -150,55 +152,20 @@ var hw_pur_asset_list = function () {
             },
             {
                 targets: 2,
-                width: "3%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 3,
-                width: "7%",
-                className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 4,
-                width: "10%",
-                className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 5,
                 width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer.ip_address + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 6,
-                width: "10%",
-                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
-                render: function (data, type, row) {
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {
-                targets: 7,
-                width: "7%",
-                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
-                render: function (data, type, row) {
-                    return '<span data-toggle="tooltip">' + data + '</span>'
-                }
-            },
+            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
             {
                 targets: 8,
-                width: "7%",
+                width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     return '<span data-toggle="tooltip">' + data + '</span>'
@@ -206,6 +173,22 @@ var hw_pur_asset_list = function () {
             },
             {
                 targets: 9,
+                width: "7%",
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
+                render: function (data, type, row) {
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 10,
+                width: "7%",
+                className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
+                render: function (data, type, row) {
+                    return '<span data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 11,
                 width: "15%",
                 className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
@@ -213,8 +196,8 @@ var hw_pur_asset_list = function () {
                 }
             },
             {
-                targets: 10,
-                width: "15%",
+                targets: 12,
+                width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     if (data === null || data === undefined || data.trim() === '') {
@@ -420,8 +403,10 @@ var sw_pur_asset_list = function () {
             },
             {data: '', title: 'No', searchable: true},
             {data: 'computer.chassistype', title: '구분', searchable: true},
+            { data: 'computer.ncdb_data.deptName', title: '부서', searchable: true },
+			{ data: 'computer.ncdb_data.userName', title: '이름', searchable: true },
+			{ data: 'computer.ncdb_data.userId', title: '계정', searchable: true },
             {data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true},
-            {data: '', title: '사용자', searchable: true},
             {data: 'computer.ip_address', title: 'IPv4', searchable: true},
             {data: 'computer.sw_list', title: '소프트웨어 목록', searchable: true},
             {data: 'computer.sw_ver_list', title: '소프트웨어 버전', searchable: true},
@@ -473,32 +458,14 @@ var sw_pur_asset_list = function () {
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+
             {
-                targets: 3,
-                width: "10%",
-                className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 4,
-                width: "5%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer.ip_address + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 5,
-                width: "5%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer.ip_address + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 6, width: "15%", className: 'text-start new-text-truncate flex-cloumn align-middle',
+                targets: 8, width: "10%", className: 'text-start new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const swList = row.computer.sw_list;
                     const swListArray = swList ? swList.split('<br>') : [];
@@ -507,7 +474,7 @@ var sw_pur_asset_list = function () {
             },
 
             {
-                targets: 7, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
+                targets: 9, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     const swVer = row.computer.sw_ver_list;
                     const swVerArray = swVer ? swVer.split('<br>') : [];
@@ -516,7 +483,7 @@ var sw_pur_asset_list = function () {
             },
 
             {
-                targets: 8, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
+                targets: 10, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     const swInstall = row.computer.sw_install;
                     const swInstallArray = swInstall ? swInstall.split('<br>') : [];
@@ -525,7 +492,7 @@ var sw_pur_asset_list = function () {
             },
 
             {
-                targets: 9, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden align-middle',
+                targets: 11, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer.computer_name;
                     const swList = row.computer.sw_list;
@@ -536,7 +503,7 @@ var sw_pur_asset_list = function () {
             },
 
             {
-                targets: 10,
+                targets: 12,
                 width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
@@ -653,7 +620,7 @@ var sw_pur_asset_list = function () {
 
 function pur_hwbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>사용자</th><th>IPv4</th><th>first_network</th><th>mem_use</th><th>disk_use</th><th>hw</th><th>메모</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75 text-center"><th>선택</th><th>No</th><th>구분</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>최초 네트워크 접속일</th><th>메모리 사용률</th><th>디스크 사용률</th><th>부품목록</th><th>메모</th></tr></thead><tbody></tbody>';
     $('#hs_pur_asset_list').DataTable().destroy();
     $('#hs_pur_asset_list').html(newTableContent);
     hw_pur_asset_list();
@@ -664,7 +631,7 @@ function pur_hwbutton(btn) {
 
 function pur_swbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>선택</th><th>No</th><th>구분</th><th>컴퓨터 이름</th><th>사용자</th><th>IPv4</th><th>소프트웨어 목록</th><th>소프트웨어 버전</th><th>설치 일자</th><th>더보기</th><th>메모</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75 text-center"><th>선택</th><th>No</th><th>구분</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>소프트웨어 목록</th><th>소프트웨어 버전</th><th>설치 일자</th><th>더보기</th><th>메모</th></tr></thead><tbody></tbody>';
     $('#hs_pur_asset_list').DataTable().destroy();
     $('#hs_pur_asset_list').html(newTableContent);
     sw_pur_asset_list();

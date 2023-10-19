@@ -25,9 +25,13 @@
                     <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="creategroup" aria-expanded="false">
                     그룹 생성
                     </button>
-                    <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="createdeploy" aria-expanded="false">
-                    배포 하기
-                    </button>
+                    {% for item in menu_list %}
+                        {% if item.0 == 'settings' %}
+                            <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="createdeploy" aria-expanded="false">
+                            배포 하기
+                            </button>
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 <!-- 검색어 필터  -->
                 <div class="search-dropdown">
@@ -37,12 +41,13 @@
                         </button>
                             <div class="dropdown-menu" aria-labelledby="column-dropdown" id="search-dropdown">
                             <!-- 드롭다운 메뉴 아이템들 -->
-                                <a class="dropdown-item" href="#" data-column="computer_name">컴퓨터 이름</a>
-                                <a class="dropdown-item" href="#" data-column="ip_address">IP주소</a>
-                                <a class="dropdown-item" href="#" data-column="os_total">OS</a>
-                                <a class="dropdown-item" href="#" data-column="os_version">버전</a>
-                                <a class="dropdown-item" href="#" data-column="os_build">빌드</a>
-                                <a class="dropdown-item" href="#" data-column="memo">메모</a>
+<!--                            <a class="dropdown-item" href="#" data-column="depName">부서</a>-->
+<!--                            <a class="dropdown-item" href="#" data-column="ncdb_data__userName">이름</a>-->
+<!--                            <a class="dropdown-item" href="#" data-column="ncdb_data__userId">계정</a>-->
+                            <a class="dropdown-item" href="#" data-column="ip_address">IP주소</a>
+                            <a class="dropdown-item" href="#" data-column="mac_address">MAC주소</a>
+                            <a class="dropdown-item" href="#" data-column="computer_name">컴퓨터 이름</a>
+                            <a class="dropdown-item" href="#" data-column="memo">메모</a>
                             </div>
                     </div>
                     <div class="input-group">
@@ -58,14 +63,16 @@
                 <table id="ver_asset_list" class="table fs-14px mb-0 text-center text-white text-opacity-60 m-auto nc-12 table-hover">
                     <thead>
                         <tr class="table-active text-white text-opacity-75">
+                            <th class="text-center">선택</th>
                             <th class="text-center">No</th>
+                            <th class="text-center">부서</th>
+                            <th class="text-center">이름</th>
+                            <th class="text-center">계정</th>
                             <th class="text-center">컴퓨터 이름</th>
                             <th class="text-center">IPv4</th>
-                            <th class="text-center">OS</th>
-                            <th class="text-center">OS_Version</th>
-                            <th class="text-center">OS_Build</th>
+                            <th class="text-center" >MAC</th>
+                            <th class="text-center" >하드웨어 목록</th>
                             <th class="text-center">메모</th>
-                            <th class="text-center">선택</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,33 +108,33 @@
     </div>
 </div>
 
-<!--<div class="modal" name="groupModal" id="groupModal" tabindex="-1">-->
-<!--    <div class="modal-dialog modal-dialog-scrollable">-->
-<!--        <div class="modal-content" style="background-color:#1d2835;">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title"></h5>-->
-<!--            </div>-->
-<!--            <form id="GroupCreateForm" class="d-flex">-->
-<!--                <div class="modal-body col-md-8">-->
-<!--                    <div class="form-group mb-3">-->
-<!--                        <label class="form-label" for="groupName">Group Name</label>-->
-<!--                        <input class="form-control form-control-lg mb-3" id="groupName" name="groupName" type="text" placeholder="">-->
-<!--                    </div>-->
-<!--                    <label class="form-label" for="groupDescription">Group Description</label>-->
-<!--                    <textarea class="form-control" id="groupDescription" name="groupDescription" rows="5"></textarea>-->
-<!--                </div>-->
-<!--                <div class="modal-body col-md-4">-->
-<!--                    <div class="form-check"></div>-->
-<!--                </div>-->
-<!--            </form>-->
 
-<!--            <div class="modal-footer">-->
-<!--                <button type="button" class="btn btn-primary groupCreate" id="groupCreate">CREATE</button>-->
-<!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="modal" name="verModal" id="verModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content" style="background-color:#1d2835;">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+      </div>
+      <div class="modal-body">
+<!--          <div class="mb-2">-->
+<!--              <input type="text" id="searchInput2" class="form-control" placeholder="검색할 내용을 입력하세요 (입력한 값이 노란색으로 보여집니다.)">-->
+<!--          </div>-->
+          <table class="table hstable" style="overflow-y: auto;">
+              <thead class="hsthead">
+                    <th scope="col">OS 정보</th>
+                    <th scope="col">값</th>
+
+              </thead>
+              <tbody class="hstbody"></tbody>
+          </table>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 

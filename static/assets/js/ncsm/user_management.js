@@ -500,9 +500,10 @@ function um_userbutton(btn) {
     $('#um_list').DataTable().destroy();
     $('#um_list').html(newTableContent);
     um_user_list();
-    $('#um_creategroup').text("그룹 생성");
+    $('#um_creategroup').addClass('hidden');
+    $('#um_delete').text("USER 삭제");
     $(btn).addClass('active');
-    $('#um_creategroup').removeClass('hidden');
+    //$('#um_creategroup').removeClass('hidden');
     //$('.hsbutton').not(btn).removeClass('active');
     checkedItems = {};
 };
@@ -513,9 +514,10 @@ function um_groupbutton(btn) {
     $('#um_list').DataTable().destroy();
     $('#um_list').html(newTableContent);
     um_group_list();
+    $('#um_delete').text("GROUP 삭제");
     //$('#um_creategroup').text("그룹 생성/수정");
     $(btn).addClass('active');
-    //$('#um_creategroup').addClass('hidden');
+    $('#um_creategroup').removeClass('hidden');
     //$('.hsbutton').not(btn).removeClass('active');
     checkedItems = {};
 };
@@ -1004,7 +1006,9 @@ $(document).on("click",".um_groupalter", function (e){
                     </div>`;
     modalbody += '<input type="hidden" id="id" value="'+id+'">';
     for (const x_id of xuser_id_array) {
-        modalbody += '<input class="form-check-input" type="checkbox" value="'+x_id+'" id="'+x_id+'" checked><label class="form-check-label" for="'+x_id+'">'+x_id+'</label><br>'
+        if (x_id.trim() !== ''){
+            modalbody += '<input class="form-check-input" type="checkbox" value="'+x_id+'" id="'+x_id+'" checked><label class="form-check-label" for="'+x_id+'">'+x_id+'</label><br>'
+        }
     }
     $("#groupNameAlter_auth").val(xgroup_name);
     $("#groupDescriptionAlter_auth").val(xgroup_note);
