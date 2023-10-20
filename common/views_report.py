@@ -15,6 +15,7 @@ from functools import reduce
 from datetime import datetime, timedelta
 from django.core.serializers import serialize
 from django.core.paginator import Paginator, EmptyPage
+from calendar import monthrange
 from .models import *
 from .serializers import *
 import logging
@@ -66,21 +67,28 @@ def report(selected_date=None):
             statistics_collection_date__hour=hour,
             item=item_value
         ).first()
+
         prev_month_date = datetime(year, month, day) - relativedelta(months=1)
+        first_day_prev_month = datetime(prev_month_date.year, prev_month_date.month, 1)
+        last_day_prev_month = datetime(prev_month_date.year, prev_month_date.month, monthrange(prev_month_date.year, prev_month_date.month)[1])
+
         last_data_in_prev_month = Daily_Statistics_log.objects.filter(
             statistics_collection_date__year=prev_month_date.year,
             statistics_collection_date__month=prev_month_date.month,
+            statistics_collection_date__gte=first_day_prev_month,
+            statistics_collection_date__lte=last_day_prev_month,
             item=item_value
         ).order_by('-statistics_collection_date').first()
+
         increase_rate = 0
         increase_amount = 0
         if current_data and last_data_in_prev_month:
             difference = current_data.item_count - last_data_in_prev_month.item_count
-            increase_rate = (difference / last_data_in_prev_month.item_count) * 100
+            increase_rate = round(((difference / last_data_in_prev_month.item_count) * 100) if last_data_in_prev_month.item_count != 0 else 0, 2)
             increase_amount = difference
         return {
-            'current_value': current_data.item_count if current_data else None,
-            'last_value_in_prev_month': last_data_in_prev_month.item_count if last_data_in_prev_month else None,
+            'current_value': current_data.item_count if current_data else 'null',
+            'last_value_in_prev_month': last_data_in_prev_month.item_count if last_data_in_prev_month else 'null',
             'increase_rate': increase_rate,
             'increase_amount': increase_amount
         }
@@ -105,14 +113,14 @@ def report(selected_date=None):
             matched_data = next((data for data in last_data_in_prev_month if data.item == current.item), None)
             if matched_data:
                 difference = current.item_count - matched_data.item_count
-                increase_rate = (difference / matched_data.item_count) * 100 if matched_data.item_count != 0 else 0
+                increase_rate = round((difference / matched_data.item_count) * 100 if matched_data and matched_data.item_count != 0 else 100, 2)
             else:
                 difference = current.item_count
                 increase_rate = 100
             result_data.append({
                 'item': current.item,
                 'current_value': current.item_count,
-                'last_value_in_prev_month': matched_data.item_count if matched_data else None,
+                'last_value_in_prev_month': matched_data.item_count if matched_data else 'null',
                 'increase_rate': increase_rate,
                 'increase_amount': difference
             })
@@ -139,11 +147,11 @@ def report(selected_date=None):
         increase_amount = 0
         if current_data and last_data_in_prev_month:
             difference = current_data.item_count - last_data_in_prev_month.item_count
-            increase_rate = (difference / last_data_in_prev_month.item_count) * 100
+            increase_rate = round(((difference / last_data_in_prev_month.item_count) * 100) if last_data_in_prev_month.item_count != 0 else 0, 2)
             increase_amount = difference
         return {
-            'current_value': current_data.item_count if current_data else None,
-            'last_value_in_prev_month': last_data_in_prev_month.item_count if last_data_in_prev_month else None,
+            'current_value': current_data.item_count if current_data else 'null',
+            'last_value_in_prev_month': last_data_in_prev_month.item_count if last_data_in_prev_month else 'null',
             'increase_rate': increase_rate,
             'increase_amount': increase_amount
         }

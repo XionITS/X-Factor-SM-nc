@@ -1561,8 +1561,16 @@ $(document).ready(function () {
     });
 
     document.getElementById('reportPop').addEventListener('click', function() {
+        if (reportDate === "select date...") {
+            var currentDate = new Date();
+            reportDate = currentDate.getFullYear() + "-" +
+                         String(currentDate.getMonth() + 1).padStart(2, '0') + "-" +
+                         String(currentDate.getDate()).padStart(2, '0') + "-" +
+                         String(currentDate.getHours());
+        }
         window.open('../report?datetime=' + reportDate, 'PopupWindowName', 'width=1000,height=1000,scrollbars=no,resizable=no');
     });
+
         function exportToExcel() {
             var seriesName = document.getElementById('seriesName').value;
             var categoryName = document.getElementById('categoryName').value;
