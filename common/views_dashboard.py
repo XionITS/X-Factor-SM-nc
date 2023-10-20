@@ -38,6 +38,7 @@ def Dashboard(selected_date=None):
         start_time = timezone.datetime(latest_date.year, latest_date.month, latest_date.day, latest_date.hour, tzinfo=timezone.utc)
         end_time = start_time + timedelta(hours=1)
         asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_time, statistics_collection_date__lt=end_time)
+        asset_cache = Xfactor_Common_Cache.objects.filter(cache_date__gte=start_time, cache_date__lt=end_time)
         asset_log_prev = Daily_Statistics_log.objects.filter(statistics_collection_date__date=previous_date)
         #print("selected_Date없음")
 
@@ -61,9 +62,10 @@ def Dashboard(selected_date=None):
 
     discover_data_list = discover_min_list + discover_day_list
     #위치별 자산현황
-    location_data = asset_log.filter(classification='subnet').order_by('item').values('item', 'item_count')
+    location_data = asset_log.filter(classification='subnet').order_by('-item_count').values('item', 'item_count')
     if location_data:
         location_items = [data['item'] for data in location_data]
+        print(location_items)
         location_item_counts = [data['item_count'] for data in location_data]
     else:
         location_items = [0]
@@ -87,21 +89,25 @@ def Dashboard(selected_date=None):
     office_data_old = asset_log.filter(classification='office_ver', item='Office 15').aggregate(total=Sum('item_count'))
     if office_data_old['total'] == None:
         office_data_old['total'] = 0
-    office_data_none = asset_log.filter(classification='office_ver', item__in=['unconfirmed', '오피스 없음', '']).aggregate(
+    office_data_none = asset_log.filter(classification='office_ver', item='오피스 없음').aggregate(
         total=Sum('item_count'))
     if office_data_none['total'] == None:
         office_data_none['total'] = 0
+    office_data_unconfirmed = asset_log.filter(classification='office_ver', item__in=['unconfirmed', '']).aggregate(
+        total=Sum('item_count'))
+    if office_data_unconfirmed['total'] == None:
+        office_data_unconfirmed['total'] = 0
     # office_items = [data['item'] for data in office_data]
     # office_item_counts = [data['item_count'] for data in office_data]
-    office_items = ['Office 16 이상', 'Office 16 미만', 'Office 설치 안됨']
-    office_item_counts = [office_data_new['total'], office_data_old['total'], office_data_none['total']]
+    office_items = ['Office 16 이상', 'Office 16 미만', 'Office 설치 안됨', '미확인']
+    office_item_counts = [office_data_new['total'], office_data_old['total'], office_data_none['total'], office_data_unconfirmed['total']]
     office_data_list = [office_items, office_item_counts]
 
     ########################################################################################################################################
     # 전체자산수 Online, TOTAL, Chassis type
     #노트북
     notebook_data = asset.filter(classification='chassis_type').filter(item='Notebook').values('item','item_count')
-    notebook_data_cache = asset.filter(classification='chassis_type_cache').filter(item='Notebook').values('item','item_count')
+    notebook_data_cache = asset_log.filter(classification='Notebook_cache_total').values('item','item_count')
     notebook_data_list = [{'item': data['item'], 'count': data['item_count']} for data in notebook_data]
     notebook_data_cache_list = [{'item': data['item'], 'count': data['item_count']} for data in notebook_data_cache]
     if len(notebook_data_list) == 0:
@@ -112,14 +118,14 @@ def Dashboard(selected_date=None):
     #print(notebook)
     #데스크탑
     desktop_data = asset.filter(classification='chassis_type').filter(item='Desktop').values('item','item_count')
-    desktop_data_cache = asset.filter(classification='chassis_type_cache').filter(item='Desktop').values('item','item_count')
+    desktop_data_cache = asset_log.filter(classification='Desktop_cache_total').values('item','item_count')
     desktop_data_list = [{'item': data['item'], 'count': data['item_count']} for data in desktop_data]
     desktop_data_cache_list = [{'item': data['item'], 'count': data['item_count']} for data in desktop_data_cache]
     desktop = [desktop_data_list, desktop_data_cache_list]
     #print(desktop)
     #그외
     other_data = asset.filter(classification='chassis_type').exclude(item__in=['Notebook', 'Desktop']).values('item_count')
-    other_data_cache  = asset.filter(classification='chassis_type_cache').exclude(item__in=['Notebook', 'Desktop']).values('item_count')
+    other_data_cache  = asset_log.filter(classification='Other_cache_total').values('item_count')
     other_data_sum = sum(data['item_count'] for data in other_data)
     other_data_cache_sum = sum(data['item_count'] for data in other_data_cache)
     other_data_list = {'item': 'Other', 'count': other_data_sum}
@@ -179,45 +185,45 @@ def Dashboard(selected_date=None):
 ########################################################################################################################################
     # 토탈 차트
     # desktop[other, mac, winodws]
-    desk_total_other = asset.filter(classification='Desktop_chassis_total').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    desk_total_other = asset_log.filter(classification='Desktop_os_cache_total').exclude(item__in=['Windows', 'Mac']).values('item_count')
     desk_total_other_sum = sum(data['item_count'] for data in desk_total_other)
     desk_total_other_list = {'item': 'Other', 'count': desk_total_other_sum}
 
-    desk_total_mac = asset.filter(classification='Desktop_chassis_total').filter(item='Mac').values('item_count')
+    desk_total_mac = asset_log.filter(classification='Desktop_os_cache_total').filter(item='Mac').values('item_count')
     desk_total_mac_sum = sum(data['item_count'] for data in desk_total_mac)
     desk_total_mac_list = {'item': 'Mac', 'count': desk_total_mac_sum}
 
-    desk_total_window = asset.filter(classification='Desktop_chassis_total').filter(item='Windows').values('item_count')
+    desk_total_window = asset_log.filter(classification='Desktop_os_cache_total').filter(item='Windows').values('item_count')
     desk_total_window_sum = sum(data['item_count'] for data in desk_total_window)
     desk_total_window_list = {'item': 'Windows', 'count': desk_total_window_sum}
 
     desk_total_list = [desk_total_other_list, desk_total_mac_list, desk_total_window_list]
 
     # notebook[other, mac, winodws]
-    note_total_other = asset.filter(classification='Notebook_chassis_total').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    note_total_other = asset_log.filter(classification='Notebook_os_cache_total').exclude(item__in=['Windows', 'Mac']).values('item_count')
     note_total_other_sum = sum(data['item_count'] for data in note_total_other)
     note_total_other_list = {'item': 'Other', 'count': note_total_other_sum}
 
-    note_total_mac = asset.filter(classification='Notebook_chassis_total').filter(item='Mac').values('item_count')
+    note_total_mac = asset_log.filter(classification='Notebook_os_cache_total').filter(item='Mac').values('item_count')
     note_total_mac_sum = sum(data['item_count'] for data in note_total_mac)
     note_total_mac_list = {'item': 'Mac', 'count': note_total_mac_sum}
 
-    note_total_window = asset.filter(classification='Notebook_chassis_total').filter(item='Windows').values('item_count')
+    note_total_window = asset_log.filter(classification='Notebook_os_cache_total').filter(item='Windows').values('item_count')
     note_total_window_sum = sum(data['item_count'] for data in note_total_window)
     note_total_window_list = {'item': 'Windows', 'count': note_total_window_sum}
 
     note_total_list = [note_total_other_list, note_total_mac_list, note_total_window_list]
     #print(note_total_list)
     # Other[other, mac, winodws]
-    other_total_other = asset.filter(classification='Other_chassis_total').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    other_total_other = asset_log.filter(classification='Other_cache_total').exclude(item__in=['Windows', 'Mac']).values('item_count')
     other_total_other_sum = sum(data['item_count'] for data in other_total_other)
     other_total_other_list = {'item': 'Other', 'count': other_total_other_sum}
 
-    other_total_mac = asset.filter(classification='Other_chassis_total').filter(item='Mac').values('item_count')
+    other_total_mac = asset_log.filter(classification='Other_cache_total').filter(item='Mac').values('item_count')
     other_total_mac_sum = sum(data['item_count'] for data in other_total_mac)
     other_total_mac_list = {'item': 'Mac', 'count': other_total_mac_sum}
 
-    other_total_window = asset.filter(classification='Other_chassis_total').filter(item='Windows').values('item_count')
+    other_total_window = asset_log.filter(classification='Other_cache_total').filter(item='Windows').values('item_count')
     other_total_window_sum = sum(data['item_count'] for data in other_total_window)
     other_total_window_list = {'item': 'Windows', 'count': other_total_window_sum}
 
@@ -304,8 +310,8 @@ def Dashboard(selected_date=None):
     latest_dates_desktop = latest_dates_desktop1 | latest_dates_desktop2 | latest_dates_desktop3 | latest_dates_desktop4| latest_dates_desktop5
     monthly_asset_ditem_count = [latest_dates_desktop1C, latest_dates_desktop2C, latest_dates_desktop3C, latest_dates_desktop4C, latest_dates_desktop5C]
     monthly_asset_litem_count = [latest_dates_laptop1C, latest_dates_laptop2C, latest_dates_laptop3C, latest_dates_laptop4C, latest_dates_laptop5C]
-    minutely_asset_desktop = asset_log.filter(classification='Desktop_chassis_total').aggregate(total_item_count=Sum('item_count'))
-    minutely_asset_laptop = asset_log.filter(classification='Notebook_chassis_total').aggregate(total_item_count=Sum('item_count'))
+    minutely_asset_desktop = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').aggregate(total_item_count=Sum('item_count'))
+    minutely_asset_laptop = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').aggregate(total_item_count=Sum('item_count'))
     if minutely_asset_laptop['total_item_count'] == None:
         minutely_asset_laptop['total_item_count'] = 0
     if minutely_asset_desktop['total_item_count'] == None:

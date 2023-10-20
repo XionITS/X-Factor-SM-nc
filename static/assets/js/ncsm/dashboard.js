@@ -122,6 +122,9 @@ var handleRenderChartNCOMG = function () {
                         $('#oslistPieChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
                         $('#office_chart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'all_asset_detail1';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
@@ -272,6 +275,9 @@ var handleRenderChartNCOMG = function () {
                         $('#oslistPieChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
                         $('#office_chart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'asset_os_detail1';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
@@ -406,6 +412,9 @@ var handleRenderChartNCOMG = function () {
                         $('#oslistPieChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
                         $('#office_chart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'asset_os_detail2';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
@@ -556,6 +565,9 @@ var handleRenderChartNCOMG = function () {
                         $('#oslistPieChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
                         $('#office_chart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'oslistPieChart';
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
@@ -639,6 +651,9 @@ var handleRenderChartNCOMG = function () {
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
                         $('#office_chart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'osVerPieChart';
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
@@ -774,6 +789,29 @@ var handleRenderChartNCOMG = function () {
 			toolbar: {
 				show: false
 			},
+            events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'discoverChart';
+                        var dataPointIndex = config.dataPointIndex;
+                        var labelsName = config.w.config.labels[dataPointIndex];
+                        document.getElementById('categoryName').value = labelsName;
+                        document.getElementById('chartName').value = 'discoverChart';
+                        $("#DashModal .modal-title").html(labelsName+' List');
+                        osVerPieChart_list(labelsName, seriesName);
+                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                        $("#DashModal").modal("show");
+                    }
+                },
 		},
 		plotOptions: {
 			bar: {
@@ -858,7 +896,29 @@ var handleRenderChartNCOMG = function () {
             chart: {
                 type: 'pie',
                 width: '100%',
-                height: 240
+                height: 240,
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'hotfix_chart';
+                        var dataPointIndex = config.dataPointIndex;
+                        var labelsName = config.w.config.labels[dataPointIndex];
+                        document.getElementById('categoryName').value = labelsName;
+                        document.getElementById('chartName').value = 'hotfix_chart';
+                        $("#DashModal .modal-title").html(labelsName+' List');
+                        hotfix_chart_list(labelsName, seriesName);
+                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                        $("#DashModal").modal("show");
+                    }
+                },
             },
             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', '#46537B', '#2F4858'],
             labels: labelsData,
@@ -941,6 +1001,32 @@ var handleRenderChartNCOMG = function () {
                     tools: {
                         zoom: false,
                         pan: false
+                    }
+                },
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'subnet_chart';
+                        var dataPointIndex = config.dataPointIndex;
+                        var seriesIndex = config.seriesIndex;
+                        var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+                        var categoryName = config.w.config.xaxis.categories[dataPointIndex];
+                        // var seriesName = config.w.config.series[seriesIndex].name;
+                        document.getElementById('categoryName').value = categoryName;
+                        // document.getElementById('seriesName').value = seriesName;
+                        document.getElementById('chartName').value = 'subnet_chart';
+                        $("#DashModal .modal-title").html(categoryName+' List');
+                        subnet_chart_list(categoryName, '');
+                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                        $("#DashModal").modal("show");
                     }
                 },
             },
@@ -1032,6 +1118,9 @@ var handleRenderChartNCOMG = function () {
                         $('#asset_os_detail2').DataTable().destroy();
                         $('#oslistPieChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'office_chart';
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
@@ -1234,6 +1323,32 @@ var handleRenderChartNCOMG = function () {
                         chart.windowResizeHandler();
                     }
                 },
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#tcpuChart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'tcpuChart';
+                        var dataPointIndex = config.dataPointIndex;
+                        var seriesIndex = config.seriesIndex;
+                        // var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+                        var categoryName = config.w.config.plotOptions.radialBar.dataLabels.value.formatter()
+                        // var seriesName = config.w.config.series[seriesIndex].name;
+                        document.getElementById('categoryName').value = categoryName;
+                        // document.getElementById('seriesName').value = seriesName;
+                        document.getElementById('chartName').value = 'tcpuChart';
+                        $("#DashModal .modal-title").html(categoryName+' List');
+                        tcpuChart_list(categoryName, '');
+                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                        $("#DashModal").modal("show");
+                    }
+                },
             },
             plotOptions: {
                 radialBar: {
@@ -1277,7 +1392,7 @@ var handleRenderChartNCOMG = function () {
                         },
                         value: {
                             formatter: function (val) {
-                                return 'Tanium CPU 20% 초과';
+                                return 'Tanium CPU 10% 초과';
                             },
                             color: '#fff',
                             fontSize: '14px',

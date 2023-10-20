@@ -180,7 +180,7 @@ def pur_asset_paginghw(request):
         # Add mappings for other columns here
     }
 
-    order_column = order_column_map.get(order_column_index, 'computer_id')
+    order_column = order_column_map.get(order_column_index, 'computer__computer_name')
     if order_column_dir == 'asc':
         user = user.order_by(order_column)
     else:

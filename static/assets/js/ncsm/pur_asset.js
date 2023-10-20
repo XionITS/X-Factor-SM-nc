@@ -371,7 +371,7 @@ var sw_pur_asset_list = function () {
                 var orderDir = data.order[0].dir;
                 var columnMap = {
                     2: 'chassistype',
-                    3: 'computer_name',
+                    3: 'computer__computer_name',
                     5: 'ip_address',
                     6: 'sw_list',
                     7: 'sw_ver_list',
