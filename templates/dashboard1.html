@@ -582,5 +582,33 @@
                 </div>
             </div>
         </div>
+
+<script>
+document.getElementById('reportPop').addEventListener('click', function() {
+    window.open('../report', 'PopupWindowName', 'width=600,height=400,scrollbars=no,resizable=no');
+});
+
+    function exportToExcel() {
+    // seriesName의 값을 가져옵니다.
+    var seriesName = document.getElementById('seriesName').value;
+    var categoryName = document.getElementById('categoryName').value;
+    var chartName = document.getElementById('chartName').value;
+
+    // Django가 반환하는 상대 URL에 원점을 추가하여 절대 URL을 만듭니다.
+    var relativeUrl = "{% url 'export' model='Xfactor_Daily' %}";
+    var absoluteUrl = window.location.origin + relativeUrl;
+
+    // 절대 URL으로 'URL' 객체를 생성합니다.
+    var url = new URL(absoluteUrl);
+
+    url.searchParams.set('parameter_name', chartName);
+    url.searchParams.set('seriesName', seriesName);
+    url.searchParams.set('categoryName', categoryName);
+
+    // 변경된 URL로 이동합니다.
+    window.location.href = url.toString();
+}
+
+</script>
 <!-- END #content -->
 {% endblock %}
