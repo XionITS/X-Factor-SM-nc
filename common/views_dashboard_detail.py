@@ -490,7 +490,7 @@ def office_chart(request):
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
-    if request.POST.get('categoryName') == 'unconfirmed':
+    if request.POST.get('categoryName') == '미확인':
         user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |

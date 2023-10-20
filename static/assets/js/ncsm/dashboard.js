@@ -762,6 +762,9 @@ var handleRenderChartNCOMG = function () {
     var discover_sub = parseInt(discover_data_min) - parseInt(discover_data_day);
     var discover_per = (parseInt(discover_data_min) - parseInt(discover_data_day)) / parseInt(discover_data_day) * 100;
 
+    if (parseInt(discover_data_day) === 0) {
+    discover_per = 0;
+    }
     var discover_per_round = Math.abs(discover_per.toFixed(2));
     if (isNaN(discover_sub) || isNaN(discover_per_round)) {
         discover_sub = '0';

@@ -24,7 +24,6 @@ def Dashboard(selected_date=None):
     monthly_asset = []
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     yesterday_collect_date = timezone.now() - timedelta(days=1)
-    asset = Daily_Statistics.objects.all()
     if selected_date:
         start_date_naive = datetime.strptime(selected_date, "%Y-%m-%d-%H")
         start_date = timezone.make_aware(start_date_naive)
@@ -37,6 +36,7 @@ def Dashboard(selected_date=None):
         previous_date = latest_date - timedelta(days=1)
         start_time = timezone.datetime(latest_date.year, latest_date.month, latest_date.day, latest_date.hour, tzinfo=timezone.utc)
         end_time = start_time + timedelta(hours=1)
+        asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_time, statistics_collection_date__lt=end_time)
         asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_time, statistics_collection_date__lt=end_time)
         asset_cache = Xfactor_Common_Cache.objects.filter(cache_date__gte=start_time, cache_date__lt=end_time)
         asset_log_prev = Daily_Statistics_log.objects.filter(statistics_collection_date__date=previous_date)
@@ -106,7 +106,7 @@ def Dashboard(selected_date=None):
     ########################################################################################################################################
     # 전체자산수 Online, TOTAL, Chassis type
     #노트북
-    notebook_data = asset.filter(classification='chassis_type').filter(item='Notebook').values('item','item_count')
+    notebook_data = asset_log.filter(classification='chassis_type').filter(item='Notebook').values('item','item_count')
     notebook_data_cache = asset_log.filter(classification='Notebook_cache_total').values('item','item_count')
     notebook_data_list = [{'item': data['item'], 'count': data['item_count']} for data in notebook_data]
     notebook_data_cache_list = [{'item': data['item'], 'count': data['item_count']} for data in notebook_data_cache]
@@ -117,14 +117,14 @@ def Dashboard(selected_date=None):
     notebook = [notebook_data_list, notebook_data_cache_list]
     #print(notebook)
     #데스크탑
-    desktop_data = asset.filter(classification='chassis_type').filter(item='Desktop').values('item','item_count')
+    desktop_data = asset_log.filter(classification='chassis_type').filter(item='Desktop').values('item','item_count')
     desktop_data_cache = asset_log.filter(classification='Desktop_cache_total').values('item','item_count')
     desktop_data_list = [{'item': data['item'], 'count': data['item_count']} for data in desktop_data]
     desktop_data_cache_list = [{'item': data['item'], 'count': data['item_count']} for data in desktop_data_cache]
     desktop = [desktop_data_list, desktop_data_cache_list]
     #print(desktop)
     #그외
-    other_data = asset.filter(classification='chassis_type').exclude(item__in=['Notebook', 'Desktop']).values('item_count')
+    other_data = asset_log.filter(classification='chassis_type').exclude(item__in=['Notebook', 'Desktop']).values('item_count')
     other_data_cache  = asset_log.filter(classification='Other_cache_total').values('item_count')
     other_data_sum = sum(data['item_count'] for data in other_data)
     other_data_cache_sum = sum(data['item_count'] for data in other_data_cache)
@@ -137,45 +137,45 @@ def Dashboard(selected_date=None):
     ########################################################################################################################################
     # 온라인 차트
     # desktop[other, mac, winodws]
-    desk_online_other = asset.filter(classification='Desktop_chassis_online').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    desk_online_other = asset_log.filter(classification='Desktop_chassis_online').exclude(item__in=['Windows', 'Mac']).values('item_count')
     desk_online_other_sum = sum(data['item_count'] for data in desk_online_other)
     desk_online_other_list = {'item': 'Other', 'count': desk_online_other_sum}
 
-    desk_online_mac = asset.filter(classification='Desktop_chassis_online').filter(item='Mac').values('item_count')
+    desk_online_mac = asset_log.filter(classification='Desktop_chassis_online').filter(item='Mac').values('item_count')
     desk_online_mac_sum = sum(data['item_count'] for data in desk_online_mac)
     desk_online_mac_list = {'item': 'Mac', 'count': desk_online_mac_sum}
 
-    desk_online_window = asset.filter(classification='Desktop_chassis_online').filter(item='Windows').values('item_count')
+    desk_online_window = asset_log.filter(classification='Desktop_chassis_online').filter(item='Windows').values('item_count')
     desk_online_window_sum = sum(data['item_count'] for data in desk_online_window)
     desk_online_window_list = {'item': 'Windows', 'count': desk_online_window_sum}
 
     desk_online_list = [desk_online_other_list, desk_online_mac_list, desk_online_window_list]
 
     # notebook[other, mac, winodws]
-    note_online_other = asset.filter(classification='Notebook_chassis_online').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    note_online_other = asset_log.filter(classification='Notebook_chassis_online').exclude(item__in=['Windows', 'Mac']).values('item_count')
     note_online_other_sum = sum(data['item_count'] for data in note_online_other)
     note_online_other_list = {'item': 'Other', 'count': note_online_other_sum}
 
-    note_online_mac = asset.filter(classification='Notebook_chassis_online').filter(item='Mac').values('item_count')
+    note_online_mac = asset_log.filter(classification='Notebook_chassis_online').filter(item='Mac').values('item_count')
     note_online_mac_sum = sum(data['item_count'] for data in note_online_mac)
     note_online_mac_list = {'item': 'Mac', 'count': note_online_mac_sum}
 
-    note_online_window = asset.filter(classification='Notebook_chassis_online').filter(item='Windows').values('item_count')
+    note_online_window = asset_log.filter(classification='Notebook_chassis_online').filter(item='Windows').values('item_count')
     note_online_window_sum = sum(data['item_count'] for data in note_online_window)
     note_online_window_list = {'item': 'Windows', 'count': note_online_window_sum}
 
     note_online_list = [note_online_other_list, note_online_mac_list, note_online_window_list]
 
     # Other[other, mac, winodws]
-    other_online_other = asset.filter(classification='Other_chassis_online').exclude(item__in=['Windows', 'Mac']).values('item_count')
+    other_online_other = asset_log.filter(classification='Other_chassis_online').exclude(item__in=['Windows', 'Mac']).values('item_count')
     other_online_other_sum = sum(data['item_count'] for data in other_online_other)
     other_online_other_list = {'item': 'Other', 'count': other_online_other_sum}
 
-    other_online_mac = asset.filter(classification='Other_chassis_online').filter(item='Mac').values('item_count')
+    other_online_mac = asset_log.filter(classification='Other_chassis_online').filter(item='Mac').values('item_count')
     other_online_mac_sum = sum(data['item_count'] for data in other_online_mac)
     other_online_mac_list = {'item': 'Mac', 'count': other_online_mac_sum}
 
-    other_online_window = asset.filter(classification='Other_chassis_online').filter(item='Windows').values('item_count')
+    other_online_window = asset_log.filter(classification='Other_chassis_online').filter(item='Windows').values('item_count')
     other_online_window_sum = sum(data['item_count'] for data in other_online_window)
     other_online_window_list = {'item': 'Windows', 'count': other_online_window_sum}
 
@@ -251,7 +251,7 @@ def Dashboard(selected_date=None):
     monthly_asset_data_list = []
     for last_day in last_days:
         desktop_data = Daily_Statistics_log.objects.filter(
-            classification='Desktop_chassis_total',
+            classification='Desktop_cache_total',
             item='Desktop',
             statistics_collection_date__year=last_day.year,
             statistics_collection_date__month=last_day.month
@@ -266,13 +266,13 @@ def Dashboard(selected_date=None):
             })
         else:
             monthly_asset_data_list.append({
-                'classification': 'Desktop_chassis_total',
+                'classification': 'Desktop_cache_total',
                 'item': 'Desktop',
                 'item_count': 0,
                 'date': str(last_day.month) + '월'
             })
         notebook_data = Daily_Statistics_log.objects.filter(
-            classification='Notebook_chassis_total',
+            classification='Notebook_cache_total',
             item='Notebook',
             statistics_collection_date__year=last_day.year,
             statistics_collection_date__month=last_day.month
@@ -287,7 +287,7 @@ def Dashboard(selected_date=None):
             })
         else:
             monthly_asset_data_list.append({
-                'classification': 'Notebook_chassis_total',
+                'classification': 'Notebook_cache_total',
                 'item': 'Notebook',
                 'item_count': 0,
                 'date': str(last_day.month) + '월'
