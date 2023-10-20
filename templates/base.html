@@ -87,10 +87,13 @@
         {% block content %}
         {% endblock %}
     <!-- 기본 템플릿 안에 삽입될 내용 End -->
-        <!-- 네비게이션바 -->
+    {% block navbar %}
         {% include "navbar.html" %}
-        <!-- 사이드바 -->
+    {% endblock %}
+    <!-- 사이드바 -->
+    {% block sidebar %}
         {% include "sidebar.html" %}
+    {% endblock %}
     </div>
 
 

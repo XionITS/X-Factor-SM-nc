@@ -5,8 +5,8 @@ import logging
 import pandas as pd
 import pytz
 from dateutil.relativedelta import relativedelta
-from django.db.models import Max, Sum, Count, Q, Subquery, OuterRef
-from django.db.models.functions import TruncMonth
+from django.db.models import Max, Sum, Value as V, Count, Q, Subquery, OuterRef
+from django.db.models.functions import TruncMonth, Coalesce
 from django.utils import timezone
 # from datetime import datetime
 from django.utils.timezone import now
@@ -42,6 +42,7 @@ def Dashboard(selected_date=None):
         asset_log_prev = Daily_Statistics_log.objects.filter(statistics_collection_date__date=previous_date)
         #print("selected_Date없음")
 
+    ###장기 미접속 자산###
     discover_min = asset_log.filter(item='150_day_ago').first()
     discover_min_list = []
     if discover_min:
@@ -65,7 +66,6 @@ def Dashboard(selected_date=None):
     location_data = asset_log.filter(classification='subnet').order_by('-item_count').values('item', 'item_count')
     if location_data:
         location_items = [data['item'] for data in location_data]
-        print(location_items)
         location_item_counts = [data['item_count'] for data in location_data]
     else:
         location_items = [0]
@@ -232,98 +232,69 @@ def Dashboard(selected_date=None):
     ########################################################################################################################################
 
 
-    # 월별 자산 변화 수 차트
-    #asset_log = Daily_Statistics_log.objects.all()
-    #lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
+    #############################
+    #### 월별 자산 변화 수 차트 ####
+    #############################
     if selected_date:
-        lastDay = (start_date_naive - relativedelta(months=5)).strftime("%Y-%m-%d")
+        month_asset_naive = datetime.strptime(selected_date, "%Y-%m-%d-%H")
     else:
-        lastDay = (now() - relativedelta(months=5)).strftime("%Y-%m-%d")
-        selected_date = str(now())
-    lastMonth = pd.date_range(lastDay, periods=5, freq='M').strftime("%Y-%m-%d")
-    LM = tuple(lastMonth)
-    latest_dates_desktop1 = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date__date=LM[0]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
-    latest_dates_desktop2 = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date__date=LM[1]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
-    latest_dates_desktop3 = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date__date=LM[2]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
-    latest_dates_desktop4 = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date__date=LM[3]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
-    latest_dates_desktop5 = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date__date=LM[4]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
-    latest_dates_laptop1 = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date__date=LM[0]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
-    latest_dates_laptop2 = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date__date=LM[1]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
-    latest_dates_laptop3 = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date__date=LM[2]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
-    latest_dates_laptop4 = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date__date=LM[3]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
-    latest_dates_laptop5 = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date__date=LM[4]).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('max_date')
+        # selected_date가 없으면 가장 최근의 statistics_collection_date를 찾습니다.
+        month_latest_data = Daily_Statistics_log.objects.order_by('-statistics_collection_date').first()
+        if month_latest_data:
+            month_asset_naive = month_latest_data.statistics_collection_date
+        else:
+            # 데이터가 아예 없는 경우 처리, 여기서는 현재 날짜를 사용하였습니다.
+            month_asset_naive = datetime.now()
+    months = [month_asset_naive.date() + relativedelta(months=-i) for i in range(6)]
+    last_days = [datetime(month.year, month.month, 1) + relativedelta(months=1) - relativedelta(days=1) for month in months]
+    last_days.reverse()
+    monthly_asset_data_list = []
+    for last_day in last_days:
+        desktop_data = Daily_Statistics_log.objects.filter(
+            classification='Desktop_chassis_total',
+            item='Desktop',
+            statistics_collection_date__year=last_day.year,
+            statistics_collection_date__month=last_day.month
+        ).order_by('-statistics_collection_date').first()
 
-    if latest_dates_desktop1 and 'max_date' in latest_dates_desktop1[0]:
-        max_date = latest_dates_desktop1[0]['max_date']
-        latest_dates_desktop1C = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date=max_date).values('item_count')[0]['item_count']
-    else:
-        latest_dates_desktop1C = 0
-    if latest_dates_desktop2 and 'max_date' in latest_dates_desktop2[0]:
-        max_date = latest_dates_desktop2[0]['max_date']
-        latest_dates_desktop2C = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date=max_date).values('item_count')[0]['item_count']
-    else:
-        latest_dates_desktop2C = 0
-    if latest_dates_desktop3 and 'max_date' in latest_dates_desktop3[0]:
-        max_date = latest_dates_desktop3[0]['max_date']
-        latest_dates_desktop3C = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date=max_date).values('item_count')[0]['item_count']
-    else:
-        latest_dates_desktop3C = 0
-    if latest_dates_desktop4 and 'max_date' in latest_dates_desktop4[0]:
-        max_date = latest_dates_desktop4[0]['max_date']
-        latest_dates_desktop4C = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date=max_date).values('item_count')[0]['item_count']
-    else:
-        latest_dates_desktop4C = 0
-    if latest_dates_desktop5 and 'max_date' in latest_dates_desktop5[0]:
-        max_date = latest_dates_desktop5[0]['max_date']
-        latest_dates_desktop5C = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date=max_date).values('item_count')[0]['item_count']
-    else:
-        latest_dates_desktop5C = 0
+        if desktop_data:
+            monthly_asset_data_list.append({
+                'classification': desktop_data.classification,
+                'item': desktop_data.item,
+                'item_count': desktop_data.item_count,
+                'date': str(desktop_data.statistics_collection_date.month) + '월'
+            })
+        else:
+            monthly_asset_data_list.append({
+                'classification': 'Desktop_chassis_total',
+                'item': 'Desktop',
+                'item_count': 0,
+                'date': str(last_day.month) + '월'
+            })
+        notebook_data = Daily_Statistics_log.objects.filter(
+            classification='Notebook_chassis_total',
+            item='Notebook',
+            statistics_collection_date__year=last_day.year,
+            statistics_collection_date__month=last_day.month
+        ).order_by('-statistics_collection_date').first()
 
-    if latest_dates_laptop1 and 'max_date' in latest_dates_laptop1[0]:
-        max_date = latest_dates_laptop1[0]['max_date']
-        latest_dates_laptop1C = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date=max_date).values('item_count')[0]['item_count']
-    else:
-        latest_dates_laptop1C = 0
-    if latest_dates_laptop2 and 'max_date' in latest_dates_laptop2[0]:
-        max_date = latest_dates_laptop2[0]['max_date']
-        latest_dates_laptop2C = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date=max_date).values('item_count')[0]['item_count']
-    else:
-        latest_dates_laptop2C = 0
-    if latest_dates_laptop3 and 'max_date' in latest_dates_laptop3[0]:
-        max_date = latest_dates_laptop3[0]['max_date']
-        latest_dates_laptop3C = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date=max_date).values('item_count')[0]['item_count']
-    else:
-        latest_dates_laptop3C = 0
-    if latest_dates_laptop4 and 'max_date' in latest_dates_laptop4[0]:
-        max_date = latest_dates_laptop4[0]['max_date']
-        latest_dates_laptop4C = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date=max_date).values('item_count')[0]['item_count']
-    else:
-        latest_dates_laptop4C = 0
-    if latest_dates_laptop5 and 'max_date' in latest_dates_laptop5[0]:
-        max_date = latest_dates_laptop5[0]['max_date']
-        latest_dates_laptop5C = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date=max_date).values('item_count')[0]['item_count']
-    else:
-        latest_dates_laptop5C = 0
+        if notebook_data:
+            monthly_asset_data_list.append({
+                'classification': notebook_data.classification,
+                'item': notebook_data.item,
+                'item_count': notebook_data.item_count,
+                'date': str(notebook_data.statistics_collection_date.month) + '월'
+            })
+        else:
+            monthly_asset_data_list.append({
+                'classification': 'Notebook_chassis_total',
+                'item': 'Notebook',
+                'item_count': 0,
+                'date': str(last_day.month) + '월'
+            })
+        monthly_asset_data_list
 
-    # latest_dates_desktop1 = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').filter(statistics_collection_date__date__in=LM).values('statistics_collection_date', 'item_count')
-    latest_dates_laptop = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').filter(statistics_collection_date__date__in=LM).annotate(month=TruncMonth('statistics_collection_date')).values('month').annotate(max_date=Max('statistics_collection_date')).values('item_count')
-    latest_dates_desktop = latest_dates_desktop1 | latest_dates_desktop2 | latest_dates_desktop3 | latest_dates_desktop4| latest_dates_desktop5
-    monthly_asset_ditem_count = [latest_dates_desktop1C, latest_dates_desktop2C, latest_dates_desktop3C, latest_dates_desktop4C, latest_dates_desktop5C]
-    monthly_asset_litem_count = [latest_dates_laptop1C, latest_dates_laptop2C, latest_dates_laptop3C, latest_dates_laptop4C, latest_dates_laptop5C]
-    minutely_asset_desktop = asset_log.filter(classification='Desktop_chassis_total', item='Desktop').aggregate(total_item_count=Sum('item_count'))
-    minutely_asset_laptop = asset_log.filter(classification='Notebook_chassis_total', item='Notebook').aggregate(total_item_count=Sum('item_count'))
-    if minutely_asset_laptop['total_item_count'] == None:
-        minutely_asset_laptop['total_item_count'] = 0
-    if minutely_asset_desktop['total_item_count'] == None:
-        minutely_asset_desktop['total_item_count'] = 0
-    date1 = datetime.strptime(LM[0], '%Y-%m-%d').strftime('%m')+'월'
-    date2 = datetime.strptime(LM[1], '%Y-%m-%d').strftime('%m')+'월'
-    date3 = datetime.strptime(LM[2], '%Y-%m-%d').strftime('%m')+'월'
-    date4 = datetime.strptime(LM[3], '%Y-%m-%d').strftime('%m')+'월'
-    date5 = datetime.strptime(LM[4], '%Y-%m-%d').strftime('%m')+'월'
-    monthly_asset_date = [date1, date2, date3, date4, date5]
-    minutely_asset_date = selected_date[5:7] + "월"
-    monthly_asset_data_list = [monthly_asset_ditem_count+[minutely_asset_desktop['total_item_count']], monthly_asset_litem_count+[minutely_asset_laptop['total_item_count']], monthly_asset_date+[minutely_asset_date]]
+    #monthly_asset_data_list = [monthly_asset_ditem_count+[minutely_asset_desktop['total_item_count']], monthly_asset_litem_count+[minutely_asset_laptop['total_item_count']], monthly_asset_date+[minutely_asset_date]]
 
     # 태니엄 프로세스 CPU 사용량 차트
     used_tcpu = asset_log.filter(classification='t_cpu').filter(item='True').values('item_count')

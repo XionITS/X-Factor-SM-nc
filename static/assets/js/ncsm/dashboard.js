@@ -1201,15 +1201,28 @@ var handleRenderChartNCOMG = function () {
     office_chart("office_donut", office_counts, office_items);
 
 //#######월별 자산 변화 수##############################
+    var MonthlyDesktopData = [];
+    var MonthlyNotebookData = [];
+    var Months = [];
+
+    dataList.monthly_asset_data_list.forEach(function(entry) {
+        if (entry.item === 'Desktop') {
+            MonthlyDesktopData.push(entry.item_count);
+            Months.push(entry.date);
+        } else if (entry.item === 'Notebook') {
+            MonthlyNotebookData.push(entry.item_count);
+        }
+    });
+
     var asset_ch_chart_options = {
         series: [
             {
                 name: 'Desktop',
-                data: dataList.monthly_asset_data_list[0]
+                data: MonthlyDesktopData
             },
             {
                 name: 'Notebook',
-                data: dataList.monthly_asset_data_list[1]
+                data: MonthlyNotebookData
             }
         ],
         chart: {
@@ -1249,7 +1262,7 @@ var handleRenderChartNCOMG = function () {
         },
         xaxis: {
             type: 'category',
-            categories: dataList.monthly_asset_data_list[2]
+            categories: Months
         },
         yaxis: {
             title: {
@@ -1516,6 +1529,7 @@ $(document).ready(function () {
     var now = new Date();
     var defaultHour = now.getHours();
     var dateTimeSelected = false;
+    var reportDate = document.getElementById('datepickerD').placeholder || "";
     $("#datepickerD").datetimepicker({
         format: 'Y-m-d H시',
         formatTime: 'H시',
@@ -1543,6 +1557,21 @@ $(document).ready(function () {
         $("#datepickerD").datetimepicker('show');
     });
 
+    document.getElementById('reportPop').addEventListener('click', function() {
+        window.open('../report?datetime=' + reportDate, 'PopupWindowName', 'width=1000,height=1000,scrollbars=no,resizable=no');
+    });
+        function exportToExcel() {
+            var seriesName = document.getElementById('seriesName').value;
+            var categoryName = document.getElementById('categoryName').value;
+            var chartName = document.getElementById('chartName').value;
+            var relativeUrl = "{% url 'export' model='Xfactor_Common' %}";
+            var absoluteUrl = window.location.origin + relativeUrl;
+            var url = new URL(absoluteUrl);
+            url.searchParams.set('parameter_name', chartName);
+            url.searchParams.set('seriesName', seriesName);
+            url.searchParams.set('categoryName', categoryName);
+            window.location.href = url.toString();
+        };
 ///////////////////////Chart////////////////////
     handleRenderChartNCOMG();
     //console.log(dataList);

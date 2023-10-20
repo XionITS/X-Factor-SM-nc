@@ -9,9 +9,9 @@
 <div id="content" class="dashboard-content">
     <div class="row justify-content-sm-between">
         <div class="d-flex justify-content-end mb-2">
-<!--            <button id="reportPop" class="btn btn-secondary" type="button" data-bs-display="static" aria-expanded="false">-->
-<!--                    Report-->
-<!--            </button>-->
+            <button id="reportPop" class="btn btn-secondary" type="button" data-bs-display="static" aria-expanded="false">
+                    Report
+            </button>
             <!--데이터피커-->
             <div class="me-3">
                 <div class="input-group">
@@ -446,7 +446,7 @@
             <div class="card mb-3" style="height:267px;">
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px">
-                        <div class="flex-grow-1" style="font-size: 17px">보안 패치별 자산 현황</div>
+                        <div class="flex-grow-1" style="font-size: 17px">보안 패치</div>
                     </div>
 
                     <div id="hotfix_donut"></div>
@@ -583,31 +583,4 @@
             </div>
         </div>
 <!-- END #content -->
-<script>
-document.getElementById('reportPop').addEventListener('click', function() {
-    window.open('../report', 'PopupWindowName', 'width=600,height=400,scrollbars=no,resizable=no');
-});
-
-    function exportToExcel() {
-    // seriesName의 값을 가져옵니다.
-    var seriesName = document.getElementById('seriesName').value;
-    var categoryName = document.getElementById('categoryName').value;
-    var chartName = document.getElementById('chartName').value;
-
-    // Django가 반환하는 상대 URL에 원점을 추가하여 절대 URL을 만듭니다.
-    var relativeUrl = "{% url 'export' model='Xfactor_Daily' %}";
-    var absoluteUrl = window.location.origin + relativeUrl;
-
-    // 절대 URL으로 'URL' 객체를 생성합니다.
-    var url = new URL(absoluteUrl);
-
-    url.searchParams.set('parameter_name', chartName);
-    url.searchParams.set('seriesName', seriesName);
-    url.searchParams.set('categoryName', categoryName);
-
-    // 변경된 URL로 이동합니다.
-    window.location.href = url.toString();
-}
-
-</script>
 {% endblock %}

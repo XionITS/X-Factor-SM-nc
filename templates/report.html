@@ -5,14 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report</title>
+    <title>X-Factor daily Report</title>
     <link rel="shortcunt icon" href='/static/img/X-Factor_favicon/favicon.ico'>
 
-    <link rel="stylesheet" href='/static/assets/css/vendor.min.css'>
-    <link rel="stylesheet" href='/static/assets/css/app.min.css'>
-
     <link rel="stylesheet" type="text/css" href='/static/css/reportPageStyle/font/reportPage_font.css'>
-    <link rel="stylesheet" type="text/css" href='/static/css/reportPageStyle/report_daily.css'>
+    <link rel="stylesheet" type="text/css" href='/static/css/reportPageStyle/reportPage_daily.css'>
 
 </head>
 
@@ -26,216 +23,56 @@
                 <!-- brand logo -->
                 <div class="sub-content brand">
                     <div class="brand-logo">
-                        <img src="/static/css/reportPageStyle/images/XFactor_logo.png" alt="x-factor로고">
+                        <img src="/static/assets/css/images/NC CI-navy.png" alt="NC로고">
                     </div>
                     <p class="brand-title">자산 리포트</p>
                 </div>
                 <!-- daily-report-content -->
                 <div class="sub-content daily-report-content">
                     <div class="daily-report-content-right">
-                        <div class="daily-report-logo">
-                            <img src="/static/css/reportPageStyle/images/xion_logo.png" alt="xionits로고">
-                        </div>
                         <p class="daily-report-text">
-                            일간 자산 리포트
+                            월간 자산 리포트
                         </p>
                     </div>
                     <div class="daily-report-content-left">
                         <ul>
                             <li>
                                 <p>리포트 생성일</p>
-                                <p>{{report_create_date}}</p>
+                                <p>ㅇㄹㅇㄹㅇㄹㅇ</p>
                             </li>
                             <li>
                                 <p>데이터 기간</p>
-                                <p>{{report_start_date}} 00:00:00 ~ {{report_end_date}} 23:59:59</p>
+                                <p>00:00:00</p>
                             </li>
                         </ul>
                     </div>
                 </div>
-
-                <!-- BEGIN daily-asset-state -->
-                <div class="sub-content daily-asset-state">
-                    <div class="daily-asset-state-title">
-                        <p>자산 통계 정보</p>
+                <div class="sub-container">
+                    <div class="sub-content brand-2">
+                        월간 자산수 비교
+                        <div id="chart-monthly_asset_data"></div>
                     </div>
-                    <div class="daily-asset-state-content">
-                        <div class="daily-asset-state-item">
-                            <div class="card h-100">
-                                <div class="card-body daily-asset-state-frame">
-                                    <div class="d-flex align-items-center justify-content-center">
-                                        <div id="report_listData_unMgmt_chart"></div>
-                                        <div class="flex-column">
-                                            <p class="daily-asset-state-text">미관리 자산 증가율</p>
-                                            <p class="daily-asset-state-count" id="calcSub_report_listData_unMgmt_counts"></p>
-                                            <p class="daily-asset-state-per" id="calcPerRound_report_listData_unMgmt_counts"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-arrow">
-                                    <div class="card-arrow-top-left"></div>
-                                    <div class="card-arrow-top-right"></div>
-                                    <div class="card-arrow-bottom-left"></div>
-                                    <div class="card-arrow-bottom-right"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="daily-asset-state-item">
-                            <div class="card h-100">
-                                <div class="card-body daily-asset-state-frame">
-                                    <div class="d-flex align-items-center justify-content-center">
-
-                                        <div id="report_listData_idle_chart"></div>
-                                        <div class="flex-column">
-                                            <p class="daily-asset-state-text">유휴장비 개수 증가율</p>
-                                            <p class="daily-asset-state-count" id="calcSub_report_listData_idle_counts"></p>
-                                            <p class="daily-asset-state-per" id="calcPerRound_report_listData_idle_counts"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-arrow">
-                                    <div class="card-arrow-top-left"></div>
-                                    <div class="card-arrow-top-right"></div>
-                                    <div class="card-arrow-bottom-left"></div>
-                                    <div class="card-arrow-bottom-right"></div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="sub-content brand-2">
+                        장기 미접속 자산 증가율
+                        <div id="chart-150days"></div>
                     </div>
                 </div>
-
-                <div class="sub-content asset-device-state1">
-                    <div class="asset-device-state-title">
-                        <p>전일 발송된 알람 정보</p>
-                    </div>
-                    <table style="width: 100%;">
-                        <colgroup>
-                            <col style="width: 10%;">
-                            <col style="width: 70%;">
-                            <col style="width: 20%;">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th class="asset-device-item text-center">No</th>
-                            <th class="asset-device-item text-center">전일 발송된 알람 이름</th>
-                            <th class="asset-device-item text-center">횟수</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for data in report_listData_alarm %}
-                        <tr>
-                            <td class="asset-device-name text-center">{{ forloop.counter }}</td>
-                            <td class="asset-device-count text-center">{{ data.name }}</td>
-                            <td class="asset-device-count text-center">{{ data.count }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                <div class="sub-content brand">
+                    Windows 버전별 수 변화량
                 </div>
-
-                <div class="sub-content asset-device-state1">
-                    <div class="asset-device-state-title">
-                        <p>IP 대역별 관리 자산 현황 (Top5)</p>
+                <div class="sub-container">
+                    <div class="sub-content brand-2">
+                        업데이트 대상 수 변화량
+                        <div id="chart-os_version_up"></div>
                     </div>
-                    <table style="width: 100%;">
-                        <colgroup>
-                            <col style="width: 10%;">
-                            <col style="width: 40%;">
-                            <col style="width: 25%;">
-                            <col style="width: 25%;">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th class="asset-device-item text-center">No</th>
-                            <th class="asset-device-item text-center">서브넷 분류</th>
-                            <th class="asset-device-item text-center">Virtual 서버 수</th>
-                            <th class="asset-device-item text-center">Physical 서버 수</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for data in report_listData_subnet_isVm %}
-                        <tr>
-                            <td class="asset-device-name text-center">{{ forloop.counter }}</td>
-                            <td class="asset-device-count text-center">{{ data.ip }}</td>
-                            <td class="asset-device-count text-center">
-                                <div class="d-flex justify-content-center" style="width: 100%;">
-                                    <div style="width:40%;">{{ data.daily_om_vm }}대</div>
-                                    <div style="width:40%;">
-                                        {% if data.vm_change < 0 %}
-                                            ▼{{ data.vm_change|cut:"-" }}
-                                        {% elif data.vm_change > 0 %}
-                                            ▲{{ data.vm_change }}
-                                        {% elif data.vm_change == 0 %}
-                                            -
-                                        {% else %}
-                                            {{ data.vm_change }}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="asset-device-count text-center">
-                                <div class="d-flex justify-content-center" style="width: 100%;">
-                                    <div style="width:40%;">{{ data.daily_om_pm }}대</div>
-                                    <div style="width:40%;">
-                                        {% if data.pm_change < 0 %}
-                                            ▼{{ data.pm_change|cut:"-" }}
-                                        {% elif data.pm_change > 0 %}
-                                            ▲{{ data.pm_change }}
-                                        {% elif data.pm_change == 0 %}
-                                            -
-                                        {% else %}
-                                            {{ data.pm_change }}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="sub-content asset-device-state1">
-                    <div class="asset-device-state-title">
-                        <p>배포 성공한 Package (Top5)</p>
+                    <div class="sub-content brand-2">
+                        보안 패치 대상 수 변화량
+                        <div id="chart-hotfix"></div>
                     </div>
-                    <table style="width: 100%;">
-                        <colgroup>
-                            <col style="width: 10%;">
-                            <col style="width: 20%;">
-                            <col style="width: 30%;">
-                            <col style="width: 30%;">
-                            <col style="width: 10%;">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th class="asset-device-item text-center">No</th>
-                            <th class="asset-device-item text-center">실행자</th>
-                            <th class="asset-device-item text-center">패키지명</th>
-                            <th class="asset-device-item text-center">대상</th>
-                            <th class="asset-device-item text-center">횟수</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for data in report_listData_action_tf %}
-                        <tr>
-                            <td class="asset-device-name text-center">{{ forloop.counter }}</td>
-                            <td class="asset-device-name text-center">{{ data.user }}</td>
-                            <td class="asset-device-name text-center">{{ data.package }}</td>
-                            <td class="asset-device-name text-center">{{ data.group }}</td>
-                            <td class="asset-device-name text-center">{{ data.count }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
                 </div>
             </div>
-
-
         </div>
     </div>
-</div>
-
-
 </div>
 <script src='/static/js/jquery/jquery-3.6.0.min.js'></script>
 <script src='/static/assets/plugins/bootstrap/dist/js/bootstrap.min.js'></script>
@@ -243,10 +80,11 @@
 <script src='/static/assets/js/app.min.js'></script>
 <!-- apexchart -->
 <script src='/static/assets/plugins/apexcharts/dist/apexcharts.min.js'></script>
-<script src='/static/js/ncsm/report_dailyChart.js'></script>
+<script src='/static/assets/js/ncsm/report_dailyChart.js'></script>
 <script src='/static/js/library/html2pdf.bundle.js'></script>
 <script>
-var report_listData_unMgmt_idle = {{ report_listData_unMgmt_idle | safe }};
+var dataList = {{ dataList |  safe }};
+console.log(dataList);
 
 document.getElementById('downloadPdfBtn').addEventListener('click', function() {
     html2pdf().set({
