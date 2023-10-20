@@ -584,7 +584,7 @@
         </div>
 <!-- END #content -->
 <script>
-/*document.getElementById('reportPop').addEventListener('click', function() {
+document.getElementById('reportPop').addEventListener('click', function() {
     window.open('../report', 'PopupWindowName', 'width=600,height=400,scrollbars=no,resizable=no');
 });
 
@@ -595,7 +595,7 @@
     var chartName = document.getElementById('chartName').value;
 
     // Django가 반환하는 상대 URL에 원점을 추가하여 절대 URL을 만듭니다.
-    var relativeUrl = "{% url 'export' model='Xfactor_Common' %}";
+    var relativeUrl = "{% url 'export' model='Xfactor_Daily' %}";
     var absoluteUrl = window.location.origin + relativeUrl;
 
     // 절대 URL으로 'URL' 객체를 생성합니다.
@@ -607,7 +607,7 @@
 
     // 변경된 URL로 이동합니다.
     window.location.href = url.toString();
-}*/
+}
 
 </script>
 {% endblock %}

@@ -182,8 +182,8 @@ def hs_asset(request):
     # # 24시간 30분 이전의 시간 계산
     # today_collect_date = local_now - timedelta(minutes=7)
 
-    asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')[:5]
-    total_asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
+    asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')[:5]
+    total_asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(total_asset.values_list('item_count', flat=True))
 
     context = {'menu_list' : unique_items, 'asset' : asset, 'total_item_count' : total_item_count}
@@ -207,7 +207,7 @@ def hs_asset_paginghw(request):
 
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
-        user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
         users = user.values('chassistype').annotate(count=Count('chassistype'))
         user = user.filter(query)
         if filter_value:
@@ -247,7 +247,7 @@ def hs_asset_paginghw(request):
                          Q(memo__icontains=filter_value))
             user = user.filter(query)
     else:
-        user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -327,7 +327,7 @@ def hs_asset_paginghw(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
 
 
     # Prepare the response
@@ -382,7 +382,7 @@ def hs_asset_pagingsw(request):
 
     if filter_text and filter_column:
         query = Q(**{f'{filter_column}__icontains': filter_text})
-        user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
         # service = Xfactor_Service.objects.filter(computer=user.computer_id)
         # print(service.essential1)
         user = user.filter(query)
@@ -411,7 +411,7 @@ def hs_asset_pagingsw(request):
                 Q(memo__icontains=filter_value))
             user = user.filter(query)
     else:
-        user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
         # print(user.values_list('computer_id', flat=True))
         if filter_value:
             if ' and ' in filter_value:
@@ -473,7 +473,7 @@ def hs_asset_pagingsw(request):
     # Serialize the paginated data
 
     #user_list = CommonSerializer(page, many=True).data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
 
 
     # Prepare the response

@@ -31117,7 +31117,7 @@ input:checked+labl::before{
 
 .group_modal {
     --bs-modal-zindex: 1051;
-    --bs-modal-width: 1000px;
+    --bs-modal-width: 1400px;
     --bs-modal-padding: 1rem;
     --bs-modal-margin: 0.5rem;
     --bs-modal-bg: none;

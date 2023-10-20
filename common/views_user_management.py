@@ -204,16 +204,7 @@ def create_auth(request):
     xuserIds = json.loads(request.POST['xuserIds'])
     print(xuserIds)
     if not xuserIds:
-        print("abv")
         xuserIds = ['']
-
-    # Computer Group 만들기
-    text = ""
-    # for index, xuser_id in enumerate(xuserIds):
-    #     if index == len(xuser_id) - 1:
-    #         text += f'Computer ID matches \\"{xuser_id}\\"'
-    #     else:
-    #         text += f'Computer ID matches \\"{xuser_id}\\" or '
 
     #DB넣기
     xgroup_insert = Xfactor_Xuser_Group()
@@ -362,3 +353,15 @@ def search_box(request):
         user_data =Xfactor_Xuser.objects.filter(x_id__icontains=search_text).values('x_id')
         # user_data = XfactorServiceserializer(user, many=True).data
         return JsonResponse({'data': list(user_data)})
+
+
+
+@csrf_exempt
+def user_list(request):
+    user = Xfactor_Xuser.objects.all()
+
+    user_list = XuserSerializer(user, many=True).data
+    # Prepare the response
+    response = { 'data': user_list}
+
+    return JsonResponse(response)
