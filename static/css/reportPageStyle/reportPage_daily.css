@@ -141,17 +141,22 @@ article {
     border: 1px solid #dcdcdc;
 }
 
-.brand-logo {
-    width: 394px;
+.brand-2 {
+    width: calc(50% - 5px);
     height: 50px;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    background-color: #f8f8f8;
+    border: 1px solid #dcdcdc;
+    margin-right: 10px;
+}
+.sub-container > .brand-2:last-child {
+    margin-right: 0;
 }
 
 .brand-logo img {
-    width: 140px;
-    height: 32px;
-    padding-left: 10px;
+    width: 64px;
+    width: 34px;
 }
 
 .brand-title {
@@ -243,8 +248,12 @@ article {
 }
 
 .daily-report-content-left ul li:last-child p:nth-child(2) {
-    border-right: 0;
+    width: 200px;
+    text-align: left;
     text-indent: 10px;
+    border: 1px solid #dbdbdb;
+    border-left: 0;
+    border-bottom: 1px solid #dbdbdb;
 }
 
 .daily-report-content-left ul li:last-child p:nth-child(3) {
@@ -737,4 +746,13 @@ article {
 #dailyChartRadarChart .apexcharts-yaxis .apexcharts-text {
     fill: var(--bs-gray900);
     font-size: 8px;
+}
+
+.sub-container {
+    display: flex;
+}
+
+.sub-sub-child {
+    flex: 1;
+    text-align: center;
 }
