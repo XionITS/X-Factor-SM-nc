@@ -33,7 +33,7 @@ var sec_asset_list = function () {
             for (var i = 0; i < rows.length; i++) {
                 var row = rows[i];
                 var data = api.row(row).data();
-                var computer_id = data.computer.computer_id;
+                var computer_id = data.computer_id;
 
                 if (checkedItems[computer_id]) {
                     $(row).find('input[type="checkbox"]').prop('checked', true);
@@ -65,14 +65,14 @@ var sec_asset_list = function () {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    2: 'computer.os_simple',
-                    3: 'computer.computer_name',
+                    2: 'os_simple',
+                    3: 'computer_name',
                     4: 'security1',
                     5: 'security2',
                     6: 'security3',
                     7: 'security4',
                     8: 'security5',
-                    9: 'computer.memo'
+                    9: 'memo'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -109,18 +109,18 @@ var sec_asset_list = function () {
                 searchable: false
             },
             {data: '', title: 'No', searchable: true},
-            {data: 'computer.os_simple', title: 'OS', searchable: true},
-            { data: 'computer.ncdb_data.deptName', title: '부서', searchable: true },
-			{ data: 'computer.ncdb_data.userName', title: '이름', searchable: true },
-	        { data: 'computer.ncdb_data.userId', title: '계정', searchable: true },
-            {data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true},
+            {data: 'os_simple', title: 'OS', searchable: true},
+            { data: 'ncdb_data.deptName', title: '부서', searchable: true },
+			{ data: 'ncdb_data.userName', title: '이름', searchable: true },
+	        { data: 'ncdb_data.userId', title: '계정', searchable: true },
+            {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
             {data: 'security1', title: 'Cososys', searchable: true},
             {data: 'security2', title: 'Symantec', searchable: true},
             {data: 'security3', title: 'CarbonBlack CBR', searchable: true},
             {data: 'security4', title: 'CarbonBlack CBC', searchable: true},
             {data: 'security5', title: 'McAfee VSE', searchable: true},
             {data: '', title: '더보기', searchable: true},
-            {data: 'computer.memo', title: '메모', searchable: true},
+            {data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
             var api = this.api();
@@ -137,8 +137,8 @@ var sec_asset_list = function () {
                 searchable: false,
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    const computer_id = row.computer.computer_id;
-                    return '<input type="checkbox" class="form-check-input" name="' + row.computer.computer_name + '" id="' + row.computer.computer_id + '" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
+                    const computer_id = row.computer_id;
+                    return '<input type="checkbox" class="form-check-input" name="' + row.computer_name + '" id="' + row.computer_id + '" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer_name + '">'
                 }
             },
             {
@@ -156,13 +156,13 @@ var sec_asset_list = function () {
                 width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 3, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 3, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
             {
                 targets: 7,
                 width: "5%",
@@ -209,9 +209,9 @@ var sec_asset_list = function () {
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<a class="secmore swmore-font" data-cbr="' + row.security3 + '" ' +
-                        'data-computer_name="' + row.computer.computer_name + '" data-cososys="' + row.security1 + '" data-cososys_ver="' + row.security1_ver + '" ' +
+                        'data-computer_name="' + row.computer_name + '" data-cososys="' + row.security1 + '" data-cososys_ver="' + row.security1_ver + '" ' +
                         'data-symantec="' + row.security2 + '" data-symantec_ver="' + row.security2_ver + '" data-cbr_ver="' + row.security3_ver + '" data-cbc="' + row.security4 + '" ' +
-                        'data-cbc_ver="' + row.security4_ver + '" data-mcafee="' + row.security5 + '" data-mcafee_ver="' + row.security5_ver + '" data-ip_address="' + row.computer.ip_address + '" data-mac_address="' + row.computer.mac_address + '" data-os_total="' + row.computer.os_total + '"> 더보기 </a>'
+                        'data-cbc_ver="' + row.security4_ver + '" data-mcafee="' + row.security5 + '" data-mcafee_ver="' + row.security5_ver + '" data-ip_address="' + row.ip_address + '" data-mac_address="' + row.mac_address + '" data-os_total="' + row.os_total + '"> 더보기 </a>'
                 }
             },
             {

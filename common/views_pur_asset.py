@@ -42,8 +42,8 @@ def pur_asset(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
 
-    asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')[:5]
-    total_asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
+    asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')[:5]
+    total_asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(total_asset.values_list('item_count', flat=True))
 
     context = {'menu_list' : unique_items}
@@ -67,95 +67,95 @@ def pur_asset_paginghw(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
     if filter_text and filter_column:
-        filter_column = 'computer__' + filter_column
+        #filter_column = 'computer__' + filter_column
         query = Q(**{f'{filter_column}__icontains': filter_text})
         #print(query)
-        user = Xfactor_Purchase.objects.select_related('computer').filter(user_date__gte=today_collect_date)
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
         #user = Xfactor_Common.objects.prefetch_related('purchase').filter(user_date__gte=today_collect_date)
         user = user.filter(query)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
-                query = reduce(operator.and_, [Q(computer__chassistype__icontains=term) |
-                                               Q(computer__computer_name__icontains=term) |
-                                               Q(computer__ip_address__icontains=term) |
-                                               Q(computer__hw_cpu__icontains=term) |
-                                               Q(computer__hw_mb__icontains=term) |
-                                               Q(computer__hw_ram__icontains=term) |
-                                               Q(computer__hw_disk__icontains=term) |
-                                               Q(computer__hw_gpu__icontains=term) |
-                                               Q(computer__first_network__icontains=term) |
+                query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(computer_name__icontains=term) |
+                                               Q(ip_address__icontains=term) |
+                                               Q(chw_cpu__icontains=term) |
+                                               Q(hw_mb__icontains=term) |
+                                               Q(hw_ram__icontains=term) |
+                                               Q(hw_disk__icontains=term) |
+                                               Q(chw_gpu__icontains=term) |
+                                               Q(first_network__icontains=term) |
                                                Q(mem_use__icontains=term) |
                                                Q(disk_use__icontains=term)
                                                for term in search_terms])
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
-                query = reduce(operator.or_, [Q(computer__chassistype__icontains=term) |
-                                               Q(computer__computer_name__icontains=term) |
-                                               Q(computer__ip_address__icontains=term) |
-                                               Q(computer__hw_cpu__icontains=term) |
-                                               Q(computer__hw_mb__icontains=term) |
-                                               Q(computer__hw_ram__icontains=term) |
-                                               Q(computer__hw_disk__icontains=term) |
-                                               Q(computer__hw_gpu__icontains=term) |
-                                               Q(computer__first_network__icontains=term) |
+                query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                               Q(computer_name__icontains=term) |
+                                               Q(ip_address__icontains=term) |
+                                               Q(chw_cpu__icontains=term) |
+                                               Q(hw_mb__icontains=term) |
+                                               Q(hw_ram__icontains=term) |
+                                               Q(hw_disk__icontains=term) |
+                                               Q(chw_gpu__icontains=term) |
+                                               Q(first_network__icontains=term) |
                                                Q(mem_use__icontains=term) |
                                                Q(disk_use__icontains=term)
                                                for term in search_terms])
             else:
-                query = (Q(computer__chassistype__icontains=filter_value) |
-                         Q(computer__computer_name__icontains=filter_value) |
-                         Q(computer__ip_address__icontains=filter_value) |
-                         Q(computer__hw_cpu__icontains=filter_value) |
-                         Q(computer__hw_mb__icontains=filter_value) |
-                         Q(computer__hw_ram__icontains=filter_value) |
-                         Q(computer__hw_disk__icontains=filter_value) |
-                         Q(computer__hw_gpu__icontains=filter_value) |
-                         Q(computer__first_network__icontains=filter_value) |
+                query = (Q(chassistype__icontains=filter_value) |
+                         Q(computer_name__icontains=filter_value) |
+                         Q(ip_address__icontains=filter_value) |
+                         Q(hw_cpu__icontains=filter_value) |
+                         Q(hw_mb__icontains=filter_value) |
+                         Q(hw_ram__icontains=filter_value) |
+                         Q(hw_disk__icontains=filter_value) |
+                         Q(hw_gpu__icontains=filter_value) |
+                         Q(first_network__icontains=filter_value) |
                          Q(mem_use__icontains=filter_value) |
                          Q(disk_use__icontains=filter_value))
             user = user.filter(query)
     else:
-        user = Xfactor_Purchase.objects.select_related('computer').filter(user_date__gte=today_collect_date)
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
-                query = reduce(operator.and_, [Q(computer__chassistype__icontains=term) |
-                                               Q(computer__computer_name__icontains=term) |
-                                               Q(computer__ip_address__icontains=term) |
-                                               Q(computer__hw_cpu__icontains=term) |
-                                               Q(computer__hw_mb__icontains=term) |
-                                               Q(computer__hw_ram__icontains=term) |
-                                               Q(computer__hw_disk__icontains=term) |
-                                               Q(computer__hw_gpu__icontains=term) |
-                                               Q(computer__first_network__icontains=term) |
+                query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(computer_name__icontains=term) |
+                                               Q(ip_address__icontains=term) |
+                                               Q(chw_cpu__icontains=term) |
+                                               Q(hw_mb__icontains=term) |
+                                               Q(hw_ram__icontains=term) |
+                                               Q(hw_disk__icontains=term) |
+                                               Q(chw_gpu__icontains=term) |
+                                               Q(first_network__icontains=term) |
                                                Q(mem_use__icontains=term) |
                                                Q(disk_use__icontains=term)
                                                for term in search_terms])
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
-                query = reduce(operator.or_, [Q(computer__chassistype__icontains=term) |
-                                               Q(computer__computer_name__icontains=term) |
-                                               Q(computer__ip_address__icontains=term) |
-                                               Q(computer__hw_cpu__icontains=term) |
-                                               Q(computer__hw_mb__icontains=term) |
-                                               Q(computer__hw_ram__icontains=term) |
-                                               Q(computer__hw_disk__icontains=term) |
-                                               Q(computer__hw_gpu__icontains=term) |
-                                               Q(computer__first_network__icontains=term) |
+                query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                               Q(computer_name__icontains=term) |
+                                               Q(ip_address__icontains=term) |
+                                               Q(chw_cpu__icontains=term) |
+                                               Q(hw_mb__icontains=term) |
+                                               Q(hw_ram__icontains=term) |
+                                               Q(hw_disk__icontains=term) |
+                                               Q(chw_gpu__icontains=term) |
+                                               Q(first_network__icontains=term) |
                                                Q(mem_use__icontains=term) |
                                                Q(disk_use__icontains=term)
                                                for term in search_terms])
             else:
-                query = (Q(computer__chassistype__icontains=filter_value) |
-                         Q(computer__computer_name__icontains=filter_value) |
-                         Q(computer__ip_address__icontains=filter_value) |
-                         Q(computer__hw_cpu__icontains=filter_value) |
-                         Q(computer__hw_mb__icontains=filter_value) |
-                         Q(computer__hw_ram__icontains=filter_value) |
-                         Q(computer__hw_disk__icontains=filter_value) |
-                         Q(computer__hw_gpu__icontains=filter_value) |
-                         Q(computer__first_network__icontains=filter_value) |
+                query = (Q(chassistype__icontains=filter_value) |
+                         Q(computer_name__icontains=filter_value) |
+                         Q(ip_address__icontains=filter_value) |
+                         Q(hw_cpu__icontains=filter_value) |
+                         Q(hw_mb__icontains=filter_value) |
+                         Q(hw_ram__icontains=filter_value) |
+                         Q(hw_disk__icontains=filter_value) |
+                         Q(hw_gpu__icontains=filter_value) |
+                         Q(first_network__icontains=filter_value) |
                          Q(mem_use__icontains=filter_value) |
                          Q(disk_use__icontains=filter_value))
             user = user.filter(query)
@@ -168,19 +168,19 @@ def pur_asset_paginghw(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        2: 'computer__chassistype',
-        3: 'computer__computer_name',
-        4: 'computer__ip_address',
-        5: 'computer__first_network',
-        6: 'computer__logged_name',
+        2: 'cchassistype',
+        3: 'computer_name',
+        4: 'ip_address',
+        5: 'cfirst_network',
+        6: 'logged_name',
         7: 'mem_use',
         8: 'disk_use',
         9: 'hw',
-        10: 'computer__memo',
+        10: 'memo',
         # Add mappings for other columns here
     }
 
-    order_column = order_column_map.get(order_column_index, 'computer__computer_name')
+    order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
         user = user.order_by(order_column)
     else:
@@ -201,7 +201,7 @@ def pur_asset_paginghw(request):
 
     # Serialize the paginated data
 
-    user_list = XfactorPurchaseSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
 
 
     # Prepare the response
@@ -232,78 +232,78 @@ def pur_asset_pagingsw(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
     if filter_text and filter_column:
-        filter_column = 'computer__' + filter_column
+        #filter_column = 'computer__' + filter_column
         query = Q(**{f'{filter_column}__icontains': filter_text})
         #user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
-        user = Xfactor_Purchase.objects.select_related('computer').filter(user_date__gte=today_collect_date)
-        print(user)
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
+        #print(user)
         # service = Xfactor_Service.objects.filter(computer=user.computer_id)
         # print(service.essential1)
         user = user.filter(query)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
-                query = reduce(operator.and_, [Q(computer__chassistype__icontains=term) |
-                                               Q(computer__computer_name__icontains=term) |
-                                               Q(computer__ip_address__icontains=term) |
-                                               Q(computer__sw_list__icontains=term) |
-                                               Q(computer__sw_ver_list__icontains=term) |
-                                               Q(computer__sw_install__icontains=term) |
-                                               Q(computer__memo__icontains=term)
+                query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(computer_name__icontains=term) |
+                                               Q(ip_address__icontains=term) |
+                                               Q(sw_list__icontains=term) |
+                                               Q(sw_ver_list__icontains=term) |
+                                               Q(sw_install__icontains=term) |
+                                               Q(memo__icontains=term)
                                                for term in search_terms])
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
-                query = reduce(operator.or_, [Q(computer__chassistype__icontains=term) |
-                                               Q(computer__computer_name__icontains=term) |
-                                               Q(computer__ip_address__icontains=term) |
-                                               Q(computer__sw_list__icontains=term) |
-                                               Q(computer__sw_ver_list__icontains=term) |
-                                               Q(computer__sw_install__icontains=term) |
-                                               Q(computer__memo__icontains=term)
+                query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                               Q(computer_name__icontains=term) |
+                                               Q(ip_address__icontains=term) |
+                                               Q(sw_list__icontains=term) |
+                                               Q(sw_ver_list__icontains=term) |
+                                               Q(sw_install__icontains=term) |
+                                               Q(memo__icontains=term)
                                                for term in search_terms])
             else:
-                query = (Q(computer__chassistype__icontains=filter_value) |
-                Q(computer__computer_name__icontains=filter_value) |
-                Q(computer__ip_address__icontains=filter_value) |
-                Q(computer__sw_list__icontains=filter_value) |
-                Q(computer__sw_ver_list__icontains=filter_value) |
-                Q(computer__sw_install__icontains=filter_value) |
-                Q(computer__memo__icontains=filter_value))
+                query = (Q(chassistype__icontains=filter_value) |
+                         Q(computer_name__icontains=filter_value) |
+                         Q(ip_address__icontains=filter_value) |
+                         Q(sw_list__icontains=filter_value) |
+                         Q(sw_ver_list__icontains=filter_value) |
+                         Q(sw_install__icontains=filter_value) |
+                         Q(memo__icontains=filter_value))
             user = user.filter(query)
     else:
         #user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
-        user = Xfactor_Purchase.objects.select_related('computer').filter(user_date__gte=today_collect_date)
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
 
         # print(user.values_list('computer_id', flat=True))
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
-                query = reduce(operator.and_, [Q(computer__chassistype__icontains=term) |
-                                               Q(computer__computer_name__icontains=term) |
-                                               Q(computer__ip_address__icontains=term) |
-                                               Q(computer__sw_list__icontains=term) |
-                                               Q(computer__sw_ver_list__icontains=term) |
-                                               Q(computer__sw_install__icontains=term) |
-                                               Q(computer__memo__icontains=term)
+                query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(computer_name__icontains=term) |
+                                               Q(ip_address__icontains=term) |
+                                               Q(sw_list__icontains=term) |
+                                               Q(sw_ver_list__icontains=term) |
+                                               Q(sw_install__icontains=term) |
+                                               Q(memo__icontains=term)
                                                for term in search_terms])
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
-                query = reduce(operator.or_, [Q(computer__chassistype__icontains=term) |
-                                               Q(computer__computer_name__icontains=term) |
-                                               Q(computer__ip_address__icontains=term) |
-                                               Q(computer__sw_list__icontains=term) |
-                                               Q(computer__sw_ver_list__icontains=term) |
-                                               Q(computer__sw_install__icontains=term) |
-                                               Q(computer__memo__icontains=term)
+                query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                               Q(computer_name__icontains=term) |
+                                               Q(ip_address__icontains=term) |
+                                               Q(sw_list__icontains=term) |
+                                               Q(sw_ver_list__icontains=term) |
+                                               Q(sw_install__icontains=term) |
+                                               Q(memo__icontains=term)
                                                for term in search_terms])
             else:
-                query = (Q(computer__chassistype__icontains=filter_value) |
-                Q(computer__computer_name__icontains=filter_value) |
-                Q(computer__ip_address__icontains=filter_value) |
-                Q(computer__sw_list__icontains=filter_value) |
-                Q(computer__sw_ver_list__icontains=filter_value) |
-                Q(computer__sw_install__icontains=filter_value) |
-                Q(computer__memo__icontains=filter_value))
+                query = (Q(chassistype__icontains=filter_value) |
+                Q(computer_name__icontains=filter_value) |
+                Q(ip_address__icontains=filter_value) |
+                Q(sw_list__icontains=filter_value) |
+                Q(sw_ver_list__icontains=filter_value) |
+                Q(sw_install__icontains=filter_value) |
+                Q(memo__icontains=filter_value))
             user = user.filter(query)
 
     # user = user.exclude(ip_address='unconfirmed')
@@ -312,16 +312,16 @@ def pur_asset_pagingsw(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'computer__chassistype',
-        2: 'computer__computer_name',
-        3: 'computer__ip_address',
-        4: 'computer__sw_list',
-        5: 'computer__sw_ver_list',
-        6: 'computer__sw_install',
-        7: 'computer__memo',
+        1: 'chassistype',
+        2: 'computer_name',
+        3: 'ip_address',
+        4: 'sw_list',
+        5: 'sw_ver_list',
+        6: 'sw_install',
+        7: 'memo',
         # Add mappings for other columns here
     }
-    order_column = order_column_map.get(order_column_index, 'computer__computer_name')
+    order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
         user = user.order_by(order_column)
     else:
@@ -342,7 +342,7 @@ def pur_asset_pagingsw(request):
     # Serialize the paginated data
     #user_list = LimitedCommonSerializer(page, many=True).data
     #user_list = CommonSerializer(page, many=True).data
-    user_list = XfactorPurchaseSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
 
     # Prepare the response
     response = {

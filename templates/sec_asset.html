@@ -45,7 +45,7 @@
                 <!-- 검색어 필터  -->
                 <div class="search-dropdown">
                     <div class="dropdown">
-                        <button class="btn btn-outline-warning dropdown-toggle" type="button" data-column="computer__computer_name" id="column-dropdown" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-outline-warning dropdown-toggle" type="button" data-column="computer_name" id="column-dropdown" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         컴퓨터 이름
                         </button>
                             <div class="dropdown-menu" aria-labelledby="column-dropdown" id="search-dropdown">
@@ -125,7 +125,7 @@
                 {% endfor %}
             )
             {% endif %}
-            <a href="{% url 'export' model='Xfactor_Security' %}?parameter_name=sec_asset" class="btn btn-outline-warning export">Export to Excel</a>
+            <a href="{% url 'export' model='Xfactor_Daily' %}?parameter_name=sec_asset" class="btn btn-outline-warning export">Export to Excel</a>
 
         </div>
     </div>

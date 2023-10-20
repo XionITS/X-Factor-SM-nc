@@ -41,7 +41,7 @@ def ver_asset(request):
     # # 24시간 30분 이전의 시간 계산
     # today_collect_date = local_now - timedelta(minutes=7)
 
-    asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='os_simple').values('item', 'item_count').order_by('-item_count')[:5]
+    asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='os_simple').values('item', 'item_count').order_by('-item_count')[:5]
     total_item_count = sum(asset.values_list('item_count', flat=True))
 
     context = {'menu_list': unique_items, 'asset': asset, 'total_item_count': total_item_count}
@@ -54,7 +54,7 @@ def ver_asset_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common.objects.filter(os_simple__icontains=default_os)
+    user = Xfactor_Daily.objects.filter(os_simple__icontains=default_os)
 
     # # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
     # local_tz = pytz.timezone('Asia/Seoul')
@@ -162,7 +162,7 @@ def ver_asset_paging(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
     response = {
         'draw': int(request.POST.get('draw', 1)),  # Echo back the draw parameter from the request

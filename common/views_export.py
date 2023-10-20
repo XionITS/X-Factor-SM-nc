@@ -10,7 +10,7 @@ import json
 from datetime import datetime, timedelta
 from django.utils import timezone
 
-from common.serializers import CommonSerializer
+from common.serializers import CommonSerializer,Dailyserializer
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -25,40 +25,42 @@ def export(request, model):
     # 파라미터 값에 따라 조건 처리
 
     if parameter_value == 'hs_asset':
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'hw_cpu','hw_mb','hw_ram','hw_disk','hw_gpu','sw_list','sw_ver_list','memo',"user_date"]
         model_class = apps.get_model('common', model)
-        columns = ['computer_name','chassistype','ip_address','mac_address','hw_cpu','hw_mb','hw_ram','hw_disk','hw_gpu','sw_list','memo','user_date']
-        data = model_class.objects.filter(user_date__gte=today_collect_date).values(*columns)
+        data_list = model_class.objects.filter(user_date__gte=today_collect_date)
+        data = Dailyserializer(data_list, many=True).data
+
     elif parameter_value == 'ver_asset':
         model_class = apps.get_model('common', model)
-        columns = ['computer_name','chassistyt7ype','ip_address','mac_address','os_simple','os_total','os_version','os_build','memo','user_date']
-        data = model_class.objects.filter(user_date__gte=today_collect_date).values(*columns)
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'os_simple','os_total','os_version','os_build','memo','user_date']
+        data_list = model_class.objects.filter(user_date__gte=today_collect_date)
+        data = Dailyserializer(data_list, many=True).data
     elif parameter_value == 'up_asset':
         model_class = apps.get_model('common', model)
-        columns = ['computer_name','chassistype','ip_address','mac_address','hotfix','hotfix_date','memo','user_date']
-        data = model_class.objects.filter(user_date__gte=today_collect_date).filter(os_simple='Windows').values(*columns)
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'hotfix','hotfix_date','memo','user_date']
+        data_list = model_class.objects.filter(user_date__gte=today_collect_date).filter(os_simple='Windows')
+        data = Dailyserializer(data_list, many=True).data
     elif parameter_value == 'pur_asset':
         model_class = apps.get_model('common', model)
-        columns = ['computer__computer_name','computer__chassistype','computer__ip_address','computer__mac_address','computer__first_network','mem_use','disk_use','computer__hw_cpu'
-            ,'computer__hw_mb','computer__hw_ram','computer__hw_disk','computer__hw_gpu','computer__sw_list','computer__sw_ver_list','computer__sw_install','computer__memo','user_date']
-        data = model_class.objects.filter(user_date__gte=today_collect_date).values(*columns)
+        columns = ["chassistype","ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'first_network','mem_use','disk_use','hw_cpu'
+            ,'hw_mb','hw_ram','hw_disk','hw_gpu','sw_list','sw_ver_list','sw_install','memo','user_date']
+        data_list = model_class.objects.filter(user_date__gte=today_collect_date)
+        data = Dailyserializer(data_list, many=True).data
     elif parameter_value == 'sec_asset':
-        print(model)
         model_class = apps.get_model('common', model)
-        print(model_class)
-        columns = ['computer__computer_name','computer__chassistype','computer__ip_address','computer__mac_address','security1','security1_ver'
+        columns = ["chassistype","ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'security1','security1_ver'
             ,'security2','security2_ver','security3','security3_ver','security4','security4_ver','security5','security5_ver','uuid','user_date']
-        data = model_class.objects.filter(user_date__gte=today_collect_date).values(*columns)
+        data_list = model_class.objects.filter(user_date__gte=today_collect_date)
+        data = Dailyserializer(data_list, many=True).data
     elif parameter_value == 'sec_asset2':
-        print(model)
         model_class = apps.get_model('common', model)
-        print(model_class)
-        columns = ['computer__computer_name','computer__chassistype','computer__ip_address','computer__mac_address'
+        columns = ["chassistype","ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address"
             ,'ext_chr','ext_chr_ver','ext_edg','ext_edg_ver','ext_fir','ext_fir_ver','uuid','user_date']
-        data = model_class.objects.filter(user_date__gte=today_collect_date).values(*columns)
+        data_list = model_class.objects.filter(user_date__gte=today_collect_date)
+        data = Dailyserializer(data_list, many=True).data
 
     elif parameter_value == 'all_asset1':
         data_list = []
-        print(model)
         model_class = apps.get_model('common', model)
         columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         if request.GET.get('categoryName') == 'Online':
@@ -71,7 +73,7 @@ def export(request, model):
                 data_list = model_class.objects.exclude(chassistype__in=['Notebook', 'Desktop'])
             else:
                 data_list = model_class.objects.filter(chassistype=request.GET.get('seriesName'))
-        data = CommonSerializer(data_list, many=True).data
+        data = Dailyserializer(data_list, many=True).data
     elif parameter_value == 'asset_os_detail1':
         data_list = []
         columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
@@ -89,7 +91,7 @@ def export(request, model):
                 data_list = model_class.objects.filter(user_date__gte=today_collect_date, os_simple=request.GET.get('categoryName')).exclude(chassistype__in=['Desktop, Notebook'])
             else:
                 data_list = model_class.objects.filter(user_date__gte=today_collect_date, os_simple=request.GET.get('categoryName'), chassistype=request.GET.get('seriesName'))
-        data = CommonSerializer(data_list, many=True).data
+        data = Dailyserializer(data_list, many=True).data
     elif parameter_value == 'asset_os_detail2':
         data_list = []
         columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
@@ -107,7 +109,7 @@ def export(request, model):
                 data_list = model_class.objects.filter(os_simple=request.GET.get('categoryName')).exclude(chassistype__in=['Desktop, Notebook'])
             else:
                 data_list = model_class.objects.filter(os_simple=request.GET.get('categoryName'), chassistype=request.GET.get('seriesName'))
-        data = CommonSerializer(data_list, many=True).data
+        data = Dailyserializer(data_list, many=True).data
     elif parameter_value == 'office_chart':
         print(request.GET.get('categoryName'))
         columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
@@ -119,14 +121,14 @@ def export(request, model):
             data_list = model_class.objects.filter(user_date__gte=today_collect_date, essential5='Office 15')
         if request.GET.get('categoryName') == 'Office 설치 안됨':
             data_list = model_class.objects.filter(user_date__gte=today_collect_date, essential5__in=['unconfirmed', '오피스 없음', ''])
-        data = CommonSerializer(data_list, many=True).data
+        data = Dailyserializer(data_list, many=True).data
     elif parameter_value == 'oslistPieChart':
         data_list = []
         print(request.GET.get('categoryName'))
         columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         model_class = apps.get_model('common', model)
         data_list = model_class.objects.filter(user_date__gte=today_collect_date).annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build__contains=request.GET.get('categoryName'))
-        data = CommonSerializer(data_list, many=True).data
+        data = Dailyserializer(data_list, many=True).data
 
     # 전체컬럼 조회
     # 동적으로 모델에서 컬럼명 추출

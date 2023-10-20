@@ -383,7 +383,7 @@ var um_group_list = function () {
             {
                 targets: 2,
                 width: "10%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const xgroup_name = row.xgroup_name;
                     const xgroup_note = row.xgroup_note;
@@ -412,7 +412,7 @@ var um_group_list = function () {
             {
                 targets: 5,
                 width: "10%",
-                className: 'text-center text-truncate flex-cloumn column_hidden',
+                className: 'text-center new-text-truncate flex-cloumn column_hidden',
                 render: function (data, type, row) {
                     data = data.replace("T", " ").substring(0, 16);
                     return '<span data-toggle="tooltip">' + data + '</span>'
@@ -589,7 +589,7 @@ $(document).on("click", ".ummore", function (e) {
                 if (authItem.auth_use === 'true') {
                     modalbody += ' checked';
                 }
-                modalbody += '>';
+                modalbody += '> &nbsp;';
                 modalbody += authItem.xfactor_auth.auth_name;
                 modalbody += '</label><br>';
             });
@@ -671,7 +671,7 @@ $(document).on("click", ".um_groupmore", function (e) {
                 if (authItem.auth_use === 'true') {
                     modalbody += ' checked';
                 }
-                modalbody += '>';
+                modalbody += '> &nbsp;';
                 modalbody += authItem.xfactor_auth.auth_name;
                 modalbody += '</label><br>';
             });
@@ -790,6 +790,10 @@ $(document).on("click", "#closeBtn4", function (e) {
     $("#group_alter_modal").modal("hide");
     GroupalterForm_auth.style.display = "none";
 });
+$(document).on("click", "#closeBtn5", function (e) {
+    $("#group_insert_modal").modal("hide");
+    GroupCreateForm_auth.style.display = "none";
+});
 // 모달 외부 클릭 시 닫기 이벤트 핸들러
 window.onclick = function (event) {
     if (event.target == insert_modal) {
@@ -872,74 +876,90 @@ $(document).on("click","#um_creategroup", function (e){
     $("#groupDescription_auth").val("");
     const check_id = [];
 
+ /////////////////USER 검색기능 버튼삽입
     var modalbody =`<div class="asset-input-group">
-                        <input type="search" class="asset-form-control" id="user_search_result" placeholder="추가할 계정을 입력하세요">
-                        <div>
-                          <button class="btn btn-outline-warning" type="button" id="user_search">추가</button>
-                        </div>
+                        <input type="search" class="asset-form-control" id="user_search_result" placeholder="검색할 계정을 입력하세요">
                     </div>`;
-    console.log(checkedItems)
+ /////////////////사용자 목록 가져오기
+    $.ajax({
+        url: 'user_list/',
+        type: 'GET',
+        dataType: 'json',
 
-    for (const x_id in checkedItems) {
-        modalbody += '<input class="form-check-input" type="checkbox" value="'+x_id+'" id="'+x_id+'" checked><label class="form-check-label" for="'+x_id+'">'+x_id+'</label><br>'
-    }
-    $("#group_insert_modal .modal-title").html("그룹 생성 팝업창");
-    $("#group_insert_modal .form-check").html(modalbody);
-    $("#group_insert_modal").modal("show");
-
-    //###################################### Group User 추가할 JS#####################################
-    $(document).ready(function(){
-      $('#user_search_result').autocomplete({
-        source: function(request, response) {
-          $.ajax({
-            url: 'search_box/',
-            method: 'POST',
-            data: {
-              searchText: request.term
-            },
-            success: function(data){
-              var autocompleteData = data.data.map(function(item) {
-                return item.x_id;
-              });
-              response(autocompleteData);
-
+        success: function (response) {
+            var users = response.data;
+            var userTable = "<table class='table'><thead><tr><th>계정</th><th>이름</th><th>이메일</th><th>부서</th><th>ADD</th></tr></thead><tbody>";
+            for (var i = 0; i < users.length; i++) {
+                var user = users[i];
+                var x_id = user.x_id;
+                var x_name = user.x_name;
+                var x_email = user.x_email;
+                var x_auth = user.x_auth;
+                userTable += `<tr>
+                    <td>${x_id}</td>
+                    <td>${x_name}</td>
+                    <td>${x_email}</td>
+                    <td>${x_auth}</td>
+                    <td><input type="checkbox" class="user-checkbox" data-x-id="${x_id}"></td>
+                </tr>`;
             }
-          });
-        },
-        minLength: 2  // 최소 문자 수 설정
-      });
-    });
-
-    //########################## User 중복체크 ##################################
-    $('#user_search').on('click', function(event) {
-
-        var searchInput = document.getElementById('user_search_result');
-        var inputValue = searchInput.value;
-        console.log(inputValue)
-        //searchPer(inputValue)
-        if (inputValue) {
-            var isAlreadySelected = false;
-            var xuserElements = $('#group_insert_modal .form-check').find('.form-check-input');
-            xuserElements.each(function () {
-                if ($(this).val() === inputValue) { //하나씩체크해보기
-                    isAlreadySelected = true;
-                    return false;
+            userTable += "</tbody></table>";
+ /////////////////사용자 테이블을 modalbody에 추가
+            modalbody += userTable;
+            // ADD 부분의 체크박스 이벤트 처리
+            var modalbody2
+            $(document).off("change", ".user-checkbox");
+            $(document).on("change", ".user-checkbox", function (e) {
+                const x_id = $(this).data("x-id");
+  /////////////// // 체크박스를 체크하면 x_id를 modalbody2에 추가
+                if (this.checked) {
+                        var newLine = '<div id="div_' + x_id  + '"><input class="form-check-input" type="checkbox" value="' + x_id + '" id="' + x_id  + '" checked><label class="form-check-label" for="' + x_id  + '">' + x_id  + '</label><br></div>';
+                        $("#group_insert_modal .form-check2").append(newLine);
+                }
+ ///////////////// 체크박스를 해제하면 modalbody2에서 제거
+                else {
+                    $("#div_" + x_id).remove();
+//                    $(`#group_insert_modal .form-check2 label[for=${x_id}]`).remove(); // 라벨도 제거
+//                    $("#group_insert_modal .form-check2").find('br').last().remove();
                 }
             });
-            if (isAlreadySelected) {
-                alert('이미 선택한 값입니다.');
-            } else {
-                var newLine = '<input class="form-check-input" type="checkbox" value="' + inputValue + '" id="' + inputValue + '" checked><label class="form-check-label" for="' + inputValue + '">' + inputValue + '</label><br>';
-                $("#group_insert_modal .form-check").append(newLine);
-                searchInput.value = '';
+
+
+ /////////////////검색하여 선택한  USER 추가하기
+
+            for (const x_id in checkedItems) {
+                modalbody2 += '<div id="div_'+x_id+'"><input class="form-check-input" type="checkbox" value="'+x_id+'" id="'+x_id+'" checked><label class="form-check-label" for="'+x_id+'">'+x_id+'</label><br></div>'
             }
+
+ /////////////////모달바디 저장하여  html에 넣기
+            $("#group_insert_modal .modal-title").html("그룹 생성 팝업창");
+            $("#group_insert_modal .form-check").html(modalbody);
+            $("#group_insert_modal .form-check2").html(modalbody2);
+            $("#group_insert_modal").modal("show");
         }
     });
 });
 
+////////////////////////////검색한거로 USER 보이게
+$(document).on("keyup", "#user_search_result", function (e) {
+    var searchText = $(this).val().toLowerCase(); // 입력된 검색어를 소문자로 변환
+    var userRows = $("#group_insert_modal .form-check table tbody tr");
 
+    userRows.each(function () {
+        var x_id = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+        if (x_id.includes(searchText)) {
+            // 검색어와 일치하는 경우 표시
+            $(this).show();
+        } else {
+            // 일치하지 않는 경우 숨김
+            $(this).hide();
+        }
+    });
+});
+ ///////////////// 그룹 저장하기  /////////////////
 $(document).on("click","#group_insert", function(e) {
     event.preventDefault(); // 기본 제출 동작을 막습니다.
+
 //    const x_id = $(this).data("x_id");
 //    console.log(x_id);
 
@@ -948,7 +968,7 @@ $(document).on("click","#group_insert", function(e) {
     var xgroup_name = form.elements.groupName_auth.value;
     var xgroup_description = form.elements.groupDescription_auth.value;
     let xuserIds = []
-    const xuserElements = $('#group_insert_modal .form-check').find('.form-check-input');
+    const xuserElements = $('#group_insert_modal .form-check2').find('.form-check-input');
     //console.log(xuserElements)
     xuserElements.each(function () {
         if ($(this).prop('checked')) {
@@ -973,6 +993,8 @@ $(document).on("click","#group_insert", function(e) {
             alert(response.message);
             $('#group_insert_modal').modal('hide');
             $('a[value="GROUP"]').click();
+            $("#group_insert_modal .form-check2").empty();
+            $("#group_insert_modal .form-check").empty();
 
         } else {
             alert('실패 : ' + response.message);
@@ -980,6 +1002,8 @@ $(document).on("click","#group_insert", function(e) {
     }
     });
 });
+
+
 
 
 //############################### Group 수정하기 ###############################
@@ -1000,88 +1024,108 @@ $(document).on("click",".um_groupalter", function (e){
 
     var modalbody = `<div class="asset-input-group">
                         <input type="search" class="asset-form-control" id="group_search_result" placeholder="추가할 계정을 입력하세요">
-                        <div>
-                          <button class="btn btn-outline-warning" type="button" id="group_search">추가</button>
-                        </div>
                     </div>`;
     modalbody += '<input type="hidden" id="id" value="'+id+'">';
-    for (const x_id of xuser_id_array) {
-        if (x_id.trim() !== ''){
-            modalbody += '<input class="form-check-input" type="checkbox" value="'+x_id+'" id="'+x_id+'" checked><label class="form-check-label" for="'+x_id+'">'+x_id+'</label><br>'
-        }
-    }
-    $("#groupNameAlter_auth").val(xgroup_name);
-    $("#groupDescriptionAlter_auth").val(xgroup_note);
-    $("#group_alter_modal .modal-title").html("그룹 수정 팝업창");
-    $("#group_alter_modal .form-check").html(modalbody);
-    $("#group_alter_modal").modal("show");
 
-    //###################################### Group User 추가할 JS#####################################
-    $(document).ready(function(){
-      $('#group_search_result').autocomplete({
-        source: function(request, response) {
-          $.ajax({
-            url: 'search_box/',
-            method: 'POST',
-            data: {
-              searchText: request.term
-            },
-            success: function(data){
-              var autocompleteData = data.data.map(function(item) {
-                return item.x_id;
-              });
-              response(autocompleteData);
+/////////////////////이미 체크된 유저도 리스트에 체크되어있게하기
+    var selectedUsers = xuser_id_array;
 
+//////////////////// 유저목록 가져오기
+    $.ajax({
+        url: 'user_list/',
+        type: 'GET',
+        dataType: 'json',
+
+        success: function (response) {
+            var users = response.data;
+            var userTable = "<table class='table'><thead><tr><th>계정</th><th>이름</th><th>이메일</th><th>부서</th><th>ADD</th></tr></thead><tbody>";
+            for (var i = 0; i < users.length; i++) {
+                var user = users[i];
+                var x_id = user.x_id;
+                var x_name = user.x_name;
+                var x_email = user.x_email;
+                var x_auth = user.x_auth;
+                var isChecked = selectedUsers.includes(x_id) ? 'checked' : '';
+                userTable += `<tr>
+                    <td>${x_id}</td>
+                    <td>${x_name}</td>
+                    <td>${x_email}</td>
+                    <td>${x_auth}</td>
+                    <td><input type="checkbox" class="user-checkbox" data-x-id="${x_id}" ${isChecked}></td>
+                </tr>`;
             }
-          });
-        },
-        minLength: 2  // 최소 문자 수 설정
-      });
-    });
+            userTable += "</tbody></table>";
+ /////////////////사용자 테이블을 modalbody에 추가
+            modalbody += userTable;
+            var modalbody2="";
+            $(document).off("change", ".user-checkbox");
+            $(document).on("change", ".user-checkbox", function (e) {
+            const x_id = $(this).data("x-id");
+  /////////////// // 체크박스를 체크하면 x_id를 modalbody2에 추가
+                if (this.checked) {
+                        var newLine = '<div id="div_'+x_id+'"><input class="form-check-input" type="checkbox" value="' + x_id +  '" checked><label class="form-check-label" for="' + x_id  + '">' + x_id  + '</label><br></div>';
+                        $("#group_alter_modal .form-check2").append(newLine);
+                }
+ ///////////////// 체크박스를 해제하면 modalbody2에서 제거
+                else {
+                    $("#div_" + x_id).remove();
+                    $(`#group_alter_modal .form-check2 #${x_id}`).remove();
+                    $(`#group_alter_modal .form-check2 label[for=${x_id}]`).remove();
 
-    //########################## User 중복체크 ##################################
-    $('#group_search').on('click', function(event) {
-
-        var searchInput = document.getElementById('group_search_result');
-        var inputValue = searchInput.value;
-        console.log(inputValue)
-        //searchPer(inputValue)
-        if (inputValue) {
-            var isAlreadySelected = false;
-            var xuserElements = $('#group_alter_modal .form-check').find('.form-check-input');
-            xuserElements.each(function () {
-                if ($(this).val() === inputValue) { //하나씩체크해보기
-                    isAlreadySelected = true;
-                    return false;
+                    //$(`#group_alter_modal .form-check2 label[for=${x_id}]`).remove();
+//                    var nextBr = $(`#group_alter_modal .form-check2 label[for=${x_id}] + br`);
+//                    if (nextBr.length > 0) {
+//                        nextBr.remove();
+//                    }
                 }
             });
-            if (isAlreadySelected) {
-                alert('이미 선택한 값입니다.');
-            } else {
-                var newLine = '<input class="form-check-input" type="checkbox" value="' + inputValue + '" id="' + inputValue + '" checked><label class="form-check-label" for="' + inputValue + '">' + inputValue + '</label><br>';
-                $("#group_alter_modal .form-check").append(newLine);
-                searchInput.value = '';
+
+            for (const x_id of xuser_id_array) {
+                if (x_id.trim() !== ''){
+                    modalbody2 += '<div id="div_'+x_id+'"><input class="form-check-input" type="checkbox" value="'+x_id+'" id="'+x_id+'" checked><label class="form-check-label" for="'+x_id+'">'+x_id+'</label><br></div>'
+                }
             }
-        }
+            $("#groupNameAlter_auth").val(xgroup_name);
+            $("#groupDescriptionAlter_auth").val(xgroup_note);
+            $("#group_alter_modal .modal-title").html("그룹 수정 팝업창");
+            $("#group_alter_modal .form-check").html(modalbody);
+            $("#group_alter_modal .form-check2").html(modalbody2);
+            $("#group_alter_modal").modal("show");
+            }
     });
 });
 
+$(document).on("keyup", "#group_search_result", function (e) {
+    var searchText = $(this).val().toLowerCase(); // 입력된 검색어를 소문자로 변환
+    var userRows = $("#group_alter_modal .form-check table tbody tr");
+
+    userRows.each(function () {
+        var x_id = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+        if (x_id.includes(searchText)) {
+            // 검색어와 일치하는 경우 표시
+            $(this).show();
+        } else {
+            // 일치하지 않는 경우 숨김
+            $(this).hide();
+        }
+    });
+});
 //######################### 그룹 수정 완료 ############################################
 $(document).on("click","#group_alter", function(e) {
     event.preventDefault(); // 기본 제출 동작을 막습니다.
-//    const x_id = $(this).data("x_id");
-//    console.log(x_id);
+
 
     var form = document.getElementById("GroupalterForm_auth");
-    console.log(form)
     var xgroup_name = form.elements.groupNameAlter_auth.value;
     var id = form.elements.id.value;
+    console.log(form)
+    console.log("aaa")
     var xgroup_description = form.elements.groupDescriptionAlter_auth.value;
     let xuserIds = []
-    const xuserElements = $('#group_alter_modal .form-check').find('.form-check-input');
+    const xuserElements = $('#group_alter_modal .form-check2').find('.form-check-input');
     xuserElements.each(function () {
         if ($(this).prop('checked')) {
-            const x_id = $(this).attr("id");
+            const x_id = $(this).attr("value");
             xuserIds.push(x_id);
         }
     });
@@ -1103,6 +1147,8 @@ $(document).on("click","#group_alter", function(e) {
             alert(response.message);
             $('#group_alter_modal').modal('hide');
             $('a[value="GROUP"]').click();
+            $("#group_alter_modal .form-check2").empty();
+            $("#group_alter_modal .form-check").empty();
 //            setTimeout(function() {
 //            window.location.reload();
 //            }, 1000); // 1000 밀리초 (1초) 후에 리로드
@@ -1183,3 +1229,53 @@ function um_check() {
     //입력 값 전송
     document.um_signup_form.submit(); //유효성 검사의 포인트
 }
+
+
+
+
+
+// /////////////////User 자동완성 기능
+//            $('#user_search_result').autocomplete({
+//                source: function(request, response) {
+//                  $.ajax({
+//                    url: 'search_box/',
+//                    method: 'POST',
+//                    data: {
+//                      searchText: request.term
+//                    },
+//                    success: function(data){
+//                      var autocompleteData = data.data.map(function(item) {
+//                        return item.x_id;
+//                      });
+//                      response(autocompleteData);
+//
+//                    }
+//                  });
+//                },
+//                minLength: 2  // 최소 문자 수 설정
+//              });
+
+// /////////////////검색하여 중복체크하고 없으면 오른쪽으로  USER 추가
+//            $('#user_search').on('click', function(event) {
+//                var searchInput = document.getElementById('user_search_result');
+//                var inputValue = searchInput.value;
+//                //searchPer(inputValue)
+//                if (inputValue) {
+//                    var isAlreadySelected = false;
+//                    var xuserElements = $('#group_insert_modal .form-check2').find('.form-check-input');
+//                    xuserElements.each(function () {
+//                        if ($(this).val() === inputValue) { //하나씩체크해보기
+//                            isAlreadySelected = true;
+//                            return false;
+//                        }
+//                    });
+//                    if (isAlreadySelected) {
+//                        alert('이미 선택한 값입니다.');
+//                    } else {
+//  /////////////////USER 추가
+//                        var newLine = '<input class="form-check-input" type="checkbox" value="' + inputValue + '" id="' + inputValue + '" checked><label class="form-check-label" for="' + inputValue + '">' + inputValue + '</label><br>';
+//                        $("#group_insert_modal .form-check2").append(newLine);
+//                        searchInput.value = '';
+//                    }
+//                }
+//            });

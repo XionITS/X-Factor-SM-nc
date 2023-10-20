@@ -96,11 +96,23 @@ class XfactorPurchaseSerializer(serializers.ModelSerializer):
         fields = ['computer', 'mem_use', 'disk_use', 'user_date']
 
 
-class XfactorDailyserializer(serializers.ModelSerializer):
+class Dailyserializer(serializers.ModelSerializer):
+    ncdb_data = serializers.SerializerMethodField()
 
     class Meta:
         model = Xfactor_Daily
         fields = '__all__'
+
+    def get_ncdb_data(self, obj):
+        try:
+            # logged_name과 관련된 Xfactor_ncdb 인스턴스를 검색
+            ncdb_instance = Xfactor_ncdb.objects.get(userId=obj.logged_name)
+            # Xfactor_ncdbSerializer를 사용하여 관련 인스턴스를 직렬화
+            ncdb_serializer = NcdbSerializer(ncdb_instance)
+            return ncdb_serializer.data
+        except Xfactor_ncdb.DoesNotExist:
+            # 일치하는 데이터가 없을 경우 빈 값을 반환
+            return {}
 
 
 class XfactorLogserializer(serializers.ModelSerializer):
@@ -120,5 +132,4 @@ class XgroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Xfactor_Xuser_Group
         fields = '__all__'
-
 

@@ -33,7 +33,7 @@ var sec_asset_list2 = function () {
             for (var i = 0; i < rows.length; i++) {
                 var row = rows[i];
                 var data = api.row(row).data();
-                var computer_id = data.computer.computer_id;
+                var computer_id = data.computer_id;
                 if (checkedItems[computer_id]) {
                     $(row).find('input[type="checkbox"]').prop('checked', true);
                 } else {
@@ -64,14 +64,14 @@ var sec_asset_list2 = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    2: 'computer.chassistype',
-                    3: 'computer.os_simple',
-                    4: 'computer.computer_name',
-                    5: 'computer.ip_address',
-                    6: 'computer.mac_address',
+                    2: 'chassistype',
+                    3: 'os_simple',
+                    4: 'computer_name',
+                    5: 'ip_address',
+                    6: 'mac_address',
                     7: 'ext_chr',
-                    8: 'computer.sw_list',
-                    9: 'computer.hotfix'
+                    8: 'sw_list',
+                    9: 'hotfix'
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -98,17 +98,17 @@ var sec_asset_list2 = function () {
                 searchable: false
             },
             {data: '', title: 'No', searchable: true},
-            {data: 'computer.chassistype', title: '구분', searchable: true},
-            {data: 'computer.os_simple', title: 'OS', searchable: true},
-            {data: 'computer.ncdb_data.deptName', title: '부서', searchable: true },
-			{data: 'computer.ncdb_data.userName', title: '이름', searchable: true },
-	        {data: 'computer.ncdb_data.userId', title: '계정', searchable: true },
-            {data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true},
-            {data: 'computer.ip_address', title: 'IPv4', searchable: true},
-            {data: 'computer.mac_address', title: 'MAC주소', searchable: true},
+            {data: 'chassistype', title: '구분', searchable: true},
+            {data: 'os_simple', title: 'OS', searchable: true},
+            {data: 'ncdb_data.deptName', title: '부서', searchable: true },
+			{data: 'ncdb_data.userName', title: '이름', searchable: true },
+	        {data: 'ncdb_data.userId', title: '계정', searchable: true },
+            {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
+            {data: 'ip_address', title: 'IPv4', searchable: true},
+            {data: 'mac_address', title: 'MAC주소', searchable: true},
             {data: 'ext_chr', title: '확장프로그램', searchable: true},
-            {data: 'computer.sw_list', title: '소프트웨어', searchable: true},
-            {data: 'computer.hotfix', title: 'Hotfix', searchable: true}
+            {data: 'sw_list', title: '소프트웨어', searchable: true},
+            {data: 'hotfix', title: 'Hotfix', searchable: true}
         ],
         rowCallback: function (row, data, index) {
             var api = this.api();
@@ -125,8 +125,8 @@ var sec_asset_list2 = function () {
                 searchable: false,
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    const computer_id = row.computer.computer_id;
-                    return '<input type="checkbox" class="form-check-input" name="' + row.computer.computer_name + '" id="' + row.computer.computer_id + '" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
+                    const computer_id = row.computer_id;
+                    return '<input type="checkbox" class="form-check-input" name="' + row.computer_name + '" id="' + row.computer_id + '" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer_name + '">'
                 }
             },
             {
@@ -144,7 +144,7 @@ var sec_asset_list2 = function () {
                 width: "5%",
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer.chassistype + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.chassistype + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -152,15 +152,15 @@ var sec_asset_list2 = function () {
                 width: "5%",
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 4, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 7, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 8, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 9, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 4, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 8, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
             {
                 targets: 10,
                 width: "5%",
@@ -171,7 +171,7 @@ var sec_asset_list2 = function () {
                     } else {
                         return '<a class="extmore swmore-font" data-ext_chr="' + row.ext_chr + '" ' +
                             'data-ext_chr_ver="' + row.ext_chr_ver + '" data-ext_edg="' + row.ext_edg + '" data-ext_edg_ver="' + row.ext_edg_ver + '" ' +
-                            'data-ext_fir="' + row.ext_fir + '" data-ext_fir_ver="' + row.ext_fir_ver + '" data-computer_name="' + row.computer.computer_name + '" >더보기</a>'
+                            'data-ext_fir="' + row.ext_fir + '" data-ext_fir_ver="' + row.ext_fir_ver + '" data-computer_name="' + row.computer_name + '" >더보기</a>'
                     }
                 }
             },
@@ -181,8 +181,8 @@ var sec_asset_list2 = function () {
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<a class="swListmore swmore-font" ' +
-                        'data-computer_name="' + row.computer.computer_name + '" data-sw_list="' + row.computer.sw_list + '" data-sw_ver_list="' + row.computer.sw_ver_list + '" ' +
-                        'data-sw_install="' + row.computer.sw_install + '">더보기</a>'
+                        'data-computer_name="' + row.computer_name + '" data-sw_list="' + row.sw_list + '" data-sw_ver_list="' + row.sw_ver_list + '" ' +
+                        'data-sw_install="' + row.sw_install + '">더보기</a>'
                 }
             },
             {
@@ -190,11 +190,11 @@ var sec_asset_list2 = function () {
                 width: "5%",
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    if (row.computer.hotfix === 'not apply') {
+                    if (row.hotfix === 'not apply') {
                         return "";
                     } else {
                         return '<a class="hotmore swmore-font" ' +
-                            'data-computer_name="' + row.computer.computer_name + '" data-hotfix="' + row.computer.hotfix + '" data-hotfix_date="' + row.computer.hotfix_date + '">더보기</a>'
+                            'data-computer_name="' + row.computer_name + '" data-hotfix="' + row.hotfix + '" data-hotfix_date="' + row.hotfix_date + '">더보기</a>'
                     }
                 }
             },

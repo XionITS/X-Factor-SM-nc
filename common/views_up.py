@@ -32,7 +32,7 @@ def up_asset(request):
     unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
     context = {'menu_list': unique_items}
     #테이블아래 자산현황
-    asset = Daily_Statistics.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
+    asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
     total_item_count = sum(asset.values_list('item_count', flat=True))
     return render(request, 'up_asset.html', context)
 
@@ -43,7 +43,7 @@ def up_asset_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common.objects.filter(os_simple__icontains=default_os).exclude(os_simple='Linux').exclude(os_simple='Mac')
+    user = Xfactor_Daily.objects.filter(os_simple__icontains=default_os).exclude(os_simple='Linux').exclude(os_simple='Mac')
     hotfix_dates = user.values_list('hotfix_date', flat=True)
     # user = user.datetime.strptime(user.hotfix_date, '%m/%d/%Y %H:%M:%S')
     if filter_text and filter_column:
@@ -149,7 +149,7 @@ def up_asset_paging(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     #hotfix_list = user.values_list('hotfix', flat=True)

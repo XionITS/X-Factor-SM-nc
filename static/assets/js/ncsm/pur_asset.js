@@ -32,7 +32,7 @@ var hw_pur_asset_list = function () {
             for (var i = 0; i < rows.length; i++) {
                 var row = rows[i];
                 var data = api.row(row).data();
-                var computer_id = data.computer.computer_id;
+                var computer_id = data.computer_id;
 
                 if (checkedItems[computer_id]) {
                     $(row).find('input[type="checkbox"]').prop('checked', true);
@@ -87,6 +87,7 @@ var hw_pur_asset_list = function () {
             },
             dataSrc: function (res) {
                 var data = res.data;
+
                 return data;
             }
         },
@@ -98,22 +99,22 @@ var hw_pur_asset_list = function () {
                 searchable: false
             },
             {data: '', title: 'No', searchable: true},
-            {data: 'computer.chassistype', title: '구분', searchable: true},
-            { data: 'computer.ncdb_data.deptName', title: '부서', searchable: true },
-			{ data: 'computer.ncdb_data.userName', title: '이름', searchable: true },
-			{ data: 'computer.ncdb_data.userId', title: '계정', searchable: true },
-            {data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true},
-            {data: 'computer.ip_address', title: 'IPv4', searchable: true},
-            {data: 'computer.first_network', title: '최초 네트워크 접속일', searchable: true},
+            {data: 'chassistype', title: '구분', searchable: true},
+            { data: 'ncdb_data.deptName', title: '부서', searchable: true },
+			{ data: 'ncdb_data.userName', title: '이름', searchable: true },
+			{ data: 'ncdb_data.userId', title: '계정', searchable: true },
+            {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
+            {data: 'ip_address', title: 'IPv4', searchable: true},
+            {data: 'first_network', title: '최초 네트워크 접속일', searchable: true},
             {data: 'mem_use', title: '메모리 사용률', searchable: true},
             {data: 'disk_use', title: '디스크 사용률', searchable: true},
             {
                 data: 'hw', title: '부품 목록',
                 render: function (data, type, row) {
-                    return "CPU : " + row.computer.hw_cpu + "<br>메인보드 : " + row.computer.hw_mb + "<br>RAM : " + row.computer.hw_ram + "<br>디스크 : " + row.computer.hw_disk + "<br>VGA : " + row.computer.hw_gpu;
+                    return "CPU : " + row.hw_cpu + "<br>메인보드 : " + row.hw_mb + "<br>RAM : " + row.hw_ram + "<br>디스크 : " + row.hw_disk + "<br>VGA : " + row.hw_gpu;
                 }, searchable: true
             },
-            {data: 'computer.memo', title: '메모', searchable: true},
+            {data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
             var api = this.api();
@@ -138,8 +139,8 @@ var hw_pur_asset_list = function () {
                 searchable: false,
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    const computer_id = row.computer.computer_id;
-                    return '<input type="checkbox" class="form-check-input" name="' + row.computer.computer_name + '" id="' + row.computer.computer_id + '" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
+                    const computer_id = row.computer_id;
+                    return '<input type="checkbox" class="form-check-input" name="' + row.computer_name + '" id="' + row.computer_id + '" data-computer-id="' + row.computer_id + '" data-computer-name="' + row.computer_name + '">'
                 }
             },
             {
@@ -158,11 +159,11 @@ var hw_pur_asset_list = function () {
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 7, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
             {
                 targets: 8,
                 width: "10%",
@@ -335,7 +336,7 @@ var sw_pur_asset_list = function () {
             for (var i = 0; i < rows.length; i++) {
                 var row = rows[i];
                 var data = api.row(row).data();
-                var computer_id = data.computer.computer_id;
+                var computer_id = data.computer_id;
 
 
                 if (checkedItems[computer_id]) {
@@ -402,17 +403,17 @@ var sw_pur_asset_list = function () {
                 searchable: false
             },
             {data: '', title: 'No', searchable: true},
-            {data: 'computer.chassistype', title: '구분', searchable: true},
-            { data: 'computer.ncdb_data.deptName', title: '부서', searchable: true },
-			{ data: 'computer.ncdb_data.userName', title: '이름', searchable: true },
-			{ data: 'computer.ncdb_data.userId', title: '계정', searchable: true },
-            {data: 'computer.computer_name', title: '컴퓨터 이름', searchable: true},
-            {data: 'computer.ip_address', title: 'IPv4', searchable: true},
-            {data: 'computer.sw_list', title: '소프트웨어 목록', searchable: true},
-            {data: 'computer.sw_ver_list', title: '소프트웨어 버전', searchable: true},
-            {data: 'computer.sw_install', title: '설치 일자', searchable: true},
+            {data: 'chassistype', title: '구분', searchable: true},
+            { data: 'ncdb_data.deptName', title: '부서', searchable: true },
+			{ data: 'ncdb_data.userName', title: '이름', searchable: true },
+			{ data: 'ncdb_data.userId', title: '계정', searchable: true },
+            {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
+            {data: 'ip_address', title: 'IPv4', searchable: true},
+            {data: 'sw_list', title: '소프트웨어 목록', searchable: true},
+            {data: 'sw_ver_list', title: '소프트웨어 버전', searchable: true},
+            {data: 'sw_install', title: '설치 일자', searchable: true},
             {data: '', title: '더보기', searchable: false},
-            {data: 'computer.memo', title: '메모', searchable: true},
+            {data: 'memo', title: '메모', searchable: true},
 
         ],
         rowCallback: function (row, data, index) {
@@ -438,8 +439,8 @@ var sw_pur_asset_list = function () {
                 searchable: false,
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    const computer_id = row.computer.computer_id;
-                    return '<input type="checkbox" class="form-check-input" name="' + row.computer.computer_name + '" id="' + row.computer.computer_id + '" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer.computer_name + '">'
+                    const computer_id = row.computer_id;
+                    return '<input type="checkbox" class="form-check-input" name="' + row.computer_name + '" id="' + row.computer_id + '" data-computer-id="' + computer_id + '" data-computer-name="' + row.computer_name + '">'
                 }
             },
             {
@@ -458,16 +459,16 @@ var sw_pur_asset_list = function () {
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 7, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 6, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 7, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 
             {
                 targets: 8, width: "10%", className: 'text-start new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    const swList = row.computer.sw_list;
+                    const swList = row.sw_list;
                     const swListArray = swList ? swList.split('<br>') : [];
                     return '<span data-toggle="tooltip">' + (swListArray[0] || '') + '<br>' + (swListArray[1] || '') + '<br>' + (swListArray[2] || '') + '<br>' + (swListArray[3] || '')
                 }
@@ -476,7 +477,7 @@ var sw_pur_asset_list = function () {
             {
                 targets: 9, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
-                    const swVer = row.computer.sw_ver_list;
+                    const swVer = row.sw_ver_list;
                     const swVerArray = swVer ? swVer.split('<br>') : [];
                     return '<span data-toggle="tooltip">' + (swVerArray[0] || '') + '<br>' + (swVerArray[1] || '') + '<br>' + (swVerArray[2] || '') + '<br>' + (swVerArray[3] || '')
                 }
@@ -485,7 +486,7 @@ var sw_pur_asset_list = function () {
             {
                 targets: 10, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
-                    const swInstall = row.computer.sw_install;
+                    const swInstall = row.sw_install;
                     const swInstallArray = swInstall ? swInstall.split('<br>') : [];
                     return '<span data-toggle="tooltip">' + (swInstallArray[0] || '') + '<br>' + (swInstallArray[1] || '') + '<br>' + (swInstallArray[2] || '') + '<br>' + (swInstallArray[3] || '')
                 }
@@ -494,10 +495,10 @@ var sw_pur_asset_list = function () {
             {
                 targets: 11, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
-                    const computer_name = row.computer.computer_name;
-                    const swList = row.computer.sw_list;
-                    const swVer = row.computer.sw_ver_list;
-                    const swInstall = row.computer.sw_install;
+                    const computer_name = row.computer_name;
+                    const swList = row.sw_list;
+                    const swVer = row.sw_ver_list;
+                    const swInstall = row.sw_install;
                     return '</span><br><div class="pur_swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-swinstall="' + swInstall + '" data-computer_name="' + computer_name + '">더보기...</div>'
                 }
             },
