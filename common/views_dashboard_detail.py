@@ -484,14 +484,14 @@ def office_chart(request):
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
     if request.POST.get('categoryName') == 'Office 설치 안됨':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(essential5__in=['Office 21', 'Office 19', 'Office 16', 'Office 15', 'unconfirmed'])
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date,essential5='오피스 없음')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
     if request.POST.get('categoryName') == '미확인':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5='unconfirmed')
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5__in=['unconfirmed', ''])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
