@@ -1,7 +1,7 @@
 {
   "PROJECT" : {
     "CORE" : "Tanium",
-    "LOGIN" : "NANO",
+    "LOGIN" : "WEB",
     "CUSTOMER" : "NC",
     "TYPE" : "System",
     "LOG" : {

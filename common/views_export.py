@@ -120,7 +120,9 @@ def export(request, model):
         if request.GET.get('categoryName') == 'Office 16 미만':
             data_list = model_class.objects.filter(user_date__gte=today_collect_date, essential5='Office 15')
         if request.GET.get('categoryName') == 'Office 설치 안됨':
-            data_list = model_class.objects.filter(user_date__gte=today_collect_date, essential5__in=['unconfirmed', '오피스 없음', ''])
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date, essential5='오피스 없음')
+        if request.GET.get('categoryName') == '미확인':
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date, essential5__in=['unconfirmed', ''])
         data = Dailyserializer(data_list, many=True).data
     elif parameter_value == 'oslistPieChart':
         data_list = []
@@ -128,6 +130,64 @@ def export(request, model):
         columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         model_class = apps.get_model('common', model)
         data_list = model_class.objects.filter(user_date__gte=today_collect_date).annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build__contains=request.GET.get('categoryName'))
+        data = Dailyserializer(data_list, many=True).data
+    elif parameter_value == 'osVerPieChart':
+        data_list = []
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        model_class = apps.get_model('common', model)
+        if request.GET.get('categoryName') == '업데이트 완료':
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__gte='19044')
+        if request.GET.get('categoryName') == '업데이트 필요':
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__lt='19044')
+        data = Dailyserializer(data_list, many=True).data
+    elif parameter_value == 'subnet_chart':
+        data_list = []
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        model_class = apps.get_model('common', model)
+        if request.GET.get('categoryName') == 'VPN':
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date, subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
+        if request.GET.get('categoryName') == '사내망':
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date, subnet__in=['172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
+                    , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
+        if request.GET.get('categoryName') == '미확인':
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date, subnet='unconfirmed')
+        if request.GET.get('categoryName') == '외부망':
+            data_list = model_class.objects.filter(user_date__gte=today_collect_date).exclude(subnet__in=['unconfirmed', '172.21.224.0/20', '192.168.0.0/20', '172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
+                    , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
+        data = Dailyserializer(data_list, many=True).data
+    elif parameter_value == 'tcpuChart':
+        data_list = []
+        print(request.GET.get('categoryName'))
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        model_class = apps.get_model('common', model)
+        data_list = model_class.objects.filter(user_date__gte=today_collect_date, t_cpu='True')
+        data = Dailyserializer(data_list, many=True).data
+    elif parameter_value == 'hotfix_chart':
+        three_months_ago = datetime.now() - timedelta(days=90)
+        data_list = []
+        filtered_user_objects = []
+        print(request.GET.get('categoryName'))
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        model_class = apps.get_model('common', model)
+        user_objects = model_class.objects.filter(user_date__gte=today_collect_date)
+        users_values = user_objects.values('hotfix_date', 'computer_id')
+
+        for i, user in enumerate(users_values):
+            date_strings = user['hotfix_date'].split('<br> ')
+            date_objects = []
+            for date_str in date_strings:
+                try:
+                    date_obj = datetime.strptime(date_str, '%m/%d/%Y %H:%M:%S')
+                    date_objects.append(date_obj)
+                except ValueError:
+                    continue
+            if date_objects:
+                latest_date = max(date_objects)
+                if latest_date < three_months_ago and request.GET.get('categoryName') == '보안패치 필요':
+                    filtered_user_objects.append(user['computer_id'])
+                elif latest_date > three_months_ago and request.GET.get('categoryName') == '보안패치 불필요':
+                    filtered_user_objects.append(user['computer_id'])
+        data_list = model_class.objects.filter(user_date__gte=today_collect_date, computer_id__in=filtered_user_objects)
         data = Dailyserializer(data_list, many=True).data
 
     # 전체컬럼 조회
