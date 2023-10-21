@@ -106,7 +106,7 @@ var options150days = {
     }],
     xaxis: {
         categories: ['150days']
-    }
+    },
 }
 var chart150days = new ApexCharts(document.querySelector("#chart-150days"), options150days);
 chart150days.render();

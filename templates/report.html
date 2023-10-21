@@ -8,6 +8,9 @@
     <title>X-Factor daily Report</title>
     <link rel="shortcunt icon" href='/static/img/X-Factor_favicon/favicon.ico'>
 
+    <link rel="stylesheet" href='/static/assets/css/vendor.min.css'>
+<!--    <link rel="stylesheet" href='/static/assets/css/app.min.css'>-->
+
     <link rel="stylesheet" type="text/css" href='/static/css/reportPageStyle/font/reportPage_font.css'>
     <link rel="stylesheet" type="text/css" href='/static/css/reportPageStyle/reportPage_daily.css'>
 
@@ -15,7 +18,7 @@
 
 <body class="theme-orange">
 <div id="app" class="app pt-0">
-    <button id="downloadPdfBtn">PDF로 저장</button>
+    <button id="downloadPdfBtn" class="btn btn-outline-darkblue report_download">PDF로 저장</button>
     <div class="daily-report-wrap">
         <!-- BEGIN daily-report 1 page -->
         <div class="daily-report">
@@ -49,21 +52,44 @@
                 </div>
                 <div class="sub-container">
                     <div class="sub-content brand-2">
-                        <p class="marginleft2px">월간 자산수 비교</p>
-                        <div id="chart_chassis"></div>
+                        <div class="daily-asset-state-title">
+                            <p class="marginleft2px">월간 자산수 비교</p>
+                        </div>
+                        <div class="card">
+                            <div id="chart_chassis"></div>
+                            <div class="card-arrow">
+                                <div class="card-arrow-top-left"></div>
+                                <div class="card-arrow-top-right"></div>
+                                <div class="card-arrow-bottom-left"></div>
+                                <div class="card-arrow-bottom-right"></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="sub-content brand-2">
+                        <div class="daily-asset-state-title">
                         <p class="marginleft2px">장기 미접속 자산 증가율</p>
-                        <div id="chart-150days"></div>
+                        </div>
+                        <div class="card">
+                            <div id="chart-150days"></div>
+                            <div class="card-arrow">
+                                <div class="card-arrow-top-left"></div>
+                                <div class="card-arrow-top-right"></div>
+                                <div class="card-arrow-bottom-left"></div>
+                                <div class="card-arrow-bottom-right"></div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
                 <div class="sub-content brand-3">
+                    <div class="daily-asset-state-title">
                     <p class="marginleft2px">Windows 버전별 수 변화량</p>
+                    </div>
                     <table class="win-ver-table">
                         <thead>
                             <tr>
                                 <th>Windows 버전</th>
-                                <th>값</th>
+                                <th>Count</th>
                             </tr>
                         </thead>
                         <tbody id="winVerTableBody">
@@ -72,12 +98,34 @@
                 </div>
                 <div class="sub-container">
                     <div class="sub-content brand-2">
+                        <div class="daily-asset-state-title">
                         <p class="marginleft2px">업데이트 대상 수 변화량</p>
-                        <div id="chart_os_version_up"></div>
+                        </div>
+                        <div class="card">
+                            <div id="chart_os_version_up"></div>
+                            <div class="card-arrow">
+                                <div class="card-arrow-top-left"></div>
+                                <div class="card-arrow-top-right"></div>
+                                <div class="card-arrow-bottom-left"></div>
+                                <div class="card-arrow-bottom-right"></div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="sub-content brand-2">
+                        <div class="daily-asset-state-title">
                         <p class="marginleft2px">보안 패치 대상 수 변화량</p>
-                        <div id="chart_hotfix"></div>
+                        </div>
+                        <div class="card">
+                            <div id="chart_hotfix"></div>
+                            <div class="card-arrow">
+                                <div class="card-arrow-top-left"></div>
+                                <div class="card-arrow-top-right"></div>
+                                <div class="card-arrow-bottom-left"></div>
+                                <div class="card-arrow-bottom-right"></div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
