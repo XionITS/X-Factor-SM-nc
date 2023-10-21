@@ -15,7 +15,7 @@
 
 <body class="theme-orange">
 <div id="app" class="app pt-0">
-    <button id="downloadPdfBtn" class="btn btn-outline-warning report_download">PDF로 저장</button>
+    <button id="downloadPdfBtn">PDF로 저장</button>
     <div class="daily-report-wrap">
         <!-- BEGIN daily-report 1 page -->
         <div class="daily-report">
@@ -24,8 +24,8 @@
                 <div class="sub-content brand">
                     <div class="brand-logo">
                         <img src="/static/assets/css/images/NC CI-navy.png" alt="NC로고">
+                        <p class="brand-title">자산 리포트</p>
                     </div>
-                    <p class="brand-title">자산 리포트</p>
                 </div>
                 <!-- daily-report-content -->
                 <div class="sub-content daily-report-content">
@@ -37,11 +37,11 @@
                     <div class="daily-report-content-left">
                         <ul>
                             <li>
-                                <p>리포트 생성일</p>
-                                <p>ㅇㄹㅇㄹㅇㄹㅇ</p>
+                                <p>리포트 생성 시간대</p>
+                                <p></p>
                             </li>
                             <li>
-                                <p>데이터 기간</p>
+                                <p>선택한 데이터 시간대</p>
                                 <p>00:00:00</p>
                             </li>
                         </ul>
@@ -49,16 +49,16 @@
                 </div>
                 <div class="sub-container">
                     <div class="sub-content brand-2">
-                        월간 자산수 비교
+                        <p class="marginleft2px">월간 자산수 비교</p>
                         <div id="chart_chassis"></div>
                     </div>
                     <div class="sub-content brand-2">
-                        <p>장기 미접속 자산 증가율</p>
+                        <p class="marginleft2px">장기 미접속 자산 증가율</p>
                         <div id="chart-150days"></div>
                     </div>
                 </div>
                 <div class="sub-content brand-3">
-                    <p>Windows 버전별 수 변화량</p>
+                    <p class="marginleft2px">Windows 버전별 수 변화량</p>
                     <table class="win-ver-table">
                         <thead>
                             <tr>
@@ -72,11 +72,11 @@
                 </div>
                 <div class="sub-container">
                     <div class="sub-content brand-2">
-                        <p>업데이트 대상 수 변화량</p>
+                        <p class="marginleft2px">업데이트 대상 수 변화량</p>
                         <div id="chart_os_version_up"></div>
                     </div>
                     <div class="sub-content brand-2">
-                        보안 패치 대상 수 변화량
+                        <p class="marginleft2px">보안 패치 대상 수 변화량</p>
                         <div id="chart_hotfix"></div>
                     </div>
                 </div>

@@ -168,7 +168,7 @@ var lastMonthDataValue_Desktop = parseValue(dataFor_Desktop['last_value_in_prev_
 var options_chassis = {
     chart: {
         type: 'bar',
-        height: 250,
+        height: 200,
         stacked: false
     },
     plotOptions: {
@@ -199,20 +199,30 @@ chart_chassis.render();
 var winVerData = dataList['win_ver'];
 var tableBody = document.getElementById('winVerTableBody');
 
-for (var version in winVerData) {
+for (var i = 0; i < winVerData.length; i++) { // 배열을 순회하기 위해 인덱스 기반의 for 문을 사용합니다.
     var row = tableBody.insertRow();
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
-    cell1.textContent = version;
-    cell2.textContent = winVerData[version];
-}v
-
-
-
-
-
+    cell1.textContent = winVerData[i].item; // 'item' 속성의 값
+    cell2.textContent = winVerData[i].current_value; // 'current_value' 속성의 값 또는 원하는 다른 속성
+}
 
 };
+
+
+var currentDate = new Date();
+var formattedDate = currentDate.getFullYear() + '년 ' + (currentDate.getMonth() + 1).toString().padStart(2, '0') + '월 ' + currentDate.getDate().toString().padStart(2, '0') + '일 ' + currentDate.getHours().toString().padStart(2, '0') + '시';
+document.querySelector(".daily-report-content-left ul li:nth-child(1) p:nth-child(2)").textContent = formattedDate;
+var urlParams = new URLSearchParams(window.location.search);
+var datetimeValue = urlParams.get('datetime');
+if (datetimeValue) {
+    var parts = datetimeValue.split('-');
+    var selected_date = parts[0] + '년 ' + parts[1] + '월 ' + parts[2] + '일 ' + parts[3] + '시';
+    document.querySelector(".daily-report-content-left ul li:nth-child(2) p:nth-child(2)").textContent = selected_date;
+} else {
+    document.querySelector(".daily-report-content-left ul li:nth-child(2) p:nth-child(2)").textContent = "datetime 값이 없습니다.";
+}
+
 
 
 /* Controller

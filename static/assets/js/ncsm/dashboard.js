@@ -1528,20 +1528,24 @@ var handleRenderChartNCOMG = function () {
 
 $(document).ready(function () {
     ///////////////////////Datepicker////////////////////
+    ///////////////////////Datepicker////////////////////
     var previousValue = "";
     var now = new Date();
     var defaultHour = now.getHours();
     var dateTimeSelected = false;
     var reportDate = document.getElementById('datepickerD').placeholder || "";
+
     $("#datepickerD").datetimepicker({
         format: 'Y-m-d H시',
         formatTime: 'H시',
         defaultDate: now,
         defaultTime: defaultHour + '시',
+        maxDate: now,  // 현재 날짜를 최대 날짜로 설정
+        maxTime: (now.getHours() + 1) + ':00',
         closeOnWithoutClick: false,
-        onGenerate:function(current_time, $input){
-            if(!dateTimeSelected){
-                $(".xdsoft_time").on("click", function(){
+        onGenerate: function(current_time, $input) {
+            if (!dateTimeSelected) {
+                $(".xdsoft_time").on("click", function() {
                     dateTimeSelected = true;
                 });
             }

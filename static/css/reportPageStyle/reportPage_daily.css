@@ -137,6 +137,7 @@ article {
     height: 50px;
     display: flex;
     justify-content: space-between;
+    flex-direction: column;
     background-color: #f8f8f8;
     border: 1px solid #dcdcdc;
 }
@@ -164,9 +165,16 @@ article {
 }
 
 .brand-logo img {
-    width: 64px;
-    width: 34px;
+    height: 40px;
+    margin-left: 4px;
 }
+
+.brand-logo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 
 .brand-title {
     width: 170px;
@@ -766,3 +774,29 @@ article {
     text-align: center;
 }
 
+.win-ver-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.win-ver-table th, .win-ver-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.win-ver-table th {
+    background-color: #f2f2f2;
+    color: black;
+}
+
+#downloadPdfBtn {
+    margin-left: 81%;
+    position: relative;
+    top: 20px;
+    padding: 6px
+}
+
+.marginleft2px {
+    margin-left: 2px;
+}
