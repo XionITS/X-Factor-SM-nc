@@ -48,12 +48,80 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'all_asset_paging1/',
@@ -252,12 +320,80 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'asset_os_paging1/',
@@ -440,12 +576,81 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'asset_os_paging2/',
@@ -628,12 +833,81 @@ var oslistPieChart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'oslistPieChart/',
@@ -816,12 +1090,80 @@ var osVerPieChart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'osVerPieChart/',
@@ -1004,12 +1346,81 @@ var office_chart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'office_chart/',
@@ -1198,12 +1609,81 @@ var subnet_chart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'subnet_chart/',
@@ -1391,12 +1871,81 @@ var hotfix_chart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'hotfixChart/',
@@ -1578,12 +2127,81 @@ var tcpuChart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'tcpuChart/',
@@ -1765,12 +2383,81 @@ var discoverChart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'discoverChart/',

@@ -1449,7 +1449,6 @@ var hw_asset_list = function () {
             },
 			dataSrc: function (res) {
 				var data = res.data;
-				console.log(data)
 
 				return data;
 			}
@@ -1550,12 +1549,76 @@ var hw_asset_list = function () {
                 $('#nexts').remove();
                 $('#after').remove();
 
-                if (total_pages_hw > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+                if (total_pages_hw >= 1){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_hw">10≫</button>')
                 .insertAfter('#hs_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_hw">≪10</button>')
                 .insertBefore('#hs_asset_list_paginate .paginate_button:first');
                 }
+                var startPage = Math.floor(current_page_hw / 10) * 10;
+                var endPage = startPage + 9;
+                if (endPage > total_pages_hw - 1) {
+                    endPage = total_pages_hw - 1;
+                }
+                $('#hs_asset_list_paginate .paginate_button').not('.first, .last').remove();
+                var maxButtons = 10;
+                var halfWay = Math.floor(maxButtons / 2);
+
+                if (current_page_hw < halfWay) {
+                    var startPage = 0;
+                    var endPage = Math.min(maxButtons - 1, total_pages_hw - 1);
+                } else if ((current_page_hw + halfWay) > total_pages_hw) {
+                    var startPage = total_pages_hw - maxButtons;
+                    var endPage = total_pages_hw - 1;
+                } else {
+                    var startPage = current_page_hw - halfWay;
+                    var endPage = current_page_hw + halfWay;
+                }
+
+                var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    hs_asset_list_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_hw')
+                .css(current_page_hw == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+                if (startPage > 1) {
+                    $('<button type="button" class="paginate_button btn">...</button>')
+                        .insertAfter(oneButton);
+                }
+                for (var i = startPage; i <= endPage; i++) {
+                    if (i == 0 || i == total_pages_hw - 1) continue;
+                    var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                    if (i == current_page_hw) {
+                        btn.addClass('current');
+                        btn.css({
+                            'font-weight': 'bold',
+                            'color': '#f39c12'
+                        });
+                    }
+                    btn.on('click', function() {
+                        hs_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
+                    });
+                    btn.insertBefore('#nexts_hw');
+                }
+
+                if (endPage < total_pages_hw - 2) {
+                    $('<button type="button" class="paginate_button btn">...</button>')
+                        .insertBefore('#nexts_hw');
+                }
+
+                $('<button type="button" class="paginate_button btn">' + total_pages_hw + '</button>')
+                    .on('click', function() {
+                        hs_asset_list_Data.page(total_pages_hw - 1).draw(false);
+                    })
+                    .insertBefore('#nexts_hw')
+                    .css(current_page_hw == (total_pages_hw - 1) ? {
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    } : {});
             }
 });
       // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
@@ -1730,12 +1793,81 @@ var sw_asset_list = function () {
                 $('#nexts').remove();
                 $('#after').remove();
 
-                if (total_pages_sw > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+                if (total_pages_sw >= 1){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sw">10≫</button>')
                 .insertAfter('#hs_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sw">≪10</button>')
                 .insertBefore('#hs_asset_list_paginate .paginate_button:first');
                 }
+
+
+                var startPage = Math.floor(current_page_sw / 10) * 10;
+                var endPage = startPage + 9;
+                if (endPage > total_pages_sw - 1) {
+                    endPage = total_pages_sw - 1;
+                }
+
+                $('#hs_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+                var maxButtons = 10;
+                var halfWay = Math.floor(maxButtons / 2);
+
+                if (current_page_sw < halfWay) {
+                    var startPage = 0;
+                    var endPage = Math.min(maxButtons - 1, total_pages_sw - 1);
+                } else if ((current_page_sw + halfWay) > total_pages_sw) {
+                    var startPage = total_pages_sw - maxButtons;
+                    var endPage = total_pages_sw - 1;
+                } else {
+                    var startPage = current_page_sw - halfWay;
+                    var endPage = current_page_sw + halfWay;
+                }
+
+                var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                    .on('click', function() {
+                        sw_asset_list_Data.page(0).draw(false);
+                    })
+                    .insertAfter('#after_sw')
+                    .css(current_page_sw == 0 ? {
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    } : {});
+
+                if (startPage > 1) {
+                    $('<button type="button" class="paginate_button btn">...</button>')
+                        .insertAfter(oneButton);
+                }
+
+                for (var i = startPage; i <= endPage; i++) {
+                    if (i == 0 || i == total_pages_sw - 1) continue;
+                    var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                    if (i == current_page_sw) {
+                        btn.addClass('current');
+                        btn.css({
+                            'font-weight': 'bold',
+                            'color': '#f39c12'
+                        });
+                    }
+                    btn.on('click', function() {
+                        sw_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
+                    });
+                    btn.insertBefore('#nexts_sw');
+                }
+
+                if (endPage < total_pages_sw - 2) {
+                    $('<button type="button" class="paginate_button btn">...</button>')
+                        .insertBefore('#nexts_sw');
+                }
+
+                $('<button type="button" class="paginate_button btn">' + total_pages_sw + '</button>')
+                    .on('click', function() {
+                        sw_asset_list_Data.page(total_pages_sw - 1).draw(false);
+                    })
+                    .insertBefore('#nexts_sw')
+                    .css(current_page_sw == (total_pages_sw - 1) ? {
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    } : {});
             }
 });
 

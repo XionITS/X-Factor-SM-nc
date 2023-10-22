@@ -1527,15 +1527,6 @@ var handleRenderChartNCOMG = function () {
 };
 
 $(document).ready(function () {
-
-
-
-
-
-
-
-
-
 var previousValue = "";
 var dateTimeSelected = false;
 var reportDate = document.getElementById('datepickerD').placeholder || "";
@@ -1587,19 +1578,6 @@ $("button.input-group-text").click(function() {
     $("#datepickerD").datetimepicker('show');
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     document.getElementById('reportPop').addEventListener('click', function() {
         if (reportDate === "select date...") {
             var currentDate = new Date();
@@ -1608,7 +1586,10 @@ $("button.input-group-text").click(function() {
                          String(currentDate.getDate()).padStart(2, '0') + "-" +
                          String(currentDate.getHours());
         }
-        window.open('../report?datetime=' + reportDate, 'PopupWindowName', 'width=1000,height=1000,scrollbars=no,resizable=no');
+        var myWindow=window.open('../report?datetime=' + reportDate, 'PopupWindowName', 'width=1000,height=1000');
+            myWindow.resizeTo(1000,1000);
+            myWindow.moveTo(500, 100);
+            myWindow.focus();
     });
 
         function exportToExcel() {

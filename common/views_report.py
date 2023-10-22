@@ -117,12 +117,15 @@ def report(selected_date=None):
             else:
                 difference = current.item_count
                 increase_rate = 100
+            formatted_increase_amount = f"+{difference}" if difference > 0 else difference
+            formatted_increase_rate = f"+{increase_rate}" if increase_rate > 0 else increase_rate
+
             result_data.append({
                 'item': current.item,
                 'current_value': current.item_count,
                 'last_value_in_prev_month': matched_data.item_count if matched_data else 'null',
-                'increase_rate': increase_rate,
-                'increase_amount': difference
+                'increase_rate': formatted_increase_rate,
+                'increase_amount': formatted_increase_amount
             })
         return result_data
 

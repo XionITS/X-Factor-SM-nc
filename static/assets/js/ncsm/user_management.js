@@ -43,7 +43,7 @@ var um_user_list = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_um_user > 10) {
+            if (total_pages_um_user >= 1) {
                 $('<button type="button" class="btn" id="after_um_user">≪10</button>')
                     .insertBefore('#um_list_paginate .paginate_button:first');
                 $('<button type="button" class="btn" id="nexts_um_user">10≫</button>')
@@ -112,7 +112,7 @@ var um_user_list = function () {
                 .on('click', function() {
                     um_user_list.page(total_pages_um_user - 1).draw(false);
                 })
-                .insertAfter('#nexts_um_user')
+                .insertBefore('#nexts_um_user')
                 .css(current_page_um_user == (total_pages_um_user - 1) ? {
                     'font-weight': 'bold',
                     'color': '#f39c12'
@@ -317,7 +317,7 @@ var um_group_list = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_um_group > 10){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_um_group >= 1){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
             $('<button type="button" class="btn" id="nexts_um_group">10≫</button>')
             .insertAfter('#um_list_paginate .paginate_button:last');
             $('<button type="button" class="btn" id="after_um_group">≪10</button>')
@@ -347,11 +347,11 @@ var um_group_list = function () {
                 var endPage = current_page_um_group + halfWay;
             }
 
-            $('<button type="button" class="paginate_button btn">1</button>')
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
                 .on('click', function() {
                     um_group_list.page(0).draw(false);
                 })
-                .insertBefore('#after_um_group')
+                .insertAfter('#after_um_group')
                 .css(current_page_um_group == 0 ? {
                     'font-weight': 'bold',
                     'color': '#f39c12'
@@ -359,7 +359,7 @@ var um_group_list = function () {
 
             if (startPage > 1) {
                 $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter('#after_um_group');
+                    .insertAfter(oneButton);
             }
 
             for (var i = startPage; i <= endPage; i++) {
@@ -387,7 +387,7 @@ var um_group_list = function () {
                 .on('click', function() {
                     um_group_list.page(total_pages_um_group - 1).draw(false);
                 })
-                .insertAfter('#nexts_um_group')
+                .insertBefore('#nexts_um_group')
                 .css(current_page_um_group == (total_pages_um_group - 1) ? {
                     'font-weight': 'bold',
                     'color': '#f39c12'

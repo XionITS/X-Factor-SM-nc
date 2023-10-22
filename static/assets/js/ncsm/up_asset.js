@@ -50,12 +50,80 @@ var up_asset_list = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_up > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_up >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_up">10≫</button>')
                     .insertAfter('#up_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_up">≪10</button>')
                     .insertBefore('#up_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_up / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_up - 1) {
+                endPage = total_pages_up - 1;
+            }
+
+            $('#up_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_up < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_up - 1);
+            } else if ((current_page_up + halfWay) > total_pages_up) {
+                var startPage = total_pages_up - maxButtons;
+                var endPage = total_pages_up - 1;
+            } else {
+                var startPage = current_page_up - halfWay;
+                var endPage = current_page_up + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    up_asset_list_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_up')
+                .css(current_page_up == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_up - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_up) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    up_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_up');
+            }
+
+            if (endPage < total_pages_up - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_up');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_up + '</button>')
+                .on('click', function() {
+                    up_asset_list_Data.page(total_pages_up - 1).draw(false);
+                })
+                .insertBefore('#nexts_up')
+                .css(current_page_up == (total_pages_up - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'paging/',

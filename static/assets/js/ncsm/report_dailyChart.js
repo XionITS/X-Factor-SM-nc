@@ -259,7 +259,7 @@ var options_chassis = {
 var chart_chassis = new ApexCharts(document.querySelector("#chart_chassis"), options_chassis);
 chart_chassis.render();
 
-// Window 버전별 데이터를 테이블로 삽입
+// Window 버전별 수 변화량
 var winVerData = dataList['win_ver'];
 var tableBody = document.getElementById('winVerTableBody');
 
