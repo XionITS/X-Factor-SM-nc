@@ -49,7 +49,7 @@
                 </div>
                 <div class="sub-container">
                     <div class="sub-content brand-2">
-                        <p class="marginleft2px">월간 자산수 비교</p>
+                        <p class="marginleft2px">월간 자산 수 비교</p>
                         <div id="chart_chassis"></div>
                     </div>
                     <div class="sub-content brand-2">
@@ -63,7 +63,9 @@
                         <thead>
                             <tr>
                                 <th>Windows 버전</th>
-                                <th>값</th>
+                                <th>현재</th>
+                                <th>증감수</th>
+                                <th>증감률</th>
                             </tr>
                         </thead>
                         <tbody id="winVerTableBody">
@@ -94,7 +96,7 @@
 <script src='/static/js/library/html2pdf.bundle.js'></script>
 <script>
 var dataList = {{ dataList |  safe }};
-console.log(dataList);
+//console.log(dataList);
 
 document.getElementById('downloadPdfBtn').addEventListener('click', function() {
     html2pdf().set({
