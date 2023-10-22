@@ -145,7 +145,7 @@ var all_asset_list = function () {
             {
                 targets: 8,
                 width: "22%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -404,7 +404,7 @@ var win_asset_list = function () {
             {
                 targets: 8,
                 width: "22%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -661,7 +661,7 @@ var mac_asset_list = function () {
             {
                 targets: 8,
                 width: "22%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -919,7 +919,7 @@ var other_asset_list = function () {
             {
                 targets: 8,
                 width: "22%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -1011,19 +1011,24 @@ var other_asset_list = function () {
     // checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    var column = $('#column-dropdown').data('column');
-    var searchValue = $('#search-input-ver').val().trim();
     $('#search-button-ver').click(function () {
+        var column = $('#column-dropdown').data('column');
+        var searchValue = $('#search-input-ver').val().trim();
 
         performSearch(column, searchValue, other_asset_list_Data);
     });
 
+    // 검색창 enter 작동
     $('#search-input-ver').on('keyup', function (event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var column = $('#column-dropdown').data('column');
+            var searchValue = $('#search-input-ver').val().trim();
 
             performSearch(column, searchValue, other_asset_list_Data);
         }
     });
+
+
 
     $(document).on('click', '#nexts_other, #after_other', function () {
         var current_page_other = other_asset_list_Data.page();

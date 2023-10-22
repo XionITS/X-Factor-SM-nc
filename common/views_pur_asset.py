@@ -54,7 +54,9 @@ def pur_asset(request):
 def pur_asset_paginghw(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_column =request.POST.get('filter[column]')
+    print(filter_column)
     filter_text = request.POST.get('filter[value]')
+    print(filter_text)
     filter_value = request.POST.get('filter[value2]')
 
     # # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
@@ -65,12 +67,13 @@ def pur_asset_paginghw(request):
     # local_now = utc_now.astimezone(local_tz)
     # # 24시간 30분 이전의 시간 계산
     # today_collect_date = local_now - timedelta(minutes=7)
-
+    user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
     if filter_text and filter_column:
+        print("aa")
         #filter_column = 'computer__' + filter_column
         query = Q(**{f'{filter_column}__icontains': filter_text})
-        #print(query)
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
+
+
         #user = Xfactor_Common.objects.prefetch_related('purchase').filter(user_date__gte=today_collect_date)
         user = user.filter(query)
         if filter_value:
@@ -277,13 +280,13 @@ def pur_asset_pagingsw(request):
                                               Q(logged_name_id__deptName__icontains=term) |
                                               Q(logged_name_id__userName__icontains=term) |
                                               Q(logged_name_id__userId__icontains=term) |
-                                               Q(computer_name__icontains=term) |
-                                               Q(ip_address__icontains=term) |
-                                               Q(sw_list__icontains=term) |
-                                               Q(sw_ver_list__icontains=term) |
-                                               Q(sw_install__icontains=term) |
-                                               Q(memo__icontains=term)
-                                               for term in search_terms])
+                                              Q(computer_name__icontains=term) |
+                                              Q(ip_address__icontains=term) |
+                                              Q(sw_list__icontains=term) |
+                                              Q(sw_ver_list__icontains=term) |
+                                              Q(sw_install__icontains=term) |
+                                              Q(memo__icontains=term)
+                                              for term in search_terms])
             else:
                 query = (Q(chassistype__icontains=filter_value) |
                          Q(logged_name_id__deptName__icontains=filter_value) |
@@ -321,24 +324,24 @@ def pur_asset_pagingsw(request):
                                               Q(logged_name_id__deptName__icontains=term) |
                                               Q(logged_name_id__userName__icontains=term) |
                                               Q(logged_name_id__userId__icontains=term) |
-                                               Q(computer_name__icontains=term) |
-                                               Q(ip_address__icontains=term) |
-                                               Q(sw_list__icontains=term) |
-                                               Q(sw_ver_list__icontains=term) |
-                                               Q(sw_install__icontains=term) |
-                                               Q(memo__icontains=term)
-                                               for term in search_terms])
+                                              Q(computer_name__icontains=term) |
+                                              Q(ip_address__icontains=term) |
+                                              Q(sw_list__icontains=term) |
+                                              Q(sw_ver_list__icontains=term) |
+                                              Q(sw_install__icontains=term) |
+                                              Q(memo__icontains=term)
+                                              for term in search_terms])
             else:
                 query = (Q(chassistype__icontains=filter_value) |
                          Q(logged_name_id__deptName__icontains=filter_value) |
                          Q(logged_name_id__userName__icontains=filter_value) |
                          Q(logged_name_id__userId__icontains=filter_value) |
-                        Q(computer_name__icontains=filter_value) |
-                        Q(ip_address__icontains=filter_value) |
-                        Q(sw_list__icontains=filter_value) |
-                        Q(sw_ver_list__icontains=filter_value) |
-                        Q(sw_install__icontains=filter_value) |
-                        Q(memo__icontains=filter_value))
+                         Q(computer_name__icontains=filter_value) |
+                         Q(ip_address__icontains=filter_value) |
+                         Q(sw_list__icontains=filter_value) |
+                         Q(sw_ver_list__icontains=filter_value) |
+                         Q(sw_install__icontains=filter_value) |
+                         Q(memo__icontains=filter_value))
             user = user.filter(query)
 
     # user = user.exclude(ip_address='unconfirmed')

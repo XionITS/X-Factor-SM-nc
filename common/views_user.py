@@ -59,6 +59,7 @@ def signup(request):
                     log_date=date
                 )
                 Xfactor_log.save()
+                AutoAuth(x_id)
                 return redirect(redirect_url)
                 #return render(request, 'user_management.html', res_data)
             else :

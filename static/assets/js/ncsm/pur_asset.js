@@ -60,6 +60,7 @@ var hw_pur_asset_list = function () {
             url: 'pur_hwpaging/',
             type: "POST",
             data: function (data) {
+                var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
@@ -78,7 +79,7 @@ var hw_pur_asset_list = function () {
                     column: column,
                     columnmap: columnMap[orderColumn],
                     direction: orderDir,
-                    value: $('#search-input-hs').val(),
+                    value: $('#search-input-pur').val(),
                     value2: $('#hs_pur_asset_list_filter input[type="search"]').val(),
                     regex: false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
@@ -280,19 +281,20 @@ var hw_pur_asset_list = function () {
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
     $('#search-button-pur').click(function () {
         var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input-hs').val().trim();
+        var searchValue = $('#search-input-pur').val().trim();
 
-        performSearch(column, searchValue, hw_pur_asset_list_Data)
+        performSearch(column, searchValue, hw_pur_asset_list_Data);
     });
 
+    // 검색창 enter 작동
     $('#search-input-pur').on('keyup', function (event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
             var column = $('#column-dropdown').data('column');
-            var searchValue = $('#search-input-hs').val().trim();
-
+            var searchValue = $('#search-input-pur').val().trim();
             performSearch(column, searchValue, hw_pur_asset_list_Data);
         }
     });
+
 
     $(document).on('click', '#nexts_hw_pur, #after_hw_pur', function () {
         var current_page_hw_pur = hw_pur_asset_list_Data.page();
@@ -383,7 +385,7 @@ var sw_pur_asset_list = function () {
                 };
                 data.filter = {
                     column: column,
-                    value: $('#search-input-hs').val(),
+                    value: $('#search-input-pur').val(),
                     value2: $('#hs_pur_asset_list_filter input[type="search"]').val(),
                     regex: false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
@@ -584,23 +586,25 @@ var sw_pur_asset_list = function () {
     dropdown_text();
 
 
+
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
     $('#search-button-pur').click(function () {
         var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val().trim();
+        var searchValue = $('#search-input-pur').val().trim();
 
-        performSearch(column, searchValue, sw_pur_asset_list_Data);
+        performSearch(column, searchValue, sw_pur_asset_list);
     });
 
     // 검색창 enter 작동
-    $('#search-input-pur').on('keyup', function (event) {
+    $('#search-input-ver').on('keyup', function (event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
             var column = $('#column-dropdown').data('column');
-            var searchValue = $('#search-input').val().trim();
+            var searchValue = $('#search-input-pur').val().trim();
 
-            performSearch(column, searchValue, sw_pur_asset_list_Data);
+            performSearch(column, searchValue, sw_pur_asset_list);
         }
     });
+
 
     $(document).on('click', '#nexts_sw_pur, #after_sw_pur', function () {
         var current_page_sw_pur = sw_pur_asset_list.page();

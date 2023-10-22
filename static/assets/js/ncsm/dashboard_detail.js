@@ -20,7 +20,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -120,7 +120,8 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -128,7 +129,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -136,7 +137,8 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -144,7 +146,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -152,7 +154,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -224,7 +226,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -324,7 +326,8 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -332,7 +335,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -340,7 +343,8 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -348,7 +352,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -356,7 +360,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -412,7 +416,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -512,7 +516,8 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -520,7 +525,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -528,7 +533,8 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -536,7 +542,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -544,7 +550,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -600,7 +606,7 @@ var oslistPieChart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -699,7 +705,8 @@ var oslistPieChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -707,7 +714,7 @@ var oslistPieChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -715,7 +722,8 @@ var oslistPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -723,7 +731,7 @@ var oslistPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -731,7 +739,7 @@ var oslistPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -788,7 +796,7 @@ var osVerPieChart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -887,7 +895,8 @@ var osVerPieChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -895,7 +904,7 @@ var osVerPieChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -903,7 +912,8 @@ var osVerPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -911,7 +921,7 @@ var osVerPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -919,7 +929,7 @@ var osVerPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -976,7 +986,7 @@ var office_chart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -1075,7 +1085,8 @@ var office_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1083,7 +1094,7 @@ var office_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1091,7 +1102,8 @@ var office_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1099,7 +1111,7 @@ var office_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1107,7 +1119,7 @@ var office_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -1170,7 +1182,7 @@ var subnet_chart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -1269,7 +1281,8 @@ var subnet_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1277,7 +1290,7 @@ var subnet_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1285,7 +1298,8 @@ var subnet_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1293,7 +1307,7 @@ var subnet_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1301,7 +1315,7 @@ var subnet_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -1363,7 +1377,7 @@ var hotfix_chart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -1462,7 +1476,8 @@ var hotfix_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1470,7 +1485,7 @@ var hotfix_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1478,7 +1493,8 @@ var hotfix_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1486,7 +1502,7 @@ var hotfix_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1494,7 +1510,7 @@ var hotfix_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -1550,7 +1566,7 @@ var tcpuChart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -1649,7 +1665,8 @@ var tcpuChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1657,7 +1674,7 @@ var tcpuChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1665,7 +1682,8 @@ var tcpuChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1673,7 +1691,7 @@ var tcpuChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1681,7 +1699,7 @@ var tcpuChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -1737,7 +1755,7 @@ var discoverChart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
