@@ -55,6 +55,9 @@ def up_asset_paging(request):
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
                 query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(mac_address__icontains=term) |
                                                Q(ip_address__icontains=term) |
@@ -65,6 +68,9 @@ def up_asset_paging(request):
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
                 query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(mac_address__icontains=term) |
                                                Q(ip_address__icontains=term) |
@@ -74,6 +80,9 @@ def up_asset_paging(request):
                                               for term in search_terms])
             else:
                 query = (Q(chassistype__icontains=filter_value) |
+                        Q(logged_name_id__deptName__icontains=filter_value) |
+                        Q(logged_name_id__userName__icontains=filter_value) |
+                        Q(logged_name_id__userId__icontains=filter_value) |
                          Q(computer_name__icontains=filter_value) |
                          Q(mac_address__icontains=filter_value) |
                          Q(ip_address__icontains=filter_value) |
@@ -87,6 +96,9 @@ def up_asset_paging(request):
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
                 query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(mac_address__icontains=term) |
                                                Q(ip_address__icontains=term) |
@@ -97,6 +109,9 @@ def up_asset_paging(request):
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
                 query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(mac_address__icontains=term) |
                                                Q(ip_address__icontains=term) |
@@ -106,6 +121,9 @@ def up_asset_paging(request):
                                               for term in search_terms])
             else:
                 query = (Q(chassistype__icontains=filter_value) |
+                        Q(logged_name_id__deptName__icontains=filter_value) |
+                        Q(logged_name_id__userName__icontains=filter_value) |
+                        Q(logged_name_id__userId__icontains=filter_value) |
                          Q(computer_name__icontains=filter_value) |
                          Q(mac_address__icontains=filter_value) |
                          Q(ip_address__icontains=filter_value) |
@@ -120,13 +138,13 @@ def up_asset_paging(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'chassistype',
-        2: 'computer_name',
-        3: 'logged_name',
-        4: 'ip_address',
-        5: 'os_total',
-        6: 'os_version',
-        7: 'os_build',
-        8: 'memo'
+        2: 'logged_name_id__deptName',
+        3: 'logged_name_id__userName',
+        4: 'logged_name_id__userId',
+        5: 'computer_name',
+        6: 'ip_address',
+        7: 'mac_address',
+        8: 'memo',
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')

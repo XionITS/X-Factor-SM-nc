@@ -67,9 +67,9 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'ncdb_data.deptName',
+                    1: 'logged_name_id__deptName',
                     2: 'computer_name',
-                    3: 'ncdb_data.userId',
+                    3: 'logged_name_id__userId',
                     4: 'ip_address.',
                     5: 'mac_address',
                 };

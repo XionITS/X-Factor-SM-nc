@@ -604,6 +604,9 @@ def Group_modifyAuth(xuser_id_list, id, auths):
     a = '1'
     return a
 
+
+
+
 @csrf_exempt
 def updateUsers(x_id, x_pw, x_name, x_email, x_auth):
     try:

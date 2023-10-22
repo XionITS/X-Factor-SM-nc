@@ -21,7 +21,7 @@ var up_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [2, "desc"]
+            [2, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -67,13 +67,13 @@ var up_asset_list = function () {
                 var orderDir = data.order[0].dir;
                 var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,

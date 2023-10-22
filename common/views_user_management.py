@@ -365,3 +365,121 @@ def user_list(request):
     response = { 'data': user_list}
 
     return JsonResponse(response)
+
+
+@csrf_exempt
+def insertAuth(request):
+    user = Xfactor_Xuser.objects.all()
+
+
+    Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+    Cur = Conn.cursor()
+    for item in user:
+        query = """ 
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_report', '""" + item.x_id + """');
+    
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_daily', '""" + item.x_id + """');
+    
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_all_asset', '""" + item.x_id + """');
+    
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_longago', '""" + item.x_id + """');
+    
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_locate', '""" + item.x_id + """');
+    
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_office', '""" + item.x_id + """');
+    
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_month', '""" + item.x_id + """');
+    
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_win_ver', '""" + item.x_id + """');
+    
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_win_update', '""" + item.x_id + """');
+    
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_win_hotfix', '""" + item.x_id + """');
+    
+                INSERT INTO public.common_xfactor_xuser_auth
+                (auth_use, xfactor_auth_id, xfactor_xuser_id)
+                VALUES('true', 'dash_tanium', '""" + item.x_id + """');            
+               """
+        Cur.execute(query)
+        Conn.commit()
+    Conn.close()
+
+    group = Xfactor_Xuser_Group.objects.all()
+
+
+    Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+    Cur = Conn.cursor()
+    for item in group:
+        id = item.id
+
+        query = """
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_report', '1', '""" + str(id) + """');
+
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_daily', '1', '""" + str(id) + """');
+
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_all_asset', '1', '""" + str(id) + """');
+
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_longago', '1', '""" + str(id) + """');
+
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_locate', '1', '""" + str(id) + """');
+
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_office', '1', '""" + str(id) + """');
+
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_month', '1', '""" + str(id) + """');
+
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_win_ver', '1', '""" + str(id) + """');
+
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_win_update', '1', '""" + str(id) + """');
+
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_win_hotfix', '1', '""" + str(id) + """');
+
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_tanium', '1', '""" + str(id) + """');
+                   """
+        Cur.execute(query)
+        Conn.commit()
+    Conn.close()
+
+
+    return 1

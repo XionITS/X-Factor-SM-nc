@@ -68,9 +68,9 @@ def all_asset_paging1(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'deptName',
+        1: 'logged_name_id__deptName',
         2: 'computer_name',
-        3: 'logged_name',
+        3: 'logged_name_id__userId',
         4: 'ip_address.',
         5: 'mac_address',
         # Add mappings for other columns here
@@ -95,7 +95,7 @@ def all_asset_paging1(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -187,9 +187,9 @@ def asset_os_paging1(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'deptName',
+        1: 'logged_name_id__deptName',
         2: 'computer_name',
-        3: 'logged_name',
+        3: 'logged_name_id__userId',
         4: 'ip_address.',
         5: 'mac_address',
         # Add mappings for other columns here
@@ -214,7 +214,7 @@ def asset_os_paging1(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -306,9 +306,9 @@ def asset_os_paging2(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'deptName',
+        1: 'logged_name_id__deptName',
         2: 'computer_name',
-        3: 'logged_name',
+        3: 'logged_name_id__userId',
         4: 'ip_address.',
         5: 'mac_address',
         # Add mappings for other columns here
@@ -333,7 +333,7 @@ def asset_os_paging2(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -362,9 +362,9 @@ def oslistPieChart(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'deptName',
+        1: 'logged_name_id__deptName',
         2: 'computer_name',
-        3: 'logged_name',
+        3: 'logged_name_id__userId',
         4: 'ip_address.',
         5: 'mac_address',
         # Add mappings for other columns here
@@ -389,7 +389,7 @@ def oslistPieChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -425,9 +425,9 @@ def osVerPieChart(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'deptName',
+        1: 'logged_name_id__deptName',
         2: 'computer_name',
-        3: 'logged_name',
+        3: 'logged_name_id__userId',
         4: 'ip_address.',
         5: 'mac_address',
         # Add mappings for other columns here
@@ -452,7 +452,7 @@ def osVerPieChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -502,9 +502,9 @@ def office_chart(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'deptName',
+        1: 'logged_name_id__deptName',
         2: 'computer_name',
-        3: 'logged_name',
+        3: 'logged_name_id__userId',
         4: 'ip_address.',
         5: 'mac_address',
         # Add mappings for other columns here
@@ -529,7 +529,7 @@ def office_chart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -582,9 +582,9 @@ def subnet_chart(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'deptName',
+        1: 'logged_name_id__deptName',
         2: 'computer_name',
-        3: 'logged_name',
+        3: 'logged_name_id__userId',
         4: 'ip_address.',
         5: 'mac_address',
         # Add mappings for other columns here
@@ -609,7 +609,7 @@ def subnet_chart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -659,9 +659,9 @@ def hotfixChart(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'deptName',
+        1: 'logged_name_id__deptName',
         2: 'computer_name',
-        3: 'logged_name',
+        3: 'logged_name_id__userId',
         4: 'ip_address.',
         5: 'mac_address',
         # Add mappings for other columns here
@@ -686,7 +686,7 @@ def hotfixChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -714,9 +714,9 @@ def tcpuChart(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'deptName',
+        1: 'logged_name_id__deptName',
         2: 'computer_name',
-        3: 'logged_name',
+        3: 'logged_name_id__userId',
         4: 'ip_address.',
         5: 'mac_address',
         # Add mappings for other columns here
@@ -741,7 +741,7 @@ def tcpuChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -773,9 +773,9 @@ def discoverChart(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'deptName',
+        1: 'logged_name_id__deptName',
         2: 'computer_name',
-        3: 'logged_name',
+        3: 'logged_name_id__userId',
         4: 'ip_address.',
         5: 'mac_address',
         # Add mappings for other columns here
@@ -800,7 +800,7 @@ def discoverChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = CommonSerializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {

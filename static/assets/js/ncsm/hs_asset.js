@@ -1427,14 +1427,13 @@ var hw_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                            1: 'chassistype',
-                            2: 'dep',
-                            3: 'name',
-                            4: 'logged_name',
-                            5: 'computer_name',
-                            6: 'ip_address',
-                            7: 'mac_address',
-                            8: 'memo'
+                            1: 'logged_name_id__deptName',
+                            2: 'logged_name_id__userName',
+                            3: 'logged_name_id__userId',
+                            4: 'computer_name',
+                            5: 'ip_address',
+                            6: 'mac_address',
+                            7: 'memo',
 
                         };
                 data.filter = {
@@ -1621,14 +1620,13 @@ var sw_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                            1: 'chassistype',
-                            2: 'dep',
-                            3: 'name',
-                            4: 'logged_name',
-                            5: 'computer_name',
-                            6: 'ip_address',
-                            7: 'mac_address',
-                            8: 'memo'
+                            1: 'logged_name_id__deptName',
+                            2: 'logged_name_id__userName',
+                            3: 'logged_name_id__userId',
+                            4: 'computer_name',
+                            5: 'ip_address',
+                            6: 'mac_address',
+                            7: 'memo',
 
                         };
                 data.filter = {

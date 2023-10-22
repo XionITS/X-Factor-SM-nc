@@ -21,7 +21,7 @@ var all_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [2, "desc"]
+            [2, "asc"]
         ],
 
         drawCallback: function (settings) {
@@ -70,13 +70,13 @@ var all_asset_list = function () {
                 var orderDir = data.order[0].dir;
                 var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -237,7 +237,7 @@ var all_asset_list = function () {
     // checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button').click(function () {
+    $('#search-button-ver').click(function () {
         var column = $('#column-dropdown').data('column');
         var searchValue = $('#search-input-ver').val().trim();
 
@@ -283,7 +283,7 @@ var win_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [2, "desc"]
+            [2, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -329,13 +329,13 @@ var win_asset_list = function () {
                 var orderDir = data.order[0].dir;
                                 var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -494,7 +494,7 @@ var win_asset_list = function () {
     // checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button').click(function () {
+    $('#search-button-ver').click(function () {
         var column = $('#column-dropdown').data('column');
         var searchValue = $('#search-input-ver').val().trim();
 
@@ -540,7 +540,7 @@ var mac_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [2, "desc"]
+            [2, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -586,13 +586,13 @@ var mac_asset_list = function () {
                 var orderDir = data.order[0].dir;
                                 var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -751,7 +751,7 @@ var mac_asset_list = function () {
     // checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button').click(function () {
+    $('#search-button-ver').click(function () {
         var column = $('#column-dropdown').data('column');
         var searchValue = $('#search-input-ver').val().trim();
 
@@ -798,7 +798,7 @@ var other_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [2, "desc"]
+            [2, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -842,15 +842,15 @@ var other_asset_list = function () {
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
-                                var columnMap = {
+                var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,

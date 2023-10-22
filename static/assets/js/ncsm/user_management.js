@@ -1168,7 +1168,14 @@ $(document).on("click","#group_alter", function(e) {
 });
 
 
-
+///////////////////////// 보너스 그룹권한 초기화할때 쓸꺼##################
+$(document).on("click","#insertauth", function (e){
+    $.ajax({
+        url: 'insertauth/',
+        type: 'get',
+        dataType: 'json'
+        });
+});
 
 
 

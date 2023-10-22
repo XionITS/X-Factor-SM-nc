@@ -60,6 +60,9 @@ def sec_asset_paging(request):
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
                 query = reduce(operator.and_, [Q(os_simple__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(security1__icontains=term) |
                                                Q(security2__icontains=term) |
@@ -71,6 +74,9 @@ def sec_asset_paging(request):
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
                 query = reduce(operator.or_, [Q(os_simple__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(security1__icontains=term) |
                                                Q(security2__icontains=term) |
@@ -81,6 +87,9 @@ def sec_asset_paging(request):
                                                for term in search_terms])
             else:
                 query = (Q(os_simple__icontains=filter_value) |
+                         Q(logged_name_id__deptName__icontains=filter_value) |
+                         Q(logged_name_id__userName__icontains=filter_value) |
+                         Q(logged_name_id__userId__icontains=filter_value) |
                          Q(computer_name__icontains=filter_value) |
                          Q(security1__icontains=filter_value) |
                          Q(security2__icontains=filter_value) |
@@ -95,6 +104,9 @@ def sec_asset_paging(request):
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
                 query = reduce(operator.and_, [Q(os_simple__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(security1__icontains=term) |
                                                Q(security2__icontains=term) |
@@ -106,6 +118,9 @@ def sec_asset_paging(request):
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
                 query = reduce(operator.or_, [Q(os_simple__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(security1__icontains=term) |
                                                Q(security2__icontains=term) |
@@ -116,6 +131,9 @@ def sec_asset_paging(request):
                                               for term in search_terms])
             else:
                 query = (Q(os_simple__icontains=filter_value) |
+                         Q(logged_name_id__deptName__icontains=filter_value) |
+                         Q(logged_name_id__userName__icontains=filter_value) |
+                         Q(logged_name_id__userId__icontains=filter_value) |
                          Q(computer_name__icontains=filter_value) |
                          Q(security1__icontains=filter_value) |
                          Q(security2__icontains=filter_value) |
@@ -131,13 +149,17 @@ def sec_asset_paging(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         2: 'os_simple',
-        3: 'computer_name',
-        4: 'security1',
-        5: 'security2',
-        6: 'security3',
-        7: 'security4',
-        8: 'security5',
-        9: 'memo'
+        1: 'chassistype',
+        3: 'logged_name_id__deptName',
+        4: 'logged_name_id__userName',
+        5: 'logged_name_id__userId',
+        6: 'computer_name',
+        7: 'security1',
+        8: 'security2',
+        9: 'security3',
+        10: 'security4',
+        11: 'security5',
+        12: 'memo'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -208,6 +230,9 @@ def sec_asset_list_paging(request):
                 search_terms = filter_value.split(' and ')
                 query = reduce(operator.and_, [Q(chassistype__icontains=term) |
                                                Q(os_simple__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
                                                Q(mac_address__icontains=term) |
@@ -223,6 +248,9 @@ def sec_asset_list_paging(request):
                 search_terms = filter_value.split(' or ')
                 query = reduce(operator.or_, [Q(chassistype__icontains=term) |
                                                Q(os_simple__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
                                                Q(mac_address__icontains=term) |
@@ -237,6 +265,9 @@ def sec_asset_list_paging(request):
             else:
                 query = (Q(chassistype__icontains=filter_value) |
                          Q(os_simple__icontains=filter_value) |
+                         Q(logged_name_id__deptName__icontains=filter_value) |
+                         Q(logged_name_id__userName__icontains=filter_value) |
+                         Q(logged_name_id__userId__icontains=filter_value) |
                          Q(computer_name__icontains=filter_value) |
                          Q(ip_address__icontains=filter_value) |
                          Q(mac_address__icontains=filter_value) |
@@ -256,6 +287,9 @@ def sec_asset_list_paging(request):
                 search_terms = filter_value.split(' and ')
                 query = reduce(operator.and_, [Q(chassistype__icontains=term) |
                                                Q(os_simple__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
                                                Q(mac_address__icontains=term) |
@@ -271,6 +305,9 @@ def sec_asset_list_paging(request):
                 search_terms = filter_value.split(' or ')
                 query = reduce(operator.or_, [Q(chassistype__icontains=term) |
                                                Q(os_simple__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
                                                Q(mac_address__icontains=term) |
@@ -285,6 +322,9 @@ def sec_asset_list_paging(request):
             else:
                 query = (Q(chassistype__icontains=filter_value) |
                          Q(os_simple__icontains=filter_value) |
+                         Q(logged_name_id__deptName__icontains=filter_value) |
+                         Q(logged_name_id__userName__icontains=filter_value) |
+                         Q(logged_name_id__userId__icontains=filter_value) |
                          Q(computer_name__icontains=filter_value) |
                          Q(ip_address__icontains=filter_value) |
                          Q(mac_address__icontains=filter_value) |
@@ -302,14 +342,17 @@ def sec_asset_list_paging(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        2: 'chassistype',
-        3: 'os_simple',
-        4: 'computer_name',
-        5: 'ip_address',
-        6: 'mac_address',
-        7: 'ext_chr',
-        8: 'sw_list',
-        9: 'hotfix'
+        2: 'os_simple',
+        1: 'chassistype',
+        3: 'logged_name_id__deptName',
+        4: 'logged_name_id__userName',
+        5: 'logged_name_id__userId',
+        6: 'computer_name',
+        7: 'ip_address',
+        8: 'mac_address',
+        9: 'ext_chr',
+        10: 'sw_list',
+        11: 'hotfix'
     }
     order_column = order_column_map.get(order_column_index, 'chassistype')
     if order_column_dir == 'desc':

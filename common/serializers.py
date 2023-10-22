@@ -6,23 +6,42 @@ class NcdbSerializer(serializers.ModelSerializer):
         model = Xfactor_ncdb
         fields = '__all__'
 
-class CommonSerializer(serializers.ModelSerializer):  #user 정보
-    ncdb_data = serializers.SerializerMethodField()
+# class CommonSerializer(serializers.ModelSerializer):  #user 정보
+#     ncdb_data = serializers.SerializerMethodField()
+#
+#     class Meta:
+#         model = Xfactor_Common
+#         fields = '__all__'
+#
+#     def get_ncdb_data(self, obj):
+#         try:
+#             # logged_name과 관련된 Xfactor_ncdb 인스턴스를 검색
+#             ncdb_instance = Xfactor_ncdb.objects.get(userId=obj.logged_name)
+#             # Xfactor_ncdbSerializer를 사용하여 관련 인스턴스를 직렬화
+#             ncdb_serializer = NcdbSerializer(ncdb_instance)
+#             return ncdb_serializer.data
+#         except Xfactor_ncdb.DoesNotExist:
+#             # 일치하는 데이터가 없을 경우 빈 값을 반환
+#             return {}
 
+
+class CommonSerializer(serializers.ModelSerializer):  #user 정보
     class Meta:
         model = Xfactor_Common
         fields = '__all__'
+    def to_representation(self, instance):
+        if instance.logged_name_id:
+            # If `logged_name_id` is not None, serialize `Xfactor_ncdb` using `NcdbSerializer`
+            ncdb_data = NcdbSerializer(instance.logged_name_id)
+            data = super().to_representation(instance)
+            data['ncdb_data'] = ncdb_data.data
+        else:
+            # If `logged_name_id` is None, just use `CommonSerializer`
+            data = super().to_representation(instance)
 
-    def get_ncdb_data(self, obj):
-        try:
-            # logged_name과 관련된 Xfactor_ncdb 인스턴스를 검색
-            ncdb_instance = Xfactor_ncdb.objects.get(userId=obj.logged_name)
-            # Xfactor_ncdbSerializer를 사용하여 관련 인스턴스를 직렬화
-            ncdb_serializer = NcdbSerializer(ncdb_instance)
-            return ncdb_serializer.data
-        except Xfactor_ncdb.DoesNotExist:
-            # 일치하는 데이터가 없을 경우 빈 값을 반환
-            return {}
+        return data
+
+
 
 class CommonHistorySerializer(serializers.ModelSerializer):  #user 정보
     class Meta:
@@ -97,22 +116,41 @@ class XfactorPurchaseSerializer(serializers.ModelSerializer):
 
 
 class Dailyserializer(serializers.ModelSerializer):
-    ncdb_data = serializers.SerializerMethodField()
-
     class Meta:
         model = Xfactor_Daily
         fields = '__all__'
 
-    def get_ncdb_data(self, obj):
-        try:
-            # logged_name과 관련된 Xfactor_ncdb 인스턴스를 검색
-            ncdb_instance = Xfactor_ncdb.objects.get(userId=obj.logged_name)
-            # Xfactor_ncdbSerializer를 사용하여 관련 인스턴스를 직렬화
-            ncdb_serializer = NcdbSerializer(ncdb_instance)
-            return ncdb_serializer.data
-        except Xfactor_ncdb.DoesNotExist:
-            # 일치하는 데이터가 없을 경우 빈 값을 반환
-            return {}
+    def to_representation(self, instance):
+        if instance.logged_name_id:
+            # If `logged_name_id` is not None, serialize `Xfactor_ncdb` using `NcdbSerializer`
+            ncdb_data = NcdbSerializer(instance.logged_name_id)
+            data = super().to_representation(instance)
+            data['ncdb_data'] = ncdb_data.data
+        else:
+            # If `logged_name_id` is None, just use `CommonSerializer`
+            data = super().to_representation(instance)
+            data['ncdb_data'] = []
+
+        return data
+
+
+# class Dailyserializer(serializers.ModelSerializer):
+#     ncdb_data = serializers.SerializerMethodField()
+#
+#     class Meta:
+#         model = Xfactor_Daily
+#         fields = '__all__'
+#
+#     def get_ncdb_data(self, obj):
+#         try:
+#             # logged_name과 관련된 Xfactor_ncdb 인스턴스를 검색
+#             ncdb_instance = Xfactor_ncdb.objects.get(userId=obj.logged_name)
+#             # Xfactor_ncdbSerializer를 사용하여 관련 인스턴스를 직렬화
+#             ncdb_serializer = NcdbSerializer(ncdb_instance)
+#             return ncdb_serializer.data
+#         except Xfactor_ncdb.DoesNotExist:
+#             # 일치하는 데이터가 없을 경우 빈 값을 반환
+#             return {}
 
 
 class XfactorLogserializer(serializers.ModelSerializer):
