@@ -105,7 +105,13 @@ var options150days = {
         data: [currentDataValue]
     }],
     xaxis: {
-        categories: ['150days']
+        categories: ['']
+    },
+    dataLabels: {
+        enabled: true, // 데이터 라벨 활성화
+        style: {
+            colors: ['#000000'] // 검정색으로 설정
+        }
     }
 }
 var chart150days = new ApexCharts(document.querySelector("#chart-150days"), options150days);
@@ -128,7 +134,13 @@ var options_osVersionUp = {
         data: [currentDataValue]
     }],
     xaxis: {
-        categories: ['os_version_up']
+        categories: ['']
+    },
+    dataLabels: {
+        enabled: true, // 데이터 라벨 활성화
+        style: {
+            colors: ['#000000'] // 검정색으로 설정
+        }
     }
 }
 var chart_os_version_up = new ApexCharts(document.querySelector("#chart_os_version_up"), options_osVersionUp);
@@ -151,7 +163,13 @@ var options_hotfix = {
         data: [currentDataValue_hotfix]
     }],
     xaxis: {
-        categories: ['hotfix']
+        categories: ['']
+    },
+    dataLabels: {
+        enabled: true, // 데이터 라벨 활성화
+        style: {
+            colors: ['#000000'] // 검정색으로 설정
+        }
     }
 }
 var chart_hotfix = new ApexCharts(document.querySelector("#chart_hotfix"), options_hotfix);
@@ -189,6 +207,12 @@ var options_chassis = {
     }],
     xaxis: {
         categories: ['노트북', '데스크탑']
+    },
+    dataLabels: {
+        enabled: true, // 데이터 라벨 활성화
+        style: {
+            colors: ['#000000'] // 검정색으로 설정
+        }
     }
 }
 
@@ -198,13 +222,17 @@ chart_chassis.render();
 // Window 버전별 데이터를 테이블로 삽입
 var winVerData = dataList['win_ver'];
 var tableBody = document.getElementById('winVerTableBody');
-
+console.log(winVerData)
 for (var i = 0; i < winVerData.length; i++) { // 배열을 순회하기 위해 인덱스 기반의 for 문을 사용합니다.
     var row = tableBody.insertRow();
     var cell1 = row.insertCell(0);
     var cell2 = row.insertCell(1);
+    var cell3 = row.insertCell(2);
+    var cell4 = row.insertCell(3);
     cell1.textContent = winVerData[i].item; // 'item' 속성의 값
-    cell2.textContent = winVerData[i].current_value; // 'current_value' 속성의 값 또는 원하는 다른 속성
+    cell2.textContent = winVerData[i].current_value + '대'; // 'current_value' 속성의 값 또는 원하는 다른 속성
+    cell3.textContent = winVerData[i].increase_amount  + '대';
+    cell4.textContent = winVerData[i].increase_rate + '%';
 }
 
 };

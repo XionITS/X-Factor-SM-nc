@@ -43,12 +43,81 @@ var um_user_list = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_um_user > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_um_user">10≫</button>')
-                    .insertAfter('#um_list_paginate .paginate_button:last');
+            if (total_pages_um_user > 10) {
                 $('<button type="button" class="btn" id="after_um_user">≪10</button>')
                     .insertBefore('#um_list_paginate .paginate_button:first');
+                $('<button type="button" class="btn" id="nexts_um_user">10≫</button>')
+                    .insertAfter('#um_list_paginate .paginate_button:last');
             }
+
+            var startPage = Math.floor(current_page_um_user / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_um_user - 1) {
+                endPage = total_pages_um_user - 1;
+            }
+
+            $('#um_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_um_user < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_um_user - 1);
+            } else if ((current_page_um_user + halfWay) > total_pages_um_user) {
+                var startPage = total_pages_um_user - maxButtons;
+                var endPage = total_pages_um_user - 1;
+            } else {
+                var startPage = current_page_um_user - halfWay;
+                var endPage = current_page_um_user + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    um_user_list.page(0).draw(false);
+                })
+                .insertAfter('#after_um_user')
+                .css(current_page_um_user == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_um_user - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_um_user) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    um_user_list.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_um_user');
+            }
+
+            if (endPage < total_pages_um_user - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_um_user');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_um_user + '</button>')
+                .on('click', function() {
+                    um_user_list.page(total_pages_um_user - 1).draw(false);
+                })
+                .insertAfter('#nexts_um_user')
+                .css(current_page_um_user == (total_pages_um_user - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'userpaging/',
@@ -198,50 +267,6 @@ var um_user_list = function () {
     //체크박스 저장하기
     um_checkbox_check($('#um_list tbody'))
 
-
-//    //개별선택
-//    $('#um_list tbody').on('click', 'input[type="checkbox"]', function () {
-//        var isChecked = $(this).prop('checked');
-//        var x_id = $(this).data('x_id');
-//
-//
-//        if (isChecked) {
-//            checkedItems[x_id] = x_id;
-//        } else {
-//            delete checkedItems[x_id];
-//        }
-//
-//        var allChecked = true;
-//        $('#um_list tbody input[type="checkbox"]').each(function () {
-//            if (!$(this).prop('checked')) {
-//                allChecked = false;
-//                return false;
-//            }
-//        });
-//
-//        $('#select-all').prop('checked', allChecked);
-//    });
-
-    /*      // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
-        dropdown_text();
-
-      // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-        $('#search-button-hs').click(function() {
-            var column = $('#column-dropdown').data('column');
-            var searchValue = $('#search-input-hs').val().trim();
-
-            performSearch(column, searchValue, um_user_list_Data)
-        });
-
-    $('#search-input-hs').on('keyup', function(event) {
-            if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
-                var column = $('#column-dropdown').data('column');
-                var searchValue = $('#search-input-hs').val().trim();
-
-                performSearch(column, searchValue, um_user_list_Data);
-            }
-        });*/
-
     $(document).on('click', '#nexts_um_user, #after_um_user', function () {
         var current_page_um_user = um_user_list.page();
         var total_pages_um_user = um_user_list.page.info().pages;
@@ -298,6 +323,77 @@ var um_group_list = function () {
             $('<button type="button" class="btn" id="after_um_group">≪10</button>')
             .insertBefore('#um_list_paginate .paginate_button:first');
             }
+
+
+            var startPage = Math.floor(current_page_um_group / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_um_group - 1) {
+                endPage = total_pages_um_group - 1;
+            }
+
+            $('#um_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_um_group < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_um_group - 1);
+            } else if ((current_page_um_group + halfWay) > total_pages_um_group) {
+                var startPage = total_pages_um_group - maxButtons;
+                var endPage = total_pages_um_group - 1;
+            } else {
+                var startPage = current_page_um_group - halfWay;
+                var endPage = current_page_um_group + halfWay;
+            }
+
+            $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    um_group_list.page(0).draw(false);
+                })
+                .insertBefore('#after_um_group')
+                .css(current_page_um_group == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter('#after_um_group');
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_um_group - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_um_group) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    um_group_list.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_um_group');
+            }
+
+            if (endPage < total_pages_um_group - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_um_group');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_um_group + '</button>')
+                .on('click', function() {
+                    um_group_list.page(total_pages_um_group - 1).draw(false);
+                })
+                .insertAfter('#nexts_um_group')
+                .css(current_page_um_group == (total_pages_um_group - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+
         },
 
 		ajax: {
@@ -894,7 +990,7 @@ $(document).on("click","#um_creategroup", function (e){
 
         success: function (response) {
             var users = response.data;
-            var userTable = "<table class='table'><thead><tr><th>계정</th><th>이름</th><th>이메일</th><th>부서</th><th>ADD</th></tr></thead><tbody>";
+            var userTable = "<table class='table'><thead><tr><th>계정</th><th style='width: 20%;'>이름</th><th>부서</th><th style='width: 7%;'>ADD</th></tr></thead><tbody>";
             for (var i = 0; i < users.length; i++) {
                 var user = users[i];
                 var x_id = user.x_id;
@@ -904,7 +1000,6 @@ $(document).on("click","#um_creategroup", function (e){
                 userTable += `<tr>
                     <td>${x_id}</td>
                     <td>${x_name}</td>
-                    <td>${x_email}</td>
                     <td>${x_auth}</td>
                     <td><input type="checkbox" class="user-checkbox" data-x-id="${x_id}"></td>
                 </tr>`;
@@ -1044,7 +1139,7 @@ $(document).on("click",".um_groupalter", function (e){
 
         success: function (response) {
             var users = response.data;
-            var userTable = "<table class='table'><thead><tr><th>계정</th><th>이름</th><th>이메일</th><th>부서</th><th>ADD</th></tr></thead><tbody>";
+            var userTable = "<table class='table'><thead><tr><th>계정</th><th style='width: 20%;'>이름</th><th>부서</th><th style='width: 7%;'>ADD</th></tr></thead><tbody>";
             for (var i = 0; i < users.length; i++) {
                 var user = users[i];
                 var x_id = user.x_id;
@@ -1055,7 +1150,6 @@ $(document).on("click",".um_groupalter", function (e){
                 userTable += `<tr>
                     <td>${x_id}</td>
                     <td>${x_name}</td>
-                    <td>${x_email}</td>
                     <td>${x_auth}</td>
                     <td><input type="checkbox" class="user-checkbox" data-x-id="${x_id}" ${isChecked}></td>
                 </tr>`;

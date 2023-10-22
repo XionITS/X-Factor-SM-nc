@@ -777,6 +777,7 @@ article {
 .win-ver-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 12px;
 }
 
 .win-ver-table th, .win-ver-table td {

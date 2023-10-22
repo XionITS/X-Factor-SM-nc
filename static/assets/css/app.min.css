@@ -31170,3 +31170,8 @@ input:checked+labl::before{
 .color-6 {
     color: #4B778D2;
 }
+
+.overflow-y-84 {
+    max-height: 84vh;
+    overflow-y: auto;
+}
