@@ -351,7 +351,7 @@ def asset_os_paging2(request):
 def oslistPieChart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-    user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build__contains=request.POST.get('categoryName'))
+    user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build__contains=request.POST.get('categoryName'))
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
                  Q(ip_address__icontains=filter_text) |
@@ -407,14 +407,14 @@ def osVerPieChart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
     if request.POST.get('categoryName') == '업데이트 완료':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__gte='19044')
+        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
     if request.POST.get('categoryName') == '업데이트 필요':
-        user = Xfactor_Daily.objects.filter(os_simple='Windows', os_build__lt='19044', user_date__gte=today_collect_date)
+        user = Xfactor_Daily.objects.filter(os_simple='Windows', os_build__lt='19044', user_date__gte=today_collect_date).exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
@@ -645,7 +645,7 @@ def hotfixChart(request):
             latest_date = max(date_objects)
             if latest_date < three_months_ago and request.POST.get('categoryName') == '보안패치 필요':
                 filtered_user_objects.append(user['computer_id'])
-            elif latest_date > three_months_ago and request.POST.get('categoryName') == '보안패치 불필요':
+            elif latest_date >= three_months_ago and request.POST.get('categoryName') == '보안패치 불필요':
                 filtered_user_objects.append(user['computer_id'])
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |

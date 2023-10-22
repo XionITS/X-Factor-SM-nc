@@ -289,11 +289,32 @@ def logout(request):
                 log_date=date
             )
             Xfactor_log.save()
-        del (request.session['sessionid'])
-        del (request.session['sessionname'])
-        del (request.session['sessionemail'])
-        return redirect("../login")
-        # return redirect("https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout")
+
+        id_token_hint = request.session.get('sessionidtoken', None)
+
+        # id_token_hint가 None인 경우, 로그아웃 요청을 보낼 수 없으므로 에러 메시지를 출력하고 함수를 종료합니다.
+        if id_token_hint is None:
+            print("No ID token found in session. Cannot perform logout.")
+        else:
+            params = {
+                'id_token_hint': id_token_hint,
+                'post_logout_redirect_uri': 'https://tanium.ncsoft.com/dashboard/'
+            }
+            # Make a GET request to the logout endpoint
+            response = requests.get('https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
+
+            # Check the response
+            if response.status_code == 200:
+                print('Logout successful')
+                request.session.pop('sessionid', None)
+                request.session.pop('sessionname', None)
+                request.session.pop('sessionemail', None)
+                request.session.pop('sessionidtoken', None)
+            else:
+                print('Logout failed')
+            # return redirect("../login")
+            # return redirect("https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout?id_token_hint=tanium-dashboard&
+            # post_logout_redirect_uri=https://tanium.ncsoft.com/dashboard/")
 
 @csrf_exempt
 def selectUsers(x_id, x_pw):
@@ -668,8 +689,9 @@ def nano(request):
 def nano_user(request):
     code = request.GET.get('code')
     print(code)
-    access_token = exchange_code_for_token(code)
+    access_token, id_token = exchange_code_for_token(code)
     print(access_token)
+    print(id_token)
     userinfo_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
 
     headers = {
@@ -698,6 +720,7 @@ def nano_user(request):
     request.session['sessionid']=sub
     request.session['sessionname']=name
     request.session['sessionemail']=email
+    request.session['sessionidtoken']=id_token
     return redirect('../home')
 
 
@@ -725,6 +748,8 @@ def exchange_code_for_token(code):
     if response.status_code == 200:
         token_data = response.json()
         access_token = token_data["access_token"]
-        return access_token
+        id_token = token_data["id_token"]
+        # id_token = token_data.get("id_token")
+        return access_token, id_token
     else:
         return None
