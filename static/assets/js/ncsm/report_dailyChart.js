@@ -95,8 +95,12 @@ var lastMonthDataValue = parseValue(dataFor150days['last_value_in_prev_month']);
 var options150days = {
     chart: {
         type: 'bar',
-        height: 200
+        height: 200,
+        toolbar: {
+            show: false
+        },
     },
+    colors : ['#6499E9','#2E4374'],
     series: [{
         name: '전월 자산 수',
         data: [lastMonthDataValue]
@@ -104,9 +108,15 @@ var options150days = {
         name: '현재 자산 수',
         data: [currentDataValue]
     }],
-    xaxis: {
-        categories: ['150days']
+    grid: {
+        show: true,
+        borderColor: 'rgba(206,212,218,0.7)', // 격자선 색상도 조절
+        strokeDashArray: 1, // 점선조절
+        position: 'back', // 격자선 위치 (front/back)
     },
+    xaxis: {
+            categories: ['150days']
+        },
 }
 var chart150days = new ApexCharts(document.querySelector("#chart-150days"), options150days);
 chart150days.render();
@@ -118,8 +128,12 @@ var lastMonthDataValue = parseValue(dataFor_osVersionUp['last_value_in_prev_mont
 var options_osVersionUp = {
     chart: {
         type: 'bar',
-        height: 200
+        height: 200,
+        toolbar: {
+            show: false
+        },
     },
+    colors : ['#6499E9','#2E4374'],
     series: [{
         name: '전월 자산 수',
         data: [lastMonthDataValue]
@@ -127,8 +141,14 @@ var options_osVersionUp = {
         name: '현재 자산 수',
         data: [currentDataValue]
     }],
+    grid: {
+        show: true,
+        borderColor: 'rgba(206,212,218,0.7)', // 격자선 색상도 조절
+        strokeDashArray: 1, // 점선조절
+        position: 'back', // 격자선 위치 (front/back)
+    },
     xaxis: {
-        categories: ['os_version_up']
+        categories: ['']
     }
 }
 var chart_os_version_up = new ApexCharts(document.querySelector("#chart_os_version_up"), options_osVersionUp);
@@ -141,8 +161,12 @@ var lastMonthDataValue_hotfix = parseValue(dataFor_hotfix['last_value_in_prev_mo
 var options_hotfix = {
     chart: {
         type: 'bar',
-        height: 200
+        height: 200,
+        toolbar: {
+            show: false
+        },
     },
+    colors : ['#6499E9','#2E4374'],
     series: [{
         name: '전월 자산 수',
         data: [lastMonthDataValue_hotfix]
@@ -150,8 +174,14 @@ var options_hotfix = {
         name: '현재 자산 수',
         data: [currentDataValue_hotfix]
     }],
+    grid: {
+        show: true,
+        borderColor: 'rgba(206,212,218,0.7)', // 격자선 색상도 조절
+        strokeDashArray: 1, // 점선조절
+        position: 'back', // 격자선 위치 (front/back)
+    },
     xaxis: {
-        categories: ['hotfix']
+        categories: [''],
     }
 }
 var chart_hotfix = new ApexCharts(document.querySelector("#chart_hotfix"), options_hotfix);
@@ -169,8 +199,12 @@ var options_chassis = {
     chart: {
         type: 'bar',
         height: 200,
-        stacked: false
+        stacked: false,
+        toolbar: {
+            show: false
+        },
     },
+    colors : ['#6499E9','#2E4374'],
     plotOptions: {
         bar: {
             horizontal: false,
@@ -187,8 +221,14 @@ var options_chassis = {
         name: '현재 자산 수',
         data: [currentDataValue_Notebook, currentDataValue_Desktop]
     }],
+    grid: {
+        show: true,
+        borderColor: 'rgba(206,212,218,0.7)', // 격자선 색상도 조절
+        strokeDashArray: 1, // 점선조절
+        position: 'back', // 격자선 위치 (front/back)
+    },
     xaxis: {
-        categories: ['노트북', '데스크탑']
+        categories: ['노트북', '데스크탑'],
     }
 }
 
