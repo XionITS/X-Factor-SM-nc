@@ -110,6 +110,7 @@ urlpatterns = [
     path('user_management/grouppaging/', views_user_management.um_group),
     path('user_management/search_box/', views_user_management.search_box),
     path('user_management/user_list/', views_user_management.user_list),
+    path('user_management/insertauth/', views_user_management.insertAuth),
     #path('group_management', views_group_management.group),
     path('log_management/', views_log_management.log),
     path('log_management/paging/', views_log_management.log_paging),

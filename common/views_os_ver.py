@@ -73,28 +73,34 @@ def ver_asset_paging(request):
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
-                query = reduce(operator.and_, [Q(computer_name__icontains=term) |
-                                               Q(os_total__icontains=term) |
-                                               Q(os_version__icontains=term) |
-                                               Q(os_build__icontains=term) |
+                query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
+                                               Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
+                                               Q(sw_list__icontains=term) |
                                                Q(memo__icontains=term)
                                                for term in search_terms])
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
-                query = reduce(operator.or_, [Q(computer_name__icontains=term) |
-                                               Q(os_total__icontains=term) |
-                                               Q(os_version__icontains=term) |
-                                               Q(os_build__icontains=term) |
-                                               Q(ip_address__icontains=term) |
-                                               Q(memo__icontains=term)
+                query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
+                                              Q(computer_name__icontains=term) |
+                                              Q(ip_address__icontains=term) |
+                                              Q(sw_list__icontains=term) |
+                                              Q(memo__icontains=term)
                                               for term in search_terms])
             else:
-                query = (Q(computer_name__icontains=filter_value) |
-                         Q(os_total__icontains=filter_value) |
-                         Q(os_version__icontains=filter_value) |
-                         Q(os_build__icontains=filter_value) |
+                query = (Q(chassistype__icontains=filter_value) |
+                        Q(logged_name_id__deptName__icontains=filter_value) |
+                        Q(logged_name_id__userName__icontains=filter_value) |
+                        Q(logged_name_id__userId__icontains=filter_value) |
+                         Q(computer_name__icontains=filter_value) |
                          Q(ip_address__icontains=filter_value) |
+                         Q(sw_list__icontains=filter_value) |
                          Q(memo__icontains=filter_value))
             user = user.filter(query)
     else:
@@ -102,28 +108,34 @@ def ver_asset_paging(request):
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
-                query = reduce(operator.and_, [Q(computer_name__icontains=term) |
-                                               Q(os_total__icontains=term) |
-                                               Q(os_version__icontains=term) |
-                                               Q(os_build__icontains=term) |
+                query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
+                                               Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
+                                               Q(sw_list__icontains=term) |
                                                Q(memo__icontains=term)
                                                for term in search_terms])
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
-                query = reduce(operator.or_, [Q(computer_name__icontains=term) |
-                                               Q(os_total__icontains=term) |
-                                               Q(os_version__icontains=term) |
-                                               Q(os_build__icontains=term) |
-                                               Q(ip_address__icontains=term) |
-                                               Q(memo__icontains=term)
+                query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
+                                              Q(computer_name__icontains=term) |
+                                              Q(ip_address__icontains=term) |
+                                              Q(sw_list__icontains=term) |
+                                              Q(memo__icontains=term)
                                               for term in search_terms])
             else:
-                query = (Q(computer_name__icontains=filter_value) |
-                         Q(os_total__icontains=filter_value) |
-                         Q(os_version__icontains=filter_value) |
-                         Q(os_build__icontains=filter_value) |
+                query = (Q(chassistype__icontains=filter_value) |
+                        Q(logged_name_id__deptName__icontains=filter_value) |
+                        Q(logged_name_id__userName__icontains=filter_value) |
+                        Q(logged_name_id__userId__icontains=filter_value) |
+                         Q(computer_name__icontains=filter_value) |
                          Q(ip_address__icontains=filter_value) |
+                         Q(sw_list__icontains=filter_value) |
                          Q(memo__icontains=filter_value))
             user = user.filter(query)
 
@@ -133,13 +145,13 @@ def ver_asset_paging(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'chassistype',
-        2: 'computer_name',
-        3: 'logged_name',
-        4: 'ip_address',
-        5: 'os_total',
-        6: 'os_version',
-        7: 'os_build',
-        8: 'memo'
+        2: 'logged_name_id__deptName',
+        3: 'logged_name_id__userName',
+        4: 'logged_name_id__userId',
+        5: 'computer_name',
+        6: 'ip_address',
+        7: 'mac_address',
+        8: 'memo',
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -289,12 +301,14 @@ def os_asset_paging(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        2: 'computer_name',
-        3: 'ip_address',
-        4: 'os_simple',
-        5: 'os_version',
-        6: 'mac_address',
-        7: 'memo'
+        1: 'chassistype',
+        2: 'logged_name_id__deptName',
+        3: 'logged_name_id__userName',
+        4: 'logged_name_id__userId',
+        5: 'computer_name',
+        6: 'ip_address',
+        7: 'mac_address',
+        8: 'memo',
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')

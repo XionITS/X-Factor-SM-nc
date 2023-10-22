@@ -20,7 +20,7 @@ var sec_asset_list2 = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -64,14 +64,17 @@ var sec_asset_list2 = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    2: 'chassistype',
-                    3: 'os_simple',
-                    4: 'computer_name',
-                    5: 'ip_address',
-                    6: 'mac_address',
-                    7: 'ext_chr',
-                    8: 'sw_list',
-                    9: 'hotfix'
+                    2: 'os_simple',
+                    1: 'chassistype',
+                    3: 'logged_name_id__deptName',
+                    4: 'logged_name_id__userName',
+                    5: 'logged_name_id__userId',
+                    6: 'computer_name',
+                    7: 'ip_address',
+                    8: 'mac_address',
+                    9: 'ext_chr',
+                    10: 'sw_list',
+                    11: 'hotfix'
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -155,9 +158,9 @@ var sec_asset_list2 = function () {
                     return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 4, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 4, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 6, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 7, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 8, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 9, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},

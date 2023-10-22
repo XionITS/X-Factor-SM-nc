@@ -582,7 +582,7 @@ $(document).on("click", ".ummore", function (e) {
                 // auth_list 배열을 auth_num 기준으로 정렬합니다.
                 return a.xfactor_auth.auth_num - b.xfactor_auth.auth_num;
             });
-            data.auth_list.forEach(function (authItem) {
+            data.auth_list.forEach(function (authItem, index) {
                 modalbody += '<label class="form-check-label">';
                 modalbody += '<input class="form-check-input" type="checkbox" name="' + authItem.xfactor_auth.auth_id + '" value="' + authItem.auth_use + '"';
                 //modalbody += '<input class="form-check-input" type="checkbox" name="auth_id" value="' + authItem.xfactor_auth.auth_id + '"';
@@ -592,6 +592,9 @@ $(document).on("click", ".ummore", function (e) {
                 modalbody += '> &nbsp;';
                 modalbody += authItem.xfactor_auth.auth_name;
                 modalbody += '</label><br>';
+                if (index === 8) {
+                    modalbody += '<br><div>'+x_id+' 대시보드 보기 권한</div>'; // 여기서 </div>를 추가
+                }
             });
 
             modalbody += '</form>';
@@ -664,7 +667,7 @@ $(document).on("click", ".um_groupmore", function (e) {
                 // auth_list 배열을 auth_num 기준으로 정렬합니다.
                 return a.xfactor_auth.auth_num - b.xfactor_auth.auth_num;
             });
-            data.auth_list.forEach(function (authItem) {
+            data.auth_list.forEach(function (authItem, index) {
                 modalbody += '<label class="form-check-label">';
                 modalbody += '<input class="form-check-input" type="checkbox" name="' + authItem.xfactor_auth.auth_id + '" value="' + authItem.auth_use + '"';
 
@@ -674,6 +677,9 @@ $(document).on("click", ".um_groupmore", function (e) {
                 modalbody += '> &nbsp;';
                 modalbody += authItem.xfactor_auth.auth_name;
                 modalbody += '</label><br>';
+                if (index === 8) {
+                    modalbody += '<br><div>'+xgroup_name+' 대시보드 보기 권한</div>'; // 여기서 </div>를 추가
+                }
             });
 
             modalbody += '</form>';
@@ -1162,7 +1168,14 @@ $(document).on("click","#group_alter", function(e) {
 });
 
 
-
+///////////////////////// 보너스 그룹권한 초기화할때 쓸꺼##################
+$(document).on("click","#insertauth", function (e){
+    $.ajax({
+        url: 'insertauth/',
+        type: 'get',
+        dataType: 'json'
+        });
+});
 
 
 

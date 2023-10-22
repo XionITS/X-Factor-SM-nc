@@ -41,16 +41,18 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 
 @csrf_exempt
 def dashboard(request):
-    selected_date = None
-    if 'datetime' in request.GET:
-        selected_date = request.GET['datetime']
-    DCDL = Dashboard(selected_date)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu_user = XuserAuthSerializer(xuser_auths, many=True)
     xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
     menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
     all_menu = menu_user.data + menu_group.data
     unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
+
+    selected_date = None
+    if 'datetime' in request.GET:
+        selected_date = request.GET['datetime']
+    DCDL = Dashboard(unique_items, selected_date)
+
 
     monthly_asset_data_list = DCDL['monthly_asset_data_list']
     cpu_data_list = DCDL['cpu_data_list']
@@ -214,6 +216,9 @@ def hs_asset_paginghw(request):
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
                 query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
                                                Q(hw_cpu__icontains=term) |
@@ -226,6 +231,9 @@ def hs_asset_paginghw(request):
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
                 query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
                                               Q(computer_name__icontains=term) |
                                               Q(ip_address__icontains=term) |
                                               Q(hw_cpu__icontains=term) |
@@ -237,6 +245,9 @@ def hs_asset_paginghw(request):
                                               for term in search_terms])
             else:
                 query = (Q(chassistype__icontains=filter_value) |
+                         Q(logged_name_id__deptName__icontains=filter_value) |
+                         Q(logged_name_id__userName__icontains=filter_value) |
+                         Q(logged_name_id__userId__icontains=filter_value) |
                          Q(computer_name__icontains=filter_value) |
                          Q(ip_address__icontains=filter_value) |
                          Q(hw_cpu__icontains=filter_value) |
@@ -252,6 +263,9 @@ def hs_asset_paginghw(request):
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
                 query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
                                                Q(hw_cpu__icontains=term) |
@@ -264,6 +278,9 @@ def hs_asset_paginghw(request):
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
                 query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
                                               Q(computer_name__icontains=term) |
                                               Q(ip_address__icontains=term) |
                                               Q(hw_cpu__icontains=term) |
@@ -275,6 +292,9 @@ def hs_asset_paginghw(request):
                                               for term in search_terms])
             else:
                 query = (Q(chassistype__icontains=filter_value) |
+                         Q(logged_name_id__deptName__icontains=filter_value) |
+                         Q(logged_name_id__userName__icontains=filter_value) |
+                         Q(logged_name_id__userId__icontains=filter_value) |
                          Q(computer_name__icontains=filter_value) |
                          Q(ip_address__icontains=filter_value) |
                          Q(hw_cpu__icontains=filter_value) |
@@ -294,16 +314,13 @@ def hs_asset_paginghw(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'chassistype',
-        2: 'computer_name',
-        3: 'logged_name',
-        4: 'ip_address',
-        5: 'hw_cpu',
-        6: 'hw_mb',
-        7: 'hw_ram',
-        8: 'hw_disk',
-        9: 'hw_gpu',
-        10: 'memo'
+        1: 'logged_name_id__deptName',
+        2: 'logged_name_id__userName',
+        3: 'logged_name_id__userId',
+        4: 'computer_name',
+        5: 'ip_address',
+        6: 'mac_address',
+        7: 'memo',
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -390,6 +407,9 @@ def hs_asset_pagingsw(request):
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
                 query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
                                                Q(sw_list__icontains=term) |
@@ -398,6 +418,9 @@ def hs_asset_pagingsw(request):
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
                 query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
                                               Q(computer_name__icontains=term) |
                                               Q(ip_address__icontains=term) |
                                               Q(sw_list__icontains=term) |
@@ -405,6 +428,9 @@ def hs_asset_pagingsw(request):
                                               for term in search_terms])
             else:
                 query = (Q(chassistype__icontains=filter_value) |
+                Q(logged_name_id__deptName__icontains=filter_value) |
+                Q(logged_name_id__userName__icontains=filter_value) |
+                Q(logged_name_id__userId__icontains=filter_value) |
                 Q(computer_name__icontains=filter_value) |
                 Q(ip_address__icontains=filter_value) |
                 Q(sw_list__icontains=filter_value) |
@@ -417,6 +443,9 @@ def hs_asset_pagingsw(request):
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
                 query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
                                                Q(sw_list__icontains=term) |
@@ -425,6 +454,9 @@ def hs_asset_pagingsw(request):
             elif ' or ' in filter_value:
                 search_terms = filter_value.split(' or ')
                 query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
                                               Q(computer_name__icontains=term) |
                                               Q(ip_address__icontains=term) |
                                               Q(sw_list__icontains=term) |
@@ -432,6 +464,9 @@ def hs_asset_pagingsw(request):
                                               for term in search_terms])
             else:
                 query = (Q(chassistype__icontains=filter_value) |
+                        Q(logged_name_id__deptName__icontains=filter_value) |
+                        Q(logged_name_id__userName__icontains=filter_value) |
+                        Q(logged_name_id__userId__icontains=filter_value) |
                          Q(computer_name__icontains=filter_value) |
                          Q(ip_address__icontains=filter_value) |
                          Q(sw_list__icontains=filter_value) |
@@ -444,12 +479,13 @@ def hs_asset_pagingsw(request):
     order_column_index = int(request.POST.get('order[0][column]', 0))
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
-        1: 'chassistype',
-        2: 'computer_name',
-        3: 'logged_name',
-        4: 'ip_address',
-        5: 'sw_list',
-        6: 'memo'
+        1: 'logged_name_id__deptName',
+        2: 'logged_name_id__userName',
+        3: 'logged_name_id__userId',
+        4: 'computer_name',
+        5: 'ip_address',
+        6: 'mac_address',
+        7: 'memo',
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')

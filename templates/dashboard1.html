@@ -6,21 +6,40 @@
 <!-- BEGIN #sidebar -->
 <!-- END #sidebar -->
 <!-- BEGIN #content -->
+{% if menu_list %}
 <div id="content" class="dashboard-content">
     <div class="row justify-content-sm-between">
         <div class="d-flex justify-content-end mb-2">
+            {% if "dash_report" in menu_list|join:" " %}
             <button id="reportPop" class="btn btn-secondary" type="button" data-bs-display="static" aria-expanded="false">
                     Report
             </button>
+            {% else %}
+            <button id="reportPop" class="btn btn-secondary" type="button" data-bs-display="static" aria-expanded="false" DISABLED>
+                    Report
+            </button>
+            {% endif %}
+
+
             <!--데이터피커-->
             <div class="me-3">
-                <div class="input-group">
+                {% if "dash_daily" in menu_list|join:" " %}
+                <div id="auth_daily" class="input-group">
                     <input type="text" class="form-control" id="datepickerD" name="datepicker1" placeholder="{{ dataList.selected_date }}" readonly>
                     <button class="input-group-text" for="datepickerD">
                         <i class="fa fa-calendar"></i>
                     </button>
                 </div>
             </div>
+            {% else %}
+                <div id="auth_daily" class="input-group" style="display:none;">
+                    <input type="text" class="form-control" id="datepickerD" name="datepicker1" placeholder="{{ dataList.selected_date }}" readonly>
+                    <button class="input-group-text" for="datepickerD">
+                        <i class="fa fa-calendar"></i>
+                    </button>
+                </div>
+            </div>
+            {% endif %}
             <!--지사별 버튼-->
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle menu-link" type="button" data-bs-display="static" data-bs-toggle="dropdown" data-bs-auto-close="true" aria-expanded="false">
@@ -38,7 +57,8 @@
         <div class="col-xxl-8 col-xl-8 col-lg-12 col-md-12 col-12 flex-fill">
             <div class="card mb-3" style="height: 275px;">
                 <div class="card-body col-12 d-flex" style="height: 275px;">
-                    <div class="col-6">
+                    {% if "dash_all_asset" in menu_list|join:" " %}
+                    <div id="auth_all_asset1" class="col-6">
                         <div class="d-flex fw-bold fs-12px">
                             <div class="d-flex flex-grow-1 justify-content-between" style="font-size: 17px">
                                 전체 자산 수
@@ -48,10 +68,26 @@
                         <!--                        <div class='text-end mx-50px' style="font-size:14px;" id="totalDataDiv"></div>-->
                         <div id="asset_all_chart"></div>
                     </div>
-                    <div class="col-6">
+                    <div id="auth_all_asset2"  class="col-6">
                         <div id="asset_all_os_chart1"></div>
                         <div id="asset_all_os_chart2"></div>
                     </div>
+                    {% else %}
+                    <div id="auth_all_asset1" class="col-6" style="display:none;">
+                        <div class="d-flex fw-bold fs-12px">
+                            <div class="d-flex flex-grow-1 justify-content-between" style="font-size: 17px">
+                                전체 자산 수
+                                <div id="totalDataDiv" style="font-size:14px"></div>
+                            </div>
+                        </div>
+                        <!--                        <div class='text-end mx-50px' style="font-size:14px;" id="totalDataDiv"></div>-->
+                        <div id="asset_all_chart"></div>
+                    </div>
+                    <div id="auth_all_asset2"  class="col-6" style="display:none;">
+                        <div id="asset_all_os_chart1"></div>
+                        <div id="asset_all_os_chart2"></div>
+                    </div>
+                    {% endif %}
                 </div>
                 <div class="card-arrow">
                     <div class="card-arrow-top-left"></div>
@@ -114,12 +150,22 @@
                     <div class="row align-items-center">
                         <div class="card-body">
                             <div class="d-flex align-items-center justify-content-center">
+                            {% if "dash_report" in menu_list|join:" " %}
                                 <div id="apexnotconChart"></div>
                                 <div class="flex-column ms-3 text-center">
                                     <p class="discover-text">증감률</p>
                                     <p class="discover-count" id="apexnotconChart_sub"></p>
                                     <p class="discover-state-per" id="apexnotconChart_per"></p>
                                 </div>
+                            {% else %}
+                                <div id="apexnotconChart" style="display : none;" ></div>
+                                <div class="flex-column ms-3 text-center" style="display : none;">
+                                    <p class="discover-text">증감률</p>
+                                    <p class="discover-count" id="apexnotconChart_sub"></p>
+                                    <p class="discover-state-per" id="apexnotconChart_per"></p>
+                                </div>
+                            {% endif %}
+
                             </div>
                         </div>
                     </div>
@@ -397,6 +443,7 @@
                         <div class="d-flex w-50 mt-3">
                             <div class="d-flex w-100">
                                 <div class="w-75 align-items-center small text-white text-opacity-50 new-text-truncate fs-14px">
+
                                     {% for data in  dataList.os_asset_data_list %}
                                     <div class="mb-2">
                                         <i class="fas fa-server fa-fw me-1 color-{{ forloop.counter }}"></i>
@@ -415,7 +462,12 @@
                                 </div>
                             </div>
                         </div>
+                        {% if "dash_win_ver" in menu_list|join:" " %}
                         <div id="windowAsset_pie" class="w-50"></div>
+                        {% else %}
+
+                        <div id="windowAsset_pie" style="display : none;" ></div>
+                    {% endif %}
                     </div>
                 </div>
                 <div class="card-arrow">
@@ -432,7 +484,11 @@
                     <div class="d-flex fw-bold fs-12px ">
                         <div class="flex-grow-1" style="font-size: 17px">Windows 버전별 자산 현황</div>
                     </div>
+                    {% if "dash_win_update" in menu_list|join:" " %}
                     <div id="os_pie"></div>
+                    {% else %}
+                    <div id="os_pie" style="display : none;"></div>
+                    {% endif %}
                 </div>
                 <div class="card-arrow">
                     <div class="card-arrow-top-left"></div>
@@ -448,8 +504,12 @@
                     <div class="d-flex fw-bold fs-12px">
                         <div class="flex-grow-1" style="font-size: 17px">보안 패치</div>
                     </div>
-
+                    {% if "dash_win_hotfix" in menu_list|join:" " %}
                     <div id="hotfix_donut"></div>
+                    {% else %}
+                    <div id="hotfix_donut" style="display : none;"></div>
+                    {% endif %}
+
                 </div>
                 <div class="card-arrow">
                     <div class="card-arrow-top-left"></div>
@@ -465,8 +525,11 @@
                     <div class="d-flex fw-bold fs-12px mb-2">
                         <div class="flex-grow-1" style="font-size: 17px">태니엄 프로세스 CPU 사용량</div>
                     </div>
-
+                    {% if "dash_tanium" in menu_list|join:" " %}
                     <div id="apexcpuChart"></div>
+                    {% else %}
+                    <div id="apexcpuChart" style="display : none;"></div>
+                    {% endif %}
                 </div>
                 <div class="card-arrow">
                     <div class="card-arrow-top-left"></div>
@@ -544,7 +607,7 @@
     </div>
     <!-- END row -->
 </div>
-
+{% endif %}
 <div class="modal" name="DashModal" id="DashModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content" style="background-color:#1d2835;">
@@ -584,6 +647,7 @@
         </div>
 
 <script>
+
 document.getElementById('reportPop').addEventListener('click', function() {
     window.open('../report', 'PopupWindowName', 'width=600,height=400,scrollbars=no,resizable=no');
 });
@@ -609,6 +673,8 @@ document.getElementById('reportPop').addEventListener('click', function() {
     window.location.href = url.toString();
 }
 
+
 </script>
+
 <!-- END #content -->
 {% endblock %}

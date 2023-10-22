@@ -19,7 +19,7 @@ var hw_pur_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -65,13 +65,13 @@ var hw_pur_asset_list = function () {
                 var orderDir = data.order[0].dir;
                 var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
 
                 };
                 data.filter = {
@@ -159,9 +159,9 @@ var hw_pur_asset_list = function () {
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 6, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
             {
@@ -278,14 +278,14 @@ var hw_pur_asset_list = function () {
     dropdown_text();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button-hs').click(function () {
+    $('#search-button-pur').click(function () {
         var column = $('#column-dropdown').data('column');
         var searchValue = $('#search-input-hs').val().trim();
 
         performSearch(column, searchValue, hw_pur_asset_list_Data)
     });
 
-    $('#search-input-hs').on('keyup', function (event) {
+    $('#search-input-pur').on('keyup', function (event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
             var column = $('#column-dropdown').data('column');
             var searchValue = $('#search-input-hs').val().trim();
@@ -323,7 +323,7 @@ var sw_pur_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -371,14 +371,14 @@ var sw_pur_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    2: 'chassistype',
-                    3: 'computer__computer_name',
-                    5: 'ip_address',
-                    6: 'sw_list',
-                    7: 'sw_ver_list',
-                    8: 'sw_install',
-                    9: 'more',
-                    10: 'memo',
+                    1: 'chassistype',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
+                    5: 'computer_name',
+                    6: 'ip_address',
+                    7: 'mac_address',
+                    8: 'memo',
 
                 };
                 data.filter = {
@@ -459,9 +459,9 @@ var sw_pur_asset_list = function () {
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 6, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 
@@ -585,7 +585,7 @@ var sw_pur_asset_list = function () {
 
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button-up').click(function () {
+    $('#search-button-pur').click(function () {
         var column = $('#column-dropdown').data('column');
         var searchValue = $('#search-input').val().trim();
 
@@ -593,7 +593,7 @@ var sw_pur_asset_list = function () {
     });
 
     // 검색창 enter 작동
-    $('#search-input').on('keyup', function (event) {
+    $('#search-input-pur').on('keyup', function (event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
             var column = $('#column-dropdown').data('column');
             var searchValue = $('#search-input').val().trim();
