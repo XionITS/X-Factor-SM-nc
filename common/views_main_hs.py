@@ -41,16 +41,18 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 
 @csrf_exempt
 def dashboard(request):
-    selected_date = None
-    if 'datetime' in request.GET:
-        selected_date = request.GET['datetime']
-    DCDL = Dashboard(selected_date)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu_user = XuserAuthSerializer(xuser_auths, many=True)
     xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
     menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
     all_menu = menu_user.data + menu_group.data
     unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
+
+    selected_date = None
+    if 'datetime' in request.GET:
+        selected_date = request.GET['datetime']
+    DCDL = Dashboard(unique_items, selected_date)
+
 
     monthly_asset_data_list = DCDL['monthly_asset_data_list']
     cpu_data_list = DCDL['cpu_data_list']

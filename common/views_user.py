@@ -423,6 +423,50 @@ def AutoAuth(x_id):
             INSERT INTO public.common_xfactor_xuser_auth
             (auth_use, xfactor_auth_id, xfactor_xuser_id)
             VALUES('false', 'settings', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_report', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_daily', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_all_asset', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_longago', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_locate', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_office', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_month', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_win_ver', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_win_update', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_win_hotfix', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'dash_tanium', '""" + x_id + """');            
            """
     Cur.execute(query)
     Conn.commit()
@@ -486,6 +530,51 @@ def Group_AutoAuth(xuser_id_list,id):
                 INSERT INTO public.common_xfactor_xgroup_auth
                 (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
                 VALUES('false', 'settings', '""" + xgroup_id + """', '""" + id + """');
+                
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_report', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_daily', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_all_asset', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_longago', '""" + xgroup_id + """', '""" + id + """');
+                
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_locate', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_office', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_month', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_win_ver', '""" + xgroup_id + """', '""" + id + """');
+                
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_win_update', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_win_hotfix', '""" + xgroup_id + """', '""" + id + """');
+    
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'dash_tanium', '""" + xgroup_id + """', '""" + id + """');
+
                """
         Cur.execute(query)
         Conn.commit()

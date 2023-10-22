@@ -19,7 +19,8 @@ with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
 
-def Dashboard(selected_date=None):
+def Dashboard(unique_items, selected_date=None):
+
     logger = logging.getLogger(__name__)
     monthly_asset = []
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
@@ -321,6 +322,73 @@ def Dashboard(selected_date=None):
     except:
         os_up_data_list = ['-', '-']
 
+
+    monthly_asset_data_list=monthly_asset_data_list
+    cpu_data_list=cpu_data_list
+    os_asset_data_list=os_asset_data_list
+    os_asset_data_count_list=os_asset_data_count_list
+    os_up_data_list=os_up_data_list
+    discover_data_list=discover_data_list
+    location_data_list=location_data_list
+    hotfix_data_list=hotfix_data_list
+    asset_all_chart_list=asset_all_chart_list
+    office_data_list=office_data_list
+    desk_online_list=desk_online_list
+    note_online_list=note_online_list
+    other_online_list=other_online_list
+    desk_total_list=desk_total_list
+    note_total_list=note_total_list
+    other_total_list=other_total_list
+
+    #items_with_permission = [item[0] for item in unique_items]
+
+
+    # if 'dash_longago' not in items_with_permission:
+    #     discover_data_list = [['-', 0],['-',0]]
+    #     print("dash_longago")
+    # if 'dash_locate' not in items_with_permission:
+    #     location_data_list = ['-', 0]
+    #     print("dash_locate")
+    # if 'dash_office' not in items_with_permission:
+    #     office_data_list = ['-', 0]
+    # if 'dash_month' not in items_with_permission:
+    #     monthly_asset_data_list = []
+    # if 'dash_win_ver' not in items_with_permission:
+    #     os_asset_data_list = {'item': '-', 'item_count': '-'}
+    # if 'dash_win_update' not in items_with_permission:
+    #     os_up_data_list = [0, 0]
+    # if 'dash_win_hotfix' not in items_with_permission:
+    #     hotfix_data_list = ['-', '-']
+    # if 'dash_tanium' not in items_with_permission:
+    #     cpu_data_list = ['-','-']
+        
+        
+        
+    # 값0으로떨어지게 추후 처리
+    items_with_permission = [item[0] for item in unique_items]
+
+    # if 'dash_longago' not in items_with_permission:
+    #     discover_data_list = [['-', 0],['-', 0]]
+
+    if 'dash_locate' not in items_with_permission:
+        location_data_list = [['-', '-', '-', '-'], [0, 0, 0, 0]]
+    if 'dash_office' not in items_with_permission:
+        office_data_list = [['-', '-', '-', '-'], [0, 0, 0, 0]]
+    if 'dash_month' not in items_with_permission:
+        monthly_asset_data_list = []
+
+    if 'dash_win_ver' not in items_with_permission:
+        os_asset_data_list = {'item': '-', 'item_count': 0}, {'item': '', 'item_count': 0}, {'item': '-', 'item_count': 0}, {'item': '-', 'item_count': 0}, {'item': '-', 'item_count': 0}
+
+    if 'dash_win_update' not in items_with_permission:
+        os_up_data_list = [0, 0]
+
+    if 'dash_win_hotfix' not in items_with_permission:
+        hotfix_data_list = [['-', '-'], [0, 0]]
+
+    if 'dash_tanium' not in items_with_permission:
+        cpu_data_list = ['-', 0]
+
     RD = {
         'monthly_asset_data_list': monthly_asset_data_list,
         'cpu_data_list': cpu_data_list,
@@ -338,8 +406,6 @@ def Dashboard(selected_date=None):
         'desk_total_list' : desk_total_list,
         'note_total_list' : note_total_list,
         'other_total_list' : other_total_list,
-
-
 
     }
     # 예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시
