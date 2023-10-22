@@ -44,8 +44,8 @@ def search_h(request):
         user1 = Xfactor_Daily.objects.filter(user_date__date=date1).filter(computer_name__icontains=search_text)
         user2 = Xfactor_Daily.objects.filter(user_date__date=date2).filter(computer_name__icontains=search_text)
 
-        user_data1 = XfactorDailyserializer(user1, many=True).data
-        user_data2 = XfactorDailyserializer(user2, many=True).data
+        user_data1 = Dailyserializer(user1, many=True).data
+        user_data2 = Dailyserializer(user2, many=True).data
         # response = {
         #     'data': user_data,  # Serialized data for the current page
         # }
