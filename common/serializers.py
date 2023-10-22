@@ -133,6 +133,23 @@ class Dailyserializer(serializers.ModelSerializer):
 
         return data
 
+class Cacheserializer(serializers.ModelSerializer):
+    class Meta:
+        model = Xfactor_Common_Cache
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        if instance.logged_name_id:
+            # If `logged_name_id` is not None, serialize `Xfactor_ncdb` using `NcdbSerializer`
+            ncdb_data = NcdbSerializer(instance.logged_name_id)
+            data = super().to_representation(instance)
+            data['ncdb_data'] = ncdb_data.data
+        else:
+            # If `logged_name_id` is None, just use `CommonSerializer`
+            data = super().to_representation(instance)
+            data['ncdb_data'] = []
+
+        return data
 
 # class Dailyserializer(serializers.ModelSerializer):
 #     ncdb_data = serializers.SerializerMethodField()

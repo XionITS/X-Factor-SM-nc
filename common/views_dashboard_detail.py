@@ -95,7 +95,7 @@ def all_asset_paging1(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -333,7 +333,7 @@ def asset_os_paging2(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
