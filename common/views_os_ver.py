@@ -231,7 +231,7 @@ def os_asset_paging(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
 
-    user = Xfactor_Common.objects.filter(os_simple__icontains=default_os)
+    user = Xfactor_Daily.objects.filter(os_simple__icontains=default_os)
     #user = Xfactor_Common.objects.filter(os_total__icontains=default_os).exclude(os_total='unconfirmed').exclude(ip_address='unconfirmed')
 
     if filter_text and filter_column:
