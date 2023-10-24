@@ -21,7 +21,7 @@ var all_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [2, "desc"]
+            [2, "asc"]
         ],
 
         drawCallback: function (settings) {
@@ -50,14 +50,79 @@ var all_asset_list = function () {
             var total_pages_all = all_asset_list_Data.page.info().pages;
             $('#nexts').remove();
             $('#after').remove();
-
-
-            if (total_pages_all > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_all >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_all">10≫</button>')
                     .insertAfter('#ver_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_all">≪10</button>')
                     .insertBefore('#ver_asset_list_paginate .paginate_button:first');
             }
+            var startPage = Math.floor(current_page_all / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_all - 1) {
+                endPage = total_pages_all - 1;
+            }
+
+            $('#ver_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_all < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_all - 1);
+            } else if ((current_page_all + halfWay) > total_pages_all) {
+                var startPage = total_pages_all - maxButtons;
+                var endPage = total_pages_all - 1;
+            } else {
+                var startPage = current_page_all - halfWay;
+                var endPage = current_page_all + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_list_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_all')
+                .css(current_page_all == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_all - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_all) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_all');
+            }
+
+            if (endPage < total_pages_all - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_all');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_all + '</button>')
+                .on('click', function() {
+                    all_asset_list_Data.page(total_pages_all - 1).draw(false);
+                })
+                .insertBefore('#nexts_all')
+                .css(current_page_all == (total_pages_all - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
 
         ajax: {
@@ -70,13 +135,13 @@ var all_asset_list = function () {
                 var orderDir = data.order[0].dir;
                 var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -136,16 +201,16 @@ var all_asset_list = function () {
                 }
             },
             {targets: 1, width: "5%", orderable: false, searchable: false, className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 2, width: "15%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "15%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 4, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 5, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 6, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
             {
                 targets: 8,
                 width: "22%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -237,7 +302,7 @@ var all_asset_list = function () {
     // checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button').click(function () {
+    $('#search-button-ver').click(function () {
         var column = $('#column-dropdown').data('column');
         var searchValue = $('#search-input-ver').val().trim();
 
@@ -283,7 +348,7 @@ var win_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [2, "desc"]
+            [2, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -312,12 +377,79 @@ var win_asset_list = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_win > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_win >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_win">10≫</button>')
                     .insertAfter('#ver_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_win">≪10</button>')
                     .insertBefore('#ver_asset_list_paginate .paginate_button:first');
             }
+            var startPage = Math.floor(current_page_win / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_win - 1) {
+                endPage = total_pages_win - 1;
+            }
+
+            $('#ver_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_win < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_win - 1);
+            } else if ((current_page_win + halfWay) > total_pages_win) {
+                var startPage = total_pages_win - maxButtons;
+                var endPage = total_pages_win - 1;
+            } else {
+                var startPage = current_page_win - halfWay;
+                var endPage = current_page_win + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    win_asset_list_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_win')
+                .css(current_page_win == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_win - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_win) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    win_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_win');
+            }
+
+            if (endPage < total_pages_win - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_win');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_win + '</button>')
+                .on('click', function() {
+                    win_asset_list_Data.page(total_pages_win - 1).draw(false);
+                })
+                .insertBefore('#nexts_win')
+                .css(current_page_win == (total_pages_win - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'paging/',
@@ -329,13 +461,13 @@ var win_asset_list = function () {
                 var orderDir = data.order[0].dir;
                                 var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -395,16 +527,16 @@ var win_asset_list = function () {
                 }
             },
             {targets: 1, width: "5%", orderable: false, searchable: false, className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 2, width: "15%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 2, width: "15%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 4, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 5, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 6, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
             {
                 targets: 8,
                 width: "22%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -494,7 +626,7 @@ var win_asset_list = function () {
     // checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button').click(function () {
+    $('#search-button-ver').click(function () {
         var column = $('#column-dropdown').data('column');
         var searchValue = $('#search-input-ver').val().trim();
 
@@ -540,7 +672,7 @@ var mac_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [2, "desc"]
+            [2, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -569,12 +701,80 @@ var mac_asset_list = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_mac > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_mac >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_mac">10≫</button>')
                     .insertAfter('#ver_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_mac">≪10</button>')
                     .insertBefore('#ver_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_mac / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_mac - 1) {
+                endPage = total_pages_mac - 1;
+            }
+
+            $('#ver_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_mac < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_mac - 1);
+            } else if ((current_page_mac + halfWay) > total_pages_mac) {
+                var startPage = total_pages_mac - maxButtons;
+                var endPage = total_pages_mac - 1;
+            } else {
+                var startPage = current_page_mac - halfWay;
+                var endPage = current_page_mac + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    mac_asset_list_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_mac')
+                .css(current_page_mac == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_mac - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_mac) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    mac_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_mac');
+            }
+
+            if (endPage < total_pages_mac - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_mac');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_mac + '</button>')
+                .on('click', function() {
+                    mac_asset_list_Data.page(total_pages_mac - 1).draw(false);
+                })
+                .insertBefore('#nexts_mac')
+                .css(current_page_mac == (total_pages_mac - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'paging/',
@@ -586,13 +786,13 @@ var mac_asset_list = function () {
                 var orderDir = data.order[0].dir;
                                 var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -652,16 +852,16 @@ var mac_asset_list = function () {
                 }
             },
             {targets: 1, width: "5%", orderable: false, searchable: false, className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 2, width: "15%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 2, width: "15%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 4, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 5, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 6, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
             {
                 targets: 8,
                 width: "22%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -751,7 +951,7 @@ var mac_asset_list = function () {
     // checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button').click(function () {
+    $('#search-button-ver').click(function () {
         var column = $('#column-dropdown').data('column');
         var searchValue = $('#search-input-ver').val().trim();
 
@@ -798,7 +998,7 @@ var other_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [2, "desc"]
+            [2, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -827,12 +1027,80 @@ var other_asset_list = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_other > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_other >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_other">10≫</button>')
-                    .insertAfter('#hs_asset_list_paginate .paginate_button:last');
+                    .insertAfter('#ver_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_other">≪10</button>')
-                    .insertBefore('#hs_asset_list_paginate .paginate_button:first');
+                    .insertBefore('#ver_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_other / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_other - 1) {
+                endPage = total_pages_other - 1;
+            }
+
+            $('#ver_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_other < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_other - 1);
+            } else if ((current_page_other + halfWay) > total_pages_other) {
+                var startPage = total_pages_other - maxButtons;
+                var endPage = total_pages_other - 1;
+            } else {
+                var startPage = current_page_other - halfWay;
+                var endPage = current_page_other + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    other_asset_list_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_other')
+                .css(current_page_other == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_other - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_other) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    other_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_other');
+            }
+
+            if (endPage < total_pages_other - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_other');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_other + '</button>')
+                .on('click', function() {
+                    other_asset_list_Data.page(total_pages_other - 1).draw(false);
+                })
+                .insertBefore('#nexts_other')
+                .css(current_page_other == (total_pages_other - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'paging/',
@@ -842,15 +1110,15 @@ var other_asset_list = function () {
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
-                                var columnMap = {
+                var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -910,16 +1178,16 @@ var other_asset_list = function () {
                 }
             },
             {targets: 1, width: "5%", orderable: false, searchable: false, className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 2, width: "15%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 4, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 2, width: "15%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 4, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 5, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 6, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
             {
                 targets: 8,
                 width: "22%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -1011,19 +1279,24 @@ var other_asset_list = function () {
     // checkbox_check();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    var column = $('#column-dropdown').data('column');
-    var searchValue = $('#search-input-ver').val().trim();
     $('#search-button-ver').click(function () {
+        var column = $('#column-dropdown').data('column');
+        var searchValue = $('#search-input-ver').val().trim();
 
         performSearch(column, searchValue, other_asset_list_Data);
     });
 
+    // 검색창 enter 작동
     $('#search-input-ver').on('keyup', function (event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var column = $('#column-dropdown').data('column');
+            var searchValue = $('#search-input-ver').val().trim();
 
             performSearch(column, searchValue, other_asset_list_Data);
         }
     });
+
+
 
     $(document).on('click', '#nexts_other, #after_other', function () {
         var current_page_other = other_asset_list_Data.page();

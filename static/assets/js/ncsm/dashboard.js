@@ -1527,38 +1527,57 @@ var handleRenderChartNCOMG = function () {
 };
 
 $(document).ready(function () {
-    ///////////////////////Datepicker////////////////////
-    var previousValue = "";
-    var now = new Date();
-    var defaultHour = now.getHours();
-    var dateTimeSelected = false;
-    var reportDate = document.getElementById('datepickerD').placeholder || "";
-    $("#datepickerD").datetimepicker({
-        format: 'Y-m-d H시',
-        formatTime: 'H시',
-        defaultDate: now,
-        defaultTime: defaultHour + '시',
-        closeOnWithoutClick: false,
-        onGenerate:function(current_time, $input){
-            if(!dateTimeSelected){
-                $(".xdsoft_time").on("click", function(){
-                    dateTimeSelected = true;
-                });
-            }
-        },
-        onChangeDateTime: function(dp, $input) {
-            var currentValue = $input.val().replace(' ', '-').replace('시', '');
-            if (previousValue !== currentValue && dateTimeSelected) {
-                previousValue = currentValue;
-                var newURL = "/home/?datetime=" + currentValue;
-                window.location.href = newURL;
-            }
-        }
-    });
+var previousValue = "";
+var dateTimeSelected = false;
+var reportDate = document.getElementById('datepickerD').placeholder || "";
+$("#datepickerD").datetimepicker({
+    format: 'Y-m-d H시',
+    formatTime: 'H시',
+    closeOnWithoutClick: false,
+    maxDate: new Date(),  // 오늘 날짜를 최대로 설정
+    onGenerate:function(current_time, $input){
+        var currentDate = new Date();
 
-    $("button.input-group-text").click(function() {
-        $("#datepickerD").datetimepicker('show');
-    });
+        // 현재 위치한 월이 이번 달인지 확인하고, 다음달 버튼을 숨김
+        if(currentDate.getMonth() === current_time.getMonth() && currentDate.getFullYear() === current_time.getFullYear()){
+            $(".xdsoft_next").hide();
+        } else {
+            $(".xdsoft_next").show();
+        }
+
+        // 현재 날짜와 선택된 날짜를 비교
+        var isSameDay = current_time.getDate() === currentDate.getDate() && current_time.getMonth() === currentDate.getMonth() && current_time.getFullYear() === currentDate.getFullYear();
+
+        // 현재 시간보다 뒤의 시간들을 숨기기 (현재 날짜일 경우에만)
+        $(".xdsoft_time_variant .xdsoft_time").each(function(){
+            var hour = $(this).data('hour');
+            if(isSameDay && hour > currentDate.getHours()){
+                $(this).hide();
+            } else {
+                $(this).show();
+            }
+        });
+
+        if(!dateTimeSelected){
+            $(".xdsoft_time").on("click", function(){
+                dateTimeSelected = true;
+            });
+        }
+    },
+    onChangeDateTime: function(dp, $input) {
+        var currentValue = $input.val().replace(' ', '-').replace('시', '');
+        if (previousValue !== currentValue && dateTimeSelected) {
+            previousValue = currentValue;
+            var newURL = "/home/?datetime=" + currentValue;
+            window.location.href = newURL;
+        }
+    }
+});
+
+$("button.input-group-text").click(function() {
+    $("#datepickerD").datetimepicker('show');
+});
+
 
     document.getElementById('reportPop').addEventListener('click', function() {
         if (reportDate === "select date...") {

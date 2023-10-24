@@ -20,7 +20,7 @@ var sec_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -48,12 +48,81 @@ var sec_asset_list = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    sec_asset_list_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    sec_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    sec_asset_list_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'paging/',
@@ -66,13 +135,17 @@ var sec_asset_list = function () {
                 var orderDir = data.order[0].dir;
                 var columnMap = {
                     2: 'os_simple',
-                    3: 'computer_name',
-                    4: 'security1',
-                    5: 'security2',
-                    6: 'security3',
-                    7: 'security4',
-                    8: 'security5',
-                    9: 'memo'
+                    1: 'chassistype',
+                    3: 'logged_name_id__deptName',
+                    4: 'logged_name_id__userName',
+                    5: 'logged_name_id__userId',
+                    6: 'computer_name',
+                    7: 'security1',
+                    8: 'security2',
+                    9: 'security3',
+                    10: 'security4',
+                    11: 'security5',
+                    12: 'memo'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -159,9 +232,9 @@ var sec_asset_list = function () {
                     return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 3, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 6, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
             {
                 targets: 7,

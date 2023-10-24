@@ -20,7 +20,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -48,12 +48,80 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'all_asset_paging1/',
@@ -67,9 +135,9 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'ncdb_data.deptName',
+                    1: 'logged_name_id__deptName',
                     2: 'computer_name',
-                    3: 'ncdb_data.userId',
+                    3: 'logged_name_id__userId',
                     4: 'ip_address.',
                     5: 'mac_address',
                 };
@@ -120,7 +188,8 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -128,7 +197,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -136,7 +205,8 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -144,7 +214,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -152,7 +222,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -224,7 +294,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -252,12 +322,80 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'asset_os_paging1/',
@@ -324,7 +462,8 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -332,7 +471,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -340,7 +479,8 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -348,7 +488,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -356,7 +496,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -412,7 +552,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -440,12 +580,81 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'asset_os_paging2/',
@@ -512,7 +721,8 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -520,7 +730,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -528,7 +738,8 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -536,7 +747,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -544,7 +755,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -600,7 +811,7 @@ var oslistPieChart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -628,12 +839,81 @@ var oslistPieChart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'oslistPieChart/',
@@ -699,7 +979,8 @@ var oslistPieChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -707,7 +988,7 @@ var oslistPieChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -715,7 +996,8 @@ var oslistPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -723,7 +1005,7 @@ var oslistPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -731,7 +1013,7 @@ var oslistPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -788,7 +1070,7 @@ var osVerPieChart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -816,12 +1098,80 @@ var osVerPieChart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'osVerPieChart/',
@@ -887,7 +1237,8 @@ var osVerPieChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -895,7 +1246,7 @@ var osVerPieChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -903,7 +1254,8 @@ var osVerPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -911,7 +1263,7 @@ var osVerPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -919,7 +1271,7 @@ var osVerPieChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -976,7 +1328,7 @@ var office_chart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -1004,12 +1356,81 @@ var office_chart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'office_chart/',
@@ -1075,7 +1496,8 @@ var office_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1083,7 +1505,7 @@ var office_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1091,7 +1513,8 @@ var office_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1099,7 +1522,7 @@ var office_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1107,7 +1530,7 @@ var office_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -1170,7 +1593,7 @@ var subnet_chart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -1198,12 +1621,81 @@ var subnet_chart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'subnet_chart/',
@@ -1269,7 +1761,8 @@ var subnet_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1277,7 +1770,7 @@ var subnet_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1285,7 +1778,8 @@ var subnet_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1293,7 +1787,7 @@ var subnet_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1301,7 +1795,7 @@ var subnet_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -1363,7 +1857,7 @@ var hotfix_chart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -1391,12 +1885,81 @@ var hotfix_chart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'hotfixChart/',
@@ -1462,7 +2025,8 @@ var hotfix_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1470,7 +2034,7 @@ var hotfix_chart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1478,7 +2042,8 @@ var hotfix_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1486,7 +2051,7 @@ var hotfix_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1494,7 +2059,7 @@ var hotfix_chart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -1550,7 +2115,7 @@ var tcpuChart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -1578,12 +2143,81 @@ var tcpuChart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'tcpuChart/',
@@ -1649,7 +2283,8 @@ var tcpuChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                     var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1657,7 +2292,7 @@ var tcpuChart_list = function (categoryName, seriesName) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1665,7 +2300,8 @@ var tcpuChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
@@ -1673,7 +2309,7 @@ var tcpuChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1681,7 +2317,7 @@ var tcpuChart_list = function (categoryName, seriesName) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],
@@ -1737,7 +2373,7 @@ var discoverChart_list = function (categoryName, seriesName) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -1765,12 +2401,81 @@ var discoverChart_list = function (categoryName, seriesName) {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
                     .insertAfter('#sec_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec">≪10</button>')
                     .insertBefore('#sec_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec - 1) {
+                endPage = total_pages_sec - 1;
+            }
+
+            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
+            } else if ((current_page_sec + halfWay) > total_pages_sec) {
+                var startPage = total_pages_sec - maxButtons;
+                var endPage = total_pages_sec - 1;
+            } else {
+                var startPage = current_page_sec - halfWay;
+                var endPage = current_page_sec + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec')
+                .css(current_page_sec == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec');
+            }
+
+            if (endPage < total_pages_sec - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
+                .on('click', function() {
+                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec')
+                .css(current_page_sec == (total_pages_sec - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'discoverChart/',

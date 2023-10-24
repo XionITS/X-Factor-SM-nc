@@ -20,7 +20,7 @@ var sec_asset_list2 = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -48,12 +48,81 @@ var sec_asset_list2 = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sec2 > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sec2 >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sec2">10≫</button>')
                     .insertAfter('#sec_asset_list2_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sec2">≪10</button>')
                     .insertBefore('#sec_asset_list2_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sec2 / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sec2 - 1) {
+                endPage = total_pages_sec2 - 1;
+            }
+
+            $('#sec_asset_list2_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sec2 < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sec2 - 1);
+            } else if ((current_page_sec2 + halfWay) > total_pages_sec2) {
+                var startPage = total_pages_sec2 - maxButtons;
+                var endPage = total_pages_sec2 - 1;
+            } else {
+                var startPage = current_page_sec2 - halfWay;
+                var endPage = current_page_sec2 + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    sec_asset_list2_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_sec2')
+                .css(current_page_sec2 == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sec2 - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sec2) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    sec_asset_list2_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sec2');
+            }
+
+            if (endPage < total_pages_sec2 - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sec2');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sec2 + '</button>')
+                .on('click', function() {
+                    sec_asset_list2_Data.page(total_pages_sec2 - 1).draw(false);
+                })
+                .insertBefore('#nexts_sec2')
+                .css(current_page_sec2 == (total_pages_sec2 - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
         },
         ajax: {
             url: 'paging/',
@@ -64,14 +133,17 @@ var sec_asset_list2 = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    2: 'chassistype',
-                    3: 'os_simple',
-                    4: 'computer_name',
-                    5: 'ip_address',
-                    6: 'mac_address',
-                    7: 'ext_chr',
-                    8: 'sw_list',
-                    9: 'hotfix'
+                    2: 'os_simple',
+                    1: 'chassistype',
+                    3: 'logged_name_id__deptName',
+                    4: 'logged_name_id__userName',
+                    5: 'logged_name_id__userId',
+                    6: 'computer_name',
+                    7: 'ip_address',
+                    8: 'mac_address',
+                    9: 'ext_chr',
+                    10: 'sw_list',
+                    11: 'hotfix'
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -155,9 +227,9 @@ var sec_asset_list2 = function () {
                     return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 4, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 6, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 4, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 6, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 7, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 8, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 9, width: "7%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},

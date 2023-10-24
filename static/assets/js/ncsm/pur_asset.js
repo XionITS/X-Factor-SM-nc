@@ -19,7 +19,7 @@ var hw_pur_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -49,36 +49,105 @@ var hw_pur_asset_list = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_hw_pur > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_hw_pur >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_hw_pur">10≫</button>')
                     .insertAfter('#hs_pur_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_hw_pur">≪10</button>')
                     .insertBefore('#hs_pur_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_hw_pur / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_hw_pur - 1) {
+                endPage = total_pages_hw_pur - 1;
+            }
+
+            $('#hs_pur_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_hw_pur < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_hw_pur - 1);
+            } else if ((current_page_hw_pur + halfWay) > total_pages_hw_pur) {
+                var startPage = total_pages_hw_pur - maxButtons;
+                var endPage = total_pages_hw_pur - 1;
+            } else {
+                var startPage = current_page_hw_pur - halfWay;
+                var endPage = current_page_hw_pur + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    hw_pur_asset_list_Data.page(0).draw(false);
+                })
+                .insertAfter('#after_hw_pur')
+                .css(current_page_hw_pur == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_hw_pur - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_hw_pur) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    hw_pur_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_hw_pur');
+            }
+
+            if (endPage < total_pages_hw_pur - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_hw_pur');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_hw_pur + '</button>')
+                .on('click', function() {
+                    hw_pur_asset_list_Data.page(total_pages_hw_pur - 1).draw(false);
+                })
+                .insertBefore('#nexts_hw_pur')
+                .css(current_page_hw_pur == (total_pages_hw_pur - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
         ajax: {
             url: 'pur_hwpaging/',
             type: "POST",
             data: function (data) {
+                var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
                     1: 'chassistype',
-                    2: 'dep',
-                    3: 'name',
-                    4: 'logged_name',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo'
+                    8: 'memo',
 
                 };
                 data.filter = {
                     column: column,
                     columnmap: columnMap[orderColumn],
                     direction: orderDir,
-                    value: $('#search-input-hs').val(),
+                    value: $('#search-input-pur').val(),
                     value2: $('#hs_pur_asset_list_filter input[type="search"]').val(),
                     regex: false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
@@ -159,9 +228,9 @@ var hw_pur_asset_list = function () {
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 6, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
             {
@@ -278,21 +347,22 @@ var hw_pur_asset_list = function () {
     dropdown_text();
 
     // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button-hs').click(function () {
+    $('#search-button-pur').click(function () {
         var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input-hs').val().trim();
+        var searchValue = $('#search-input-pur').val().trim();
 
-        performSearch(column, searchValue, hw_pur_asset_list_Data)
+        performSearch(column, searchValue, hw_pur_asset_list_Data);
     });
 
-    $('#search-input-hs').on('keyup', function (event) {
+    // 검색창 enter 작동
+    $('#search-input-pur').on('keyup', function (event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
             var column = $('#column-dropdown').data('column');
-            var searchValue = $('#search-input-hs').val().trim();
-
+            var searchValue = $('#search-input-pur').val().trim();
             performSearch(column, searchValue, hw_pur_asset_list_Data);
         }
     });
+
 
     $(document).on('click', '#nexts_hw_pur, #after_hw_pur', function () {
         var current_page_hw_pur = hw_pur_asset_list_Data.page();
@@ -323,7 +393,7 @@ var sw_pur_asset_list = function () {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "desc"]
+            [3, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -355,12 +425,80 @@ var sw_pur_asset_list = function () {
             $('#nexts').remove();
             $('#after').remove();
 
-            if (total_pages_sw_pur > 10) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            if (total_pages_sw_pur >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
                 $('<button type="button" class="btn" id="nexts_sw_pur">10≫</button>')
                     .insertAfter('#hs_pur_asset_list_paginate .paginate_button:last');
                 $('<button type="button" class="btn" id="after_sw_pur">≪10</button>')
                     .insertBefore('#hs_pur_asset_list_paginate .paginate_button:first');
             }
+
+            var startPage = Math.floor(current_page_sw_pur / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_sw_pur - 1) {
+                endPage = total_pages_sw_pur - 1;
+            }
+
+            $('#hs_pur_asset_list_paginate .paginate_button').not('.first, .last').remove();
+
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_sw_pur < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_sw_pur - 1);
+            } else if ((current_page_sw_pur + halfWay) > total_pages_sw_pur) {
+                var startPage = total_pages_sw_pur - maxButtons;
+                var endPage = total_pages_sw_pur - 1;
+            } else {
+                var startPage = current_page_sw_pur - halfWay;
+                var endPage = current_page_sw_pur + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+                .on('click', function() {
+                    sw_pur_asset_list.page(0).draw(false);
+                })
+                .insertAfter('#after_sw_pur')
+                .css(current_page_sw_pur == 0 ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_sw_pur - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_sw_pur) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
+                }
+                btn.on('click', function() {
+                    sw_pur_asset_list.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_sw_pur');
+            }
+
+            if (endPage < total_pages_sw_pur - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_sw_pur');
+            }
+
+            $('<button type="button" class="paginate_button btn">' + total_pages_sw_pur + '</button>')
+                .on('click', function() {
+                    sw_pur_asset_list.page(total_pages_sw_pur - 1).draw(false);
+                })
+                .insertBefore('#nexts_sw_pur')
+                .css(current_page_sw_pur == (total_pages_sw_pur - 1) ? {
+                    'font-weight': 'bold',
+                    'color': '#f39c12'
+                } : {});
         },
 
         ajax: {
@@ -371,19 +509,19 @@ var sw_pur_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    2: 'chassistype',
-                    3: 'computer__computer_name',
-                    5: 'ip_address',
-                    6: 'sw_list',
-                    7: 'sw_ver_list',
-                    8: 'sw_install',
-                    9: 'more',
-                    10: 'memo',
+                    1: 'chassistype',
+                    2: 'logged_name_id__deptName',
+                    3: 'logged_name_id__userName',
+                    4: 'logged_name_id__userId',
+                    5: 'computer_name',
+                    6: 'ip_address',
+                    7: 'mac_address',
+                    8: 'memo',
 
                 };
                 data.filter = {
                     column: column,
-                    value: $('#search-input-hs').val(),
+                    value: $('#search-input-pur').val(),
                     value2: $('#hs_pur_asset_list_filter input[type="search"]').val(),
                     regex: false // OR 조건을 사용하지 않을 경우에는 false로 설정
                 };
@@ -459,9 +597,9 @@ var sw_pur_asset_list = function () {
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.deptName+'" data-toggle="tooltip">'+data+'</span>'}},
-            {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userName+'" data-toggle="tooltip">'+data+'</span>'}},
-		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ncdb_data.userId+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 3, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 4, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.userName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
+		    {targets: 5, width: "5%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {var title = row.ncdb_data && row.ncdb_data.userId || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
 		    {targets: 6, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "7%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 
@@ -584,23 +722,25 @@ var sw_pur_asset_list = function () {
     dropdown_text();
 
 
-    // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
-    $('#search-button-up').click(function () {
-        var column = $('#column-dropdown').data('column');
-        var searchValue = $('#search-input').val().trim();
 
-        performSearch(column, searchValue, sw_pur_asset_list_Data);
+    // 검색 버튼 클릭 시 선택한 컬럼과 검색어로 검색 수행
+    $('#search-button-pur').click(function () {
+        var column = $('#column-dropdown').data('column');
+        var searchValue = $('#search-input-pur').val().trim();
+
+        performSearch(column, searchValue, sw_pur_asset_list);
     });
 
     // 검색창 enter 작동
-    $('#search-input').on('keyup', function (event) {
+    $('#search-input-ver').on('keyup', function (event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
             var column = $('#column-dropdown').data('column');
-            var searchValue = $('#search-input').val().trim();
+            var searchValue = $('#search-input-pur').val().trim();
 
-            performSearch(column, searchValue, sw_pur_asset_list_Data);
+            performSearch(column, searchValue, sw_pur_asset_list);
         }
     });
+
 
     $(document).on('click', '#nexts_sw_pur, #after_sw_pur', function () {
         var current_page_sw_pur = sw_pur_asset_list.page();
