@@ -599,7 +599,7 @@ function um_userbutton(btn) {
     $('#um_creategroup').addClass('hidden');
     $('#um_delete').text("USER 삭제");
     $(btn).addClass('active');
-    //$('#um_creategroup').removeClass('hidden');
+    $('#um_insert').removeClass('hidden');
     //$('.hsbutton').not(btn).removeClass('active');
     checkedItems = {};
 };
@@ -611,6 +611,7 @@ function um_groupbutton(btn) {
     $('#um_list').html(newTableContent);
     um_group_list();
     $('#um_delete').text("GROUP 삭제");
+    $('#um_insert').addClass('hidden');
     //$('#um_creategroup').text("그룹 생성/수정");
     $(btn).addClass('active');
     $('#um_creategroup').removeClass('hidden');

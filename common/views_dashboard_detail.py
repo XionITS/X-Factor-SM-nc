@@ -29,6 +29,9 @@ def all_asset_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -38,8 +41,11 @@ def all_asset_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
-                            Q(ip_address__icontains=filter_text) |
-                            Q(mac_address__icontains=filter_text))
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
+                         Q(ip_address__icontains=filter_text) |
+                         Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
             else:
                 user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
@@ -49,8 +55,11 @@ def all_asset_paging1(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
-                            Q(ip_address__icontains=filter_text) |
-                            Q(mac_address__icontains=filter_text))
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
+                         Q(ip_address__icontains=filter_text) |
+                         Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
             else:
                 user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
@@ -58,6 +67,9 @@ def all_asset_paging1(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -95,7 +107,7 @@ def all_asset_paging1(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -119,6 +131,9 @@ def asset_os_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -126,6 +141,9 @@ def asset_os_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -133,6 +151,9 @@ def asset_os_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude( os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -142,6 +163,9 @@ def asset_os_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -149,6 +173,9 @@ def asset_os_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -156,6 +183,9 @@ def asset_os_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude( os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -165,6 +195,9 @@ def asset_os_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -172,6 +205,9 @@ def asset_os_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -179,6 +215,9 @@ def asset_os_paging1(request):
             user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows').exclude(chassistype__in=['Notebook', 'Desktop'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -238,6 +277,9 @@ def asset_os_paging2(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -245,6 +287,9 @@ def asset_os_paging2(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -252,6 +297,9 @@ def asset_os_paging2(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -261,6 +309,9 @@ def asset_os_paging2(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -268,6 +319,9 @@ def asset_os_paging2(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -275,6 +329,9 @@ def asset_os_paging2(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).objects.exclude(chassistype__in=['Notebook', 'Desktop']).exclude( os_simple__in=['Windows', 'Mac'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -284,6 +341,9 @@ def asset_os_paging2(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -291,6 +351,9 @@ def asset_os_paging2(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -298,6 +361,9 @@ def asset_os_paging2(request):
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, os_simple='Windows').exclude(chassistype__in=['Notebook', 'Desktop'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         Q(logged_name_id__deptName=filter_text) |
+                         Q(logged_name_id__userName__icontains=filter_text) |
+                         Q(logged_name_id__userId__icontains=filter_text) |
                          Q(ip_address__icontains=filter_text) |
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
@@ -333,7 +399,7 @@ def asset_os_paging2(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -354,6 +420,9 @@ def oslistPieChart(request):
     user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build__contains=request.POST.get('categoryName'))
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
+                 Q(logged_name_id__deptName=filter_text) |
+                 Q(logged_name_id__userName__icontains=filter_text) |
+                 Q(logged_name_id__userId__icontains=filter_text) |
                  Q(ip_address__icontains=filter_text) |
                  Q(mac_address__icontains=filter_text))
         user = user.filter(query)
@@ -410,6 +479,9 @@ def osVerPieChart(request):
         user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     Q(logged_name_id__deptName=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
@@ -417,6 +489,9 @@ def osVerPieChart(request):
         user = Xfactor_Daily.objects.filter(os_simple='Windows', os_build__lt='19044', user_date__gte=today_collect_date).exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     Q(logged_name_id__deptName=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
@@ -473,6 +548,9 @@ def office_chart(request):
         user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5__in=['Office 21', 'Office 19', 'Office 16'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     Q(logged_name_id__deptName=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
@@ -480,6 +558,9 @@ def office_chart(request):
         user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5='Office 15')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     Q(logged_name_id__deptName=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
@@ -487,6 +568,9 @@ def office_chart(request):
         user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date,essential5='오피스 없음')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     Q(logged_name_id__deptName=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
@@ -494,6 +578,9 @@ def office_chart(request):
         user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5__in=['unconfirmed', ''])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     Q(logged_name_id__deptName=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
@@ -551,6 +638,9 @@ def subnet_chart(request):
         user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     Q(logged_name_id__deptName=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
@@ -559,6 +649,9 @@ def subnet_chart(request):
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     Q(logged_name_id__deptName=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
@@ -566,6 +659,9 @@ def subnet_chart(request):
         user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, subnet='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     Q(logged_name_id__deptName=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
@@ -574,6 +670,9 @@ def subnet_chart(request):
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     Q(logged_name_id__deptName=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
@@ -649,6 +748,9 @@ def hotfixChart(request):
                 filtered_user_objects.append(user['computer_id'])
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
+                 Q(logged_name_id__deptName=filter_text) |
+                 Q(logged_name_id__userName__icontains=filter_text) |
+                 Q(logged_name_id__userId__icontains=filter_text) |
                  Q(ip_address__icontains=filter_text) |
                  Q(mac_address__icontains=filter_text))
         filtered_user_objects = user.filter(query)
@@ -706,6 +808,9 @@ def tcpuChart(request):
     user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, t_cpu='True')
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
+                 Q(logged_name_id__deptName=filter_text) |
+                 Q(logged_name_id__userName__icontains=filter_text) |
+                 Q(logged_name_id__userId__icontains=filter_text) |
                  Q(ip_address__icontains=filter_text) |
                  Q(mac_address__icontains=filter_text))
         user = user.filter(query)
@@ -765,6 +870,9 @@ def discoverChart(request):
     filter_text = request.POST.get('search[value]')
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
+                 Q(logged_name_id__deptName=filter_text) |
+                 Q(logged_name_id__userName__icontains=filter_text) |
+                 Q(logged_name_id__userId__icontains=filter_text) |
                  Q(ip_address__icontains=filter_text) |
                  Q(mac_address__icontains=filter_text))
         user = user.filter(query)
