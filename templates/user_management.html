@@ -103,64 +103,25 @@
 
 
 
-
 <!-- 사용자 추가 모달 창 -->
-<div id="um_insert_modal" class="um_modal" tabindex="-1">
+<div id="um_insert_modal" class="group_modal2" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content" style="background-color:#1d2835;">
              <div class="modal-header">
-                <h5 class="modal-title">사용자 추가하기</h5>
+                <h5 class="modal-title">USER 추가</h5>
             </div>
-          <!-- 회원가입 양식의 내용을 직접 작성하거나, include 등을 사용하여 적절한 HTML을 추가 -->
-          <form action="{% url 'signup' %}" method="POST" name="um_signup_form">
-            {% csrf_token %}
-            <div class="modal_center">
-                <br>
-            <div class="mb-3">
-                <label class="form-label">사용자 아이디 <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-lg bg-white bg-opacity-5" placeholder="" id="x_id"
-           value="{{ x_id|default_if_none:'' }}" name="x_id" autocomplete="off"/>
-            </div>
-            <div class = "col-md-12">
-                <div class = "row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">비밀번호 <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control form-control-lg bg-white bg-opacity-5" id="x_pw"
-                   value="" name="x_pw"/>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">비밀번호 확인 <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control form-control-lg bg-white bg-opacity-5" id="re_x_pw"
-                   value="" name="re_x_pw"/>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">이름 <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-lg bg-white bg-opacity-5" name="x_name" id="x_name"
-           value="{{user_name|default_if_none:'' }}" autocomplete="off"/>
-            </div>
-            <div class="mb-3">
-                <label class="form-label">이메일 <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-lg bg-white bg-opacity-5" name="x_email" id="x_email"
-           value="{{user_email|default_if_none:'' }}" autocomplete="off"/>
-            </div>
+          <div class="modal-body ">
+              <label class="form-label" for="groupName_auth">User 추가하기</label>
+              <div class="form-check"></div>
+          </div>
 
-            <div class="mb-3">
-                <label class="form-label">권한 <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-lg bg-white bg-opacity-5" name="x_auth" id="x_auth"
-           value="{{user_dep|default_if_none:'' }}" autocomplete="off"/>
-            </div>
-            <input type="hidden" name="page" id="page" value="um">
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary groupCreate" onclick="um_check();">Action</button>
-                <button type="button" class="btn btn-secondary" id="closeBtn">Close</button>
-            </div>
-            </div>
-          </form>
+      <div class="modal-footer">
+            <button type="button" class="btn btn-primary groupCreate" onclick="um_check();">Action</button>
+            <button type="button" class="btn btn-secondary" id="closeBtn">Close</button>
         </div>
-      </div>
+    </div>
   </div>
+</div>
 
 <!-- 사용자 삭제 모달 창 -->
 <div id="um_delete_modal" class="um_modal" tabindex="-1">

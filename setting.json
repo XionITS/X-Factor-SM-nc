@@ -1,7 +1,7 @@
 {
   "PROJECT" : {
     "CORE" : "Tanium",
-    "LOGIN" : "WEB",
+    "LOGIN" : "NANO",
     "CUSTOMER" : "NC",
     "TYPE" : "System",
     "LOG" : {
@@ -11,7 +11,7 @@
     }
   },
    "API" : {
-     "apiUrl": "https://211.38.3.194:4082",
+     "apiUrl": "https://172.20.160.109",
      "ContentType": "application/json",
      "PATH": {
        "SessionKey": "/api/v2/session/login",
@@ -20,10 +20,10 @@
          "Saved": "/api/v2/saved_questions"
        }
      },
-     "defaultGroupID" : "4",
+     "defaultGroupID" : "1",
      "packageID" : "27083",
-     "username": "administrator",
-     "password": "xion123!"
+     "username": "tadmin",
+     "password": "xosldja12#"
    },
   "DB" : {
     "DBHost" : "localhost",

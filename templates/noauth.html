@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="wrapper" >
+    <div class="content">
+        권한이 없습니다.
+        <br> 관리자에게 문의해주시길 바랍니다.
+
+
+       <!-- <br> <a href= "{% url 'login' %}" >로그인 해주시길 바랍니다.</a> -->
+    </div>
+</div>
+
+<style>
+    .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80dvh;
+}
+
+.content {
+  padding: 2rem;
+  font-size:70px;
+    text-align: center;
+  border-radius: 1rem;
+}
+</style>
+{% endblock %}

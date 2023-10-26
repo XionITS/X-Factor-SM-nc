@@ -23,6 +23,8 @@ class SessionMiddleware:
 
             # return redirect(f"{auth_url}?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope=openid")
             #return redirect('login')  # 'login'은 실제 로그인 페이지의 URL 이름으로 변경해야 합니다.
-
+        if request.path not in ['/', "/login/", "/dashboard/", "/nano/"] :
+            if not request.session.get("sessionid") :
+                return redirect("/")
         response = self.get_response(request)
         return response

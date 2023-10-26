@@ -877,6 +877,7 @@ $(document).on("click", "#um_delete", function (e) {
 
 // insert 모달 닫기 버튼 클릭 이벤트 핸들러
 $(document).on("click", "#closeBtn", function (e) {
+    $("#um_insert_modal").modal("hide");
     insert_modal.style.display = "none";
 });
 // delete 모달 닫기 버튼 클릭 이벤트 핸들러
@@ -908,6 +909,96 @@ window.onclick = function (event) {
     }
 };
 //##########################################################################################
+//############################### User 추가하기 ###############################
+$(document).on("click","#um_insert", function (e) {
+    /////////////////USER 검색기능 버튼삽입
+    var modalbody = `<div class="asset-input-group">
+                        <input type="search" class="asset-form-control" id="ncuser_search_result" placeholder="검색할 계정을 입력하세요">
+                    </div>`;
+    /////////////////사용자 목록 가져오기
+    $.ajax({
+        url: 'db_list/',
+        type: 'GET',
+        dataType: 'json',
+
+        success: function (response) {
+            var nc_users = response.data;
+            var userTable = "<table class='table'><thead><tr><th class='text-center'>계정</th><th class='text-center' style='width: 15%;'>이름</th><th class='text-center'>부서</th><th class='text-center' style='width: 15%;'>ADD</th></tr></thead><tbody>";
+            for (var i = 0; i < nc_users.length; i++) {
+                var nc_user = nc_users[i];
+                var userId = nc_user.userId;
+                var userName = nc_user.userName;
+                var deptName = nc_user.deptName;
+                userTable += `<tr>
+                    <td class='text-center'>${userId}</td>
+                    <td class='text-center'>${userName}</td>
+                    <td class='text-center'>${deptName}</td>
+                    <td class='text-center'><button id="user_add_btn" type="button" class="btn btn-outline-warning " data-userId="${userId}" data-userName="${userName}" data-deptName="${deptName}">추가</td>
+                </tr>`;
+            }
+            userTable += "</tbody></table>";
+            //////////////사용자 테이블을 modalbody에 추가
+            modalbody += userTable;
+            /////////////////모달바디 저장하여  html에 넣기
+            $("#um_insert_modal .modal-title").html("USER 추가");
+            $("#um_insert_modal .form-check").html(modalbody);
+            $("#um_insert_modal").modal("show");
+        }
+    });
+});
+
+////////////////////////////검색한거로 USER 보이게
+$(document).on("keyup", "#ncuser_search_result", function (e) {
+    var searchText = $(this).val().toLowerCase(); // 입력된 검색어를 소문자로 변환
+    var userRows = $("#um_insert_modal .form-check table tbody tr");
+
+    userRows.each(function () {
+        var x_id = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+        if (x_id.includes(searchText)) {
+            // 검색어와 일치하는 경우 표시
+            $(this).show();
+        } else {
+            // 일치하지 않는 경우 숨김
+            $(this).hide();
+        }
+    });
+});
+
+
+//###################### 유저 ADD 저장 하기 #################################
+ ///////////////// 그룹 저장하기  /////////////////
+$(document).on("click","#user_add_btn", function(e) {
+    e.preventDefault(); // 기본 제출 동작을 막습니다.
+    console.log(this);
+    const userId = $(this).data("userid");
+    const userName = $(this).data("username");
+    const deptName = $(this).data("deptname");
+    console.log(userId);
+    console.log(userName);
+    console.log(deptName);
+    $.ajax({
+    url: 'user_add/', // views.py 파일의 URL을 여기에 넣으세요.
+    type: 'POST',
+    dataType: 'json',
+    data:  {
+         'userId' : userId,
+         'userName' : userName,
+         'deptName' : deptName,
+    },
+
+    success: function (response) {
+    // response에 따른 처리 - 예: 경고창 띄우기
+        if (response.result == "success") {
+            alert("유저 추가 성공;
+            $('#um_insert_modal').modal('hide');
+
+
+        } else {
+            alert('실패 : ' + response.message);
+        }
+    }
+    });
+});
 
 
 //####################################유저 삭제하기 ##########################
@@ -936,6 +1027,7 @@ $(document).on("click", "#user_delete", function (event) {
                     alert("그룹이 삭제되었습니다.");
                 } else {
                     console.error("Group delete failure");
+
                     // 그룹 삭제 실패 처리
                 }
             },
@@ -1015,7 +1107,7 @@ $(document).on("click","#um_creategroup", function (e){
                 const x_id = $(this).data("x-id");
   /////////////// // 체크박스를 체크하면 x_id를 modalbody2에 추가
                 if (this.checked) {
-                        var newLine = '<div id="div_' + x_id  + '"><input class="form-check-input" type="checkbox" value="' + x_id + '" id="' + x_id  + '" checked><label class="form-check-label" for="' + x_id  + '">' + x_id  + '</label><br></div>';
+                        var newLine = '<div id="div_' + x_id  + '"><input class="form-check-input" type="checkbox" value="' + x_id + '" id="' + x_id  + '" checked><label class="form-check-label no-before ps-5px" for="' + x_id  + '">' + x_id  + '</label><br></div>';
                         $("#group_insert_modal .form-check2").append(newLine);
                 }
  ///////////////// 체크박스를 해제하면 modalbody2에서 제거
@@ -1125,7 +1217,7 @@ $(document).on("click",".um_groupalter", function (e){
     };
 
     var modalbody = `<div class="asset-input-group">
-                        <input type="search" class="asset-form-control" id="group_search_result" placeholder="추가할 계정을 입력하세요">
+                        <input type="search" class="asset-form-control before-init ps-5px" id="group_search_result" placeholder="추가할 계정을 입력하세요">
                     </div>`;
     modalbody += '<input type="hidden" id="id" value="'+id+'">';
 

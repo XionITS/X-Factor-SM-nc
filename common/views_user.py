@@ -110,6 +110,7 @@ def login(request):
                 print(RS)
                 if RS == None:
                     res_data['error'] = '아이디 또는 비밀번호가 일치하지 않습니다'
+                    return render(request, 'noauth.html')
                     return render(request, 'common/login.html', res_data)
 
                 else:
@@ -294,25 +295,21 @@ def logout(request):
         id_token_hint = request.session.get('sessionidtoken', None)
 
         # id_token_hint가 None인 경우, 로그아웃 요청을 보낼 수 없으므로 에러 메시지를 출력하고 함수를 종료합니다.
+        from django.contrib.auth import logout
         if id_token_hint is None:
             print("No ID token found in session. Cannot perform logout.")
         else:
+            logout(request)
             params = {
                 'id_token_hint': id_token_hint,
-                'post_logout_redirect_uri': 'https://tanium.ncsoft.com/dashboard/'
+                'post_logout_redirect_uri': 'http://taniumstg.ncsoft.com:8000/dashboard/'
             }
             # Make a GET request to the logout endpoint
-            response = requests.get('https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
-
+            response = requests.get('https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
+            request.session.clear()
+            return redirect("/")
             # Check the response
-            if response.status_code == 200:
-                print('Logout successful')
-                request.session.pop('sessionid', None)
-                request.session.pop('sessionname', None)
-                request.session.pop('sessionemail', None)
-                request.session.pop('sessionidtoken', None)
-            else:
-                print('Logout failed')
+        return redirect("/")
             # return redirect("../login")
             # return redirect("https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout?id_token_hint=tanium-dashboard&
             # post_logout_redirect_uri=https://tanium.ncsoft.com/dashboard/")
@@ -404,6 +401,44 @@ def createUsers(x_id, x_pw, x_name, x_email, x_auth):
         print(UserTNM + ' Table connection(Select) Failure')
         a = "0"
         return a
+
+
+@csrf_exempt
+def createUsers_nano(request):
+    try:
+
+        userId = request.POST['userId']
+        userName = request.POST['userName']
+        deptName = request.POST['deptName']
+
+
+        Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+        Cur = Conn.cursor()
+        query = """ 
+        INSERT INTO 
+            common_xfactor_xuser
+            (x_id, x_pw, x_name, x_email, x_auth, create_date) 
+        VALUES ( 
+                '""" + userId + """',
+                '""" + userId + """' ,
+                '""" + userName + """',
+                '""" + userId + """',
+                '""" + deptName + """',
+                now()
+                );
+        """
+        Cur.execute(query)
+        print(Cur)
+        Conn.commit()
+        Conn.close()
+        # Auth 자동생성
+        RS = AutoAuth(userId)
+        if RS == "1":
+            return JsonResponse({'result': 'success'}, status=200)  # 성공적으로 삭제되었을 때 응답
+    except Exception as e:
+        print(str(e))  # 에러 메시지 출력 (디버깅 용)
+        return JsonResponse({'result': 'failure'}, status=400)  # 삭제 중 오류가 발생했을 때 응답
+
 
 @csrf_exempt
 def AutoAuth(x_id):
@@ -771,9 +806,9 @@ def group_delete(request):
 
 
 def nano(request):
-    auth_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
+    auth_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
     client_id = "tanium-dashboard"
-    redirect_uri = "https://tanium.ncsoft.com/dashboard/"
+    redirect_uri = "https://taniumstg.ncsoft.com:8000/dashboard/"
 
     # 사용자를 인증 페이지로 리디렉션합니다.
     return redirect(f"{auth_url}?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope=openid")
@@ -785,7 +820,7 @@ def nano_user(request):
     access_token, id_token = exchange_code_for_token(code)
     print(access_token)
     print(id_token)
-    userinfo_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
+    userinfo_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
 
     headers = {
         "Authorization": f"Bearer {access_token}"
@@ -798,35 +833,37 @@ def nano_user(request):
     dept = userinfo_data.get("display_department")
     email = userinfo_data.get("email")
     print("User Sub:", sub)
-    
-    #유저 체크
+
+    # 유저 체크
     RS_user = selectUsers_nano(sub)
-    if RS_user==None:
-        RS = createUsers(sub, sub, name, email, dept)
+    if RS_user == None:
+        return render(request, 'noauth.html')
+        #return redirect('../noauth')
+        # RS = createUsers(sub, sub, name, email, dept)
         # xuser_instance = Xfactor_Xuser(
         #     x_id=sub,
         #     x_email=email,
         # )
         # xuser_instance.save()
-    else :
+    else:
         print("생성되어 있는 ID입니다.")
-    request.session['sessionid']=sub
-    request.session['sessionname']=name
-    request.session['sessionemail']=email
-    request.session['sessionidtoken']=id_token
+    request.session['sessionid'] = sub
+    request.session['sessionname'] = name
+    request.session['sessionemail'] = email
+    request.session['sessionidtoken'] = id_token
     return redirect('../home')
 
 
 def exchange_code_for_token(code):
-    token_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
-    client_id = "tanium-dashboard"
-    client_secret = "BzKFaj19XgtFfXuA3TUYKVACfEeANqga"  # 클라이언트 시크릿 키
+    token_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
+    client_id = "stg-tanium-dashboard"
+    client_secret = "whLXIZvLEZsAWfqbQIsiwSkhVpgKGJWP"  # 클라이언트 시크릿 키
 
     # 토큰 요청 파라미터 설정
     token_payload = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": "https://tanium.ncsoft.com/dashboard/",
+        "redirect_uri": "http://taniumstg.ncsoft.com:8000/dashboard/",
         "client_id": client_id,
         "client_secret": client_secret
     }

@@ -366,6 +366,52 @@ def user_list(request):
 
     return JsonResponse(response)
 
+@csrf_exempt
+def db_list(request):
+    user = Xfactor_ncdb.objects.all()
+
+    db_list = NcdbSerializer(user, many=True).data
+    # Prepare the response
+    response = { 'data': db_list}
+
+    return JsonResponse(response)
+
+
+
+#user_add
+#createUsers
+# @csrf_exempt
+#
+# def insertAuth(x_id, x_pw, x_name, x_email, x_auth):
+#     try:
+#         Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
+#         Cur = Conn.cursor()
+#         query = """
+#         INSERT INTO
+#             common_xfactor_xuser
+#             (x_id, x_pw, x_name, x_email, x_auth, create_date)
+#         VALUES (
+#                 '""" + x_id + """',
+#                 '""" + x_id + """' ,
+#                 '""" + x_name + """',
+#                 '""" + x_email + """',
+#                 '""" + x_auth + """',
+#                 now()
+#                 );
+#         """
+#         Cur.execute(query)
+#         Conn.commit()
+#         Conn.close()
+#         # Auth 자동생성
+#         RS = AutoAuth(x_id)
+#         if RS == "1":
+#             a = "1"
+#             return a
+#     except:
+#         print(UserTNM + ' Table connection(Select) Failure')
+#         a = "0"
+#         return a
+
 
 @csrf_exempt
 def insertAuth(request):

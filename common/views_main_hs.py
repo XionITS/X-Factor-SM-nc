@@ -95,7 +95,6 @@ def dashboard(request):
     context = {'menu_list' : unique_items, 'dataList': dataList}
     return render(request, 'dashboard1.html', context)
 
-# @csrf_exempt
 # def dashboard(request):
 #     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
 #         selected_date = request.POST.get('selected_date')
