@@ -38,6 +38,7 @@ def sec_asset(request):
 @csrf_exempt
 def sec_asset_paging(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+    seven_days_ago = timezone.now() - timedelta(days=7)
     default_os = request.POST.get('filter[defaultColumn]')
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
@@ -164,9 +165,9 @@ def sec_asset_paging(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(order_column)
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + order_column)
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -216,6 +217,7 @@ def sec_asset_list(request):
 @csrf_exempt
 def sec_asset_list_paging(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+    seven_days_ago = timezone.now() - timedelta(days=7)
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
@@ -356,9 +358,9 @@ def sec_asset_list_paging(request):
     }
     order_column = order_column_map.get(order_column_index, 'chassistype')
     if order_column_dir == 'desc':
-        user = user.order_by(order_column)
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + order_column)
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))

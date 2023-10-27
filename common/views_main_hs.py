@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
-from django.db.models import Q, Count
+from django.db.models import Q, Count, F , ExpressionWrapper, fields
 from functools import reduce
 from datetime import datetime, timedelta
 from django.core.serializers import serialize
@@ -183,16 +183,23 @@ def hs_asset(request):
     # # 24시간 30분 이전의 시간 계산
     # today_collect_date = local_now - timedelta(minutes=7)
 
-    asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')[:5]
-    total_asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
-    total_item_count = sum(total_asset.values_list('item_count', flat=True))
+    #온라인자산
+    online_asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')[:5]
+    online_total_asset = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='chassis_type').values('item', 'item_count').order_by('-item_count')
+    online_total_item_count = sum(online_total_asset.values_list('item_count', flat=True))
 
-    context = {'menu_list' : unique_items, 'asset' : asset, 'total_item_count' : total_item_count}
+    #토탈자산
+    total_asset_Desk = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='Desktop_cache_total').values('item_count')
+    total_asset_Note = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=today_collect_date, classification='Notebook_cache_total').values('item_count')
+
+    context = {'menu_list' : unique_items, 'online_asset' : online_asset, 'online_total_item_count' : online_total_item_count,'total_asset_Desk' : total_asset_Desk, 'total_asset_Note': total_asset_Note}
     return render(request, 'hs_asset.html', context)
 
 @csrf_exempt
 def hs_asset_paginghw(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+    seven_days_ago = timezone.now() - timedelta(days=7)
+
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
@@ -207,57 +214,162 @@ def hs_asset_paginghw(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
     if filter_text and filter_column:
-        query = Q(**{f'{filter_column}__icontains': filter_text})
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-        users = user.values('chassistype').annotate(count=Count('chassistype'))
-        user = user.filter(query)
-        if filter_value:
-            if ' and ' in filter_value:
-                search_terms = filter_value.split(' and ')
-                query = reduce(operator.and_, [Q(chassistype__icontains=term) |
-                                               Q(logged_name_id__deptName__icontains=term) |
-                                               Q(logged_name_id__userName__icontains=term) |
-                                               Q(logged_name_id__userId__icontains=term) |
-                                               Q(computer_name__icontains=term) |
-                                               Q(ip_address__icontains=term) |
-                                               Q(hw_cpu__icontains=term) |
-                                               Q(hw_mb__icontains=term) |
-                                               Q(hw_ram__icontains=term) |
-                                               Q(hw_disk__icontains=term) |
-                                               Q(hw_gpu__icontains=term) |
-                                               Q(memo__icontains=term)
-                                               for term in search_terms])
-            elif ' or ' in filter_value:
-                search_terms = filter_value.split(' or ')
-                query = reduce(operator.or_, [Q(chassistype__icontains=term) |
-                                              Q(logged_name_id__deptName__icontains=term) |
-                                              Q(logged_name_id__userName__icontains=term) |
-                                              Q(logged_name_id__userId__icontains=term) |
-                                              Q(computer_name__icontains=term) |
-                                              Q(ip_address__icontains=term) |
-                                              Q(hw_cpu__icontains=term) |
-                                              Q(hw_mb__icontains=term) |
-                                              Q(hw_ram__icontains=term) |
-                                              Q(hw_disk__icontains=term) |
-                                              Q(hw_gpu__icontains=term) |
-                                              Q(memo__icontains=term)
-                                              for term in search_terms])
-            else:
-                query = (Q(chassistype__icontains=filter_value) |
-                         Q(logged_name_id__deptName__icontains=filter_value) |
-                         Q(logged_name_id__userName__icontains=filter_value) |
-                         Q(logged_name_id__userId__icontains=filter_value) |
-                         Q(computer_name__icontains=filter_value) |
-                         Q(ip_address__icontains=filter_value) |
-                         Q(hw_cpu__icontains=filter_value) |
-                         Q(hw_mb__icontains=filter_value) |
-                         Q(hw_ram__icontains=filter_value) |
-                         Q(hw_disk__icontains=filter_value) |
-                         Q(hw_gpu__icontains=filter_value) |
-                         Q(memo__icontains=filter_value))
+        if filter_column == "cache_date":
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date)
+            if filter_text == "online":
+                user = user.annotate(time_difference=ExpressionWrapper(
+                    F('user_date') - F('cache_date'),
+                    output_field=fields.DurationField()
+                )).filter(time_difference__lte=timedelta(hours=1))
+                if filter_value:
+                    if ' and ' in filter_value:
+                        search_terms = filter_value.split(' and ')
+                        query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                                       Q(logged_name_id__deptName__icontains=term) |
+                                                       Q(logged_name_id__userName__icontains=term) |
+                                                       Q(logged_name_id__userId__icontains=term) |
+                                                       Q(computer_name__icontains=term) |
+                                                       Q(ip_address__icontains=term) |
+                                                       Q(hw_cpu__icontains=term) |
+                                                       Q(hw_mb__icontains=term) |
+                                                       Q(hw_ram__icontains=term) |
+                                                       Q(hw_disk__icontains=term) |
+                                                       Q(hw_gpu__icontains=term) |
+                                                       Q(memo__icontains=term)
+                                                       for term in search_terms])
+                    elif ' or ' in filter_value:
+                        search_terms = filter_value.split(' or ')
+                        query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                                      Q(logged_name_id__deptName__icontains=term) |
+                                                      Q(logged_name_id__userName__icontains=term) |
+                                                      Q(logged_name_id__userId__icontains=term) |
+                                                      Q(computer_name__icontains=term) |
+                                                      Q(ip_address__icontains=term) |
+                                                      Q(hw_cpu__icontains=term) |
+                                                      Q(hw_mb__icontains=term) |
+                                                      Q(hw_ram__icontains=term) |
+                                                      Q(hw_disk__icontains=term) |
+                                                      Q(hw_gpu__icontains=term) |
+                                                      Q(memo__icontains=term)
+                                                      for term in search_terms])
+                    else:
+                        query = (Q(chassistype__icontains=filter_value) |
+                                 Q(logged_name_id__deptName__icontains=filter_value) |
+                                 Q(logged_name_id__userName__icontains=filter_value) |
+                                 Q(logged_name_id__userId__icontains=filter_value) |
+                                 Q(computer_name__icontains=filter_value) |
+                                 Q(ip_address__icontains=filter_value) |
+                                 Q(hw_cpu__icontains=filter_value) |
+                                 Q(hw_mb__icontains=filter_value) |
+                                 Q(hw_ram__icontains=filter_value) |
+                                 Q(hw_disk__icontains=filter_value) |
+                                 Q(hw_gpu__icontains=filter_value) |
+                                 Q(memo__icontains=filter_value))
+                    user = user.filter(query)
+            elif filter_text == "offline":
+                user = user.annotate(time_difference=ExpressionWrapper(
+                    F('user_date') - F('cache_date'),
+                    output_field=fields.DurationField()
+                )).filter(time_difference__gt=timedelta(hours=1))
+                if filter_value:
+                    if ' and ' in filter_value:
+                        search_terms = filter_value.split(' and ')
+                        query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                                       Q(logged_name_id__deptName__icontains=term) |
+                                                       Q(logged_name_id__userName__icontains=term) |
+                                                       Q(logged_name_id__userId__icontains=term) |
+                                                       Q(computer_name__icontains=term) |
+                                                       Q(ip_address__icontains=term) |
+                                                       Q(hw_cpu__icontains=term) |
+                                                       Q(hw_mb__icontains=term) |
+                                                       Q(hw_ram__icontains=term) |
+                                                       Q(hw_disk__icontains=term) |
+                                                       Q(hw_gpu__icontains=term) |
+                                                       Q(memo__icontains=term)
+                                                       for term in search_terms])
+                    elif ' or ' in filter_value:
+                        search_terms = filter_value.split(' or ')
+                        query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                                      Q(logged_name_id__deptName__icontains=term) |
+                                                      Q(logged_name_id__userName__icontains=term) |
+                                                      Q(logged_name_id__userId__icontains=term) |
+                                                      Q(computer_name__icontains=term) |
+                                                      Q(ip_address__icontains=term) |
+                                                      Q(hw_cpu__icontains=term) |
+                                                      Q(hw_mb__icontains=term) |
+                                                      Q(hw_ram__icontains=term) |
+                                                      Q(hw_disk__icontains=term) |
+                                                      Q(hw_gpu__icontains=term) |
+                                                      Q(memo__icontains=term)
+                                                      for term in search_terms])
+                    else:
+                        query = (Q(chassistype__icontains=filter_value) |
+                                 Q(logged_name_id__deptName__icontains=filter_value) |
+                                 Q(logged_name_id__userName__icontains=filter_value) |
+                                 Q(logged_name_id__userId__icontains=filter_value) |
+                                 Q(computer_name__icontains=filter_value) |
+                                 Q(ip_address__icontains=filter_value) |
+                                 Q(hw_cpu__icontains=filter_value) |
+                                 Q(hw_mb__icontains=filter_value) |
+                                 Q(hw_ram__icontains=filter_value) |
+                                 Q(hw_disk__icontains=filter_value) |
+                                 Q(hw_gpu__icontains=filter_value) |
+                                 Q(memo__icontains=filter_value))
+                    user = user.filter(query)
+        else:
+            query = Q(**{f'{filter_column}__icontains': filter_text})
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+            users = user.values('chassistype').annotate(count=Count('chassistype'))
             user = user.filter(query)
+            if filter_value:
+                if ' and ' in filter_value:
+                    search_terms = filter_value.split(' and ')
+                    query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                                   Q(logged_name_id__deptName__icontains=term) |
+                                                   Q(logged_name_id__userName__icontains=term) |
+                                                   Q(logged_name_id__userId__icontains=term) |
+                                                   Q(computer_name__icontains=term) |
+                                                   Q(ip_address__icontains=term) |
+                                                   Q(hw_cpu__icontains=term) |
+                                                   Q(hw_mb__icontains=term) |
+                                                   Q(hw_ram__icontains=term) |
+                                                   Q(hw_disk__icontains=term) |
+                                                   Q(hw_gpu__icontains=term) |
+                                                   Q(memo__icontains=term)
+                                                   for term in search_terms])
+                elif ' or ' in filter_value:
+                    search_terms = filter_value.split(' or ')
+                    query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                                  Q(logged_name_id__deptName__icontains=term) |
+                                                  Q(logged_name_id__userName__icontains=term) |
+                                                  Q(logged_name_id__userId__icontains=term) |
+                                                  Q(computer_name__icontains=term) |
+                                                  Q(ip_address__icontains=term) |
+                                                  Q(hw_cpu__icontains=term) |
+                                                  Q(hw_mb__icontains=term) |
+                                                  Q(hw_ram__icontains=term) |
+                                                  Q(hw_disk__icontains=term) |
+                                                  Q(hw_gpu__icontains=term) |
+                                                  Q(memo__icontains=term)
+                                                  for term in search_terms])
+                else:
+                    query = (Q(chassistype__icontains=filter_value) |
+                             Q(logged_name_id__deptName__icontains=filter_value) |
+                             Q(logged_name_id__userName__icontains=filter_value) |
+                             Q(logged_name_id__userId__icontains=filter_value) |
+                             Q(computer_name__icontains=filter_value) |
+                             Q(ip_address__icontains=filter_value) |
+                             Q(hw_cpu__icontains=filter_value) |
+                             Q(hw_mb__icontains=filter_value) |
+                             Q(hw_ram__icontains=filter_value) |
+                             Q(hw_disk__icontains=filter_value) |
+                             Q(hw_gpu__icontains=filter_value) |
+                             Q(memo__icontains=filter_value))
+                user = user.filter(query)
     else:
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
+        #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -319,14 +431,15 @@ def hs_asset_paginghw(request):
         4: 'computer_name',
         5: 'ip_address',
         6: 'mac_address',
-        7: 'memo',
+        8: 'cache_date',
+        9: 'memo',
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(order_column)
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + order_column)
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -343,7 +456,7 @@ def hs_asset_paginghw(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
 
 
     # Prepare the response
@@ -383,6 +496,7 @@ def hs_asset_paginghw(request):
 @csrf_exempt
 def hs_asset_pagingsw(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+    seven_days_ago = timezone.now() - timedelta(days=7)
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
@@ -397,47 +511,61 @@ def hs_asset_pagingsw(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
     if filter_text and filter_column:
-        query = Q(**{f'{filter_column}__icontains': filter_text})
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-        # service = Xfactor_Service.objects.filter(computer=user.computer_id)
-        # print(service.essential1)
-        user = user.filter(query)
-        if filter_value:
-            if ' and ' in filter_value:
-                search_terms = filter_value.split(' and ')
-                query = reduce(operator.and_, [Q(chassistype__icontains=term) |
-                                               Q(logged_name_id__deptName__icontains=term) |
-                                               Q(logged_name_id__userName__icontains=term) |
-                                               Q(logged_name_id__userId__icontains=term) |
-                                               Q(computer_name__icontains=term) |
-                                               Q(ip_address__icontains=term) |
-                                               Q(sw_list__icontains=term) |
-                                               Q(memo__icontains=term)
-                                               for term in search_terms])
-            elif ' or ' in filter_value:
-                search_terms = filter_value.split(' or ')
-                query = reduce(operator.or_, [Q(chassistype__icontains=term) |
-                                              Q(logged_name_id__deptName__icontains=term) |
-                                              Q(logged_name_id__userName__icontains=term) |
-                                              Q(logged_name_id__userId__icontains=term) |
-                                              Q(computer_name__icontains=term) |
-                                              Q(ip_address__icontains=term) |
-                                              Q(sw_list__icontains=term) |
-                                              Q(memo__icontains=term)
-                                              for term in search_terms])
-            else:
-                query = (Q(chassistype__icontains=filter_value) |
-                Q(logged_name_id__deptName__icontains=filter_value) |
-                Q(logged_name_id__userName__icontains=filter_value) |
-                Q(logged_name_id__userId__icontains=filter_value) |
-                Q(computer_name__icontains=filter_value) |
-                Q(ip_address__icontains=filter_value) |
-                Q(sw_list__icontains=filter_value) |
-                Q(memo__icontains=filter_value))
+        if filter_column == "cache_date":
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date)
+            if filter_text == "online":
+                user = user.annotate(time_difference=ExpressionWrapper(
+                    F('user_date') - F('cache_date'),
+                    output_field=fields.DurationField()
+                )).filter(time_difference__lte=timedelta(hours=1))
+            elif filter_text == "offline":
+                user = user.annotate(time_difference=ExpressionWrapper(
+                    F('user_date') - F('cache_date'),
+                    output_field=fields.DurationField()
+                )).filter(time_difference__gt=timedelta(hours=1))
+        else:
+            query = Q(**{f'{filter_column}__icontains': filter_text})
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+            # service = Xfactor_Service.objects.filter(computer=user.computer_id)
+            # print(service.essential1)
             user = user.filter(query)
+            if filter_value:
+                if ' and ' in filter_value:
+                    search_terms = filter_value.split(' and ')
+                    query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                                   Q(logged_name_id__deptName__icontains=term) |
+                                                   Q(logged_name_id__userName__icontains=term) |
+                                                   Q(logged_name_id__userId__icontains=term) |
+                                                   Q(computer_name__icontains=term) |
+                                                   Q(ip_address__icontains=term) |
+                                                   Q(sw_list__icontains=term) |
+                                                   Q(memo__icontains=term)
+                                                   for term in search_terms])
+                elif ' or ' in filter_value:
+                    search_terms = filter_value.split(' or ')
+                    query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                                  Q(logged_name_id__deptName__icontains=term) |
+                                                  Q(logged_name_id__userName__icontains=term) |
+                                                  Q(logged_name_id__userId__icontains=term) |
+                                                  Q(computer_name__icontains=term) |
+                                                  Q(ip_address__icontains=term) |
+                                                  Q(sw_list__icontains=term) |
+                                                  Q(memo__icontains=term)
+                                                  for term in search_terms])
+                else:
+                    query = (Q(chassistype__icontains=filter_value) |
+                    Q(logged_name_id__deptName__icontains=filter_value) |
+                    Q(logged_name_id__userName__icontains=filter_value) |
+                    Q(logged_name_id__userId__icontains=filter_value) |
+                    Q(computer_name__icontains=filter_value) |
+                    Q(ip_address__icontains=filter_value) |
+                    Q(sw_list__icontains=filter_value) |
+                    Q(memo__icontains=filter_value))
+                user = user.filter(query)
     else:
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-        # print(user.values_list('computer_id', flat=True))
+        #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -484,14 +612,15 @@ def hs_asset_pagingsw(request):
         4: 'computer_name',
         5: 'ip_address',
         6: 'mac_address',
-        7: 'memo',
+        8: 'cache_date',
+        9: 'memo',
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(order_column)
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + order_column)
+        user = user.order_by('-' + order_column, 'computer_id')
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
@@ -508,7 +637,7 @@ def hs_asset_pagingsw(request):
     # Serialize the paginated data
 
     #user_list = CommonSerializer(page, many=True).data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
 
 
     # Prepare the response

@@ -53,7 +53,7 @@ class Xfactor_Common(models.Model):
     mem_use = models.CharField(max_length=100, null=True)
     disk_use = models.CharField(max_length=100, null=True)
     t_cpu = models.CharField(max_length=100, null=True)
-    logged_name_id = models.ForeignKey(Xfactor_ncdb, on_delete=models.SET_NULL, null=True)
+    logged_name_id = models.ForeignKey(Xfactor_ncdb, on_delete=models.SET_NULL, null=True, db_column="logged_name")
     user_date = models.DateTimeField(auto_now_add=True)
 
 class Xfactor_Daily(models.Model):
@@ -107,7 +107,7 @@ class Xfactor_Daily(models.Model):
     ext_edg_ver = models.TextField()
     ext_fir = models.TextField()
     ext_fir_ver = models.TextField()
-    logged_name_id = models.ForeignKey(Xfactor_ncdb, on_delete=models.SET_NULL, null=True)
+    logged_name_id = models.ForeignKey(Xfactor_ncdb, on_delete=models.SET_NULL, null=True, db_column="logged_name")
     user_date = models.DateTimeField()
 
 
@@ -267,7 +267,7 @@ class Xfactor_Common_Cache(models.Model):
     mem_use = models.CharField(max_length=100, null=True)
     disk_use = models.CharField(max_length=100, null=True)
     t_cpu = models.CharField(max_length=100, null=True)
-    logged_name_id = models.ForeignKey(Xfactor_ncdb, on_delete=models.SET_NULL, null=True)
+    logged_name_id = models.ForeignKey(Xfactor_ncdb, on_delete=models.SET_NULL, null=True, db_column="logged_name")
     cache_date = models.DateTimeField(null=True)
     user_date = models.DateTimeField(auto_now_add=True)
 

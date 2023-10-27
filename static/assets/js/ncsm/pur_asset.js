@@ -133,14 +133,14 @@ var hw_pur_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'chassistype',
-                    2: 'logged_name_id__deptName',
-                    3: 'logged_name_id__userName',
-                    4: 'logged_name_id__userId',
-                    5: 'computer_name',
-                    6: 'ip_address',
-                    7: 'mac_address',
-                    8: 'memo',
+                    2: 'chassistype',
+                    3: 'logged_name_id__deptName',
+                    4: 'logged_name_id__userName',
+                    5: 'logged_name_id__userId',
+                    6: 'computer_name',
+                    7: 'ip_address',
+                    12: 'cache_date',
+                    13: 'memo',
 
                 };
                 data.filter = {
@@ -183,6 +183,7 @@ var hw_pur_asset_list = function () {
                     return "CPU : " + row.hw_cpu + "<br>메인보드 : " + row.hw_mb + "<br>RAM : " + row.hw_ram + "<br>디스크 : " + row.hw_disk + "<br>VGA : " + row.hw_gpu;
                 }, searchable: true
             },
+            { data: 'cache_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -265,8 +266,9 @@ var hw_pur_asset_list = function () {
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            {targets: 12, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
             {
-                targets: 12,
+                targets: 13,
                 width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
@@ -509,14 +511,14 @@ var sw_pur_asset_list = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'chassistype',
-                    2: 'logged_name_id__deptName',
-                    3: 'logged_name_id__userName',
-                    4: 'logged_name_id__userId',
-                    5: 'computer_name',
-                    6: 'ip_address',
-                    7: 'mac_address',
-                    8: 'memo',
+                    2: 'chassistype',
+                    3: 'logged_name_id__deptName',
+                    4: 'logged_name_id__userName',
+                    5: 'logged_name_id__userId',
+                    6: 'computer_name',
+                    7: 'ip_address',
+                    12: 'cache_date',
+                    13: 'memo',
 
                 };
                 data.filter = {
@@ -551,6 +553,7 @@ var sw_pur_asset_list = function () {
             {data: 'sw_ver_list', title: '소프트웨어 버전', searchable: true},
             {data: 'sw_install', title: '설치 일자', searchable: true},
             {data: '', title: '더보기', searchable: false},
+            { data: 'cache_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true},
 
         ],
@@ -640,9 +643,9 @@ var sw_pur_asset_list = function () {
                     return '</span><br><div class="pur_swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-swinstall="' + swInstall + '" data-computer_name="' + computer_name + '">더보기...</div>'
                 }
             },
-
+            {targets: 12, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
             {
-                targets: 12,
+                targets: 13,
                 width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
@@ -761,7 +764,7 @@ var sw_pur_asset_list = function () {
 
 function pur_hwbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75 text-center"><th>선택</th><th>No</th><th>구분</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>최초 네트워크 접속일</th><th>메모리 사용률</th><th>디스크 사용률</th><th>부품목록</th><th>메모</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75 text-center"><th>선택</th><th>No</th><th>구분</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>최초 네트워크 접속일</th><th>메모리 사용률</th><th>디스크 사용률</th><th>부품목록</th><th>온/오프라인</th><th>메모</th></tr></thead><tbody></tbody>';
     $('#hs_pur_asset_list').DataTable().destroy();
     $('#hs_pur_asset_list').html(newTableContent);
     hw_pur_asset_list();
@@ -772,7 +775,7 @@ function pur_hwbutton(btn) {
 
 function pur_swbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75 text-center"><th>선택</th><th>No</th><th>구분</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>소프트웨어 목록</th><th>소프트웨어 버전</th><th>설치 일자</th><th>더보기</th><th>메모</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75 text-center"><th>선택</th><th>No</th><th>구분</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>소프트웨어 목록</th><th>소프트웨어 버전</th><th>설치 일자</th><th>더보기</th><th>온/오프라인</th><th>메모</th></tr></thead><tbody></tbody>';
     $('#hs_pur_asset_list').DataTable().destroy();
     $('#hs_pur_asset_list').html(newTableContent);
     sw_pur_asset_list();

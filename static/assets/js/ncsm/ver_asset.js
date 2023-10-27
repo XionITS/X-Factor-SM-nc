@@ -141,7 +141,8 @@ var all_asset_list = function () {
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo',
+                    8: 'cache_date',
+                    9: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -178,6 +179,7 @@ var all_asset_list = function () {
 //            {data: 'os_total', title: 'OS', searchable: true},
 //            {data: 'os_version', title: '버전', searchable: true},
 //            {data: 'os_build', title: '빌드', searchable: true},
+            { data: 'cache_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -219,8 +221,9 @@ var all_asset_list = function () {
                     return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
+            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
             {
-                targets: 9,
+                targets: 10,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
@@ -467,7 +470,8 @@ var win_asset_list = function () {
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo',
+                    8: 'cache_date',
+                    9: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -504,6 +508,7 @@ var win_asset_list = function () {
 //            {data: 'os_total', title: 'OS', searchable: true},
 //            {data: 'os_version', title: '버전', searchable: true},
 //            {data: 'os_build', title: '빌드', searchable: true},
+            { data: 'cache_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -545,8 +550,9 @@ var win_asset_list = function () {
                     return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
+            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
             {
-                targets: 9,
+                targets: 10,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
@@ -792,7 +798,8 @@ var mac_asset_list = function () {
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo',
+                    8: 'cache_date',
+                    9: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -829,6 +836,7 @@ var mac_asset_list = function () {
 //            {data: 'os_total', title: 'OS', searchable: true},
 //            {data: 'os_version', title: '버전', searchable: true},
 //            {data: 'os_build', title: '빌드', searchable: true},
+            { data: 'cache_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -870,8 +878,9 @@ var mac_asset_list = function () {
                     return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
+            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
             {
-                targets: 9,
+                targets: 10,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
@@ -1118,7 +1127,8 @@ var other_asset_list = function () {
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo',
+                    8: 'cache_date',
+                    9: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -1155,6 +1165,7 @@ var other_asset_list = function () {
 //            {data: 'os_total', title: 'OS', searchable: true},
 //            {data: 'os_version', title: '버전', searchable: true},
 //            {data: 'os_build', title: '빌드', searchable: true},
+            { data: 'cache_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1196,8 +1207,9 @@ var other_asset_list = function () {
                     return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
+            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
             {
-                targets: 9,
+                targets: 10,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {

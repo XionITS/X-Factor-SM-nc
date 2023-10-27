@@ -989,7 +989,7 @@ $(document).on("click","#user_add_btn", function(e) {
     success: function (response) {
     // response에 따른 처리 - 예: 경고창 띄우기
         if (response.result == "success") {
-            alert("유저 추가 성공;
+            alert("유저 추가 성공");
             $('#um_insert_modal').modal('hide');
 
 

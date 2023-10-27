@@ -141,7 +141,8 @@ var up_asset_list = function () {
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'memo',
+                    9: 'cache_date',
+                    10: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -175,6 +176,7 @@ var up_asset_list = function () {
             { data: 'ip_address', title: 'IPv4' , searchable: true},
             { data: 'mac_address', title: 'MAC' , searchable: true},
             { data: 'hotfix', title: 'hotfix', searchable: true},
+            { data: 'cache_date', title: '온/오프라인', searchable: true },
             { data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -218,23 +220,9 @@ var up_asset_list = function () {
                     }
                 }
             },
-//            {
-//                targets: 7,
-//                width: "10%",
-//                className: 'text-center text-truncate flex-cloumn align-middle',
-//                render: function (data, type, row) {
-//                    const computer_name = row.computer_name;
-//                    const hotfix = row.hotfix;
-//                    const date = row.hotfix_date;
-//                    if (row.hotfix_date === 'unconfirmed') {
-//                        return "";
-//                    } else {
-//                        return '<a class="upmore swmore-font" data-date="' + date + '" data-hotfix="' + hotfix + '" data-computer_name="' + computer_name + '">' + date.split('<br>')[0] + '</a>'
-//                    }
-//                }
-//            },
+            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
             {
-                targets: 9,
+                targets: 10,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {

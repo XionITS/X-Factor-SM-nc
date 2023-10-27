@@ -1433,7 +1433,8 @@ var hw_asset_list = function () {
                             4: 'computer_name',
                             5: 'ip_address',
                             6: 'mac_address',
-                            7: 'memo',
+                            8: 'cache_date',
+                            9: 'memo',
 
                         };
                 data.filter = {
@@ -1464,6 +1465,7 @@ var hw_asset_list = function () {
             { data: 'ip_address', title: 'IPv4' , searchable: true},
             { data: 'mac_address', title: 'MAC' , searchable: true},
 			{ data: 'hw', title: '하드웨어 목록', searchable: true },
+			{ data: 'cache_date', title: '온/오프라인', searchable: true },
 //			{ data: 'hw_mb', title: 'Mainboard', searchable: true },
 //			{ data: 'hw_ram', title: 'RAM', searchable: true },
 //			{ data: 'hw_disk', title: 'DISK', searchable: true },
@@ -1516,7 +1518,8 @@ var hw_asset_list = function () {
                 const hw_disk = row.hw_disk;
                 const hw_gpu = row.hw_gpu;
 		        return '<span data-toggle="tooltip"></span><div class="hwmore swmore-font text-center new-text-truncate flex-cloumn align-middle " data-hw_cpu="' + hw_cpu + '" data-hw_mb="' + hw_mb + '"  data-hw_ram="' + hw_ram + '"  data-hw_disk="' + hw_disk + '"  data-hw_gpu="' + hw_gpu + '"data-computer_name="' + computer_name +'">더보기...</div>'}},
-		    {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+		    {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+data+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
                 if (data === null || data === undefined || data.trim() === '') { return '';
                 } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';}}},
 		],
@@ -1689,7 +1692,8 @@ var sw_asset_list = function () {
                             4: 'computer_name',
                             5: 'ip_address',
                             6: 'mac_address',
-                            7: 'memo',
+                            8: 'cache_date',
+                            9: 'memo',
 
                         };
                 data.filter = {
@@ -1731,6 +1735,7 @@ var sw_asset_list = function () {
     //			{ data: 'hw_ram', title: 'RAM', searchable: true },
     //			{ data: 'hw_disk', title: 'DISK', searchable: true },
     //			{ data: 'hw_gpu', title: 'VGA', searchable: true },
+            { data: 'cache_date', title: '온/오프라인', searchable: true },
             { data: 'memo', title: '메모', searchable: true },
 		],
 		rowCallback: function (row, data, index) {
@@ -1760,7 +1765,8 @@ var sw_asset_list = function () {
 		        const swList = row.sw_list;
                 const swVer = row.sw_ver_list;
 		        return '<span data-toggle="tooltip"></span><div class="swmore swmore-font align-middle text-center " data-swlist="' + swList + '" data-swver="' + swVer + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
-		    {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+            {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
+		    {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
                 if (data === null || data === undefined || data.trim() === '') { return '';
                 } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';}}},
 		],
@@ -1916,7 +1922,7 @@ var sw_asset_list = function () {
 
 function hwbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>No</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>MAC</th><th>하드웨어 목록</th><th>memo</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>No</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>MAC</th><th>하드웨어 목록</th><th>온/오프라인</th><th>memo</th></tr></thead><tbody></tbody>';
     $('#hs_asset_list').DataTable().destroy();
     $('#hs_asset_list').html(newTableContent);
     hw_asset_list();
@@ -1927,7 +1933,7 @@ function hwbutton(btn) {
 
 function swbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>No</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>MAC</th><th>소프트웨어 목록</th><th>memo</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75"><th>No</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>MAC</th><th>소프트웨어 목록</th><th>온/오프라인</th><th>memo</th></tr></thead><tbody></tbody>';
     $('#hs_asset_list').DataTable().destroy();
     $('#hs_asset_list').html(newTableContent);
     sw_asset_list();

@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ncsm2',
+        'NAME': 'ncsm',
         'USER': 'postgres',
         'PASSWORD': 'psql',
-        'HOST': '172.20.161.129',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

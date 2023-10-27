@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import *
-
+from datetime import datetime, timedelta
 class NcdbSerializer(serializers.ModelSerializer):
     class Meta:
         model = Xfactor_ncdb
@@ -134,10 +134,15 @@ class Dailyserializer(serializers.ModelSerializer):
         return data
 
 class Cacheserializer(serializers.ModelSerializer):
+    cache_date = serializers.SerializerMethodField()
     class Meta:
         model = Xfactor_Common_Cache
         fields = '__all__'
-
+    def get_cache_date(self, obj):
+        if obj.cache_date > obj.user_date - timedelta(hours=1):
+            return "Online"
+        else:
+            return "Offline"
     def to_representation(self, instance):
         if instance.logged_name_id:
             # If `logged_name_id` is not None, serialize `Xfactor_ncdb` using `NcdbSerializer`
