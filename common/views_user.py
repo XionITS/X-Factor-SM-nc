@@ -809,8 +809,8 @@ def group_delete(request):
 
 def nano(request):
     auth_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
-    client_id = "tanium-dashboard"
-    redirect_uri = "https://taniumstg.ncsoft.com:8000/dashboard/"
+    client_id = "stg-tanium-dashboard"
+    redirect_uri = "http://taniumstg.ncsoft.com:8000/dashboard/"
 
     # 사용자를 인증 페이지로 리디렉션합니다.
     return redirect(f"{auth_url}?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope=openid")
