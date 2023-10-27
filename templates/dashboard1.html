@@ -73,20 +73,20 @@
                         <div id="asset_all_os_chart2"></div>
                     </div>
                     {% else %}
-                    <div id="auth_all_asset1" class="col-6" style="display:none;">
+                    <div id="auth_all_asset1" class="col-6">
                         <div class="d-flex fw-bold fs-12px">
                             <div class="d-flex flex-grow-1 justify-content-between" style="font-size: 17px">
                                 전체 자산 수
                                 <div id="totalDataDiv" style="font-size:14px"></div>
                             </div>
+                                                <div class="flex-column ms-3 mt-5 text-center">
+                                    <h2 style="margin-top: 50px;">권한 없음</h2>
+                                </div>
                         </div>
                         <!--                        <div class='text-end mx-50px' style="font-size:14px;" id="totalDataDiv"></div>-->
-                        <div id="asset_all_chart"></div>
+
                     </div>
-                    <div id="auth_all_asset2"  class="col-6" style="display:none;">
-                        <div id="asset_all_os_chart1"></div>
-                        <div id="asset_all_os_chart2"></div>
-                    </div>
+
                     {% endif %}
                 </div>
                 <div class="card-arrow">
@@ -158,11 +158,8 @@
                                     <p class="discover-state-per" id="apexnotconChart_per"></p>
                                 </div>
                             {% else %}
-                                <div id="apexnotconChart" style="display : none;" ></div>
-                                <div class="flex-column ms-3 text-center" style="display : none;">
-                                    <p class="discover-text">증감률</p>
-                                    <p class="discover-count" id="apexnotconChart_sub"></p>
-                                    <p class="discover-state-per" id="apexnotconChart_per"></p>
+                                <div class="flex-column ms-3 mt-5 text-center">
+                                    <h2>권한 없음</h2>
                                 </div>
                             {% endif %}
 
@@ -338,7 +335,13 @@
                     <div class="d-flex fw-bold fs-12px">
                         <div class="flex-grow-1" style="font-size: 17px">위치별 자산 현황</div>
                     </div>
+                    {% if "dash_locate" in menu_list|join:" " %}
                     <div id="location_bar"></div>
+                    {% else %}
+                    <div class="flex-column ms-3 mt-5 text-center">
+                                    <h2>권한 없음</h2>
+                                </div>
+                    {% endif %}
                 </div>
                 <div class="card-arrow">
                     <div class="card-arrow-top-left"></div>
@@ -354,8 +357,13 @@
                     <div class="d-flex fw-bold fs-12px mb-2">
                         <div class="flex-grow-1" style="font-size: 17px">Office 버전별 통계</div>
                     </div>
-
+                    {% if "dash_office" in menu_list|join:" " %}
                     <div id="office_donut"></div>
+                    {% else %}
+                                        <div class="flex-column ms-3 mt-5 text-center">
+                                    <h2>권한 없음</h2>
+                                </div>
+                    {% endif %}
                 </div>
                 <div class="card-arrow">
                     <div class="card-arrow-top-left"></div>
@@ -371,8 +379,13 @@
                     <div class="d-flex fw-bold fs-12px mb-2">
                         <div class="flex-grow-1" style="font-size: 17px">월별 자산 변화 수</div>
                     </div>
-
+                {% if "dash_month" in menu_list|join:" " %}
                     <div id="chAsset_line"></div>
+                    {% else %}
+                                                            <div class="flex-column ms-3 mt-5 text-center">
+                                    <h2>권한 없음</h2>
+                                </div>
+                    {% endif %}
                 </div>
                 <div class="card-arrow">
                     <div class="card-arrow-top-left"></div>
@@ -439,6 +452,7 @@
                     <div class="d-flex fw-bold fs-12px">
                         <div class="flex-grow-1" style="font-size: 17px">Windows 버전별 자산 목록 (Top 6)</div>
                     </div>
+                    {% if "dash_win_ver" in menu_list|join:" " %}
                     <div class="d-flex col-xl-12">
                         <div class="d-flex w-50 mt-3">
                             <div class="d-flex w-100">
@@ -462,13 +476,16 @@
                                 </div>
                             </div>
                         </div>
-                        {% if "dash_win_ver" in menu_list|join:" " %}
-                        <div id="windowAsset_pie" class="w-50"></div>
-                        {% else %}
 
-                        <div id="windowAsset_pie" style="display : none;" ></div>
-                    {% endif %}
+                        <div id="windowAsset_pie" class="w-50"></div>
+
+
                     </div>
+                {% else %}
+                                <div class="flex-column ms-3 mt-5 text-center">
+                                    <h2>권한 없음</h2>
+                                </div>
+                            {% endif %}
                 </div>
                 <div class="card-arrow">
                     <div class="card-arrow-top-left"></div>
@@ -487,7 +504,9 @@
                     {% if "dash_win_update" in menu_list|join:" " %}
                     <div id="os_pie"></div>
                     {% else %}
-                    <div id="os_pie" style="display : none;"></div>
+                    <div class="flex-column ms-3 mt-5 text-center">
+                                    <h2>권한 없음</h2>
+                                </div>
                     {% endif %}
                 </div>
                 <div class="card-arrow">
@@ -507,7 +526,9 @@
                     {% if "dash_win_hotfix" in menu_list|join:" " %}
                     <div id="hotfix_donut"></div>
                     {% else %}
-                    <div id="hotfix_donut" style="display : none;"></div>
+                    <div class="flex-column ms-3 mt-5 text-center">
+                                    <h2>권한 없음</h2>
+                                </div>
                     {% endif %}
 
                 </div>
@@ -528,7 +549,9 @@
                     {% if "dash_tanium" in menu_list|join:" " %}
                     <div id="apexcpuChart"></div>
                     {% else %}
-                    <div id="apexcpuChart" style="display : none;"></div>
+                    <div class="flex-column ms-3 mt-5 text-center">
+                                    <h2>권한 없음</h2>
+                                </div>
                     {% endif %}
                 </div>
                 <div class="card-arrow">

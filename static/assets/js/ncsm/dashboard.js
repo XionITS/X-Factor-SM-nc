@@ -80,6 +80,11 @@ var handleRenderChartNCOMG = function () {
 //############################### 전체 자산 수 #######################################
     var assetAllChartInstance;
     function asset_all_chart(divId, notebook, desktop, other) {
+        if (!document.getElementById(divId)) {
+            // 요소가 없으므로 아무 동작도 하지 않고 함수를 종료
+            return;
+        }
+
         // 데이터 포인트의 총합을 계산
         const totalData1 = [
             notebook[0][0]['count'] + desktop[0][0]['count'] + other[0]['count']
@@ -89,7 +94,11 @@ var handleRenderChartNCOMG = function () {
         ];
 
         document.getElementById('totalDataDiv').innerHTML = `Online : ${totalData1} &nbsp;&nbsp;&nbsp;&nbsp;Total : ${totalData2}`;
-
+        window.onload = function() {
+          if (document.getElementById('totalDataDiv')) {
+            document.getElementById('totalDataDiv').innerHTML = `Online : ${totalData1} &nbsp;&nbsp;&nbsp;&nbsp;Total : ${totalData2}`;
+          }
+        };
         var asset_all_chart_options = {
             series: [
                 {
@@ -200,6 +209,10 @@ var handleRenderChartNCOMG = function () {
 
 //############################### 전체 자산 수(Online OS) #######################################
     function asset_all_os_chart1(divId, a, b, c) {
+        if (!document.getElementById(divId)) {
+            return;
+        }
+
         // a, b, c 변수에서 각각의 카운트 값을 추출
         var countA = a.map(function (item) {
             return item.count;
@@ -358,12 +371,15 @@ var handleRenderChartNCOMG = function () {
     note_online_list = dataList.note_online_list
     other_online_list = dataList.other_online_list
 
-    asset_all_os_chart1("asset_all_os_chart", desk_online_list, note_online_list, other_online_list);
+    asset_all_os_chart1("asset_all_os_chart1", desk_online_list, note_online_list, other_online_list);
 
 
 
 //#######################################전체 자산 수(Total OS)#################################
     function asset_all_os_chart2(divId, a, b, c) {
+        if (!document.getElementById(divId)) {
+            return;
+        }
         // a, b, c 변수에서 각각의 카운트 값을 추출
         var countA = a.map(function (item) {
             return item.count;
@@ -551,6 +567,9 @@ var handleRenderChartNCOMG = function () {
     // windows 버전별 자산목록 - windowAsset_pie 차트
     //--------------------------------------------------------------------------
      function oslistPieChart(divId, seriesData, labelsData) {
+        if (!document.getElementById(divId)) {
+            return;
+        }
         var donutOptions = {
             series: seriesData,
             chart: {
@@ -637,6 +656,9 @@ var handleRenderChartNCOMG = function () {
     // };
 
     function osVerPieChart(divId, seriesData, labelsData) {
+        if (!document.getElementById(divId)) {
+            return;
+        }
         var donutOptions = {
             series: seriesData,
             chart: {
@@ -779,121 +801,132 @@ var handleRenderChartNCOMG = function () {
         discover_per_round += '%';
     }
     var discover_sub_data = document.querySelector('#apexnotconChart_sub');
-    discover_sub_data.textContent = discover_sub;
-
+    if (discover_sub_data) {
+        discover_sub_data.textContent = discover_sub;
+    }
     var discover_per_data = document.querySelector('#apexnotconChart_per');
-    discover_per_data.textContent = discover_per_round;
+    if (discover_per_data) {
+        discover_per_data.textContent = discover_per_round;}
 
-    var apexnotconChartOptions = {
-		chart: {
-			width: '100%',
-			height: 200,
-			type: 'bar',
-			toolbar: {
-				show: false
-			},
-            events: {
-                    dataPointSelection: function (event, chartContext, config) {
-                        $('#discoverChart').DataTable().destroy();
-                        $('#osVerPieChart').DataTable().destroy();
-                        $('#asset_os_detail1').DataTable().destroy();
-                        $('#all_asset_detail1').DataTable().destroy();
-                        $('#asset_os_detail2').DataTable().destroy();
-                        $('#oslistPieChart').DataTable().destroy();
-                        $('#office_chart').DataTable().destroy();
-                        $('#subnet_chart').DataTable().destroy();
-                        $('#hotfix_chart').DataTable().destroy();
-                        $('#tcpuChart').DataTable().destroy();
-                        document.getElementsByClassName('table m')[0].id = 'discoverChart';
-                        var dataPointIndex = config.dataPointIndex;
-                        var labelsName = config.w.config.labels[dataPointIndex];
-                        document.getElementById('categoryName').value = labelsName;
-                        document.getElementById('chartName').value = 'discoverChart';
-                        $("#DashModal .modal-title").html(labelsName+' List');
-                        osVerPieChart_list(labelsName, seriesName);
-                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
-                        $("#DashModal").modal("show");
-                    }
+    var apexnotconChartContainer =  document.querySelector('#apexnotconChart');
+    if(apexnotconChartContainer) {
+        var apexnotconChartOptions = {
+            chart: {
+                width: '100%',
+                height: 200,
+                type: 'bar',
+                toolbar: {
+                    show: false
                 },
-		},
-		plotOptions: {
-			bar: {
-				horizontal: false,
-				columnWidth: '70%',
-				distributed: true,
-				endingShape: 'rounded'
-
-			},
-		},
-		dataLabels: {
-            enabled: true,
-            formatter: function (value) {
-                return value;
+                events: {
+                        dataPointSelection: function (event, chartContext, config) {
+                            $('#discoverChart').DataTable().destroy();
+                            $('#osVerPieChart').DataTable().destroy();
+                            $('#asset_os_detail1').DataTable().destroy();
+                            $('#all_asset_detail1').DataTable().destroy();
+                            $('#asset_os_detail2').DataTable().destroy();
+                            $('#oslistPieChart').DataTable().destroy();
+                            $('#office_chart').DataTable().destroy();
+                            $('#subnet_chart').DataTable().destroy();
+                            $('#hotfix_chart').DataTable().destroy();
+                            $('#tcpuChart').DataTable().destroy();
+                            document.getElementsByClassName('table m')[0].id = 'discoverChart';
+                            var dataPointIndex = config.dataPointIndex;
+                            var labelsName = config.w.config.labels[dataPointIndex];
+                            document.getElementById('categoryName').value = labelsName;
+                            document.getElementById('chartName').value = 'discoverChart';
+                            $("#DashModal .modal-title").html(labelsName+' List');
+                            osVerPieChart_list(labelsName, seriesName);
+                            // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
+                            $("#DashModal").modal("show");
+                        }
+                    },
             },
-            style: {
-                colors: ['#ffffff']
-            }
-        },
-		legend: {
-			show: false
-		},
-		stroke: {
-			show: true,
-			width: 1,
-			colors: ['transparent']
-		},
-		colors: [app.color.orange],
-		series: [{
-			data: [discover_data_day, discover_data_min]
-		}],
-		grid: {
-			show: true
-		},
-		xaxis: {
-			categories: [
-				'1일 전', '현재'
-			],
-			labels: {
-				show: true,
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '70%',
+                    distributed: true,
+                    endingShape: 'rounded'
 
-			},
-			crosshairs: {
+                },
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function (value) {
+                    return value;
+                },
+                style: {
+                    colors: ['#ffffff']
+                }
+            },
+            legend: {
                 show: false
-            }
-		},
-		yaxis: {
-			labels: {
-				show: true,
-				formatter: function (value) {
-                    return value;
+            },
+            stroke: {
+                show: true,
+                width: 1,
+                colors: ['transparent']
+            },
+            colors: [app.color.orange],
+            series: [{
+                data: [discover_data_day, discover_data_min]
+            }],
+            grid: {
+                show: true
+            },
+            xaxis: {
+                categories: [
+                    '1일 전', '현재'
+                ],
+                labels: {
+                    show: true,
+
+                },
+                crosshairs: {
+                    show: false
                 }
-			}
-		},
-		fill: {
-			opacity: 1
-		},
-		tooltip: {
-			theme: 'dark',
-			x: {
-				show: true
-			},
-			y: {
-				title: {
-					formatter: function (seriesName) {
-						return ''
-					}
-				},
-				formatter: function (value) {
-                    return value;
+            },
+            yaxis: {
+                labels: {
+                    show: true,
+                    formatter: function (value) {
+                        return value;
+                    }
                 }
-			}
-		},
-	};
-	var apexnotconChart = new ApexCharts(document.querySelector('#apexnotconChart'), apexnotconChartOptions);
-    apexnotconChart.render();
+            },
+            fill: {
+                opacity: 1
+            },
+            tooltip: {
+                theme: 'dark',
+                x: {
+                    show: true
+                },
+                y: {
+                    title: {
+                        formatter: function (seriesName) {
+                            return ''
+                        }
+                    },
+                    formatter: function (value) {
+                        return value;
+                    }
+                }
+            },
+        };
+
+        var apexnotconChart = new ApexCharts(apexnotconChartContainer, apexnotconChartOptions);
+        apexnotconChart.render();
+        } else {
+
+        }
 
 //############################# 보안패치 차트#################################################
     function createPieChart(divId, seriesData, labelsData) {
+        if (!document.getElementById(divId)) {
+            return;
+        }
         var donutOptions = {
             series: seriesData,
             chart: {
@@ -992,6 +1025,9 @@ var handleRenderChartNCOMG = function () {
 
 //#################################위치별 자산현황###########################################
     function location_chart(divId, seriesData, labelsData) {
+        if (!document.getElementById(divId)) {
+            return;
+        }
         var asset_location_chart_options = {
             chart: {
                 type: 'bar',
@@ -1099,6 +1135,9 @@ var handleRenderChartNCOMG = function () {
 
 //####################################오피스버전별#########################################
     function office_chart(divId, seriesData, labelsData) {
+        if (!document.getElementById(divId)) {
+            return;
+        }
         var asset_office_chart_options = {
             chart: {
                 type: 'bar',
@@ -1217,76 +1256,79 @@ var handleRenderChartNCOMG = function () {
         }
     });
 
-    var asset_ch_chart_options = {
-        series: [
-            {
-                name: 'Desktop',
-                data: MonthlyDesktopData
-            },
-            {
-                name: 'Notebook',
-                data: MonthlyNotebookData
-            }
-        ],
-        chart: {
-            type: 'line',
-            background: 'transparent',
-            foreColor: 'rgba(255, 255, 255, 0.75)',
-            height: 200,
-            width: '100%',
-            toolbar: {
-                show: false,
-                tools: {
-                    zoom: false,
-                    pan: false
+    var asset_ch_chartContainer = document.querySelector('#chAsset_line');
+    if (asset_ch_chartContainer) {
+        var asset_ch_chart_options = {
+            series: [
+                {
+                    name: 'Desktop',
+                    data: MonthlyDesktopData
+                },
+                {
+                    name: 'Notebook',
+                    data: MonthlyNotebookData
                 }
-            }
-        },
-        stroke: {
-            width: 3
-        },
-        grid: {
-            borderColor: 'rgba(144, 164, 174, 0.5)'
-        },
-        colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',],
-        dataLabels: {
-            enabled: true,
-            background: {
+            ],
+            chart: {
+                type: 'line',
+                background: 'transparent',
+                foreColor: 'rgba(255, 255, 255, 0.75)',
+                height: 200,
+                width: '100%',
+                toolbar: {
+                    show: false,
+                    tools: {
+                        zoom: false,
+                        pan: false
+                    }
+                }
+            },
+            stroke: {
+                width: 3
+            },
+            grid: {
+                borderColor: 'rgba(144, 164, 174, 0.5)'
+            },
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',],
+            dataLabels: {
                 enabled: true,
-                // foreColor: 'rgba(29, 40, 53, 0.95)'
-                foreColor: ["#fff"]
+                background: {
+                    enabled: true,
+                    // foreColor: 'rgba(29, 40, 53, 0.95)'
+                    foreColor: ["#fff"]
+                },
+                dropShadow: {
+                    enabled: false,
+                },
+                style: {
+                    fontSize: '13px',
+                }
             },
-            dropShadow: {
-                enabled: false,
+            xaxis: {
+                type: 'category',
+                categories: Months
             },
-            style: {
-                fontSize: '13px',
+            yaxis: {
+                title: {
+                    text: ''
+                }
+            },
+            legend: {
+                markers: {
+                    fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',]
+                },
+                itemMargin: {
+                    horizontal: 20
+                },
+                labels: {
+                    colors: 'rgba(255, 255, 255, 0.75)',
+                },
+                position: 'top'
             }
-        },
-        xaxis: {
-            type: 'category',
-            categories: Months
-        },
-        yaxis: {
-            title: {
-                text: ''
-            }
-        },
-        legend: {
-            markers: {
-                fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',]
-            },
-            itemMargin: {
-                horizontal: 20
-            },
-            labels: {
-                colors: 'rgba(255, 255, 255, 0.75)',
-            },
-            position: 'top'
-        }
-    };
-    var asset_overview_chart = new ApexCharts(document.querySelector('#chAsset_line'), asset_ch_chart_options);
-    asset_overview_chart.render();
+        };
+        var asset_overview_chart = new ApexCharts(asset_ch_chartContainer, asset_ch_chart_options);
+        asset_overview_chart.render();
+    } else {};
 
 //################################# 태니엄 프로스세 cpu 초과######################################################
 //    function asset_cpu_chart_options(divId, seriesData, labelsData) {
@@ -1329,6 +1371,9 @@ var handleRenderChartNCOMG = function () {
 //    }
 //    asset_cpu_chart_options("cpu_donut", dataList.cpu_data_list, ['20% 이상', '20% 이하']);
     function apexcpuChart(divId, seriesData, labelsData) {
+        if (!document.getElementById(divId)) {
+            return;
+        }
         var apexcpuOptions = {
             series: [100],
             chart: {
