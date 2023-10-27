@@ -368,7 +368,7 @@ def user_list(request):
 
 @csrf_exempt
 def db_list(request):
-    user = Xfactor_ncdb.objects.all()
+    user = Xfactor_ncdb.objects.exclude(userName__isnull=True).exclude(email__isnull=True)
 
     db_list = NcdbSerializer(user, many=True).data
     # Prepare the response

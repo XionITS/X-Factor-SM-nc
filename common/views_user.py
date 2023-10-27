@@ -410,6 +410,7 @@ def createUsers_nano(request):
         userId = request.POST['userId']
         userName = request.POST['userName']
         deptName = request.POST['deptName']
+        email = request.POST['email']
 
 
         Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
@@ -419,10 +420,10 @@ def createUsers_nano(request):
             common_xfactor_xuser
             (x_id, x_pw, x_name, x_email, x_auth, create_date) 
         VALUES ( 
-                '""" + userId + """',
+                '""" + email + """',
                 '""" + userId + """' ,
                 '""" + userName + """',
-                '""" + userId + """',
+                '""" + email + """',
                 '""" + deptName + """',
                 now()
                 );
@@ -432,7 +433,7 @@ def createUsers_nano(request):
         Conn.commit()
         Conn.close()
         # Auth 자동생성
-        RS = AutoAuth(userId)
+        RS = AutoAuth(email)
         if RS == "1":
             return JsonResponse({'result': 'success'}, status=200)  # 성공적으로 삭제되었을 때 응답
     except Exception as e:
@@ -550,6 +551,7 @@ def DeleteAuth(id):
 def Group_AutoAuth(xuser_id_list,id):
     Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
     Cur = Conn.cursor()
+    id = id
     for xgroup_id in xuser_id_list:
         query = """ 
                INSERT INTO public.common_xfactor_xgroup_auth
