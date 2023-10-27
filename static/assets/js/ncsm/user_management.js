@@ -912,8 +912,19 @@ window.onclick = function (event) {
 //############################### User 추가하기 ###############################
 $(document).on("click","#um_insert", function (e) {
     /////////////////USER 검색기능 버튼삽입
-    var modalbody = `<div class="asset-input-group">
-                        <input type="search" class="asset-form-control" id="ncuser_search_result" placeholder="검색할 계정을 입력하세요">
+    var modalbody = `
+                    <style>
+                        .asset-input-group {
+                            display: flex;
+                            justify-content: center;
+                        }
+                        .asset-input-group input {
+                            width: 20%; /* 검색창 너비를 조절하세요. */
+                            margin-right: 10px; /* @ncsoft.com과의 간격을 조절하세요. */
+                        }
+                    </style>
+                    <div class="asset-input-group">
+                        <input type="search" class="asset-form-control" id="ncuser_search_result" placeholder="계정을 입력하세요"> @ncsoft.com
                     </div>`;
     /////////////////사용자 목록 가져오기
     $.ajax({
