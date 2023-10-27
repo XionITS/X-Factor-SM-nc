@@ -107,7 +107,10 @@ def all_asset_paging1(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    if request.POST.get('categoryName') == 'Total':
+        user_list = Cacheserializer(page, many=True).data
+    elif request.POST.get('categoryName') == 'Online':
+        user_list = Dailyserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -399,7 +402,7 @@ def asset_os_paging2(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -417,7 +420,7 @@ def asset_os_paging2(request):
 def oslistPieChart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-    user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build__contains=request.POST.get('categoryName'))
+    user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
                  Q(logged_name_id__deptName=filter_text) |
