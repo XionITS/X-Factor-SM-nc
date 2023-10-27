@@ -19,6 +19,7 @@ var sec_asset_list2 = function () {
         ordering: true,
         serverSide: true,
         displayLength: false,
+        autoWidth: false,
         order: [
             [3, "asc"]
         ],

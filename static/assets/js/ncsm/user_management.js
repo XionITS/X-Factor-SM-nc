@@ -13,6 +13,7 @@ var um_user_list = function () {
         ordering: true,
         serverSide: true,
         displayLength: false,
+        autoWidth: false,
         order: [
             [6, "desc"]
         ],
@@ -295,6 +296,7 @@ var um_group_list = function () {
 		ordering: true,
 		serverSide: true,
 		displayLength: false,
+		autoWidth: false,
 		drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
@@ -979,8 +981,9 @@ $(document).on("click","#um_creategroup", function (e){
     const check_id = [];
 
  /////////////////USER 검색기능 버튼삽입
-    var modalbody =`<div class="asset-input-group">
-                        <input type="search" class="asset-form-control" id="user_search_result" placeholder="검색할 계정을 입력하세요">
+    var modalbody =`<div class="asset-input-group justify-content-end">
+                        <span class="fs-16px pb-2 pe-2">검색 : </span>
+                        <input type="search" class="asset-form-control mb-2" id="user_search_result" placeholder="검색할 계정을 입력하세요">
                     </div>`;
  /////////////////사용자 목록 가져오기
     $.ajax({
@@ -990,7 +993,7 @@ $(document).on("click","#um_creategroup", function (e){
 
         success: function (response) {
             var users = response.data;
-            var userTable = "<table class='table'><thead><tr><th>계정</th><th style='width: 20%;'>이름</th><th>부서</th><th style='width: 7%;'>ADD</th></tr></thead><tbody>";
+            var userTable = "<table class='table table-sm'><thead class='table-active'><tr><th>계정</th><th style='width: 20%;'>이름</th><th>부서</th><th style='width: 7%;'>ADD</th></tr></thead><tbody>";
             for (var i = 0; i < users.length; i++) {
                 var user = users[i];
                 var x_id = user.x_id;
@@ -1014,7 +1017,7 @@ $(document).on("click","#um_creategroup", function (e){
                 const x_id = $(this).data("x-id");
   /////////////// // 체크박스를 체크하면 x_id를 modalbody2에 추가
                 if (this.checked) {
-                        var newLine = '<div id="div_' + x_id  + '"><input class="form-check-input" type="checkbox" value="' + x_id + '" id="' + x_id  + '" checked><label class="form-check-label" for="' + x_id  + '">' + x_id  + '</label><br></div>';
+                        var newLine = '<div id="div_' + x_id  + '"><input class="form-check-input" type="checkbox" value="' + x_id + '" id="' + x_id  + '" checked><label class="form-check-label no-before ps-5px" for="' + x_id  + '">' + x_id  + '</label><br></div>';
                         $("#group_insert_modal .form-check2").append(newLine);
                 }
  ///////////////// 체크박스를 해제하면 modalbody2에서 제거
