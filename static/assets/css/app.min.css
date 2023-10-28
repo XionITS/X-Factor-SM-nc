@@ -31220,3 +31220,7 @@ label.no-before::before {
     overflow-y: auto;
     outline: 0
 }
+
+.datepicker .day.disabled {
+    color: #696969 !important;  // 색상을 원하는 값으로 변경하세요.
+}
