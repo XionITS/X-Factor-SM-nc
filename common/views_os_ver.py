@@ -14,6 +14,7 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 import pytz
+from common.custom_sort_key import custom_sort_key as cus_sort
 #today_collect_date = timezone.now() - timedelta(minutes=7)
 
 with open("setting.json", encoding="UTF-8") as f:
@@ -247,9 +248,10 @@ def ver_asset_paging(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(order_column, '-computer_id')
+        user = sorted(user, key=lambda x: cus_sort(x, order_column))
+        #user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + order_column, 'computer_id')
+        user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))

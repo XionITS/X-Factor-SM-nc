@@ -14,7 +14,7 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 import pytz
-
+from common.custom_sort_key import custom_sort_key as cus_sort
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
@@ -311,10 +311,12 @@ def pur_asset_paginghw(request):
     }
 
     order_column = order_column_map.get(order_column_index, 'computer_name')
+    print(order_column)
     if order_column_dir == 'asc':
-        user = user.order_by(order_column, '-computer_id')
+        user = sorted(user, key=lambda x: cus_sort(x, order_column))
+        #user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + order_column, 'computer_id')
+        user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -588,9 +590,10 @@ def pur_asset_pagingsw(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(order_column, '-computer_id')
+        user = sorted(user, key=lambda x: cus_sort(x, order_column))
+        #user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + order_column, 'computer_id')
+        user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
