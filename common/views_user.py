@@ -406,12 +406,12 @@ def createUsers(x_id, x_pw, x_name, x_email, x_auth):
 @csrf_exempt
 def createUsers_nano(request):
     try:
-
+        print('111111111111')
         userId = request.POST['userId']
         userName = request.POST['userName']
         deptName = request.POST['deptName']
         email = request.POST['email']
-
+        print("222222222")
 
         Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
         Cur = Conn.cursor()

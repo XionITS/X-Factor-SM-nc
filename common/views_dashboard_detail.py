@@ -131,7 +131,7 @@ def asset_os_paging1(request):
     print(request.POST.get('seriesName'))
     if request.POST.get('categoryName') == 'Other':
         if request.POST.get('seriesName') == 'Desktop':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -141,7 +141,7 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Notebook':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -151,7 +151,7 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude( os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -163,7 +163,7 @@ def asset_os_paging1(request):
 
     if request.POST.get('categoryName') == 'Mac':
         if request.POST.get('seriesName') == 'Desktop':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -173,7 +173,7 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Notebook':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -183,7 +183,7 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude( os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Mac').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -215,7 +215,7 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows').exclude(chassistype__in=['Notebook', 'Desktop'])
+            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -277,7 +277,7 @@ def asset_os_paging2(request):
     filter_text = request.POST.get('search[value]')
     if request.POST.get('categoryName') == 'Other':
         if request.POST.get('seriesName') == 'Desktop':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -287,7 +287,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Notebook':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -297,7 +297,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -309,7 +309,7 @@ def asset_os_paging2(request):
 
     if request.POST.get('categoryName') == 'Mac':
         if request.POST.get('seriesName') == 'Desktop':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -319,7 +319,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Notebook':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -329,7 +329,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).objects.exclude(chassistype__in=['Notebook', 'Desktop']).exclude( os_simple__in=['Windows', 'Mac'])
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, os_simple='Mac').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -361,7 +361,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, os_simple='Windows').exclude(chassistype__in=['Notebook', 'Desktop'])
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, os_simple='Windows').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |

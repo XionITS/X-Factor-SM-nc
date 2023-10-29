@@ -940,11 +940,12 @@ $(document).on("click","#um_insert", function (e) {
                 var userId = nc_user.userId;
                 var userName = nc_user.userName;
                 var deptName = nc_user.deptName;
+                var email = nc_user.email;
                 userTable += `<tr>
                     <td class='text-center'>${userId}</td>
                     <td class='text-center'>${userName}</td>
                     <td class='text-center'>${deptName}</td>
-                    <td class='text-center'><button id="user_add_btn" type="button" class="btn btn-outline-warning " data-userId="${userId}" data-userName="${userName}" data-deptName="${deptName}">추가</td>
+                    <td class='text-center'><button id="user_add_btn" type="button" class="btn btn-outline-warning " data-userId="${userId}" data-userName="${userName}" data-deptName="${deptName}" data-email="${email}">추가</td>
                 </tr>`;
             }
             userTable += "</tbody></table>";
@@ -965,11 +966,13 @@ $(document).on("keyup", "#ncuser_search_result", function (e) {
 
     userRows.each(function () {
         var x_id = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
-        if (x_id.includes(searchText)) {
-            // 검색어와 일치하는 경우 표시
+        var shouldShow = searchText.length >= 3 && x_id.includes(searchText);
+
+        if (shouldShow) {
+            // 검색어가 3글자 이상이고 일치하는 경우 표시
             $(this).show();
         } else {
-            // 일치하지 않는 경우 숨김
+            // 그 외의 경우 숨김
             $(this).hide();
         }
     });
@@ -984,9 +987,7 @@ $(document).on("click","#user_add_btn", function(e) {
     const userId = $(this).data("userid");
     const userName = $(this).data("username");
     const deptName = $(this).data("deptname");
-    console.log(userId);
-    console.log(userName);
-    console.log(deptName);
+    const email = $(this).data("email");
     $.ajax({
     url: 'user_add/', // views.py 파일의 URL을 여기에 넣으세요.
     type: 'POST',
@@ -995,6 +996,7 @@ $(document).on("click","#user_add_btn", function(e) {
          'userId' : userId,
          'userName' : userName,
          'deptName' : deptName,
+         'email' : email
     },
 
     success: function (response) {
@@ -1200,7 +1202,7 @@ $(document).on("click","#group_insert", function(e) {
         if (response.success == "success") {
             alert(response.message);
             $('#group_insert_modal').modal('hide');
-            $('a[value="GROUP"]').click();
+            $('[value="GROUP"]').click();
             $("#group_insert_modal .form-check2").empty();
             $("#group_insert_modal .form-check").empty();
 
