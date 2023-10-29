@@ -343,6 +343,8 @@ var handleRenderChartNCOMG = function () {
                         fontSize: "8px",
                     },
                 },
+                max: 10000,
+
             },
             yaxis: {
                 labels: {
@@ -482,6 +484,7 @@ var handleRenderChartNCOMG = function () {
                         fontSize: "8px",
                     },
                 },
+                max: 10000,
             },
             yaxis: {
                 labels: {
