@@ -10,7 +10,7 @@ import psycopg2
 import json
 from django.http import JsonResponse
 from urllib.parse import urlencode
-from common.models import Xfactor_Log,Xfactor_Xuser
+from common.models import Xfactor_Log,Xfactor_Xuser,Xfactor_Xuser_Auth
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -107,12 +107,16 @@ def login(request):
             # 모든 필드를 채웠을 경우
             else:
                 RS = selectUsers(x_id, x_pw)
+                user_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id = x_id)
                 print(RS)
-                if RS == None:
-                    res_data['error'] = '아이디 또는 비밀번호가 일치하지 않습니다'
+                # print(user_check)
+                if RS == None or (user_check.filter(xfactor_auth_id='dash_report',auth_use='false') and user_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and user_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
+                                  and user_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and user_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and user_check.filter(xfactor_auth_id='dash_office', auth_use='false')
+                                  and user_check.filter(xfactor_auth_id='dash_month', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
+                                  and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')):
+                    # res_data['error'] = '아이디 또는 비밀번호가 일치하지 않습니다'
                     return render(request, 'noauth.html')
-                    return render(request, 'common/login.html', res_data)
-
+                    # return render(request, 'common/login.html', res_data)
                 else:
                     request.session['sessionid'] = RS[0]
                     request.session['sessionname'] = RS[2]
@@ -838,9 +842,13 @@ def nano_user(request):
 
     # 유저 체크
     RS_user = selectUsers_nano(sub)
-    if RS_user == None:
+    nano_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=sub)
+    if RS_user == None or (nano_check.filter(xfactor_auth_id='dash_report', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_all_asset',auth_use='false')
+                      and nano_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_office',auth_use='false')
+                      and nano_check.filter(xfactor_auth_id='dash_month', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
+                      and nano_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')):
         return render(request, 'noauth.html')
-        #return redirect('../noauth')
+
         # RS = createUsers(sub, sub, name, email, dept)
         # xuser_instance = Xfactor_Xuser(
         #     x_id=sub,
