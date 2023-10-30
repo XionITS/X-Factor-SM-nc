@@ -688,16 +688,16 @@ def hs_asset_pagingsw(request):
         9: 'memo',
         # Add mappings for other columns here
     }
-    from common.multiprocess import apply_multiprocessing_sort
-    order_column = order_column_map.get(order_column_index, 'computer_name')
-    user = apply_multiprocessing_sort(user, order_column, order_column_dir)
+    # from common.multiprocess import apply_multiprocessing_sort
+    # order_column = order_column_map.get(order_column_index, 'computer_name')
+    # user = apply_multiprocessing_sort(user, order_column, order_column_dir)
 
     #멀티프로세싱 적용 x
-    # order_column = order_column_map.get(order_column_index, 'computer_name')
-    # if order_column_dir == 'asc':
-    #     user = sorted(user, key=lambda x: cus_sort(x, order_column))
-    # else:
-    #     user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
+    order_column = order_column_map.get(order_column_index, 'computer_name')
+    if order_column_dir == 'asc':
+        user = sorted(user, key=lambda x: cus_sort(x, order_column))
+    else:
+        user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
 
 
     # Get start and length parameters from DataTables AJAX request
