@@ -133,17 +133,19 @@ var sec_asset_list2 = function () {
                 var orderColumn = data.order[0].column;
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    2: 'os_simple',
-                    1: 'chassistype',
-                    3: 'logged_name_id__deptName',
-                    4: 'logged_name_id__userName',
-                    5: 'logged_name_id__userId',
-                    6: 'computer_name',
-                    7: 'ip_address',
-                    8: 'mac_address',
-                    9: 'ext_chr',
-                    10: 'sw_list',
-                    11: 'hotfix'
+                    2: 'chassistype',
+                    3: 'os_simple',
+                    4: 'logged_name_id__deptName',
+                    5: 'logged_name_id__userName',
+                    6: 'logged_name_id__userId',
+                    7: 'computer_name',
+                    8: 'ip_address',
+                    9: 'mac_address',
+                    10: 'ext_chr',
+                    11: 'sw_list',
+                    12: 'hotfix',
+                    13: 'cache_date',
+                    14: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -180,7 +182,9 @@ var sec_asset_list2 = function () {
             {data: 'mac_address', title: 'MAC주소', searchable: true},
             {data: 'ext_chr', title: '확장프로그램', searchable: true},
             {data: 'sw_list', title: '소프트웨어', searchable: true},
-            {data: 'hotfix', title: 'Hotfix', searchable: true}
+            {data: 'hotfix', title: 'Hotfix', searchable: true},
+            { data: 'cache_date', title: '온/오프라인', searchable: true },
+            {data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
             var api = this.api();
@@ -267,6 +271,21 @@ var sec_asset_list2 = function () {
                     } else {
                         return '<a class="hotmore swmore-font" ' +
                             'data-computer_name="' + row.computer_name + '" data-hotfix="' + row.hotfix + '" data-hotfix_date="' + row.hotfix_date + '">더보기</a>'
+                    }
+                }
+            },
+            {targets: 13, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function(data, type, row) {
+                    return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
+            {
+                targets: 14,
+                width: "5%",
+                className: 'text-center text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    if (data === null || data === undefined || data.trim() === '') {
+                        return '';
+                    } else {
+                        return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';
                     }
                 }
             },

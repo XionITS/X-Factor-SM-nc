@@ -10,7 +10,7 @@ import json
 from datetime import datetime, timedelta
 from django.utils import timezone
 
-from common.serializers import CommonSerializer,Dailyserializer
+from common.serializers import CommonSerializer,Dailyserializer,Cacheserializer
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -25,39 +25,39 @@ def export(request, model):
     # 파라미터 값에 따라 조건 처리
 
     if parameter_value == 'hs_asset':
-        columns = ["deptName", "userName", "userId", "computer_name", "ip_address", "mac_address",'hw_cpu','hw_mb','hw_ram','hw_disk','hw_gpu','sw_list','sw_ver_list','memo',"user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'hw_cpu','hw_mb','hw_ram','hw_disk','hw_gpu','sw_list','sw_ver_list','memo',"user_date"]
         model_class = apps.get_model('common', model)
         data_list = model_class.objects.filter(user_date__gte=today_collect_date)
-        data = Dailyserializer(data_list, many=True).data
+        data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'ver_asset':
         model_class = apps.get_model('common', model)
-        columns = ["deptName", "userName", "userId", "computer_name", "ip_address", "mac_address",'os_simple','os_total','os_version','os_build','memo','user_date']
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'os_simple','os_total','os_version','os_build','memo','user_date']
         data_list = model_class.objects.filter(user_date__gte=today_collect_date)
-        data = Dailyserializer(data_list, many=True).data
+        data = Cacheserializer(data_list, many=True).data
     elif parameter_value == 'up_asset':
         model_class = apps.get_model('common', model)
-        columns = ["deptName", "userName", "userId", "computer_name", "ip_address", "mac_address",'hotfix','hotfix_date','memo','user_date']
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'hotfix','hotfix_date','memo','user_date']
         data_list = model_class.objects.filter(user_date__gte=today_collect_date).filter(os_simple='Windows')
-        data = Dailyserializer(data_list, many=True).data
+        data = Cacheserializer(data_list, many=True).data
     elif parameter_value == 'pur_asset':
         model_class = apps.get_model('common', model)
-        columns = ["chassistype","deptName", "userName", "userId", "computer_name", "ip_address", "mac_address",'first_network','mem_use','disk_use','hw_cpu'
+        columns = ["chassistype","ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'first_network','mem_use','disk_use','hw_cpu'
             ,'hw_mb','hw_ram','hw_disk','hw_gpu','sw_list','sw_ver_list','sw_install','memo','user_date']
         data_list = model_class.objects.filter(user_date__gte=today_collect_date)
-        data = Dailyserializer(data_list, many=True).data
+        data = Cacheserializer(data_list, many=True).data
     elif parameter_value == 'sec_asset':
         model_class = apps.get_model('common', model)
-        columns = ["chassistype","deptName", "userName", "userId", "computer_name", "ip_address", "mac_address",'security1','security1_ver'
+        columns = ["chassistype","ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'security1','security1_ver'
             ,'security2','security2_ver','security3','security3_ver','security4','security4_ver','security5','security5_ver','uuid','user_date']
         data_list = model_class.objects.filter(user_date__gte=today_collect_date)
-        data = Dailyserializer(data_list, many=True).data
+        data = Cacheserializer(data_list, many=True).data
     elif parameter_value == 'sec_asset2':
         model_class = apps.get_model('common', model)
-        columns = ["chassistype","deptName", "userName", "userId", "computer_name", "ip_address", "mac_address"
+        columns = ["chassistype","ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address"
             ,'ext_chr','ext_chr_ver','ext_edg','ext_edg_ver','ext_fir','ext_fir_ver','uuid','user_date']
         data_list = model_class.objects.filter(user_date__gte=today_collect_date)
-        data = Dailyserializer(data_list, many=True).data
+        data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'all_asset1':
         data_list = []
@@ -155,7 +155,7 @@ def export(request, model):
         if request.GET.get('categoryName') == '외부망':
             data_list = model_class.objects.filter(user_date__gte=today_collect_date).exclude(subnet__in=['unconfirmed', '172.21.224.0/20', '192.168.0.0/20', '172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
-        data = Dailyserializer(data_list, many=True).data
+        data = Cacheserializer(data_list, many=True).data
     elif parameter_value == 'tcpuChart':
         data_list = []
         print(request.GET.get('categoryName'))

@@ -42,6 +42,7 @@
                                 <a class="dropdown-item" href="#" data-column="computer_name">컴퓨터 이름</a>
                                 <a class="dropdown-item" href="#" data-column="ip_address">IP주소</a>
                                 <a class="dropdown-item" href="#" data-column="mac_address">MAC주소</a>
+                                <a class="dropdown-item" href="#" data-column="cache_date">online/offline</a>
                                 <a class="dropdown-item" href="#" data-column="memo">메모</a>
 <!--                                <a class="dropdown-item" href="#" data-column="computer__ncdb_data__deptName">부서</a>-->
 <!--                                <a class="dropdown-item" href="#" data-column="computer__ncdb_data__userName">이름</a>-->
@@ -79,6 +80,8 @@
                             <th class="text-center">확장프로그램</th>
                             <th class="text-center">소프트웨어</th>
                             <th class="text-center">Hotfix</th>
+                            <th class="text-center">온/오프라인</th>
+                            <th class="text-center">메모</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -108,7 +111,7 @@
             )
             {% endif %}
 
-            <a href="{% url 'export' model='Xfactor_Daily' %}?parameter_name=sec_asset2" class="btn btn-outline-warning export">Export to Excel</a>
+            <a href="{% url 'export' model='Xfactor_Common_Cache' %}?parameter_name=sec_asset2" class="btn btn-outline-warning export">Export to Excel</a>
 
         </div>
     </div>

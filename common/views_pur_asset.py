@@ -182,6 +182,8 @@ def pur_asset_paginghw(request):
                                  Q(mem_use__icontains=filter_value) |
                                  Q(disk_use__icontains=filter_value))
                     user = user.filter(query)
+            else:
+                user = user
         else:
             query = Q(**{f'{filter_column}__icontains': filter_text})
             #user = Xfactor_Common.objects.prefetch_related('purchase').filter(user_date__gte=today_collect_date)
@@ -477,6 +479,8 @@ def pur_asset_pagingsw(request):
                                  Q(mem_use__icontains=filter_value) |
                                  Q(disk_use__icontains=filter_value))
                     user = user.filter(query)
+            else:
+                user = user
         else:
             #filter_column = 'computer__' + filter_column
             query = Q(**{f'{filter_column}__icontains': filter_text})
@@ -527,7 +531,7 @@ def pur_asset_pagingsw(request):
                 user = user.filter(query)
     else:
         #user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
-        Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
 
         # print(user.values_list('computer_id', flat=True))
         if filter_value:

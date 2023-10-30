@@ -155,6 +155,8 @@ def ver_asset_paging(request):
                                  Q(sw_list__icontains=filter_value) |
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
+            else:
+                user = user
         else:
             query = Q(**{f'{filter_column}__icontains': filter_text})
             user = user.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)

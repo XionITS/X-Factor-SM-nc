@@ -134,8 +134,8 @@ var sec_asset_list = function () {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    2: 'os_simple',
                     1: 'chassistype',
+                    2: 'os_simple',
                     3: 'logged_name_id__deptName',
                     4: 'logged_name_id__userName',
                     5: 'logged_name_id__userId',
@@ -145,7 +145,8 @@ var sec_asset_list = function () {
                     9: 'security3',
                     10: 'security4',
                     11: 'security5',
-                    12: 'memo'
+                    13: 'cache_date',
+                    14: 'memo'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -183,9 +184,9 @@ var sec_asset_list = function () {
             },
             {data: '', title: 'No', searchable: true},
             {data: 'os_simple', title: 'OS', searchable: true},
-            { data: 'ncdb_data.deptName', title: '부서', searchable: true },
-			{ data: 'ncdb_data.userName', title: '이름', searchable: true },
-	        { data: 'ncdb_data.userId', title: '계정', searchable: true },
+            {data: 'ncdb_data.deptName', title: '부서', searchable: true },
+			{data: 'ncdb_data.userName', title: '이름', searchable: true },
+	        {data: 'ncdb_data.userId', title: '계정', searchable: true },
             {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
             {data: 'security1', title: 'Cososys', searchable: true},
             {data: 'security2', title: 'Symantec', searchable: true},
@@ -193,6 +194,7 @@ var sec_asset_list = function () {
             {data: 'security4', title: 'CarbonBlack CBC', searchable: true},
             {data: 'security5', title: 'McAfee VSE', searchable: true},
             {data: '', title: '더보기', searchable: true},
+            {data: 'cache_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -287,8 +289,11 @@ var sec_asset_list = function () {
                         'data-cbc_ver="' + row.security4_ver + '" data-mcafee="' + row.security5 + '" data-mcafee_ver="' + row.security5_ver + '" data-ip_address="' + row.ip_address + '" data-mac_address="' + row.mac_address + '" data-os_total="' + row.os_total + '"> 더보기 </a>'
                 }
             },
+            {targets: 13, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function(data, type, row) {
+                    return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
             {
-                targets: 13,
+                targets: 14,
                 width: "5%",
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {

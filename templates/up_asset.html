@@ -104,7 +104,7 @@
             )
             {% endif %}
 
-            <a href="{% url 'export' model='Xfactor_Daily' %}?parameter_name=up_asset" class="btn btn-outline-warning export">Export to Excel</a>
+            <a href="{% url 'export' model='Xfactor_Common_Cache' %}?parameter_name=up_asset" class="btn btn-outline-warning export">Export to Excel</a>
 
         </div>
     </div>
@@ -122,8 +122,12 @@
           </div>
           <table class="table uptable" style="overflow-y: auto;">
               <thead class="upthead">
-                    <th scope="col" style="text-align: center">Hotfix</th>
-                    <th scope="col" style="text-align: center">업데이트 날짜</th>
+                <th class="sortable" scope="col" style="text-align: center">
+                  Hotfix &nbsp; <i class="fas fa-sort"></i>
+                </th>
+                <th class="sortable" scope="col" style="text-align: center">
+                  업데이트 날짜 &nbsp; <i class="fas fa-sort"></i>
+                </th>
 
               </thead>
               <tbody class="uptbody"></tbody>

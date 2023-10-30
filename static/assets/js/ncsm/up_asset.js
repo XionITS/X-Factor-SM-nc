@@ -322,6 +322,39 @@ var up_asset_list = function () {
         //$("#swListModal .modal-body-2").html(swVerHTML);
         $("#upAssetModal").modal("show");
 
+
+        //############### 정렬기능?>
+        $(document).on("click", ".sortable", function (e) {
+            const $table = $("#upAssetModal .uptbody");
+            const $rows = $table.find("tr").toArray();
+            const $th = $(this);
+            const index = $th.index();
+            const sortDirection = $th.data("sort") || 1;
+
+            // 행 정렬
+            $rows.sort(function (a, b) {
+                const aText = $(a).find("td").eq(index).text();
+                const bText = $(b).find("td").eq(index).text();
+                if (index === 0) {
+                    return aText.localeCompare(bText) * sortDirection;
+                } else if (index === 1) {
+                    const aDate = new Date(aText);
+                    const bDate = new Date(bText);
+                    return (aDate - bDate) * sortDirection;
+                }
+            });
+
+            // 정렬 순서 업데이트
+            $table.empty().append($rows);
+            $th.data("sort", sortDirection === 1 ? -1 : 1);
+
+//            // 정렬된 열에 하이라이트 클래스 추가 유지
+//            $table.find("tr").removeClass("highlight");
+//            $table.find("tr:odd").addClass("highlight");
+        });
+
+
+
     // Input 상자 값에 따라 해당 값을 노란색으로 처리
     $("#searchInput").on("input", function () {
         const searchValue = $(this).val().trim().toLowerCase();
@@ -381,6 +414,7 @@ var up_asset_list = function () {
             up_asset_list_Data.page(Math.max(current_page_up - 10, 0)).draw('page');
         }
     });
+
     var customStyle = '<style>#nexts_up, #after_up {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
     $('head').append(customStyle);
 };
