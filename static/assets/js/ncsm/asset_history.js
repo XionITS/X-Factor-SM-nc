@@ -16,6 +16,8 @@ $(document).ready(function(){
     $("#datepicker1").datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
+        startDate: '2023-10-13',
+        endDate: '0d',
     }).on('changeDate', function(e) {
         date1 = e.format()
     });
@@ -26,6 +28,8 @@ $(document).ready(function(){
     $("#datepicker2").datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
+        startDate: '2023-10-13',
+        endDate: '0d',
     }).on('changeDate', function(e) {
         date2 = e.format()
     });
@@ -101,6 +105,7 @@ function searchPer_h(inputValue, date1, date2){
                 var ipAddressElement = document.getElementById("asset_ip_address");
                 var ipAddressElement2 = document.getElementById("asset_ip_address2");
                 if (ipAddressElement && ipAddressElement2) {
+                    ipAddressElement2.style.color = '';
                     ipAddressElement.textContent = data1.ip_address;
                     ipAddressElement2.textContent = data2.ip_address;
                     if (ipAddressElement.textContent !== ipAddressElement2.textContent) {
@@ -110,6 +115,7 @@ function searchPer_h(inputValue, date1, date2){
                 var computerNameElement = document.getElementById("asset_computer_name");
                 var computerNameElement2 = document.getElementById("asset_computer_name2");
                 if (computerNameElement && computerNameElement2) {
+                    computerNameElement2.style.color = '';
                     computerNameElement.textContent = data1.computer_name;
                     computerNameElement2.textContent = data2.computer_name;
                     if (computerNameElement.textContent !== computerNameElement2.textContent) {
@@ -127,6 +133,7 @@ function searchPer_h(inputValue, date1, date2){
                 var macAddressElement = document.getElementById("asset_mac_address");
                 var macAddressElement2 = document.getElementById("asset_mac_address2");
                 if (macAddressElement && macAddressElement2) {
+                    macAddressElement2.style.color = '';
                     macAddressElement.textContent = data1.mac_address;
                     macAddressElement2.textContent = data2.mac_address;
                     if (macAddressElement.textContent !== macAddressElement2.textContent) {
@@ -137,6 +144,7 @@ function searchPer_h(inputValue, date1, date2){
                 var osTypeElement = document.getElementById("asset_os_simple");
                 var osTypeElement2 = document.getElementById("asset_os_simple2");
                 if (osTypeElement && osTypeElement) {
+                    osTypeElement2.style.color = '';
                     osTypeElement.textContent = data1.os_simple;
                     osTypeElement2.textContent = data2.os_simple;
                     if (osTypeElement.textContent !== osTypeElement2.textContent) {
@@ -147,6 +155,7 @@ function searchPer_h(inputValue, date1, date2){
                 var osVersionElement = document.getElementById("asset_os_version");
                 var osVersionElement2 = document.getElementById("asset_os_version2");
                 if (osVersionElement && osVersionElement2) {
+                    osVersionElement2.style.color = '';
                     osVersionElement.textContent = data1.os_version;
                     osVersionElement2.textContent = data2.os_version;
                     if (osVersionElement.textContent !== osVersionElement2.textContent) {
@@ -157,6 +166,7 @@ function searchPer_h(inputValue, date1, date2){
                 var office365VersionElement= document.getElementById("asset_office_version");
                 var office365VersionElement2= document.getElementById("asset_office_version2");
                 if (office365VersionElement && office365VersionElement2) {
+                    office365VersionElement2.style.color = '';
                     office365VersionElement.textContent= data1.essential5 || "";
                     office365VersionElement2.textContent= data2.essential5 || "";
                     if (office365VersionElement.textContent !== office365VersionElement2.textContent) {
@@ -167,6 +177,7 @@ function searchPer_h(inputValue, date1, date2){
                 var memoryUsageElement=document.getElementById('asset_mem_use');
                 var memoryUsageElement2=document.getElementById('asset_mem_use2');
                 if(memoryUsageElement && memoryUsageElement2){
+                    memoryUsageElement2.style.color = '';
                 memoryUsageElement.textContent=data1.mem_use ||"";
                 memoryUsageElement2.textContent=data2.mem_use ||"";
                     if (memoryUsageElement.textContent !== memoryUsageElement2.textContent) {
@@ -177,6 +188,7 @@ function searchPer_h(inputValue, date1, date2){
                 var diskUsageElement=document.getElementById('asset_disk_use');
                 var diskUsageElement2=document.getElementById('asset_disk_use2');
                 if(diskUsageElement && diskUsageElement2){
+                    diskUsageElement2.style.color = '';
                 diskUsageElement.textContent=data1.disk_use ||"";
                 diskUsageElement2.textContent=data2.disk_use ||"";
                     if (diskUsageElement.textContent !== diskUsageElement2.textContent) {
@@ -187,10 +199,11 @@ function searchPer_h(inputValue, date1, date2){
                 var firstNetworkAccessDateElement=document.getElementById('asset_first_network');
                 var firstNetworkAccessDateElement2=document.getElementById('asset_first_network2');
                 if(firstNetworkAccessDateElement && firstNetworkAccessDateElement2){
-                firstNetworkAccessDateElement.textContent=data1.first_network||"";
-                firstNetworkAccessDateElement2.textContent=data2.first_network||"";
+                    firstNetworkAccessDateElement2.style.color = '';
+                    firstNetworkAccessDateElement.textContent=data1.first_network||"";
+                    firstNetworkAccessDateElement2.textContent=data2.first_network||"";
                     if (firstNetworkAccessDateElement.textContent !== firstNetworkAccessDateElement2.textContent) {
-                            firstNetworkAccessDateElement2.style.color = 'red';
+                        firstNetworkAccessDateElement2.style.color = 'red';
                     }
                 }
 

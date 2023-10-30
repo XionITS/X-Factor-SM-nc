@@ -938,9 +938,9 @@ $(document).on("click","#um_insert", function (e) {
             for (var i = 0; i < nc_users.length; i++) {
                 var nc_user = nc_users[i];
                 var userId = nc_user.userId;
-                var email = nc_user.email;
                 var userName = nc_user.userName;
                 var deptName = nc_user.deptName;
+                var email = nc_user.email;
                 userTable += `<tr>
                     <td class='text-center'>${userId}</td>
                     <td class='text-center'>${userName}</td>
@@ -977,21 +977,6 @@ $(document).on("keyup", "#ncuser_search_result", function (e) {
         }
     });
 });
-//$(document).on("keyup", "#ncuser_search_result", function (e) {
-//    var searchText = $(this).val().toLowerCase(); // 입력된 검색어를 소문자로 변환
-//    var userRows = $("#um_insert_modal .form-check table tbody tr");
-//
-//    userRows.each(function () {
-//        var x_id = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
-//        if (x_id.includes(searchText)) {
-//            // 검색어와 일치하는 경우 표시
-//            $(this).show();
-//        } else {
-//            // 일치하지 않는 경우 숨김
-//            $(this).hide();
-//        }
-//    });
-//});
 
 
 //###################### 유저 ADD 저장 하기 #################################
@@ -1011,7 +996,7 @@ $(document).on("click","#user_add_btn", function(e) {
          'userId' : userId,
          'userName' : userName,
          'deptName' : deptName,
-         'email' : email,
+         'email' : email
     },
 
     success: function (response) {
@@ -1019,12 +1004,15 @@ $(document).on("click","#user_add_btn", function(e) {
         if (response.result == "success") {
             alert("유저 추가 성공");
             $('#um_insert_modal').modal('hide');
-
+            location.reload();
 
         } else {
             alert('실패 : ' + response.message);
         }
-    }
+    },
+    error: function(xhr, status, error) {
+            alert('중복된 계정입니다');
+        }
     });
 });
 
@@ -1053,7 +1041,6 @@ $(document).on("click", "#user_delete", function (event) {
                 if (response.result === 'success') {
                     // 그룹 삭제 성공 처리
                     alert("그룹이 삭제되었습니다.");
-
                 } else {
                     console.error("Group delete failure");
 
