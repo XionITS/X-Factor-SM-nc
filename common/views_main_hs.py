@@ -437,13 +437,6 @@ def hs_asset_paginghw(request):
         9: 'memo',
         # Add mappings for other columns here
     }
-    #order_column = order_column_map.get(order_column_index, 'computer_name')
-    #if order_column_dir == 'asc':
-    #    user = sorted(user, key=lambda x: cus_sort(x, order_column))
-        #user = user.order_by(order_column, '-computer_id')
-    #else:
-    #    user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
-        #user = user.order_by('-' + order_column, 'computer_id')
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
         user = user.order_by(order_column, '-computer_id')
