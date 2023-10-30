@@ -248,13 +248,17 @@ def ver_asset_paging(request):
         9: 'memo',
         # Add mappings for other columns here
     }
+    #order_column = order_column_map.get(order_column_index, 'computer_name')
+    #if order_column_dir == 'asc':
+    #    user = sorted(user, key=lambda x: cus_sort(x, order_column))
+        #user = user.order_by(order_column, '-computer_id')
+    #else:
+    #    user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = sorted(user, key=lambda x: cus_sort(x, order_column))
-        #user = user.order_by(order_column, '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
-
+        user = user.order_by('-' + order_column, 'computer_id')
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
