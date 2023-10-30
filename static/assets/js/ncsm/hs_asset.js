@@ -1419,6 +1419,23 @@ var hw_asset_list = function () {
 		serverSide: true,
 		displayLength: false,
         autoWidth: false,
+        buttons: [
+            {
+                text: 'Select All',
+                className: 'ms-1',
+                action: function () {
+                    hs_asset_list_Data.rows().select();
+                }
+            },
+            {
+                text: 'Select None',
+                className: 'ms-1',
+                action: function () {
+                    hs_asset_list_Data.rows().deselect();
+                }
+            }
+        ],
+        select: true,
 		ajax: {
 			url: 'hwpaging/',
 			type: "POST",
@@ -1927,6 +1944,31 @@ function swbutton(btn) {
     $('.hsbutton').not(btn).removeClass('active');
 
 }
+
+//S/W 자산현황 더보기 정렬 기능
+function sortTable(n) {
+    var table = document.getElementById("hsTable");
+    var tbody = table.querySelector(".hstbody");
+    var rows = Array.from(tbody.querySelectorAll("tr"));
+    var ascending = tbody.getAttribute("data-ascending") === "true";
+
+    rows.sort((a, b) => {
+        var textA = a.getElementsByTagName("TD")[n].innerText.toLowerCase();
+        var textB = b.getElementsByTagName("TD")[n].innerText.toLowerCase();
+
+        if (textA < textB) return ascending ? -1 : 1;
+        if (textA > textB) return ascending ? 1 : -1;
+        return 0;
+    });
+
+    ascending = !ascending;
+    tbody.setAttribute("data-ascending", ascending.toString());
+
+    rows.forEach(row => {
+        tbody.appendChild(row);
+    });
+}
+
 
 $(document).ready(function () {
     user_list_popup();

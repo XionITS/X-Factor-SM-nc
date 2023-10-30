@@ -99,11 +99,12 @@
           <div class="mb-2">
               <input type="text" id="searchInput" class="form-control" placeholder="검색할 내용을 입력하세요 (입력한 값이 노란색으로 보여집니다.)">
           </div>
-          <table id="hstable" class="table hstable" style="overflow-y: auto;">
+          <table id="hsTable" class="table hstable" style="overflow-y: auto;">
               <thead class="hsthead">
-                    <th scope="col">SW Name</th>
-                    <th scope="col">SW Version</th>
-
+                <tr>
+                    <th scope="col" onclick="sortTable(0)" style="cursor: pointer;">SW Name</th>
+                    <th scope="col" onclick="sortTable(1)" style="cursor: pointer;">SW Version</th>
+                </tr>
               </thead>
               <tbody class="hstbody"></tbody>
           </table>
@@ -129,15 +130,13 @@
 <!--          </div>-->
           <table class="table hstable" style="overflow-y: auto;">
               <thead class="hsthead">
-                    <th scope="col">장비 종류</th>
-                    <th scope="col">장비 명</th>
-
+                    <tr>
+                        <th scope="col">장비 종류</th>
+                        <th scope="col">장비 명</th>
+                    </tr>
               </thead>
               <tbody class="hstbody"></tbody>
           </table>
-      </div>
-
-      <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
