@@ -14,7 +14,7 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 import pytz
-
+from common.custom_sort_key import custom_sort_key as cus_sort
 
 # menu_list = Xfactor_Auth.objects.get(auth_id="OS_asset").auth_name
 # menu_list = Xfactor_Auth.objects.all()
@@ -439,10 +439,12 @@ def hs_asset_paginghw(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(order_column, '-computer_id')
+        user = sorted(user, key=lambda x: cus_sort(x, order_column))
+        #user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + order_column, 'computer_id')
-
+        user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
+        #user = user.order_by('-' + order_column, 'computer_id')
+        
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
@@ -686,11 +688,18 @@ def hs_asset_pagingsw(request):
         9: 'memo',
         # Add mappings for other columns here
     }
+    from common.multiprocess import apply_multiprocessing_sort
     order_column = order_column_map.get(order_column_index, 'computer_name')
-    if order_column_dir == 'asc':
-        user = user.order_by(order_column, '-computer_id')
-    else:
-        user = user.order_by('-' + order_column, 'computer_id')
+    user = apply_multiprocessing_sort(user, order_column, order_column_dir)
+
+    #멀티프로세싱 적용 x
+    # order_column = order_column_map.get(order_column_index, 'computer_name')
+    # if order_column_dir == 'asc':
+    #     user = sorted(user, key=lambda x: cus_sort(x, order_column))
+    # else:
+    #     user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
+
+
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
@@ -751,3 +760,45 @@ def index_paging (request):
     RD = {"item": data}
     #print(RD)
     return JsonResponse(RD)
+
+# def custom_sort_key(item, order_column):
+#     # item에서 order_column 값을 가져오기
+#     if "__" in order_column:
+#         parts = order_column.split("__")
+#         fk_field = parts[0]
+#         related_field = parts[1]
+        
+#         related_obj = getattr(item, fk_field)
+#         if related_obj:
+#             value = getattr(related_obj, related_field, "")
+#         else:
+#             value = ""
+#     else:
+#         value = getattr(item, order_column, "")
+    
+#     if not value:
+#         return (3, )  # 정의되지 않은 값은 가장 마지막에 위치
+
+#     value = value.lower()  # 대소문자 구분 없이 처리하기 위해 소문자로 변환
+#     first_char = value[0] if value else ''
+#     # 한글 처리
+#     if '가' <= first_char <= '힣':
+#         cho = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
+#         jung = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ', 'ㅣ']
+        
+#         cho_index = next((i for i, c in enumerate(cho) if first_char.startswith(c)), len(cho))
+#         jung_index = next((i for i, c in enumerate(jung) if first_char.startswith(c)), len(jung))
+        
+#         return (0, cho_index, jung_index, value)
+    
+#     # 영어 처리
+#     elif 'a' <= first_char <= 'z':
+#         return (1, first_char)
+    
+#     # 숫자 처리
+#     elif '0' <= first_char <= '9':
+#         return (2, first_char)
+    
+#     # 그 외 처리
+#     else:
+#         return (3, first_char)

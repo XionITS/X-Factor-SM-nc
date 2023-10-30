@@ -1040,7 +1040,11 @@ $(document).on("click", "#user_delete", function (event) {
             success: function (response) {
                 if (response.result === 'success') {
                     // 그룹 삭제 성공 처리
+                    $("#user_delete").modal("hide");
                     alert("그룹이 삭제되었습니다.");
+                    delete_modal.style.display = "none"
+//                    window.location.href = "/user_management/"
+                    um_groupbutton()
                 } else {
                     console.error("Group delete failure");
 
@@ -1052,10 +1056,8 @@ $(document).on("click", "#user_delete", function (event) {
                 // 그룹 삭제 오류 처리
             }
         });
-    }
-
-
-    $.ajax({
+    } else {
+        $.ajax({
         url: "/user_management/um_delete/", // 서버의 URL을 여기에 입력
         method: "POST", // 또는 "GET" 등 HTTP 요청 메서드 선택
         data: {
@@ -1076,6 +1078,10 @@ $(document).on("click", "#user_delete", function (event) {
             // 오류 처리
         }
     });
+    }
+
+
+
 });
 //############################################################################
 
