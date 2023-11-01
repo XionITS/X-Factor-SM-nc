@@ -640,7 +640,7 @@ function um_checkbox_check($tbody) {
             if ($(this).prop('checked')) {
                 // Add the group value to checkedItems
                 checkedItems[x_group_id] = xgroup_name;
-                console.log(checkedItems)
+                //console.log(checkedItems)
                 //checkedItems['xgroup_name'] = xgroup_name;
             } else {
                 // Remove the group value from checkedItems
@@ -753,7 +753,7 @@ $(document).on("click", ".um_groupmore", function (e) {
         },
         success: function (res) {
             var data = res;
-            console.log(data)
+            //console.log(data)
             // AJAX 요청이 성공한 후에 modalbody를 설정하고 모달을 열기
             var modalbody = '<div>'+xgroup_name+' 권한</div>';
             modalbody += '<form id="authForm">';
@@ -852,7 +852,7 @@ $(document).on("click", "#um_delete", function (e) {
         checkedIds.forEach(function (x_id) {
             // Check if x_id is a string
             if (typeof x_id === "string") {
-                console.log(x_id);
+                //console.log(x_id);
                 if (!isNaN(x_id)) {
                     // If x_id is a numeric string (e.g., "1")
                     const x_group_id = x_id;
@@ -983,7 +983,7 @@ $(document).on("keyup", "#ncuser_search_result", function (e) {
  ///////////////// 그룹 저장하기  /////////////////
 $(document).on("click","#user_add_btn", function(e) {
     e.preventDefault(); // 기본 제출 동작을 막습니다.
-    console.log(this);
+    //console.log(this);
     const userId = $(this).data("userid");
     const userName = $(this).data("username");
     const deptName = $(this).data("deptname");

@@ -395,7 +395,7 @@ var sec_asset_list = function () {
 //    const swVerHTML = "<ul>" + swVer2.map(item => "<li>" + item + "</li>").join("") + "</ul>";
         let tableHTML = "";
         $(this).data("computer_name").trim()
-        console.log(swList)
+        //console.log(swList)
         // Generate the table HTML
         for (let i = 0; i < swList.length; i++) {
             const item = swList[i];

@@ -2,7 +2,7 @@ from django.http import HttpResponse
 import math
 import json
 import operator
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
@@ -36,6 +36,11 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 
 @csrf_exempt
 def um(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../home/')
     #메뉴
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu_user = XuserAuthSerializer(xuser_auths, many=True)
@@ -48,6 +53,11 @@ def um(request):
 
 @csrf_exempt
 def um_user(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     user = Xfactor_Xuser.objects.all()
     #user = Xfactor_Common.objects.prefetch_related('purchase').filter(user_date__gte=today_collect_date)
     filter_columnmap = request.POST.get('filter[columnmap]')
@@ -95,6 +105,11 @@ def um_user(request):
 
 @csrf_exempt
 def user_auth(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     x_id = request.POST.get("x_id")
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=x_id)
     auth_list= XuserAuthSerializer(xuser_auths, many=True).data
@@ -103,6 +118,11 @@ def user_auth(request):
 
 @csrf_exempt
 def group_auth(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     id = request.POST.get("id")
     xgroup_auth = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=id).distinct('auth_use', 'xfactor_auth_id', 'xgroup_id')
     auth_list = XgroupAuthSerializer(xgroup_auth, many=True).data
@@ -112,6 +132,11 @@ def group_auth(request):
 
 @csrf_exempt
 def save_user_auth(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     x_ids_str = request.POST.get('x_id')  # 쉼표로 구분된 문자열을 얻음
     print(x_ids_str)
     #x_ids = x_ids_str.split(',')
@@ -161,6 +186,11 @@ def save_user_auth(request):
 
 @csrf_exempt
 def save_group_auth(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     xgroup_id = request.POST.get('id')
     x_ids_str = request.POST.get('x_id_array')  # 쉼표로 구분된 문자열을 얻음
     x_ids = x_ids_str.replace('[', '').replace(']', '').replace('"', '').split(',')
@@ -199,6 +229,11 @@ def save_group_auth(request):
 
 @csrf_exempt
 def create_auth(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     xgroup_name = request.POST['xgroup_name']
     xgroup_description = request.POST['xgroup_description']
     xuserIds = json.loads(request.POST['xuserIds'])
@@ -239,6 +274,11 @@ def create_auth(request):
 
 @csrf_exempt
 def alter_auth(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     xgroup_name = request.POST['xgroup_name']
     id = request.POST['id']
     xgroup_description = request.POST['xgroup_description']
@@ -302,6 +342,11 @@ def alter_auth(request):
 
 @csrf_exempt
 def um_group(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     user = Xfactor_Xuser_Group.objects.all()
     #user = Xfactor_Common.objects.prefetch_related('purchase').filter(user_date__gte=today_collect_date)
     filter_columnmap = request.POST.get('filter[columnmap]')
@@ -348,6 +393,11 @@ def um_group(request):
 
 @csrf_exempt
 def search_box(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     if request.method == "POST":
         search_text = request.POST.get('searchText', None)
         user_data =Xfactor_Xuser.objects.filter(x_id__icontains=search_text).values('x_id')
@@ -358,6 +408,11 @@ def search_box(request):
 
 @csrf_exempt
 def user_list(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     user = Xfactor_Xuser.objects.all()
 
     user_list = XuserSerializer(user, many=True).data
@@ -368,6 +423,11 @@ def user_list(request):
 
 @csrf_exempt
 def db_list(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     user = Xfactor_ncdb.objects.exclude(userName__isnull=True).exclude(email__isnull=True)
 
     db_list = NcdbSerializer(user, many=True).data
@@ -415,6 +475,12 @@ def db_list(request):
 
 @csrf_exempt
 def insertAuth(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
+
     user = Xfactor_Xuser.objects.all()
 
 

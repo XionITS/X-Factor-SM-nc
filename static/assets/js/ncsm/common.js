@@ -102,7 +102,7 @@ function checkbox_check($tbody){
         event.stopPropagation(); // Prevent the row click event from firing when clicking the checkbox
         var computer_id = $(this).data('computer-id');
         var computer_name = $(this).data('computer-name');
-        console.log("Clicked checkbox for computer ID:", computer_id);
+        // console.log("Clicked checkbox for computer ID:", computer_id);
         if ($(this).prop('checked')) {
             checkedItems[computer_id] = computer_name;
         } else {
@@ -191,8 +191,8 @@ $(document).on("click","#groupCreate", function(event) {
 
 // 검색 버튼 클릭, 엔터 키로 선택한 컬럼과 검색어로 검색 수행
 function performSearch(column, searchValue, list_Data) {
-    console.log(column)
-    console.log(searchValue)
+    //console.log(column)
+    //console.log(searchValue)
     if (searchValue !== ''){
         list_Data.columns().search('').draw();
         list_Data.column(column).search(searchValue).draw();
