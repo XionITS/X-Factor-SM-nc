@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="wrapper" >
+    <div class="content">
+        앗..! 잘못 찾아오셨네요..!
+<!--        <br> <a href= "{% url 'logout/' %}"  style="font-size: 40px; text-decoration-line: none">로그인 화면으로</a>-->
+    </div>
+</div>
+
+<style>
+    .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80dvh;
+}
+
+.content {
+  padding: 2rem;
+  font-size:100px;
+    text-align: center;
+  border-radius: 1rem;
+}
+</style>
+{% endblock %}

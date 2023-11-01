@@ -1596,14 +1596,14 @@ $("#datepickerD").datetimepicker({
         var isSameDay = current_time.getDate() === currentDate.getDate() && current_time.getMonth() === currentDate.getMonth() && current_time.getFullYear() === currentDate.getFullYear();
 
         // 현재 시간보다 뒤의 시간들을 숨기기 (현재 날짜일 경우에만)
-        $(".xdsoft_time_variant .xdsoft_time").each(function(){
-            var hour = $(this).data('hour');
-            if(isSameDay && hour > currentDate.getHours()){
-                $(this).hide();
-            } else {
-                $(this).show();
-            }
-        });
+        // $(".xdsoft_time_variant .xdsoft_time").each(function(){
+        //     var hour = $(this).data('hour');
+        //     if(isSameDay && hour > currentDate.getHours()){
+        //         $(this).hide();
+        //     } else {
+        //         $(this).show();
+        //     }
+        // });
 
         if(!dateTimeSelected){
             $(".xdsoft_time").on("click", function(){

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="wrapper" >
+    <div class="content">
+        권한이 없습니다.
+
+    </div>
+</div>
+
+<style>
+    .wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80dvh;
+}
+
+.content {
+  padding: 2rem;
+  font-size:70px;
+    text-align: center;
+  border-radius: 1rem;
+}
+</style>
+{% endblock %}
