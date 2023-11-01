@@ -76,24 +76,25 @@ def save_memo(request):
     if request.method =='POST':
         memo = request.POST.get('memo')
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+        largest_time = timezone.make_aware(datetime.max, timezone.utc)
         computername = request.POST.get('computername')
         macaddress = request.POST.get('macaddress')
         try:
             # X-Factor_Common 오브젝트 가져오기
-            xfactor_daily = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).get(computer_name=computername, mac_address=macaddress)
-
-            # memo 필드 값 설정 및 저장
-            xfactor_daily.memo = memo
-            xfactor_daily.save()
-            computer_name = xfactor_daily.computer_name
-
-            # X-Factor_Common 오브젝트 가져오기
-            xfactor_common = Xfactor_Common.objects.filter(user_date__gte=today_collect_date).get(computer_name=computername, mac_address=macaddress)
+            xfactor_common = Xfactor_Common.objects.get(computer_name=computername, mac_address=macaddress)
 
             # memo 필드 값 설정 및 저장
             xfactor_common.memo = memo
             xfactor_common.save()
             computer_name = xfactor_common.computer_name
+
+            # X-Factor_Common 오브젝트 가져오기
+            xfactor_common_cache = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).get(computer_name=computername, mac_address=macaddress)
+
+            # memo 필드 값 설정 및 저장
+            xfactor_common_cache.memo = memo
+            xfactor_common_cache.save()
+            computer_name = xfactor_common_cache.computer_name
             return JsonResponse({'success': computer_name})
 
 
