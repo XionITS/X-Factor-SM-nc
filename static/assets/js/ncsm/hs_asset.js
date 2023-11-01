@@ -1418,7 +1418,24 @@ var hw_asset_list = function () {
 		ordering: true,
 		serverSide: true,
 		displayLength: false,
-
+        autoWidth: false,
+        buttons: [
+            {
+                text: 'Select All',
+                className: 'ms-1',
+                action: function () {
+                    hs_asset_list_Data.rows().select();
+                }
+            },
+            {
+                text: 'Select None',
+                className: 'ms-1',
+                action: function () {
+                    hs_asset_list_Data.rows().deselect();
+                }
+            }
+        ],
+        select: true,
 		ajax: {
 			url: 'hwpaging/',
 			type: "POST",
@@ -1479,29 +1496,6 @@ var hw_asset_list = function () {
             var index = (page * pageLength) + (index + 1);
             $('td:eq(0)', row).html(index);
         },
-//        columnDefs: [
-//		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
-//		    {targets: 1, width: "20%", className: 'text-start text-truncate'},
-//		    {targets: 2, width: "10%", className: 'text-start text-truncate'},
-//            {targets: 3, width: "10%", className: 'text-start text-truncate'},
-//		    {targets: 4, width: "40%", className: 'text-start text-truncate'},
-//		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
-//		],
-//		columnDefs: [
-//            {targets: 0, width: "3%", orderable: false, searchable: false, className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 1, width: "3%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.chassistype+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 2, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.computer_name+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 3, width: "10%", className: 'sorting_asc text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.logged_name+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 4, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 5, width: "10%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_cpu+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 6, width: "5%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_mb+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 7, width: "3%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_ram+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_disk+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn column_hidden', render: function(data, type, row) {return '<span title="'+row.hw_gpu+'" data-toggle="tooltip">'+data+'</span>'}},
-//		    {targets: 10, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-//                if (data === null || data === undefined || data.trim() === '') { return '';
-//                } else {return '<span title="' + row.memo + '" data-toggle="tooltip">' + data + '</span>';}}},
-//		],
 		columnDefs: [
             {targets: 0, width: "5%", orderable: false, searchable: false, className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.index+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 1, width: "15%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) { var title = row.ncdb_data && row.ncdb_data.deptName || ''; return '<span title="'+title+'" data-toggle="tooltip">'+title+'</span>'}},
@@ -1542,87 +1536,103 @@ var hw_asset_list = function () {
 			"search": "검색:",
 			"infoFiltered": "(전체 _MAX_ 건 중 검색결과)",
 			"infoPostFix": "",
-            },
-            pagingType: 'numbers',//이전 다음 버튼 히든처리
+        },
+         // row 전체 선택
+//        buttons: [
+//            {
+//                text: 'Select all',
+//                action: function (){
+//                    hs_asset_list_Data.rows({page:'all'}).select();
+//                }
+//            },
+//            {
+//                text: 'Select none',
+//                action: function (){
+//                    hs_asset_list_Data.rows({page:'all'}).deselect();
+//                }
+//            },
+//        ],
+//        select: true,
+        pagingType: 'numbers',//이전 다음 버튼 히든처리
 
-            //페이징 10칸식 이동 로직
-            drawCallback: function() {
-                var current_page_hw = hs_asset_list_Data.page();
-                var total_pages_hw = hs_asset_list_Data.page.info().pages;
-                $('#nexts').remove();
-                $('#after').remove();
+        //페이징 10칸식 이동 로직
+        drawCallback: function() {
+            var current_page_hw = hs_asset_list_Data.page();
+            var total_pages_hw = hs_asset_list_Data.page.info().pages;
+            $('#nexts').remove();
+            $('#after').remove();
 
-                if (total_pages_hw >= 1){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_hw">10≫</button>')
-                .insertAfter('#hs_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_hw">≪10</button>')
-                .insertBefore('#hs_asset_list_paginate .paginate_button:first');
+            if (total_pages_hw >= 1){ // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
+            $('<button type="button" class="btn" id="nexts_hw">10≫</button>')
+            .insertAfter('#hs_asset_list_paginate .paginate_button:last');
+            $('<button type="button" class="btn" id="after_hw">≪10</button>')
+            .insertBefore('#hs_asset_list_paginate .paginate_button:first');
+            }
+            var startPage = Math.floor(current_page_hw / 10) * 10;
+            var endPage = startPage + 9;
+            if (endPage > total_pages_hw - 1) {
+                endPage = total_pages_hw - 1;
+            }
+            $('#hs_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            var maxButtons = 10;
+            var halfWay = Math.floor(maxButtons / 2);
+
+            if (current_page_hw < halfWay) {
+                var startPage = 0;
+                var endPage = Math.min(maxButtons - 1, total_pages_hw - 1);
+            } else if ((current_page_hw + halfWay) > total_pages_hw) {
+                var startPage = total_pages_hw - maxButtons;
+                var endPage = total_pages_hw - 1;
+            } else {
+                var startPage = current_page_hw - halfWay;
+                var endPage = current_page_hw + halfWay;
+            }
+
+            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+            .on('click', function() {
+                hs_asset_list_Data.page(0).draw(false);
+            })
+            .insertAfter('#after_hw')
+            .css(current_page_hw == 0 ? {
+                'font-weight': 'bold',
+                'color': '#f39c12'
+            } : {});
+
+            if (startPage > 1) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertAfter(oneButton);
+            }
+            for (var i = startPage; i <= endPage; i++) {
+                if (i == 0 || i == total_pages_hw - 1) continue;
+                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
+                if (i == current_page_hw) {
+                    btn.addClass('current');
+                    btn.css({
+                        'font-weight': 'bold',
+                        'color': '#f39c12'
+                    });
                 }
-                var startPage = Math.floor(current_page_hw / 10) * 10;
-                var endPage = startPage + 9;
-                if (endPage > total_pages_hw - 1) {
-                    endPage = total_pages_hw - 1;
-                }
-                $('#hs_asset_list_paginate .paginate_button').not('.first, .last').remove();
-                var maxButtons = 10;
-                var halfWay = Math.floor(maxButtons / 2);
+                btn.on('click', function() {
+                    hs_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
+                });
+                btn.insertBefore('#nexts_hw');
+            }
 
-                if (current_page_hw < halfWay) {
-                    var startPage = 0;
-                    var endPage = Math.min(maxButtons - 1, total_pages_hw - 1);
-                } else if ((current_page_hw + halfWay) > total_pages_hw) {
-                    var startPage = total_pages_hw - maxButtons;
-                    var endPage = total_pages_hw - 1;
-                } else {
-                    var startPage = current_page_hw - halfWay;
-                    var endPage = current_page_hw + halfWay;
-                }
+            if (endPage < total_pages_hw - 2) {
+                $('<button type="button" class="paginate_button btn">...</button>')
+                    .insertBefore('#nexts_hw');
+            }
 
-                var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
+            $('<button type="button" class="paginate_button btn">' + total_pages_hw + '</button>')
                 .on('click', function() {
-                    hs_asset_list_Data.page(0).draw(false);
+                    hs_asset_list_Data.page(total_pages_hw - 1).draw(false);
                 })
-                .insertAfter('#after_hw')
-                .css(current_page_hw == 0 ? {
+                .insertBefore('#nexts_hw')
+                .css(current_page_hw == (total_pages_hw - 1) ? {
                     'font-weight': 'bold',
                     'color': '#f39c12'
                 } : {});
-
-                if (startPage > 1) {
-                    $('<button type="button" class="paginate_button btn">...</button>')
-                        .insertAfter(oneButton);
-                }
-                for (var i = startPage; i <= endPage; i++) {
-                    if (i == 0 || i == total_pages_hw - 1) continue;
-                    var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                    if (i == current_page_hw) {
-                        btn.addClass('current');
-                        btn.css({
-                            'font-weight': 'bold',
-                            'color': '#f39c12'
-                        });
-                    }
-                    btn.on('click', function() {
-                        hs_asset_list_Data.page(parseInt($(this).text()) - 1).draw(false);
-                    });
-                    btn.insertBefore('#nexts_hw');
-                }
-
-                if (endPage < total_pages_hw - 2) {
-                    $('<button type="button" class="paginate_button btn">...</button>')
-                        .insertBefore('#nexts_hw');
-                }
-
-                $('<button type="button" class="paginate_button btn">' + total_pages_hw + '</button>')
-                    .on('click', function() {
-                        hs_asset_list_Data.page(total_pages_hw - 1).draw(false);
-                    })
-                    .insertBefore('#nexts_hw')
-                    .css(current_page_hw == (total_pages_hw - 1) ? {
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    } : {});
-            }
+        }
 });
       // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
       $('.dropdown-menu a').click(function() {
@@ -1676,8 +1686,7 @@ var sw_asset_list = function () {
 		ordering: true,
 		serverSide: true,
 		displayLength: false,
-
-
+        autoWidth: false,
 		ajax: {
 			url: 'swpaging/',
 			type: "POST",
@@ -1941,6 +1950,31 @@ function swbutton(btn) {
     $('.hsbutton').not(btn).removeClass('active');
 
 }
+
+//S/W 자산현황 더보기 정렬 기능
+function sortTable(n) {
+    var table = document.getElementById("hsTable");
+    var tbody = table.querySelector(".hstbody");
+    var rows = Array.from(tbody.querySelectorAll("tr"));
+    var ascending = tbody.getAttribute("data-ascending") === "true";
+
+    rows.sort((a, b) => {
+        var textA = a.getElementsByTagName("TD")[n].innerText.toLowerCase();
+        var textB = b.getElementsByTagName("TD")[n].innerText.toLowerCase();
+
+        if (textA < textB) return ascending ? -1 : 1;
+        if (textA > textB) return ascending ? 1 : -1;
+        return 0;
+    });
+
+    ascending = !ascending;
+    tbody.setAttribute("data-ascending", ascending.toString());
+
+    rows.forEach(row => {
+        tbody.appendChild(row);
+    });
+}
+
 
 $(document).ready(function () {
     user_list_popup();

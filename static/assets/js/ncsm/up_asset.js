@@ -23,6 +23,7 @@ var up_asset_list = function () {
         order: [
             [2, "asc"]
         ],
+        autoWidth: false,
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();

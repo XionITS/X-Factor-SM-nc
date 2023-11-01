@@ -21,7 +21,7 @@
                 <br>
                 <br>
                 <div class="">
-                    <button class="btn btn-outline-warning float-start groupdeploy hidden" type="button" id="um_creategroup" aria-expanded="false">
+                    <button class="btn btn-outline-warning me-3px float-start groupdeploy hidden" type="button" id="um_creategroup" aria-expanded="false">
                     그룹 생성
                     </button>
 
@@ -46,7 +46,7 @@
                 <br>
                 <br>
                 <br>
-                <table id="um_list" class="table fs-14px mb-0 text-center text-white text-opacity-60 m-auto nc-12 table-hover">
+                <table id="um_list" class="table w-100 fs-14px text-center text-white text-opacity-60 nc-12 table-hover">
                     <thead>
                         <tr class="table-active text-white text-opacity-75">
                             <th class="text-center">선택</th>
@@ -160,20 +160,20 @@
                 <h5 class="modal-title"></h5>
             </div>
             <form id="GroupCreateForm_auth" class="d-flex">
-                <div class="modal-body col-md-4">
+                <div class="modal-body col-4">
                     <div class="form-group mb-3">
-                        <label class="form-label" for="groupName_auth">Group Name</label>
+                        <label class="form-label" for="groupName_auth"><span class="d-block fw-bold pb-2">그룹 생성</span><span>Group Name</span></label>
                         <input class="form-control form-control-lg mb-3" id="groupName_auth" name="groupName_auth" type="text" placeholder="">
                     </div>
                     <label class="form-label" for="groupDescription_auth">Group Description</label>
-                    <textarea class="form-control" id="groupDescription_auth" name="groupDescription_auth" rows="7"></textarea>
+                    <textarea class="form-control " id="groupDescription_auth" name="groupDescription_auth" rows="7"></textarea>
                 </div>
-                <div class="modal-body col-md-8 overflow-y-84">
-                    <label class="form-label" for="groupName_auth">User 추가하기</label>
-                    <div class="form-check"></div>
+                <div class="modal-body col-5 overflow-y-84">
+                    <label class="form-label" for="groupName_auth"><span class="d-block fw-bold pb-2">User 추가하기</span></label>
+                    <div class="form-check ps-0"></div>
                 </div>
-                <div class="modal-body col-md-2">
-                    <label class="form-label" >선택한 User</label>
+                <div class="modal-body col-2">
+                    <label class="form-label" for="groupName_auth"><span class="d-block fw-bold pb-2">선택한 User</span></label>
                     <div class="form-check2"></div>
                 </div>
 
@@ -195,20 +195,20 @@
                 <h5 class="modal-title"></h5>
             </div>
             <form id="GroupalterForm_auth" class="d-flex">
-                <div class="modal-body col-md-4">
+                <div class="modal-body col-4">
                     <div class="form-group mb-3">
-                        <label class="form-label" for="groupNameAlter_auth">Group Name</label>
+                        <label class="form-label" for="groupNameAlter_auth"><span class="d-block fw-bold pb-2">그룹 수정</span><span>Group Name</span></label>
                         <input class="form-control form-control-lg mb-3" id="groupNameAlter_auth" name="groupNameAlter_auth" type="text" placeholder="">
                     </div>
                     <label class="form-label" for="groupDescriptionAlter_auth">Group Description</label>
                     <textarea class="form-control" id="groupDescriptionAlter_auth" name="groupDescriptionAlter_auth" rows="7"></textarea>
                 </div>
-                <div class="modal-body col-md-8 overflow-y-84">
-                    <label class="form-label" for="groupName_auth">User 추가하기</label>
-                    <div class="form-check"></div>
+                <div class="modal-body col-5 overflow-y-84">
+                    <label class="form-label" for="groupName_auth"><span class="d-block fw-bold pb-2">User 추가하기</span></label>
+                    <div class="form-check ps-0"></div>
                 </div>
-                <div class="modal-body col-md-2">
-                    <label class="form-label" for="groupName_auth">선택한 User</label>
+                <div class="modal-body col-2">
+                    <label class="form-label" for="groupName_auth"><span class="d-block fw-bold pb-2">선택한 User</span></label>
                     <div class="form-check2"></div>
                 </div>
             </form>

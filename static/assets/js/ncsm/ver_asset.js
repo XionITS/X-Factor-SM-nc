@@ -20,6 +20,7 @@ var all_asset_list = function () {
         ordering: true,
         serverSide: true,
         displayLength: false,
+        autoWidth: false,
         order: [
             [2, "asc"]
         ],
@@ -350,6 +351,7 @@ var win_asset_list = function () {
         ordering: true,
         serverSide: true,
         displayLength: false,
+        autoWidth: false,
         order: [
             [2, "asc"]
         ],
@@ -677,6 +679,7 @@ var mac_asset_list = function () {
         ordering: true,
         serverSide: true,
         displayLength: false,
+        autoWidth: false,
         order: [
             [2, "asc"]
         ],
@@ -1006,6 +1009,7 @@ var other_asset_list = function () {
         ordering: true,
         serverSide: true,
         displayLength: false,
+        autoWidth: false,
         order: [
             [2, "asc"]
         ],
@@ -1398,6 +1402,8 @@ $(document).ready(function () {
     checkbox_check($('#ver_asset_list tbody'))
 
     //initializeDataTable();
+
+
 });
 
 

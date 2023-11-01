@@ -30858,6 +30858,10 @@ label::before{
     margin-right:0;
 }
 
+label.no-before::before {
+    content: none;
+}
+
 /*체크했을 때*/
 input:checked+labl::before{
 	background-image:url("checkboxWhite.png");
@@ -30909,12 +30913,9 @@ input:checked+labl::before{
   background-color: #f39c12;
 }
 
-
-
-.table.fs-14px.mb-0.text-center.text-white.text-opacity-60.m-auto{
+/*.table.fs-14px.mb-0.text-center.text-white.text-opacity-60.m-auto{
     width:100%
-
-}
+}*/
 
 .dashboard-content {
     padding: 2rem;
@@ -31032,6 +31033,12 @@ input:checked+labl::before{
     border-radius: 4px;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out
 }
+
+/*.textarea-resize {
+    resize: none;
+    height: 170px;
+}*/
+
 #sec_total_list {
     margin: 0 auto; /* 수평 가운데 정렬을 위한 스타일 */
     display: table;
