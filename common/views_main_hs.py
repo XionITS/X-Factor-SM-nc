@@ -2,7 +2,7 @@ from django.http import HttpResponse
 import math
 import json
 import operator
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
@@ -164,6 +164,10 @@ def dashboard1(request):
 
 @csrf_exempt
 def hs_asset(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],xfactor_auth_id='HS_asset', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../home/')
     #메뉴
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
@@ -197,6 +201,10 @@ def hs_asset(request):
 
 @csrf_exempt
 def hs_asset_paginghw(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'], xfactor_auth_id='HS_asset', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
 
@@ -496,6 +504,11 @@ def hs_asset_paginghw(request):
     # return JsonResponse(context)
 @csrf_exempt
 def hs_asset_pagingsw(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='HS_asset', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
     filter_column = request.POST.get('filter[column]')

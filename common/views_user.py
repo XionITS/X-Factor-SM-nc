@@ -24,7 +24,6 @@ Login_Method = SETTING['PROJECT']['LOGIN']
 apiUrl = SETTING['API']['apiUrl']
 SesstionKeyPath = SETTING['API']['PATH']['SessionKey']
 
-
 # hi
 @csrf_exempt
 def signup(request):
@@ -108,7 +107,7 @@ def login(request):
             else:
                 RS = selectUsers(x_id, x_pw)
                 user_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id = x_id)
-                print(RS)
+                # print(RS)
                 # print(user_check)
                 if RS == None or (user_check.filter(xfactor_auth_id='dash_report',auth_use='false') and user_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and user_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
                                   and user_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and user_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and user_check.filter(xfactor_auth_id='dash_office', auth_use='false')
@@ -720,6 +719,11 @@ def taniumUsers(x_id, x_pw):
 
 @csrf_exempt
 def delete(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     x_ids_str = request.POST.get('x_id')  # 쉼표로 구분된 문자열을 얻음
     x_ids = x_ids_str.split(',')
     try:
@@ -766,6 +770,11 @@ def delete(request):
 
 @csrf_exempt
 def group_delete(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     xgroup_ids_str = request.POST.get('group_ids')  # 쉼표로 구분된 문자열을 얻음
     xgroup_ids = xgroup_ids_str.split(',')
 

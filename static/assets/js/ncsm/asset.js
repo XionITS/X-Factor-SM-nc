@@ -217,7 +217,7 @@ $(document).ready(function(){
           var autocompleteData = data.data.map(function(item) {
             return item.computer_name;
           });
-          console.log(autocompleteData)
+          // console.log(autocompleteData)
           response(autocompleteData);
         }
       });
@@ -228,7 +228,7 @@ $(document).ready(function(){
 
 
 $('#asset_search').on('click', function(event) {
-    console.log(searchInput)
+    // console.log(searchInput)
     var searchInput = document.getElementById('asset_search_result');
     var inputValue = searchInput.value;
     searchPer(inputValue)
@@ -455,8 +455,8 @@ $(document).ready(function () {
                 macaddress: macaddressValue
                             },
       success: function(response) {
-          console.log(computernameValue)
-          console.log(response)
+          // console.log(computernameValue)
+          //console.log(response)
           if (computernameValue == '-'){
               return
           }

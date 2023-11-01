@@ -163,35 +163,7 @@ var os_asset_list = function () {
 
 
 
-// function os_checkbox_check(){
-//     console.log("os_checkbox_check() called");
-//     $('#os_asset_list tbody').off('click', 'tr');
-//     $('#os_asset_list tbody').on('click', 'tr', function () {
-//         var checkbox = $(this).find('input[type="checkbox"]');
-//         var hidden = $(this).find('input[type="hidden"]');
-//         var computer_id = checkbox.attr('id');
-//         console.log(computer_id)
-//         checkbox.prop('checked', !checkbox.prop('checked'));
-//         if (checkbox.prop('checked')) {
-//             checkedItems[computer_id] = computer_id;
-//         } else {
-//             delete checkedItems[computer_id];
-//         }
-//     });
-//
-//     $('#os_asset_list tbody').on('click', 'input[type="checkbox"]', function (event) {
-//         event.stopPropagation(); // Prevent the row click event from firing when clicking the checkbox
-//         var computer_id = $(this).data('computer-id');
-//         console.log("Clicked checkbox for computer ID:", computer_id);
-//         console.log(computer_id)
-//
-//         if ($(this).prop('checked')) {
-//             checkedItems[computer_id] = computer_id;
-//         } else {
-//             delete checkedItems[computer_id];
-//         }
-//     });
-// }
+
 
 // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
 function dropdown_text(){

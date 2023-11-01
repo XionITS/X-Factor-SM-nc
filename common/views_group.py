@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse,HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from .models import Xfactor_Group, Xfactor_Log
+from .models import Xfactor_Group, Xfactor_Log,Xfactor_Xuser_Auth
 import requests
 import json
 import math

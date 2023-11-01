@@ -4,7 +4,7 @@ from django.http import HttpResponse
 import math
 import operator
 import json
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from dateutil.relativedelta import relativedelta
 from django.db.models import Max
@@ -28,6 +28,11 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 
 @csrf_exempt
 def create(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='dash_report', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../home/')
     datetime = request.GET.get('datetime')
     #print(datetime)
     selected_date = datetime

@@ -2,7 +2,7 @@ from django.http import HttpResponse
 import math
 import operator
 import json
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
@@ -23,6 +23,11 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 
 @csrf_exempt
 def history(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='History', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../home/')
     #메뉴
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu_user = XuserAuthSerializer(xuser_auths, many=True)
@@ -36,6 +41,11 @@ def history(request):
 
 @csrf_exempt
 def search_h(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='History', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
@@ -55,6 +65,11 @@ def search_h(request):
 
 @csrf_exempt
 def search_box_h(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='History', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)

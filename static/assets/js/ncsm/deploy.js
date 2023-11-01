@@ -64,13 +64,13 @@ $(document).on("click","#createdeploy", function (e) {
                 groupDesc.val(res.group.group_note);
             }
         })
-        console.log('Selected Group ID:', selectedGroup);
+        //console.log('Selected Group ID:', selectedGroup);
     });
 
     $('#packageData').on('change', function() {
         selectedPackage = $(this).val();
         selectedPackageName = $("#packageData option:selected").text()
-        console.log('Selected Package ID:', selectedPackage);
+        //console.log('Selected Package ID:', selectedPackage);
     });
 
     $("#deployModal").modal("show");

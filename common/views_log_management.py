@@ -4,7 +4,7 @@ from django.http import HttpResponse
 import math
 import operator
 import json
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
@@ -24,6 +24,11 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 
 @csrf_exempt
 def log(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                 xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../home/')
     #메뉴
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu_user = XuserAuthSerializer(xuser_auths, many=True)
@@ -37,6 +42,11 @@ def log(request):
 
 @csrf_exempt
 def log_paging(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                 xfactor_auth_id='VER_asset', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     korean_tz = pytz.timezone('Asia/Seoul')
     logs = Xfactor_Log.objects.order_by('-log_date')
     formatted_logs = [

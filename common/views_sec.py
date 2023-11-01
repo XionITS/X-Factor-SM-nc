@@ -21,6 +21,11 @@ with open("setting.json", encoding="UTF-8") as f:
 DBSettingTime = SETTING['DB']['DBSelectTime']
 
 def sec_asset(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='SEC_asset', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../home/')
     #메뉴
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
@@ -37,6 +42,11 @@ def sec_asset(request):
 
 @csrf_exempt
 def sec_asset_paging(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='SEC_asset', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
     default_os = request.POST.get('filter[defaultColumn]')
@@ -303,6 +313,11 @@ def sec_asset_paging(request):
 
 
 def sec_asset_list(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='SEC_asset_list', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../home/')
     # 메뉴
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
@@ -321,6 +336,11 @@ def sec_asset_list(request):
 
 @csrf_exempt
 def sec_asset_list_paging(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                 xfactor_auth_id='SEC_asset_list', auth_use='false')
+    print(user_auth)
+    if user_auth:
+        return redirect('../../home/')
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
     filter_column = request.POST.get('filter[column]')
