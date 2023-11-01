@@ -1,7 +1,7 @@
 
 from django.contrib import admin
 from django.urls import path
-from common import views_user, views_sec, views_dashboard_detail
+from common import views_user, views_sec, views_dashboard_detail, error_handler
 from common import views_main_hs
 from common import views_os_ver
 from common import views_up
@@ -19,6 +19,11 @@ from common import views_log_management
 from common import views_report
 from common.CallbackView import CallbackView
 from common.LoginView import LoginView
+from django.conf import settings
+from django.views.static import serve
+from django.urls import re_path
+
+from config import settings
 
 urlpatterns = [
     #path('', views_user.nano, name=''),
@@ -125,4 +130,12 @@ urlpatterns = [
     # path('callback/', CallbackView.as_view(), name='callback'),
 
 ]
+if not settings.DEBUG:
+    urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+        re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_URL}),
+    ]
+handler400 = 'common.error_handler.bad_request'
+handler404 = 'common.error_handler.not_found'
 
+handler500 = 'common.error_handler.server_error'
