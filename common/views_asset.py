@@ -72,7 +72,7 @@ def save_memo(request):
                                                   xfactor_auth_id='Asset', auth_use='false')
     print(user_auth)
     if user_auth:
-        return redirect('../home/')
+        return redirect('../../home/')
     if request.method =='POST':
         memo = request.POST.get('memo')
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)

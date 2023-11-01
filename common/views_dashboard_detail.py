@@ -20,9 +20,9 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 local_tz = pytz.timezone('Asia/Seoul')
 utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
 now = utc_now.astimezone(local_tz)
-start_of_today = now.replace(minute=0, second=0, microsecond=0)
-start_of_day = start_of_today - timedelta(days=7)
-end_of_today = start_of_today + timedelta(minutes=50)
+# start_of_today = now.replace(minute=0, second=0, microsecond=0)
+# start_of_day = start_of_today - timedelta(days=7)
+# end_of_today = start_of_today + timedelta(minutes=50)
 #end_of_day = now.replace(minute=50, second=0, microsecond=0) +timedelta(days=7)
 
 
@@ -30,6 +30,9 @@ end_of_today = start_of_today + timedelta(minutes=50)
 #전체 자산 수 차트
 @csrf_exempt
 def all_asset_paging1(request):
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     current_hour = timezone.now().replace(minute=0, second=0, microsecond=0)
     filter_text = request.POST.get('search[value]')
@@ -43,6 +46,7 @@ def all_asset_paging1(request):
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+            print('111111111111')
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
@@ -51,6 +55,7 @@ def all_asset_paging1(request):
             # 토탈
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
+            print('2222222222')
             end_of_today = start_of_today + timedelta(minutes=50)
             # 현재
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
@@ -59,7 +64,12 @@ def all_asset_paging1(request):
 
         print(len(user))
     elif request.POST.get('selectedDate') == '':
-        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        print('3333333333')
+        # 출력 형식을 설정합니다.
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
+        print(start_of_today)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 

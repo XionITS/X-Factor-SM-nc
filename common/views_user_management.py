@@ -58,7 +58,7 @@ def um_user(request):
     print(user_auth)
     if user_auth:
         return redirect('../../home/')
-    user = Xfactor_Xuser.objects.all()
+    user = Xfactor_Xuser.objects.values('x_id', 'x_name', 'x_email', 'x_auth', 'create_date')
     #user = Xfactor_Common.objects.prefetch_related('purchase').filter(user_date__gte=today_collect_date)
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))
