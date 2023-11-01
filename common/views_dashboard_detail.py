@@ -17,16 +17,64 @@ from .serializers import *
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
+local_tz = pytz.timezone('Asia/Seoul')
+utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+now = utc_now.astimezone(local_tz)
+start_of_today = now.replace(minute=0, second=0, microsecond=0)
+start_of_day = start_of_today - timedelta(days=7)
+end_of_today = start_of_today + timedelta(minutes=50)
+#end_of_day = now.replace(minute=50, second=0, microsecond=0) +timedelta(days=7)
+
+
 
 #전체 자산 수 차트
 @csrf_exempt
 def all_asset_paging1(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+    current_hour = timezone.now().replace(minute=0, second=0, microsecond=0)
     filter_text = request.POST.get('search[value]')
+    user = ''
+    cache = ''
+    print(request.POST.get('selectedDate'))
+    if request.POST.get('selectedDate') != '':
+
+        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+        start_of_today = timezone.make_aware(start_date_naive)
+        end_of_today = start_of_today + timedelta(minutes=50)
+        start_of_day = start_of_today - timedelta(days=7)
+        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+            start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+            start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
+            end_of_today2 = start_of_today + timedelta(minutes=110)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+        else:
+            end_of_today = start_of_today + timedelta(minutes=50)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+        print(len(user))
+    elif request.POST.get('selectedDate') == '':
+        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_day = start_of_today - timedelta(days=7)
+        end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        # 토탈
+        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+
 
     if request.POST.get('categoryName') == 'Online':
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
+            user = user.exclude(chassistype__in=['Notebook', 'Desktop'])
+            print(user)
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -36,9 +84,12 @@ def all_asset_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
             else:
-                user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
+                #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
+                user = user.exclude(chassistype__in=['Notebook', 'Desktop'])
         if request.POST.get('seriesName') != 'Other':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
+            user  = user.filter(chassistype=request.POST.get('seriesName'))
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -48,11 +99,12 @@ def all_asset_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
             else:
-                user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
+                #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
+                user = user.filter(chassistype=request.POST.get('seriesName'))
 
     if request.POST.get('categoryName') == 'Total':
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
+            user = cache.exclude(chassistype__in=['Notebook', 'Desktop'])
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -62,9 +114,9 @@ def all_asset_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
             else:
-                user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
+                user = cache.exclude(chassistype__in=['Notebook', 'Desktop'])
         if request.POST.get('seriesName') != 'Other':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
+            user = cache.filter(chassistype=request.POST.get('seriesName'))
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -74,7 +126,7 @@ def all_asset_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
             else:
-                user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
+                user = cache.filter(chassistype=request.POST.get('seriesName'))
 
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))
@@ -110,7 +162,7 @@ def all_asset_paging1(request):
     if request.POST.get('categoryName') == 'Total':
         user_list = Cacheserializer(page, many=True).data
     elif request.POST.get('categoryName') == 'Online':
-        user_list = Dailyserializer(page, many=True).data
+        user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -127,11 +179,46 @@ def all_asset_paging1(request):
 def asset_os_paging1(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
+    user = ''
+    cache = ''
+    print(request.POST.get('selectedDate'))
+    if request.POST.get('selectedDate') != '':
+
+        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+        start_of_today = timezone.make_aware(start_date_naive)
+        end_of_today = start_of_today + timedelta(minutes=50)
+        start_of_day = start_of_today - timedelta(days=7)
+        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+            start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+            start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
+            end_of_today2 = start_of_today + timedelta(minutes=110)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+        else:
+            end_of_today = start_of_today + timedelta(minutes=50)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+    elif request.POST.get('selectedDate') == '':
+        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_day = start_of_today - timedelta(days=7)
+        end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        # 토탈
+        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
     print(request.POST.get('categoryName'))
     print(request.POST.get('seriesName'))
     if request.POST.get('categoryName') == 'Other':
         if request.POST.get('seriesName') == 'Desktop':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
+            user = user.filter( chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -141,7 +228,7 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Notebook':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
+            user = user.filter( chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -151,7 +238,8 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple='Windows').exclude(os_simple='Mac')
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple='Windows').exclude(os_simple='Mac')
+            user = user.exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -163,7 +251,8 @@ def asset_os_paging1(request):
 
     if request.POST.get('categoryName') == 'Mac':
         if request.POST.get('seriesName') == 'Desktop':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Mac')
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Mac')
+            user = user.filter( chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -173,7 +262,8 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Notebook':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Mac')
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Mac')
+            user =user.filter(chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -183,7 +273,8 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Mac').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Mac').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
+            user = user.filter(os_simple='Mac').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -195,7 +286,8 @@ def asset_os_paging1(request):
 
     if request.POST.get('categoryName') == 'Windows':
         if request.POST.get('seriesName') == 'Desktop':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Windows')
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Windows')
+            user = user.filter( chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -205,7 +297,8 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Notebook':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Windows')
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Windows')
+            user = user.filter(chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -215,7 +308,8 @@ def asset_os_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
+            #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
+            user = user.filter( os_simple='Windows').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -256,7 +350,7 @@ def asset_os_paging1(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -274,10 +368,46 @@ def asset_os_paging2(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     print(request.POST.get('categoryName'))
     print(request.POST.get('seriesName'))
+
+    user = ''
+    cache = ''
+    print(request.POST.get('selectedDate'))
+    if request.POST.get('selectedDate') != '':
+
+        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+        start_of_today = timezone.make_aware(start_date_naive)
+        end_of_today = start_of_today + timedelta(minutes=50)
+        start_of_day = start_of_today - timedelta(days=7)
+        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+            start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+            start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
+            end_of_today2 = start_of_today + timedelta(minutes=110)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+        else:
+            end_of_today = start_of_today + timedelta(minutes=50)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+    elif request.POST.get('selectedDate') == '':
+        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_day = start_of_today - timedelta(days=7)
+        end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        # 토탈
+        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
     filter_text = request.POST.get('search[value]')
+
     if request.POST.get('categoryName') == 'Other':
         if request.POST.get('seriesName') == 'Desktop':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
+            user = cache.filter(chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -287,7 +417,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Notebook':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
+            user =cache.filter(chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -297,7 +427,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple='Windows').exclude(os_simple='Mac')
+            user = cache.exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -309,7 +439,7 @@ def asset_os_paging2(request):
 
     if request.POST.get('categoryName') == 'Mac':
         if request.POST.get('seriesName') == 'Desktop':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Mac')
+            user = cache.filter( chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -319,7 +449,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Notebook':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Mac')
+            user = cache.filter(chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -329,7 +459,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, os_simple='Mac').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
+            user = cache.filter( os_simple='Mac').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -341,7 +471,7 @@ def asset_os_paging2(request):
 
     if request.POST.get('categoryName') == 'Windows':
         if request.POST.get('seriesName') == 'Desktop':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Windows')
+            user = cache.filter(chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -351,7 +481,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Notebook':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'), os_simple='Windows')
+            user = cache.filter(chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -361,7 +491,7 @@ def asset_os_paging2(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
         if request.POST.get('seriesName') == 'Other':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, os_simple='Windows').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
+            user = cache.filter(os_simple='Windows').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -420,7 +550,43 @@ def asset_os_paging2(request):
 def oslistPieChart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-    user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
+
+    user = ''
+    cache = ''
+    print(request.POST.get('selectedDate'))
+    if request.POST.get('selectedDate') != '':
+
+        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+        start_of_today = timezone.make_aware(start_date_naive)
+        end_of_today = start_of_today + timedelta(minutes=50)
+        start_of_day = start_of_today - timedelta(days=7)
+        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+            start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+            start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
+            end_of_today2 = start_of_today + timedelta(minutes=110)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+        else:
+            end_of_today = start_of_today + timedelta(minutes=50)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+    elif request.POST.get('selectedDate') == '':
+        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_day = start_of_today - timedelta(days=7)
+        end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        # 토탈
+        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+    #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
+    user = user.filter( os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
                  Q(logged_name_id__deptName=filter_text) |
@@ -461,7 +627,7 @@ def oslistPieChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -478,8 +644,44 @@ def oslistPieChart(request):
 def osVerPieChart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
+
+    user = ''
+    cache = ''
+    print(request.POST.get('selectedDate'))
+    if request.POST.get('selectedDate') != '':
+
+        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+        start_of_today = timezone.make_aware(start_date_naive)
+        end_of_today = start_of_today + timedelta(minutes=50)
+        start_of_day = start_of_today - timedelta(days=7)
+        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+            start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+            start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
+            end_of_today2 = start_of_today + timedelta(minutes=110)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+        else:
+            end_of_today = start_of_today + timedelta(minutes=50)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+    elif request.POST.get('selectedDate') == '':
+        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_day = start_of_today - timedelta(days=7)
+        end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        # 토탈
+        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
     if request.POST.get('categoryName') == '업데이트 완료':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
+        #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
+        user = user.filter( os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(logged_name_id__deptName=filter_text) |
@@ -489,7 +691,8 @@ def osVerPieChart(request):
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
     if request.POST.get('categoryName') == '업데이트 필요':
-        user = Xfactor_Daily.objects.filter(os_simple='Windows', os_build__lt='19044', user_date__gte=today_collect_date).exclude(os_total='unconfirmed')
+        #user = Xfactor_Daily.objects.filter(os_simple='Windows', os_build__lt='19044', user_date__gte=today_collect_date).exclude(os_total='unconfirmed')
+        user = user.filter(os_simple='Windows', os_build__lt='19044').exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(logged_name_id__deptName=filter_text) |
@@ -530,7 +733,7 @@ def osVerPieChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -547,8 +750,44 @@ def osVerPieChart(request):
 def office_chart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
+
+    user = ''
+    cache = ''
+    print(request.POST.get('selectedDate'))
+    if request.POST.get('selectedDate') != '':
+
+        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+        start_of_today = timezone.make_aware(start_date_naive)
+        end_of_today = start_of_today + timedelta(minutes=50)
+        start_of_day = start_of_today - timedelta(days=7)
+        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+            start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+            start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
+            end_of_today2 = start_of_today + timedelta(minutes=110)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+        else:
+            end_of_today = start_of_today + timedelta(minutes=50)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+    elif request.POST.get('selectedDate') == '':
+        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_day = start_of_today - timedelta(days=7)
+        end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        # 토탈
+        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
     if request.POST.get('categoryName') == 'Office 16 이상':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5__in=['Office 21', 'Office 19', 'Office 16'])
+        #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5__in=['Office 21', 'Office 19', 'Office 16'])
+        user = user.filter( essential5__in=['Office 21', 'Office 19', 'Office 16'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(logged_name_id__deptName=filter_text) |
@@ -558,7 +797,8 @@ def office_chart(request):
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
     if request.POST.get('categoryName') == 'Office 16 미만':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5='Office 15')
+        #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, essential5='Office 15')
+        user = user.filter(essential5='Office 15')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(logged_name_id__deptName=filter_text) |
@@ -568,7 +808,12 @@ def office_chart(request):
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
     if request.POST.get('categoryName') == 'Office 설치 안됨':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date,essential5='오피스 없음')
+        #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today,essential5='오피스 없음')
+        user = user.filter(essential5='오피스 없음')
+        print(start_of_today)
+        print(start_of_today)
+        print(start_of_today)
+        print(start_of_today)
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(logged_name_id__deptName=filter_text) |
@@ -578,7 +823,8 @@ def office_chart(request):
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
     if request.POST.get('categoryName') == '미확인':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5__in=['unconfirmed', ''])
+        #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, essential5__in=['unconfirmed', ''])
+        user =user.filter(essential5__in=['unconfirmed', ''])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(logged_name_id__deptName=filter_text) |
@@ -619,7 +865,7 @@ def office_chart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -637,8 +883,44 @@ def office_chart(request):
 def subnet_chart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
+
+    user = ''
+    cache = ''
+    print(request.POST.get('selectedDate'))
+    if request.POST.get('selectedDate') != '':
+
+        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+        start_of_today = timezone.make_aware(start_date_naive)
+        end_of_today = start_of_today + timedelta(minutes=50)
+        start_of_day = start_of_today - timedelta(days=7)
+        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+            start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+            start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
+            end_of_today2 = start_of_today + timedelta(minutes=110)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+        else:
+            end_of_today = start_of_today + timedelta(minutes=50)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+    elif request.POST.get('selectedDate') == '':
+        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_day = start_of_today - timedelta(days=7)
+        end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        # 토탈
+        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
     if request.POST.get('categoryName') == 'VPN':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
+        #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
+        user = user.filter(subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(logged_name_id__deptName=filter_text) |
@@ -648,7 +930,8 @@ def subnet_chart(request):
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
     if request.POST.get('categoryName') == '사내망':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, subnet__in=['172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
+        #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, subnet__in=['172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
+        user = user.filter(subnet__in=['172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
@@ -659,7 +942,8 @@ def subnet_chart(request):
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
     if request.POST.get('categoryName') == '미확인':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, subnet='unconfirmed')
+        #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, subnet='unconfirmed')
+        user = user.filter(subnet='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(logged_name_id__deptName=filter_text) |
@@ -669,7 +953,8 @@ def subnet_chart(request):
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
     if request.POST.get('categoryName') == '외부망':
-        user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(subnet__in=['unconfirmed', '172.21.224.0/20', '192.168.0.0/20', '172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
+        #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today).exclude(subnet__in=['unconfirmed', '172.21.224.0/20', '192.168.0.0/20', '172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
+        user = user.exclude(subnet__in=['unconfirmed', '172.21.224.0/20', '192.168.0.0/20', '172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
@@ -711,7 +996,7 @@ def subnet_chart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -730,8 +1015,44 @@ def hotfixChart(request):
     three_months_ago = datetime.now() - timedelta(days=90)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
+
+    user = ''
+    cache = ''
+    print(request.POST.get('selectedDate'))
+    if request.POST.get('selectedDate') != '':
+
+        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+        start_of_today = timezone.make_aware(start_date_naive)
+        end_of_today = start_of_today + timedelta(minutes=50)
+        start_of_day = start_of_today - timedelta(days=7)
+        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+            start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+            start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
+            end_of_today2 = start_of_today + timedelta(minutes=110)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+        else:
+            end_of_today = start_of_today + timedelta(minutes=50)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+    elif request.POST.get('selectedDate') == '':
+        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_day = start_of_today - timedelta(days=7)
+        end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        # 토탈
+        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
     filtered_user_objects = []  # 조건을 만족하는 사용자들을 저장할 리스트
-    user_objects = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
+    #user_objects = Xfactor_Daily.objects.filter(user_date__gte=start_of_today)
+    user_objects = user
     users_values = user_objects.values('hotfix_date', 'computer_id')
 
     for i, user in enumerate(users_values):
@@ -758,7 +1079,7 @@ def hotfixChart(request):
                  Q(mac_address__icontains=filter_text))
         filtered_user_objects = user.filter(query)
 
-    user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, computer_id__in=filtered_user_objects)
+    user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, computer_id__in=filtered_user_objects)
 
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))
@@ -791,7 +1112,7 @@ def hotfixChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -808,7 +1129,43 @@ def hotfixChart(request):
 def tcpuChart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-    user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, t_cpu='True')
+
+    user = ''
+    cache = ''
+    print(request.POST.get('selectedDate'))
+    if request.POST.get('selectedDate') != '':
+
+        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+        start_of_today = timezone.make_aware(start_date_naive)
+        end_of_today = start_of_today + timedelta(minutes=50)
+        start_of_day = start_of_today - timedelta(days=7)
+        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+            start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+            start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
+            end_of_today2 = start_of_today + timedelta(minutes=110)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+        else:
+            end_of_today = start_of_today + timedelta(minutes=50)
+            # 현재
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            # 토탈
+            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+    elif request.POST.get('selectedDate') == '':
+        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_day = start_of_today - timedelta(days=7)
+        end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        # 토탈
+        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+    #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, t_cpu='True')
+    user = user.filter(t_cpu='True')
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
                  Q(logged_name_id__deptName=filter_text) |
@@ -849,7 +1206,7 @@ def tcpuChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -911,7 +1268,7 @@ def discoverChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Dailyserializer(page, many=True).data
+    user_list = Cacheserializer(page, many=True).data
     # Prepare the response
 
     response = {

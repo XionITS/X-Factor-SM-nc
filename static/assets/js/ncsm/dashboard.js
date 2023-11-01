@@ -135,6 +135,8 @@ var handleRenderChartNCOMG = function () {
                         $('#hotfix_chart').DataTable().destroy();
                         $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'all_asset_detail1';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
@@ -144,7 +146,7 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'all_asset1';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
-                        all_asset_detail_list1(categoryName, seriesName);
+                        all_asset_detail_list1(categoryName, seriesName, selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -292,6 +294,8 @@ var handleRenderChartNCOMG = function () {
                         $('#hotfix_chart').DataTable().destroy();
                         $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'asset_os_detail1';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
@@ -301,7 +305,7 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'asset_os_detail1';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
-                        asset_os_detail_list1(categoryName, seriesName);
+                        asset_os_detail_list1(categoryName, seriesName, selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -433,6 +437,8 @@ var handleRenderChartNCOMG = function () {
                         $('#hotfix_chart').DataTable().destroy();
                         $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'asset_os_detail2';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
@@ -442,7 +448,7 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'asset_os_detail2';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
-                        asset_os_detail_list2(categoryName, seriesName);
+                        asset_os_detail_list2(categoryName, seriesName, selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -590,12 +596,14 @@ var handleRenderChartNCOMG = function () {
                         $('#hotfix_chart').DataTable().destroy();
                         $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'oslistPieChart';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
                         document.getElementById('categoryName').value = labelsName;
                         document.getElementById('chartName').value = 'oslistPieChart';
                         $("#DashModal .modal-title").html(labelsName+' List');
-                        oslistPieChart_list(labelsName, seriesName);
+                        oslistPieChart_list(labelsName, seriesName, selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -679,12 +687,14 @@ var handleRenderChartNCOMG = function () {
                         $('#hotfix_chart').DataTable().destroy();
                         $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'osVerPieChart';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
                         document.getElementById('categoryName').value = labelsName;
                         document.getElementById('chartName').value = 'osVerPieChart';
                         $("#DashModal .modal-title").html(labelsName+' List');
-                        osVerPieChart_list(labelsName, seriesName);
+                        osVerPieChart_list(labelsName, seriesName, selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -833,12 +843,14 @@ var handleRenderChartNCOMG = function () {
                             $('#hotfix_chart').DataTable().destroy();
                             $('#tcpuChart').DataTable().destroy();
                             document.getElementsByClassName('table m')[0].id = 'discoverChart';
+                            var urlParams = new URLSearchParams(window.location.search)
+                            var selectedDate = urlParams.get('datetime')
                             var dataPointIndex = config.dataPointIndex;
                             var labelsName = config.w.config.labels[dataPointIndex];
                             document.getElementById('categoryName').value = labelsName;
                             document.getElementById('chartName').value = 'discoverChart';
                             $("#DashModal .modal-title").html(labelsName+' List');
-                            osVerPieChart_list(labelsName, seriesName);
+                            osVerPieChart_list(labelsName, seriesName, selectedDate);
                             // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                             $("#DashModal").modal("show");
                         }
@@ -947,12 +959,14 @@ var handleRenderChartNCOMG = function () {
                         $('#subnet_chart').DataTable().destroy();
                         $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'hotfix_chart';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
                         document.getElementById('categoryName').value = labelsName;
                         document.getElementById('chartName').value = 'hotfix_chart';
                         $("#DashModal .modal-title").html(labelsName+' List');
-                        hotfix_chart_list(labelsName, seriesName);
+                        hotfix_chart_list(labelsName, seriesName, selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -1056,6 +1070,8 @@ var handleRenderChartNCOMG = function () {
                         $('#hotfix_chart').DataTable().destroy();
                         $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'subnet_chart';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
@@ -1065,7 +1081,7 @@ var handleRenderChartNCOMG = function () {
                         // document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'subnet_chart';
                         $("#DashModal .modal-title").html(categoryName+' List');
-                        subnet_chart_list(categoryName, '');
+                        subnet_chart_list(categoryName, '', selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -1166,6 +1182,8 @@ var handleRenderChartNCOMG = function () {
                         $('#hotfix_chart').DataTable().destroy();
                         $('#tcpuChart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'office_chart';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
@@ -1175,7 +1193,7 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'office_chart';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
-                        office_chart_list(categoryName, seriesName);
+                        office_chart_list(categoryName, seriesName, selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -1398,6 +1416,8 @@ var handleRenderChartNCOMG = function () {
                         $('#office_chart').DataTable().destroy();
                         $('#hotfix_chart').DataTable().destroy();
                         document.getElementsByClassName('table m')[0].id = 'tcpuChart';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
                         var dataPointIndex = config.dataPointIndex;
                         var seriesIndex = config.seriesIndex;
                         // var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
@@ -1407,7 +1427,7 @@ var handleRenderChartNCOMG = function () {
                         // document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'tcpuChart';
                         $("#DashModal .modal-title").html(categoryName+' List');
-                        tcpuChart_list(categoryName, '');
+                        tcpuChart_list(categoryName, '', selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
@@ -1596,14 +1616,14 @@ $("#datepickerD").datetimepicker({
         var isSameDay = current_time.getDate() === currentDate.getDate() && current_time.getMonth() === currentDate.getMonth() && current_time.getFullYear() === currentDate.getFullYear();
 
         // 현재 시간보다 뒤의 시간들을 숨기기 (현재 날짜일 경우에만)
-        $(".xdsoft_time_variant .xdsoft_time").each(function(){
-            var hour = $(this).data('hour');
-            if(isSameDay && hour > currentDate.getHours()){
-                $(this).hide();
-            } else {
-                $(this).show();
-            }
-        });
+//        $(".xdsoft_time_variant .xdsoft_time").each(function(){
+//            var hour = $(this).data('hour');
+//            if(isSameDay && hour > currentDate.getHours()){
+//                $(this).hide();
+//            } else {
+//                $(this).show();
+//            }
+//        });
 
         if(!dateTimeSelected){
             $(".xdsoft_time").on("click", function(){

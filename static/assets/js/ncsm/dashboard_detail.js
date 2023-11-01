@@ -9,7 +9,7 @@ Author: Sean Ngu
 // 전역 변수로 체크박스 값을 저장할 객체를 생성합니다.
 var checkedItems = {};
 
-var all_asset_detail_list1 = function (categoryName, seriesName) {
+var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
     var all_asset_detail1_Data = $('#all_asset_detail1').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
@@ -129,6 +129,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName) {
             data: function (data) {
                 data.seriesName = seriesName[0];
                 data.categoryName = categoryName;
+                data.selectedDate = selectedDate;
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
@@ -283,7 +284,7 @@ $(document).ready(function () {
     //initializeDataTable();
 });
 
-var asset_os_detail_list1 = function (categoryName, seriesName) {
+var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
     var asset_os_detail_list1_Data = $('#asset_os_detail1').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
@@ -403,6 +404,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
             data: function (data) {
                 data.seriesName = seriesName;
                 data.categoryName = categoryName;
+                data.selectedDate = selectedDate;
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
@@ -541,7 +543,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName) {
 };
 
 
-var asset_os_detail_list2 = function (categoryName, seriesName) {
+var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
     var asset_os_detail_list2_Data = $('#asset_os_detail2').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
@@ -662,6 +664,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
             data: function (data) {
                 data.seriesName = seriesName;
                 data.categoryName = categoryName;
+                data.selectedDate = selectedDate;
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
@@ -800,7 +803,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName) {
 };
 
 
-var oslistPieChart_list = function (categoryName, seriesName) {
+var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
     var oslistPieChart_list_Data = $('#oslistPieChart').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
@@ -920,6 +923,7 @@ var oslistPieChart_list = function (categoryName, seriesName) {
             type: "POST",
             data: function (data) {
                 data.categoryName = categoryName;
+                data.selectedDate = selectedDate;
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
@@ -1059,7 +1063,7 @@ var oslistPieChart_list = function (categoryName, seriesName) {
 
 
 
-var osVerPieChart_list = function (categoryName, seriesName) {
+var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
     var osVerPieChart_list_Data = $('#osVerPieChart').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
@@ -1178,6 +1182,7 @@ var osVerPieChart_list = function (categoryName, seriesName) {
             type: "POST",
             data: function (data) {
                 data.categoryName = categoryName;
+                data.selectedDate = selectedDate;
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
@@ -1317,7 +1322,7 @@ var osVerPieChart_list = function (categoryName, seriesName) {
 
 
 
-var office_chart_list = function (categoryName, seriesName) {
+var office_chart_list = function (categoryName, seriesName, selectedDate) {
     var office_chart_list_Data = $('#office_chart').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
@@ -1437,6 +1442,7 @@ var office_chart_list = function (categoryName, seriesName) {
             type: "POST",
             data: function (data) {
                 data.categoryName = categoryName;
+                data.selectedDate = selectedDate;
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
@@ -1582,7 +1588,7 @@ var office_chart_list = function (categoryName, seriesName) {
 
 
 
-var subnet_chart_list = function (categoryName, seriesName) {
+var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
     var subnet_chart_list_Data = $('#subnet_chart').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
@@ -1702,6 +1708,7 @@ var subnet_chart_list = function (categoryName, seriesName) {
             type: "POST",
             data: function (data) {
                 data.categoryName = categoryName;
+                data.selectedDate = selectedDate;
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
@@ -1846,7 +1853,7 @@ var subnet_chart_list = function (categoryName, seriesName) {
 };
 
 
-var hotfix_chart_list = function (categoryName, seriesName) {
+var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
     var hotfix_chart_list_Data = $('#hotfix_chart').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
@@ -1966,6 +1973,7 @@ var hotfix_chart_list = function (categoryName, seriesName) {
             type: "POST",
             data: function (data) {
                 data.categoryName = categoryName;
+                data.selectedDate = selectedDate;
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
@@ -2104,7 +2112,7 @@ var hotfix_chart_list = function (categoryName, seriesName) {
 };
 
 
-var tcpuChart_list = function (categoryName, seriesName) {
+var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
     var tcpuChart_list_Data = $('#tcpuChart').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
@@ -2224,6 +2232,7 @@ var tcpuChart_list = function (categoryName, seriesName) {
             type: "POST",
             data: function (data) {
                 data.categoryName = categoryName;
+                data.selectedDate = selectedDate;
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
@@ -2362,7 +2371,7 @@ var tcpuChart_list = function (categoryName, seriesName) {
 };
 
 
-var discoverChart_list = function (categoryName, seriesName) {
+var discoverChart_list = function (categoryName, seriesName, selectedDate) {
     var discoverChart_list_Data = $('#discoverChart').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
         lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
@@ -2482,6 +2491,7 @@ var discoverChart_list = function (categoryName, seriesName) {
             type: "POST",
             data: function (data) {
                 data.categoryName = categoryName;
+                data.selectedDate = selectedDate;
                 var defaultColumn = ''
                 var column = $('#column-dropdown').data('column');
                 var orderColumn = data.order[0].column;
