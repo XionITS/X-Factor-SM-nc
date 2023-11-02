@@ -31236,3 +31236,8 @@ label.no-before::before {
     padding: .125rem .5rem;
     font-size: .875rem;
 }
+
+.big-pagination .page-link {
+    padding: .5rem .75rem;
+    font-size: 1rem;
+}
