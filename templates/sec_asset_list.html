@@ -111,7 +111,7 @@
             )
             {% endif %}
 
-            <a href="{% url 'export' model='Xfactor_Common_Cache' %}?parameter_name=sec_asset2" class="btn btn-outline-warning export">Export to Excel</a>
+            <a href="{% url 'export' model='Xfactor_Common_Cache' %}?parameter_name=sec_asset2" class="btn btn-outline-warning export" onclick="return noti()">Export to Excel</a>
 
         </div>
     </div>
@@ -204,7 +204,14 @@
     </div>
   </div>
 </div>
-
+<script>
+function noti() {
+    if( confirm("추출 하시겠습니까?") ) {
+    }else {
+        return false;
+    }
+}
+</script>
 {% endblock %}
 
 
