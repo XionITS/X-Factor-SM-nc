@@ -741,8 +741,11 @@ $(document).on("click", ".ummore", function (e) {
 //###############################################################################
 
 //################ Group 권한관리 설정 JS ######################################
+function escapeHTML(html) {
+    return html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 $(document).on("click", ".um_groupmore", function (e) {
-    const xgroup_name = $(this).data("xgroup_name");
+    const xgroup_name = escapeHTML($(this).data("xgroup_name"));
     const id = $(this).data("id");
     const xuser_id_list = $(this).data("xuser_id_list");
 
@@ -782,7 +785,6 @@ $(document).on("click", ".um_groupmore", function (e) {
             });
 
             modalbody += '</form>';
-
             $("#um_auth_modal .hstbody").html(modalbody);
             $("#um_auth_modal").modal("show");
 
@@ -801,7 +803,7 @@ $(document).on("click", ".um_groupmore", function (e) {
                         auth_use: checkbox.is(":checked") ? 'true' : 'false'
                     });
                 });
-                console.log(x_id_array)
+                //console.log(x_id_array)
                 // 서버에 체크된 auth_ids와 x_id를 전달하여 DB에 저장 요청 보냄
                 $.ajax({
                     url: 'save_group_auth/',
@@ -841,6 +843,9 @@ $(document).on("click", "#um_insert", function (e) {
 });
 
 // delete 모달 열기 버튼 클릭 이벤트 핸들러
+function escapeHTML(html) {
+    return html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 $(document).on("click", "#um_delete", function (e) {
     var modalbody = "";
     const checkedIds = Object.keys(checkedItems); // Assuming checkedItems is an object with IDs as keys
@@ -862,7 +867,7 @@ $(document).on("click", "#um_delete", function (e) {
                     modalbody += `
                         <label class="form-check-label" for="${x_group_id}">
                             <input type="hidden" class="delete_hidden" id="${x_group_id}" value="${x_group_id}">
-                            ${xgroup_name}
+                            ${escapeHTML(xgroup_name)}
                         </label><br>`;
                 } else {
                     // If x_id is a regular string (e.g., "Test Group")
@@ -1336,8 +1341,8 @@ $(document).on("click","#group_alter", function(e) {
     var form = document.getElementById("GroupalterForm_auth");
     var xgroup_name = form.elements.groupNameAlter_auth.value;
     var id = form.elements.id.value;
-    console.log(form)
-    console.log("aaa")
+    //console.log(form)
+    //console.log("aaa")
     var xgroup_description = form.elements.groupDescriptionAlter_auth.value;
     let xuserIds = []
     const xuserElements = $('#group_alter_modal .form-check2').find('.form-check-input');
