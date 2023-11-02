@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from datetime import datetime, timedelta
+from django.utils.html import escape
 class NcdbSerializer(serializers.ModelSerializer):
     class Meta:
         model = Xfactor_ncdb
@@ -193,3 +194,8 @@ class XgroupSerializer(serializers.ModelSerializer):
         model = Xfactor_Xuser_Group
         fields = '__all__'
 
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['xgroup_name'] = escape(representation.get('xgroup_name', ''))
+    #     representation['xgroup_note'] = escape(representation.get('xgroup_note', ''))
+    #     return representation

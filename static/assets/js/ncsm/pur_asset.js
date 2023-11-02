@@ -140,6 +140,9 @@ var hw_pur_asset_list = function () {
                     5: 'logged_name_id__userId',
                     6: 'computer_name',
                     7: 'ip_address',
+                    8: 'first_network',
+                    9: 'mem_use',
+                    10: 'disk_use',
                     12: 'cache_date',
                     13: 'memo',
 
@@ -157,7 +160,7 @@ var hw_pur_asset_list = function () {
             },
             dataSrc: function (res) {
                 var data = res.data;
-
+                console.log(data);
                 return data;
             }
         },

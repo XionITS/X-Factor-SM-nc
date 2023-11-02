@@ -80,7 +80,7 @@ def pur_asset_paginghw(request):
     if filter_text and filter_column:
         if filter_column == "cache_date":
             user = user.filter(user_date__gte=today_collect_date)
-            if filter_text == "online":
+            if all(char in "online" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
                     output_field=fields.DurationField()
@@ -136,7 +136,7 @@ def pur_asset_paginghw(request):
                                  Q(mem_use__icontains=filter_value) |
                                  Q(disk_use__icontains=filter_value))
                     user = user.filter(query)
-            elif filter_text == "offline":
+            elif all(char in "offline" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
                     output_field=fields.DurationField()
@@ -317,6 +317,9 @@ def pur_asset_paginghw(request):
         5: 'logged_name_id__userId',
         6: 'computer_name',
         7: 'ip_address',
+        8: 'first_network',
+        9: 'mem_use',
+        10: 'disk_use',
         12: 'cache_date',
         13: 'memo',
         # Add mappings for other columns here
@@ -330,6 +333,10 @@ def pur_asset_paginghw(request):
     else:
         user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
 
+    # if order_column_dir == 'asc':
+    #     user = user.order_by(order_column, '-computer_id')
+    # else:
+    #     user = user.order_by('-' + order_column, 'computer_id')
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
@@ -384,7 +391,7 @@ def pur_asset_pagingsw(request):
     if filter_text and filter_column:
         if filter_column == "cache_date":
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
-            if filter_text == "online":
+            if all(char in "online" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
                     output_field=fields.DurationField()
@@ -440,7 +447,7 @@ def pur_asset_pagingsw(request):
                                  Q(mem_use__icontains=filter_value) |
                                  Q(disk_use__icontains=filter_value))
                     user = user.filter(query)
-            elif filter_text == "offline":
+            elif all(char in "offline" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
                     output_field=fields.DurationField()

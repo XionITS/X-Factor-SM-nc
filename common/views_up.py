@@ -61,7 +61,7 @@ def up_asset_paging(request):
     if filter_text and filter_column:
         if filter_column == "cache_date":
             user = user.filter(user_date__gte=today_collect_date)
-            if filter_text == "online":
+            if all(char in "online" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
                     output_field=fields.DurationField()
@@ -105,7 +105,7 @@ def up_asset_paging(request):
                                  Q(hotfix_date__icontains=filter_value) |
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
-            elif filter_text == "offline":
+            elif all(char in "offline" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
                     output_field=fields.DurationField()

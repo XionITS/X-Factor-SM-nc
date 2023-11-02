@@ -23,7 +23,6 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 def sec_asset(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='SEC_asset', auth_use='false')
-    print(user_auth)
     if user_auth:
         return redirect('../home/')
     #메뉴
@@ -66,7 +65,7 @@ def sec_asset_paging(request):
     if filter_text and filter_column:
         if filter_column == "cache_date":
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
-            if filter_text == "online":
+            if all(char in "online" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
                     output_field=fields.DurationField()
@@ -113,7 +112,7 @@ def sec_asset_paging(request):
                                  Q(security5__icontains=filter_value) |
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
-            elif filter_text == "offline":
+            elif all(char in "offline" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
                     output_field=fields.DurationField()
@@ -351,7 +350,7 @@ def sec_asset_list_paging(request):
     if filter_text and filter_column:
         if filter_column == "cache_date":
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
-            if filter_text == "online":
+            if all(char in "online" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
                     output_field=fields.DurationField()
@@ -414,7 +413,7 @@ def sec_asset_list_paging(request):
                                  Q(memo__icontains=filter_value)
                                  )
                     user = user.filter(query)
-            elif filter_text == "offline":
+            elif all(char in "offline" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
                     output_field=fields.DurationField()
