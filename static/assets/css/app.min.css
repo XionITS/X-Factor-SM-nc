@@ -31231,3 +31231,8 @@ label.no-before::before {
 .datepicker .day.disabled {
     color: #696969 !important;  // 색상을 원하는 값으로 변경하세요.
 }
+
+.small-pagination .page-link {
+    padding: .125rem .5rem;
+    font-size: .875rem;
+}
