@@ -864,14 +864,15 @@ $(document).on("click", "#um_delete", function (e) {
                             <input type="hidden" class="delete_hidden" id="${x_group_id}" value="${x_group_id}">
                             ${xgroup_name}
                         </label><br>`;
+                    document.querySelector("#um_delete_modal .modal-title").innerText='그룹 삭제';
                 } else {
                     // If x_id is a regular string (e.g., "Test Group")
+                    document.querySelector("#um_delete_modal .modal-title").innerText='사용자 삭제';
                     const x_name = x_id;
                     modalbody += '<label class="form-check-label" for="x_id"><input type="hidden" class="delete_hidden" id="' + x_id + '" value="' + x_id + '">' + x_name + '</label><br>';
                 }
             }
         });
-
         $("#um_delete_form .form-check").html(modalbody);
         // $("#um_delete_form").modal("show"); // Uncomment this line if needed
     }
@@ -1151,7 +1152,7 @@ $(document).on("click","#um_creategroup", function (e){
             }
 
  /////////////////모달바디 저장하여  html에 넣기
-            $("#group_insert_modal .modal-title").html("그룹 생성 팝업창");
+            $("#group_insert_modal .modal-title").html("그룹 생성");
             $("#group_insert_modal .form-check").html(modalbody);
             $("#group_insert_modal .form-check2").html(modalbody2);
             $("#group_insert_modal").modal("show");

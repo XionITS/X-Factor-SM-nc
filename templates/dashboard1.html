@@ -662,6 +662,7 @@
                         <input type="hidden" id="categoryName" value="">
                         <input type="hidden" id="seriesName" value="">
                         <input type="hidden" id="chartName" value="">
+                        <input type="hidden" id="selectedDate" value="">
                         <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
@@ -680,9 +681,9 @@ document.getElementById('reportPop').addEventListener('click', function() {
     var seriesName = document.getElementById('seriesName').value;
     var categoryName = document.getElementById('categoryName').value;
     var chartName = document.getElementById('chartName').value;
-
+    var selectedDate = document.getElementById('selectedDate').value;
     // Django가 반환하는 상대 URL에 원점을 추가하여 절대 URL을 만듭니다.
-    var relativeUrl = "{% url 'export' model='Xfactor_Daily' %}";
+    var relativeUrl = "{% url 'export' model='Xfactor_Common_Cache' %}";
     var absoluteUrl = window.location.origin + relativeUrl;
 
     // 절대 URL으로 'URL' 객체를 생성합니다.
@@ -691,6 +692,7 @@ document.getElementById('reportPop').addEventListener('click', function() {
     url.searchParams.set('parameter_name', chartName);
     url.searchParams.set('seriesName', seriesName);
     url.searchParams.set('categoryName', categoryName);
+    url.searchParams.set('selectedDate', selectedDate);
 
     // 변경된 URL로 이동합니다.
     window.location.href = url.toString();

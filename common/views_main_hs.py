@@ -45,9 +45,9 @@ def dashboard(request):
     menu_user = XuserAuthSerializer(xuser_auths, many=True)
     xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
     menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
+
     all_menu = menu_user.data + menu_group.data
     unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
-
     selected_date = None
     if 'datetime' in request.GET:
         selected_date = request.GET['datetime']
@@ -165,6 +165,7 @@ def dashboard1(request):
 @csrf_exempt
 def hs_asset(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],xfactor_auth_id='HS_asset', auth_use='false')
+    # group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],xfactor_auth_id='HS_asset', auth_use='false')
     print(user_auth)
     if user_auth:
         return redirect('../home/')
@@ -202,8 +203,9 @@ def hs_asset(request):
 @csrf_exempt
 def hs_asset_paginghw(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'], xfactor_auth_id='HS_asset', auth_use='false')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='HS_asset', auth_use='false')
     print(user_auth)
-    if user_auth:
+    if user_auth and group_auth:
         return redirect('../../home/')
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
@@ -506,8 +508,9 @@ def hs_asset_paginghw(request):
 def hs_asset_pagingsw(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='HS_asset', auth_use='false')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='HS_asset', auth_use='false')
     print(user_auth)
-    if user_auth:
+    if user_auth and group_auth:
         return redirect('../../home/')
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)

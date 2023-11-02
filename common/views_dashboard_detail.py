@@ -17,9 +17,7 @@ from .serializers import *
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
-local_tz = pytz.timezone('Asia/Seoul')
-utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
-now = utc_now.astimezone(local_tz)
+
 # start_of_today = now.replace(minute=0, second=0, microsecond=0)
 # start_of_day = start_of_today - timedelta(days=7)
 # end_of_today = start_of_today + timedelta(minutes=50)
@@ -83,7 +81,7 @@ def all_asset_paging1(request):
     if request.POST.get('categoryName') == 'Online':
         if request.POST.get('seriesName') == 'Other':
             #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
-            user = user.exclude(chassistype__in=['Notebook', 'Desktop'])
+            user = user.exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             print(user)
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
@@ -95,7 +93,7 @@ def all_asset_paging1(request):
                 user = user.filter(query)
             else:
                 #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
-                user = user.exclude(chassistype__in=['Notebook', 'Desktop'])
+                user = user.exclude(chassistype='Notebook').exclude(chassistype='Desktop')
         if request.POST.get('seriesName') != 'Other':
             #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
             #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName'))
@@ -114,7 +112,7 @@ def all_asset_paging1(request):
 
     if request.POST.get('categoryName') == 'Total':
         if request.POST.get('seriesName') == 'Other':
-            user = cache.exclude(chassistype__in=['Notebook', 'Desktop'])
+            user = cache.exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName=filter_text) |
@@ -124,7 +122,7 @@ def all_asset_paging1(request):
                          Q(mac_address__icontains=filter_text))
                 user = user.filter(query)
             else:
-                user = cache.exclude(chassistype__in=['Notebook', 'Desktop'])
+                user = cache.exclude(chassistype='Notebook').exclude(chassistype='Desktop')
         if request.POST.get('seriesName') != 'Other':
             user = cache.filter(chassistype=request.POST.get('seriesName'))
             if filter_text:
@@ -187,6 +185,9 @@ def all_asset_paging1(request):
 #전체 자산 수 os별 차트1
 @csrf_exempt
 def asset_os_paging1(request):
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
     user = ''
@@ -214,7 +215,10 @@ def asset_os_paging1(request):
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
-        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
+
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
@@ -375,6 +379,10 @@ def asset_os_paging1(request):
 #전체 자산 수 os별 차트1
 @csrf_exempt
 def asset_os_paging2(request):
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
+
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     print(request.POST.get('categoryName'))
     print(request.POST.get('seriesName'))
@@ -404,7 +412,10 @@ def asset_os_paging2(request):
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
-        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
+
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
@@ -560,12 +571,13 @@ def asset_os_paging2(request):
 def oslistPieChart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
     print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
-
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
@@ -586,7 +598,9 @@ def oslistPieChart(request):
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
-        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
@@ -596,7 +610,7 @@ def oslistPieChart(request):
         cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
-    user = user.filter( os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
+    user = user.filter(os_simple='Windows', os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
                  Q(logged_name_id__deptName=filter_text) |
@@ -654,7 +668,9 @@ def oslistPieChart(request):
 def osVerPieChart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
     print(request.POST.get('selectedDate'))
@@ -680,7 +696,9 @@ def osVerPieChart(request):
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
-        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
@@ -760,7 +778,9 @@ def osVerPieChart(request):
 def office_chart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
     print(request.POST.get('selectedDate'))
@@ -786,7 +806,9 @@ def office_chart(request):
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
-        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
@@ -820,10 +842,6 @@ def office_chart(request):
     if request.POST.get('categoryName') == 'Office 설치 안됨':
         #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today,essential5='오피스 없음')
         user = user.filter(essential5='오피스 없음')
-        print(start_of_today)
-        print(start_of_today)
-        print(start_of_today)
-        print(start_of_today)
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(logged_name_id__deptName=filter_text) |
@@ -893,7 +911,9 @@ def office_chart(request):
 def subnet_chart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
     print(request.POST.get('selectedDate'))
@@ -919,7 +939,9 @@ def subnet_chart(request):
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
-        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
@@ -1025,7 +1047,9 @@ def hotfixChart(request):
     three_months_ago = datetime.now() - timedelta(days=90)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
     print(request.POST.get('selectedDate'))
@@ -1051,7 +1075,9 @@ def hotfixChart(request):
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
-        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
@@ -1139,7 +1165,9 @@ def hotfixChart(request):
 def tcpuChart(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
-
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
     print(request.POST.get('selectedDate'))
@@ -1165,7 +1193,9 @@ def tcpuChart(request):
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
-        start_of_today = now.replace(minute=0, second=0, microsecond=0)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
