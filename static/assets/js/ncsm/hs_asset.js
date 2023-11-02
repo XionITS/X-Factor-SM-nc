@@ -1419,22 +1419,22 @@ var hw_asset_list = function () {
 		serverSide: true,
 		displayLength: false,
         autoWidth: false,
-        buttons: [
-            {
-                text: 'Select All',
-                className: 'ms-1',
-                action: function () {
-                    hs_asset_list_Data.rows().select();
-                }
-            },
-            {
-                text: 'Select None',
-                className: 'ms-1',
-                action: function () {
-                    hs_asset_list_Data.rows().deselect();
-                }
-            }
-        ],
+        // buttons: [
+        //     {
+        //         text: 'Select All',
+        //         className: 'ms-1',
+        //         action: function () {
+        //             hs_asset_list_Data.rows().select();
+        //         }
+        //     },
+        //     {
+        //         text: 'Select None',
+        //         className: 'ms-1',
+        //         action: function () {
+        //             hs_asset_list_Data.rows().deselect();
+        //         }
+        //     }
+        // ],
         select: true,
 		ajax: {
 			url: 'hwpaging/',

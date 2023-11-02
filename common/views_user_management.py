@@ -17,7 +17,6 @@ import pytz
 import psycopg2
 from django.shortcuts import get_object_or_404
 from common.views_user import Group_AutoAuth, DeleteAuth, Group_modifyAuth
-import re
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -39,7 +38,9 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 def um(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../home/')
     #메뉴
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
@@ -55,7 +56,9 @@ def um(request):
 def um_user(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     user = Xfactor_Xuser.objects.values('x_id', 'x_name', 'x_email', 'x_auth', 'create_date')
     #user = Xfactor_Common.objects.prefetch_related('purchase').filter(user_date__gte=today_collect_date)
@@ -106,7 +109,9 @@ def um_user(request):
 def user_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     x_id = request.POST.get("x_id")
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=x_id)
@@ -118,7 +123,9 @@ def user_auth(request):
 def group_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     id = request.POST.get("id")
     xgroup_auth = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=id).distinct('auth_use', 'xfactor_auth_id', 'xgroup_id')
@@ -131,7 +138,9 @@ def group_auth(request):
 def save_user_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     x_ids_str = request.POST.get('x_id')  # 쉼표로 구분된 문자열을 얻음
     #x_ids = x_ids_str.split(',')
@@ -182,7 +191,9 @@ def save_user_auth(request):
 def save_group_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     xgroup_id = request.POST.get('id')
     x_ids_str = request.POST.get('x_id_array')  # 쉼표로 구분된 문자열을 얻음
@@ -224,7 +235,9 @@ def save_group_auth(request):
 def create_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     xgroup_name = request.POST['xgroup_name']
     xgroup_description = request.POST['xgroup_description']
@@ -270,7 +283,9 @@ def create_auth(request):
 def alter_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     xgroup_name = request.POST['xgroup_name']
     id = request.POST['id']
@@ -339,7 +354,9 @@ def alter_auth(request):
 def um_group(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     user = Xfactor_Xuser_Group.objects.all()
     #user = Xfactor_Common.objects.prefetch_related('purchase').filter(user_date__gte=today_collect_date)
@@ -389,8 +406,9 @@ def um_group(request):
 def search_box(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     if request.method == "POST":
         search_text = request.POST.get('searchText', None)
@@ -404,8 +422,9 @@ def search_box(request):
 def user_list(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     user = Xfactor_Xuser.objects.all()
 
@@ -419,8 +438,9 @@ def user_list(request):
 def db_list(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
     user = Xfactor_ncdb.objects.exclude(userName__isnull=True).exclude(email__isnull=True)
 
@@ -471,8 +491,9 @@ def db_list(request):
 def insertAuth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    print(user_auth)
+    if user_auth and group_auth:
         return redirect('../../home/')
 
     user = Xfactor_Xuser.objects.all()

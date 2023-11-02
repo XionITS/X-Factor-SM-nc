@@ -145,6 +145,7 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('categoryName').value = categoryName;
                         document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'all_asset1';
+                        document.getElementById('selectedDate').value = selectedDate;
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
                         all_asset_detail_list1(categoryName, seriesName, selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
@@ -303,6 +304,7 @@ var handleRenderChartNCOMG = function () {
                         var seriesName = config.w.config.series[seriesIndex].name;
                         document.getElementById('categoryName').value = categoryName;
                         document.getElementById('seriesName').value = seriesName;
+                        document.getElementById('selectedDate').value = selectedDate;
                         document.getElementById('chartName').value = 'asset_os_detail1';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
                         asset_os_detail_list1(categoryName, seriesName, selectedDate);
@@ -446,6 +448,7 @@ var handleRenderChartNCOMG = function () {
                         var seriesName = config.w.config.series[seriesIndex].name;
                         document.getElementById('categoryName').value = categoryName;
                         document.getElementById('seriesName').value = seriesName;
+                        document.getElementById('selectedDate').value = selectedDate;
                         document.getElementById('chartName').value = 'asset_os_detail2';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
                         asset_os_detail_list2(categoryName, seriesName, selectedDate);
@@ -601,6 +604,7 @@ var handleRenderChartNCOMG = function () {
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
                         document.getElementById('categoryName').value = labelsName;
+                        document.getElementById('selectedDate').value = selectedDate;
                         document.getElementById('chartName').value = 'oslistPieChart';
                         $("#DashModal .modal-title").html(labelsName+' List');
                         oslistPieChart_list(labelsName, seriesName, selectedDate);
@@ -692,6 +696,7 @@ var handleRenderChartNCOMG = function () {
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
                         document.getElementById('categoryName').value = labelsName;
+                        document.getElementById('selectedDate').value = selectedDate;
                         document.getElementById('chartName').value = 'osVerPieChart';
                         $("#DashModal .modal-title").html(labelsName+' List');
                         osVerPieChart_list(labelsName, seriesName, selectedDate);
@@ -848,6 +853,7 @@ var handleRenderChartNCOMG = function () {
                             var dataPointIndex = config.dataPointIndex;
                             var labelsName = config.w.config.labels[dataPointIndex];
                             document.getElementById('categoryName').value = labelsName;
+                            document.getElementById('selectedDate').value = selectedDate;
                             document.getElementById('chartName').value = 'discoverChart';
                             $("#DashModal .modal-title").html(labelsName+' List');
                             osVerPieChart_list(labelsName, seriesName, selectedDate);
@@ -964,6 +970,7 @@ var handleRenderChartNCOMG = function () {
                         var dataPointIndex = config.dataPointIndex;
                         var labelsName = config.w.config.labels[dataPointIndex];
                         document.getElementById('categoryName').value = labelsName;
+                        document.getElementById('selectedDate').value = selectedDate;
                         document.getElementById('chartName').value = 'hotfix_chart';
                         $("#DashModal .modal-title").html(labelsName+' List');
                         hotfix_chart_list(labelsName, seriesName, selectedDate);
@@ -1078,6 +1085,7 @@ var handleRenderChartNCOMG = function () {
                         var categoryName = config.w.config.xaxis.categories[dataPointIndex];
                         // var seriesName = config.w.config.series[seriesIndex].name;
                         document.getElementById('categoryName').value = categoryName;
+                        document.getElementById('selectedDate').value = selectedDate;
                         // document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'subnet_chart';
                         $("#DashModal .modal-title").html(categoryName+' List');
@@ -1192,6 +1200,7 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('categoryName').value = categoryName;
                         document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'office_chart';
+                        document.getElementById('selectedDate').value = selectedDate;
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
                         office_chart_list(categoryName, seriesName, selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
@@ -1426,6 +1435,7 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('categoryName').value = categoryName;
                         // document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'tcpuChart';
+                        document.getElementById('selectedDate').value = 'selectedDate';
                         $("#DashModal .modal-title").html(categoryName+' List');
                         tcpuChart_list(categoryName, '', selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
