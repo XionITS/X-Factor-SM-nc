@@ -16,7 +16,7 @@ $(document).ready(function(){
     $("#datepicker1").datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
-        startDate: '2023-10-13',
+        startDate: '2023-10-18',
         endDate: '0d',
     }).on('changeDate', function(e) {
         date1 = e.format()
@@ -28,7 +28,7 @@ $(document).ready(function(){
     $("#datepicker2").datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
-        startDate: '2023-10-13',
+        startDate: '2023-10-18',
         endDate: '0d',
     }).on('changeDate', function(e) {
         date2 = e.format()
