@@ -25,7 +25,7 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 def history(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='History', auth_use='false')
-    print(user_auth)
+    #print(user_auth)
     if user_auth:
         return redirect('../home/')
     #메뉴
@@ -43,19 +43,25 @@ def history(request):
 def search_h(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='History', auth_use='false')
-    print(user_auth)
+    #print(user_auth)
     if user_auth:
         return redirect('../../home/')
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
-        date1 = request.POST.get('date1')
-        date2 = request.POST.get('date2')
-        user1 = Xfactor_Daily.objects.filter(user_date__date=date1).filter(computer_name__icontains=search_text)
-        user2 = Xfactor_Daily.objects.filter(user_date__date=date2).filter(computer_name__icontains=search_text)
+        date1 = datetime.strptime(request.POST.get('date1'), "%Y-%m-%d %H시")
+        date2 = datetime.strptime(request.POST.get('date2'), "%Y-%m-%d %H시")
 
-        user_data1 = Dailyserializer(user1, many=True).data
-        user_data2 = Dailyserializer(user2, many=True).data
+        start_h_1 = timezone.make_aware(datetime.combine(date1.date(), datetime.min.time())) + timedelta(hours=date1.hour)
+        end_h_1 = start_h_1 + timedelta(hours=1)
+        start_h_2 = timezone.make_aware(datetime.combine(date1.date(), datetime.min.time())) + timedelta(hours=date2.hour)
+        end_h_2 = start_h_2 + timedelta(hours=1)
+
+        user1 = Xfactor_Common_Cache.objects.filter(user_date__range=(start_h_1, end_h_1)).filter(computer_name__icontains=search_text).order_by('-user_date').first()
+        user2 = Xfactor_Common_Cache.objects.filter(user_date__range=(start_h_2, end_h_2)).filter(computer_name__icontains=search_text).order_by('-user_date').first()
+
+        user_data1 = Cacheserializer(user1).data
+        user_data2 = Cacheserializer(user2).data
         # response = {
         #     'data': user_data,  # Serialized data for the current page
         # }
@@ -67,14 +73,14 @@ def search_h(request):
 def search_box_h(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='History', auth_use='false')
-    print(user_auth)
+    #print(user_auth)
     if user_auth:
         return redirect('../../home/')
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
         user_data = Xfactor_Common.objects.filter(computer_name__icontains=search_text).values('computer_name')
-        print(user_data)
+        #print(user_data)
         # user_data = XfactorServiceserializer(user, many=True).data
         return JsonResponse({'data': list(user_data)})
 

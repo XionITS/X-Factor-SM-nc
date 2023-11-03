@@ -36,7 +36,7 @@ def all_asset_paging1(request):
     filter_text = request.POST.get('search[value]')
     user = ''
     cache = ''
-    print(request.POST.get('selectedDate'))
+    #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
 
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
@@ -44,7 +44,7 @@ def all_asset_paging1(request):
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
-            print('111111111111')
+            #print('111111111111')
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
@@ -53,21 +53,21 @@ def all_asset_paging1(request):
             # 토탈
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
-            print('2222222222')
+            #print('2222222222')
             end_of_today = start_of_today + timedelta(minutes=50)
             # 현재
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
             # 토탈
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
-        print(len(user))
+        #print(len(user))
     elif request.POST.get('selectedDate') == '':
-        print('3333333333')
+        #print('3333333333')
         # 출력 형식을 설정합니다.
         start_of_today1 = now.strftime('%Y-%m-%d %H')
         start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
         start_of_today = timezone.make_aware(start_of_today2)
-        print(start_of_today)
+        #print(start_of_today)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
@@ -82,7 +82,7 @@ def all_asset_paging1(request):
         if request.POST.get('seriesName') == 'Other':
             #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])
             user = user.exclude(chassistype='Notebook').exclude(chassistype='Desktop')
-            print(user)
+            #print(user)
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
@@ -192,7 +192,7 @@ def asset_os_paging1(request):
     filter_text = request.POST.get('search[value]')
     user = ''
     cache = ''
-    print(request.POST.get('selectedDate'))
+    #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
 
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
@@ -227,8 +227,8 @@ def asset_os_paging1(request):
         # 토탈
         cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
-    print(request.POST.get('categoryName'))
-    print(request.POST.get('seriesName'))
+    #print(request.POST.get('categoryName'))
+    #print(request.POST.get('seriesName'))
     if request.POST.get('categoryName') == 'Other':
         if request.POST.get('seriesName') == 'Desktop':
             #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
@@ -384,12 +384,12 @@ def asset_os_paging2(request):
     now = utc_now.astimezone(local_tz)
 
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
-    print(request.POST.get('categoryName'))
-    print(request.POST.get('seriesName'))
+    #print(request.POST.get('categoryName'))
+    #print(request.POST.get('seriesName'))
 
     user = ''
     cache = ''
-    print(request.POST.get('selectedDate'))
+    #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
 
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
@@ -576,7 +576,7 @@ def oslistPieChart(request):
     now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
-    print(request.POST.get('selectedDate'))
+    #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
         start_of_today = timezone.make_aware(start_date_naive)
@@ -673,7 +673,7 @@ def osVerPieChart(request):
     now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
-    print(request.POST.get('selectedDate'))
+    #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
 
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
@@ -783,7 +783,7 @@ def office_chart(request):
     now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
-    print(request.POST.get('selectedDate'))
+    #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
 
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
@@ -916,7 +916,7 @@ def subnet_chart(request):
     now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
-    print(request.POST.get('selectedDate'))
+    #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
 
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
@@ -1052,7 +1052,7 @@ def hotfixChart(request):
     now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
-    print(request.POST.get('selectedDate'))
+    #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
 
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
@@ -1170,7 +1170,7 @@ def tcpuChart(request):
     now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
-    print(request.POST.get('selectedDate'))
+    #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
 
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
