@@ -869,8 +869,11 @@ $(document).on("click", "#um_delete", function (e) {
                             <input type="hidden" class="delete_hidden" id="${x_group_id}" value="${x_group_id}">
                             ${escapeHTML(xgroup_name)}
                         </label><br>`;
+                    document.querySelector("#um_delete_modal .modal-title").innerText='그룹 삭제';
+
                 } else {
                     // If x_id is a regular string (e.g., "Test Group")
+                    document.querySelector("#um_delete_modal .modal-title").innerText='사용자 삭제';
                     const x_name = x_id;
                     modalbody += '<label class="form-check-label" for="x_id"><input type="hidden" class="delete_hidden" id="' + x_id + '" value="' + x_id + '">' + x_name + '</label><br>';
                 }
