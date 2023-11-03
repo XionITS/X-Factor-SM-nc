@@ -20,6 +20,7 @@ $(document).ready(function(){
         formatTime: 'H시',
         minDate: '2023/10/18',
         maxDate: currentDateTime,
+        roundTime:'floor',
         onChangeDateTime:function(dp,$input){
             date1 = $input.val();
         }
@@ -33,6 +34,7 @@ $(document).ready(function(){
         formatTime: 'H시',
         minDate: '2023/10/18',
         maxDate: currentDateTime,
+        roundTime:'floor',
         onChangeDateTime:function(dp,$input){
             date2 = $input.val();
         }
