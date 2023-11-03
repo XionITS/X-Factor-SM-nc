@@ -75,7 +75,6 @@ def export(request, model):
     if request.GET.get('selectedDate') == None:
         pass
     elif request.GET.get('selectedDate') != '':
-        print("000")
         start_date_naive = datetime.strptime(request.GET.get('selectedDate'), "%Y-%m-%d-%H")
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
@@ -86,7 +85,6 @@ def export(request, model):
         cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.GET.get('selectedDate') == '':
-        print('111')
         start_of_today1 = now.strftime('%Y-%m-%d %H')
         start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
         start_of_today = timezone.make_aware(start_of_today2)
