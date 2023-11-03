@@ -892,6 +892,7 @@ $(document).on("click", "#um_delete", function (e) {
                             ${escapeHTML(xgroup_name)}
                         </label><br>`;
                     document.querySelector("#um_delete_modal .modal-title").innerText='그룹 삭제';
+
                 } else {
                     // If x_id is a regular string (e.g., "Test Group")
                     document.querySelector("#um_delete_modal .modal-title").innerText='사용자 삭제';
