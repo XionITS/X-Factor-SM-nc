@@ -31124,7 +31124,7 @@ input:checked+labl::before{
 
 .group_modal {
     --bs-modal-zindex: 1051;
-    --bs-modal-width: 1400px;
+    --bs-modal-width: 1600px;
     --bs-modal-padding: 1rem;
     --bs-modal-margin: 0.5rem;
     --bs-modal-bg: none;
@@ -31151,7 +31151,8 @@ input:checked+labl::before{
     height: 100%;
     overflow-x: hidden;
     overflow-y: auto;
-    outline: 0
+    outline: 0;
+    max-height: 80vh;
 }
 .ui-autocomplete {
     position:absolute;
