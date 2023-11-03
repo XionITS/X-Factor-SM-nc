@@ -22,107 +22,103 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
         order: [
             [3, "asc"]
         ],
+        // 기존 설정에 추가
         drawCallback: function (settings) {
-            // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({page: 'current'}).nodes();
-            var allCheckedOnCurrentPage = rows.length > 0;
+            var pageInfo = api.page.info();
+            var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
 
+            // 기존 페이지네이션 제거
+            $pagination.empty();
 
-            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var data = api.row(row).data();
-                var computer_id = data.computer_id;
+            // 부트스트랩 페이징 컨테이너 생성
+            var $ul = $('<ul>', {class: 'pagination small-pagination'}).appendTo($pagination);
 
-                if (checkedItems[computer_id]) {
-                    $(row).find('input[type="checkbox"]').prop('checked', true);
-                } else {
-                    $(row).find('input[type="checkbox"]').prop('checked', false);
-                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
-                }
-            }
-            $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_sec = all_asset_detail1_Data.page();
-            var total_pages_sec = all_asset_detail1_Data.page.info().pages;
-            $('#nexts').remove();
-            $('#after').remove();
-
-            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
-                    .insertAfter('#sec_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_sec">≪10</button>')
-                    .insertBefore('#sec_asset_list_paginate .paginate_button:first');
+            // 첫 페이지 번호 버튼 생성
+            if (pageInfo.page > 5) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '1',
+                        click: function () {
+                            api.page(0).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            var startPage = Math.floor(current_page_sec / 10) * 10;
-            var endPage = startPage + 9;
-            if (endPage > total_pages_sec - 1) {
-                endPage = total_pages_sec - 1;
+            // << 10 버튼 생성
+            if (pageInfo.page > 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '<< 10',
+                        click: function () {
+                            api.page(pageInfo.page - 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            // 중앙 페이지네이션 생성
+            var startPage = Math.max(0, pageInfo.page - 5);
+            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
 
-            var maxButtons = 10;
-            var halfWay = Math.floor(maxButtons / 2);
-
-            if (current_page_sec < halfWay) {
-                var startPage = 0;
-                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
-            } else if ((current_page_sec + halfWay) > total_pages_sec) {
-                var startPage = total_pages_sec - maxButtons;
-                var endPage = total_pages_sec - 1;
-            } else {
-                var startPage = current_page_sec - halfWay;
-                var endPage = current_page_sec + halfWay;
+            if (startPage > 0) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
+            }
+            for (var i = startPage; i < endPage; i++) {
+                $('<li>', {
+                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: i + 1,
+                        click: function (event) {
+                            api.page($(event.target).text() - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
+            }
+            if (endPage < pageInfo.pages) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
             }
 
-            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(0).draw(false);
-                })
-                .insertAfter('#after_sec')
-                .css(current_page_sec == 0 ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
-            if (startPage > 1) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter(oneButton);
+            // 10 >> 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '10 >>',
+                        click: function () {
+                            api.page(pageInfo.page + 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            for (var i = startPage; i <= endPage; i++) {
-                if (i == 0 || i == total_pages_sec - 1) continue;
-                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                if (i == current_page_sec) {
-                    btn.addClass('current');
-                    btn.css({
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    });
-                }
-                btn.on('click', function() {
-                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
-                });
-                btn.insertBefore('#nexts_sec');
+            // 마지막 페이지 번호 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 6) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: pageInfo.pages,
+                        click: function () {
+                            api.page(pageInfo.pages - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
-
-            if (endPage < total_pages_sec - 2) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertBefore('#nexts_sec');
-            }
-
-            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
-                })
-                .insertBefore('#nexts_sec')
-                .css(current_page_sec == (total_pages_sec - 1) ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
         },
+
         ajax: {
             url: 'all_asset_paging1/',
             type: "POST",
@@ -250,21 +246,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
         pagingType: 'numbers',//이전 다음 버튼 히든처리
     });
 
-	$(document).on('click', '#nexts_sec, #after_sec', function() {
-        var current_page_sec = all_asset_detail1_Data.page();
-        var total_pages_sec = all_asset_detail1_Data.page.info().pages;
-        if ($(this).attr('id') == 'nexts_sec') {
-            if (current_page_sec + 10 < total_pages_sec) {
-                all_asset_detail1_Data.page(current_page_sec + 10).draw('page');
-            } else {
-                all_asset_detail1_Data.page(total_pages_sec - 1).draw('page');
-            }
-        } else {
-            all_asset_detail1_Data.page(Math.max(current_page_sec - 10, 0)).draw('page');
-        }
-    });
-    var customStyle = '<style>#nexts_sec, #after_sec {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
-    $('head').append(customStyle);
+
 };
 
 
@@ -298,105 +280,99 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
             [3, "asc"]
         ],
         drawCallback: function (settings) {
-            // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({page: 'current'}).nodes();
-            var allCheckedOnCurrentPage = rows.length > 0;
+            var pageInfo = api.page.info();
+            var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
 
+            // 기존 페이지네이션 제거
+            $pagination.empty();
 
-            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var data = api.row(row).data();
-                var computer_id = data.computer_id;
+            // 부트스트랩 페이징 컨테이너 생성
+            var $ul = $('<ul>', {class: 'pagination small-pagination'}).appendTo($pagination);
 
-                if (checkedItems[computer_id]) {
-                    $(row).find('input[type="checkbox"]').prop('checked', true);
-                } else {
-                    $(row).find('input[type="checkbox"]').prop('checked', false);
-                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
-                }
-            }
-            $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_sec = asset_os_detail_list1_Data.page();
-            var total_pages_sec = asset_os_detail_list1_Data.page.info().pages;
-            $('#nexts').remove();
-            $('#after').remove();
-
-            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
-                    .insertAfter('#sec_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_sec">≪10</button>')
-                    .insertBefore('#sec_asset_list_paginate .paginate_button:first');
+            // 첫 페이지 번호 버튼 생성
+            if (pageInfo.page > 5) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '1',
+                        click: function () {
+                            api.page(0).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            var startPage = Math.floor(current_page_sec / 10) * 10;
-            var endPage = startPage + 9;
-            if (endPage > total_pages_sec - 1) {
-                endPage = total_pages_sec - 1;
+            // << 10 버튼 생성
+            if (pageInfo.page > 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '<< 10',
+                        click: function () {
+                            api.page(pageInfo.page - 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            // 중앙 페이지네이션 생성
+            var startPage = Math.max(0, pageInfo.page - 5);
+            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
 
-            var maxButtons = 10;
-            var halfWay = Math.floor(maxButtons / 2);
-
-            if (current_page_sec < halfWay) {
-                var startPage = 0;
-                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
-            } else if ((current_page_sec + halfWay) > total_pages_sec) {
-                var startPage = total_pages_sec - maxButtons;
-                var endPage = total_pages_sec - 1;
-            } else {
-                var startPage = current_page_sec - halfWay;
-                var endPage = current_page_sec + halfWay;
+            if (startPage > 0) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
+            }
+            for (var i = startPage; i < endPage; i++) {
+                $('<li>', {
+                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: i + 1,
+                        click: function (event) {
+                            api.page($(event.target).text() - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
+            }
+            if (endPage < pageInfo.pages) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
             }
 
-            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(0).draw(false);
-                })
-                .insertAfter('#after_sec')
-                .css(current_page_sec == 0 ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
-            if (startPage > 1) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter(oneButton);
+            // 10 >> 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '10 >>',
+                        click: function () {
+                            api.page(pageInfo.page + 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            for (var i = startPage; i <= endPage; i++) {
-                if (i == 0 || i == total_pages_sec - 1) continue;
-                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                if (i == current_page_sec) {
-                    btn.addClass('current');
-                    btn.css({
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    });
-                }
-                btn.on('click', function() {
-                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
-                });
-                btn.insertBefore('#nexts_sec');
+            // 마지막 페이지 번호 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 6) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: pageInfo.pages,
+                        click: function () {
+                            api.page(pageInfo.pages - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
-
-            if (endPage < total_pages_sec - 2) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertBefore('#nexts_sec');
-            }
-
-            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
-                })
-                .insertBefore('#nexts_sec')
-                .css(current_page_sec == (total_pages_sec - 1) ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
         },
         ajax: {
             url: 'asset_os_paging1/',
@@ -557,106 +533,99 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
             [3, "asc"]
         ],
         drawCallback: function (settings) {
-            // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({page: 'current'}).nodes();
-            var allCheckedOnCurrentPage = rows.length > 0;
+            var pageInfo = api.page.info();
+            var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
 
+            // 기존 페이지네이션 제거
+            $pagination.empty();
 
-            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var data = api.row(row).data();
-                var computer_id = data.computer_id;
+            // 부트스트랩 페이징 컨테이너 생성
+            var $ul = $('<ul>', {class: 'pagination small-pagination'}).appendTo($pagination);
 
-                if (checkedItems[computer_id]) {
-                    $(row).find('input[type="checkbox"]').prop('checked', true);
-                } else {
-                    $(row).find('input[type="checkbox"]').prop('checked', false);
-                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
-                }
-            }
-            $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_sec = asset_os_detail_list2_Data.page();
-            var total_pages_sec = asset_os_detail_list2_Data.page.info().pages;
-            $('#nexts').remove();
-            $('#after').remove();
-
-            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
-                    .insertAfter('#sec_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_sec">≪10</button>')
-                    .insertBefore('#sec_asset_list_paginate .paginate_button:first');
+            // 첫 페이지 번호 버튼 생성
+            if (pageInfo.page > 5) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '1',
+                        click: function () {
+                            api.page(0).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            var startPage = Math.floor(current_page_sec / 10) * 10;
-            var endPage = startPage + 9;
-            if (endPage > total_pages_sec - 1) {
-                endPage = total_pages_sec - 1;
+            // << 10 버튼 생성
+            if (pageInfo.page > 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '<< 10',
+                        click: function () {
+                            api.page(pageInfo.page - 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            // 중앙 페이지네이션 생성
+            var startPage = Math.max(0, pageInfo.page - 5);
+            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
 
-            var maxButtons = 10;
-            var halfWay = Math.floor(maxButtons / 2);
-
-            if (current_page_sec < halfWay) {
-                var startPage = 0;
-                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
-            } else if ((current_page_sec + halfWay) > total_pages_sec) {
-                var startPage = total_pages_sec - maxButtons;
-                var endPage = total_pages_sec - 1;
-            } else {
-                var startPage = current_page_sec - halfWay;
-                var endPage = current_page_sec + halfWay;
+            if (startPage > 0) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
+            }
+            for (var i = startPage; i < endPage; i++) {
+                $('<li>', {
+                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: i + 1,
+                        click: function (event) {
+                            api.page($(event.target).text() - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
+            }
+            if (endPage < pageInfo.pages) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
             }
 
-            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(0).draw(false);
-                })
-                .insertAfter('#after_sec')
-                .css(current_page_sec == 0 ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
-            if (startPage > 1) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter(oneButton);
+            // 10 >> 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '10 >>',
+                        click: function () {
+                            api.page(pageInfo.page + 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            for (var i = startPage; i <= endPage; i++) {
-                if (i == 0 || i == total_pages_sec - 1) continue;
-                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                if (i == current_page_sec) {
-                    btn.addClass('current');
-                    btn.css({
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    });
-                }
-                btn.on('click', function() {
-                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
-                });
-                btn.insertBefore('#nexts_sec');
+            // 마지막 페이지 번호 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 6) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: pageInfo.pages,
+                        click: function () {
+                            api.page(pageInfo.pages - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
-
-            if (endPage < total_pages_sec - 2) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertBefore('#nexts_sec');
-            }
-
-            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
-                })
-                .insertBefore('#nexts_sec')
-                .css(current_page_sec == (total_pages_sec - 1) ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
         },
         ajax: {
             url: 'asset_os_paging2/',
@@ -817,106 +786,99 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
             [3, "asc"]
         ],
         drawCallback: function (settings) {
-            // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({page: 'current'}).nodes();
-            var allCheckedOnCurrentPage = rows.length > 0;
+            var pageInfo = api.page.info();
+            var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
 
+            // 기존 페이지네이션 제거
+            $pagination.empty();
 
-            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var data = api.row(row).data();
-                var computer_id = data.computer_id;
+            // 부트스트랩 페이징 컨테이너 생성
+            var $ul = $('<ul>', {class: 'pagination small-pagination'}).appendTo($pagination);
 
-                if (checkedItems[computer_id]) {
-                    $(row).find('input[type="checkbox"]').prop('checked', true);
-                } else {
-                    $(row).find('input[type="checkbox"]').prop('checked', false);
-                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
-                }
-            }
-            $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_sec = oslistPieChart_list_Data.page();
-            var total_pages_sec = oslistPieChart_list_Data.page.info().pages;
-            $('#nexts').remove();
-            $('#after').remove();
-
-            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
-                    .insertAfter('#sec_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_sec">≪10</button>')
-                    .insertBefore('#sec_asset_list_paginate .paginate_button:first');
+            // 첫 페이지 번호 버튼 생성
+            if (pageInfo.page > 5) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '1',
+                        click: function () {
+                            api.page(0).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            var startPage = Math.floor(current_page_sec / 10) * 10;
-            var endPage = startPage + 9;
-            if (endPage > total_pages_sec - 1) {
-                endPage = total_pages_sec - 1;
+            // << 10 버튼 생성
+            if (pageInfo.page > 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '<< 10',
+                        click: function () {
+                            api.page(pageInfo.page - 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            // 중앙 페이지네이션 생성
+            var startPage = Math.max(0, pageInfo.page - 5);
+            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
 
-            var maxButtons = 10;
-            var halfWay = Math.floor(maxButtons / 2);
-
-            if (current_page_sec < halfWay) {
-                var startPage = 0;
-                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
-            } else if ((current_page_sec + halfWay) > total_pages_sec) {
-                var startPage = total_pages_sec - maxButtons;
-                var endPage = total_pages_sec - 1;
-            } else {
-                var startPage = current_page_sec - halfWay;
-                var endPage = current_page_sec + halfWay;
+            if (startPage > 0) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
+            }
+            for (var i = startPage; i < endPage; i++) {
+                $('<li>', {
+                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: i + 1,
+                        click: function (event) {
+                            api.page($(event.target).text() - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
+            }
+            if (endPage < pageInfo.pages) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
             }
 
-            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(0).draw(false);
-                })
-                .insertAfter('#after_sec')
-                .css(current_page_sec == 0 ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
-            if (startPage > 1) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter(oneButton);
+            // 10 >> 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '10 >>',
+                        click: function () {
+                            api.page(pageInfo.page + 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            for (var i = startPage; i <= endPage; i++) {
-                if (i == 0 || i == total_pages_sec - 1) continue;
-                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                if (i == current_page_sec) {
-                    btn.addClass('current');
-                    btn.css({
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    });
-                }
-                btn.on('click', function() {
-                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
-                });
-                btn.insertBefore('#nexts_sec');
+            // 마지막 페이지 번호 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 6) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: pageInfo.pages,
+                        click: function () {
+                            api.page(pageInfo.pages - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
-
-            if (endPage < total_pages_sec - 2) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertBefore('#nexts_sec');
-            }
-
-            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
-                })
-                .insertBefore('#nexts_sec')
-                .css(current_page_sec == (total_pages_sec - 1) ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
         },
         ajax: {
             url: 'oslistPieChart/',
@@ -1077,105 +1039,99 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
             [3, "asc"]
         ],
         drawCallback: function (settings) {
-            // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({page: 'current'}).nodes();
-            var allCheckedOnCurrentPage = rows.length > 0;
+            var pageInfo = api.page.info();
+            var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
 
+            // 기존 페이지네이션 제거
+            $pagination.empty();
 
-            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var data = api.row(row).data();
-                var computer_id = data.computer_id;
+            // 부트스트랩 페이징 컨테이너 생성
+            var $ul = $('<ul>', {class: 'pagination small-pagination'}).appendTo($pagination);
 
-                if (checkedItems[computer_id]) {
-                    $(row).find('input[type="checkbox"]').prop('checked', true);
-                } else {
-                    $(row).find('input[type="checkbox"]').prop('checked', false);
-                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
-                }
-            }
-            $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_sec = osVerPieChart_list_Data.page();
-            var total_pages_sec = osVerPieChart_list_Data.page.info().pages;
-            $('#nexts').remove();
-            $('#after').remove();
-
-            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
-                    .insertAfter('#sec_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_sec">≪10</button>')
-                    .insertBefore('#sec_asset_list_paginate .paginate_button:first');
+            // 첫 페이지 번호 버튼 생성
+            if (pageInfo.page > 5) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '1',
+                        click: function () {
+                            api.page(0).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            var startPage = Math.floor(current_page_sec / 10) * 10;
-            var endPage = startPage + 9;
-            if (endPage > total_pages_sec - 1) {
-                endPage = total_pages_sec - 1;
+            // << 10 버튼 생성
+            if (pageInfo.page > 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '<< 10',
+                        click: function () {
+                            api.page(pageInfo.page - 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            // 중앙 페이지네이션 생성
+            var startPage = Math.max(0, pageInfo.page - 5);
+            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
 
-            var maxButtons = 10;
-            var halfWay = Math.floor(maxButtons / 2);
-
-            if (current_page_sec < halfWay) {
-                var startPage = 0;
-                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
-            } else if ((current_page_sec + halfWay) > total_pages_sec) {
-                var startPage = total_pages_sec - maxButtons;
-                var endPage = total_pages_sec - 1;
-            } else {
-                var startPage = current_page_sec - halfWay;
-                var endPage = current_page_sec + halfWay;
+            if (startPage > 0) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
+            }
+            for (var i = startPage; i < endPage; i++) {
+                $('<li>', {
+                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: i + 1,
+                        click: function (event) {
+                            api.page($(event.target).text() - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
+            }
+            if (endPage < pageInfo.pages) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
             }
 
-            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(0).draw(false);
-                })
-                .insertAfter('#after_sec')
-                .css(current_page_sec == 0 ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
-            if (startPage > 1) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter(oneButton);
+            // 10 >> 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '10 >>',
+                        click: function () {
+                            api.page(pageInfo.page + 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            for (var i = startPage; i <= endPage; i++) {
-                if (i == 0 || i == total_pages_sec - 1) continue;
-                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                if (i == current_page_sec) {
-                    btn.addClass('current');
-                    btn.css({
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    });
-                }
-                btn.on('click', function() {
-                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
-                });
-                btn.insertBefore('#nexts_sec');
+            // 마지막 페이지 번호 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 6) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: pageInfo.pages,
+                        click: function () {
+                            api.page(pageInfo.pages - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
-
-            if (endPage < total_pages_sec - 2) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertBefore('#nexts_sec');
-            }
-
-            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
-                })
-                .insertBefore('#nexts_sec')
-                .css(current_page_sec == (total_pages_sec - 1) ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
         },
         ajax: {
             url: 'osVerPieChart/',
@@ -1336,106 +1292,99 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
             [3, "asc"]
         ],
         drawCallback: function (settings) {
-            // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({page: 'current'}).nodes();
-            var allCheckedOnCurrentPage = rows.length > 0;
+            var pageInfo = api.page.info();
+            var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
 
+            // 기존 페이지네이션 제거
+            $pagination.empty();
 
-            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var data = api.row(row).data();
-                var computer_id = data.computer_id;
+            // 부트스트랩 페이징 컨테이너 생성
+            var $ul = $('<ul>', {class: 'pagination small-pagination'}).appendTo($pagination);
 
-                if (checkedItems[computer_id]) {
-                    $(row).find('input[type="checkbox"]').prop('checked', true);
-                } else {
-                    $(row).find('input[type="checkbox"]').prop('checked', false);
-                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
-                }
-            }
-            $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_sec = office_chart_list_Data.page();
-            var total_pages_sec = office_chart_list_Data.page.info().pages;
-            $('#nexts').remove();
-            $('#after').remove();
-
-            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
-                    .insertAfter('#sec_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_sec">≪10</button>')
-                    .insertBefore('#sec_asset_list_paginate .paginate_button:first');
+            // 첫 페이지 번호 버튼 생성
+            if (pageInfo.page > 5) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '1',
+                        click: function () {
+                            api.page(0).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            var startPage = Math.floor(current_page_sec / 10) * 10;
-            var endPage = startPage + 9;
-            if (endPage > total_pages_sec - 1) {
-                endPage = total_pages_sec - 1;
+            // << 10 버튼 생성
+            if (pageInfo.page > 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '<< 10',
+                        click: function () {
+                            api.page(pageInfo.page - 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            // 중앙 페이지네이션 생성
+            var startPage = Math.max(0, pageInfo.page - 5);
+            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
 
-            var maxButtons = 10;
-            var halfWay = Math.floor(maxButtons / 2);
-
-            if (current_page_sec < halfWay) {
-                var startPage = 0;
-                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
-            } else if ((current_page_sec + halfWay) > total_pages_sec) {
-                var startPage = total_pages_sec - maxButtons;
-                var endPage = total_pages_sec - 1;
-            } else {
-                var startPage = current_page_sec - halfWay;
-                var endPage = current_page_sec + halfWay;
+            if (startPage > 0) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
+            }
+            for (var i = startPage; i < endPage; i++) {
+                $('<li>', {
+                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: i + 1,
+                        click: function (event) {
+                            api.page($(event.target).text() - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
+            }
+            if (endPage < pageInfo.pages) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
             }
 
-            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(0).draw(false);
-                })
-                .insertAfter('#after_sec')
-                .css(current_page_sec == 0 ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
-            if (startPage > 1) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter(oneButton);
+            // 10 >> 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '10 >>',
+                        click: function () {
+                            api.page(pageInfo.page + 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            for (var i = startPage; i <= endPage; i++) {
-                if (i == 0 || i == total_pages_sec - 1) continue;
-                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                if (i == current_page_sec) {
-                    btn.addClass('current');
-                    btn.css({
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    });
-                }
-                btn.on('click', function() {
-                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
-                });
-                btn.insertBefore('#nexts_sec');
+            // 마지막 페이지 번호 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 6) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: pageInfo.pages,
+                        click: function () {
+                            api.page(pageInfo.pages - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
-
-            if (endPage < total_pages_sec - 2) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertBefore('#nexts_sec');
-            }
-
-            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
-                })
-                .insertBefore('#nexts_sec')
-                .css(current_page_sec == (total_pages_sec - 1) ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
         },
         ajax: {
             url: 'office_chart/',
@@ -1602,106 +1551,99 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
             [3, "asc"]
         ],
         drawCallback: function (settings) {
-            // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({page: 'current'}).nodes();
-            var allCheckedOnCurrentPage = rows.length > 0;
+            var pageInfo = api.page.info();
+            var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
 
+            // 기존 페이지네이션 제거
+            $pagination.empty();
 
-            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var data = api.row(row).data();
-                var computer_id = data.computer_id;
+            // 부트스트랩 페이징 컨테이너 생성
+            var $ul = $('<ul>', {class: 'pagination small-pagination'}).appendTo($pagination);
 
-                if (checkedItems[computer_id]) {
-                    $(row).find('input[type="checkbox"]').prop('checked', true);
-                } else {
-                    $(row).find('input[type="checkbox"]').prop('checked', false);
-                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
-                }
-            }
-            $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_sec = subnet_chart_list_Data.page();
-            var total_pages_sec = subnet_chart_list_Data.page.info().pages;
-            $('#nexts').remove();
-            $('#after').remove();
-
-            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
-                    .insertAfter('#sec_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_sec">≪10</button>')
-                    .insertBefore('#sec_asset_list_paginate .paginate_button:first');
+            // 첫 페이지 번호 버튼 생성
+            if (pageInfo.page > 5) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '1',
+                        click: function () {
+                            api.page(0).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            var startPage = Math.floor(current_page_sec / 10) * 10;
-            var endPage = startPage + 9;
-            if (endPage > total_pages_sec - 1) {
-                endPage = total_pages_sec - 1;
+            // << 10 버튼 생성
+            if (pageInfo.page > 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '<< 10',
+                        click: function () {
+                            api.page(pageInfo.page - 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            // 중앙 페이지네이션 생성
+            var startPage = Math.max(0, pageInfo.page - 5);
+            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
 
-            var maxButtons = 10;
-            var halfWay = Math.floor(maxButtons / 2);
-
-            if (current_page_sec < halfWay) {
-                var startPage = 0;
-                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
-            } else if ((current_page_sec + halfWay) > total_pages_sec) {
-                var startPage = total_pages_sec - maxButtons;
-                var endPage = total_pages_sec - 1;
-            } else {
-                var startPage = current_page_sec - halfWay;
-                var endPage = current_page_sec + halfWay;
+            if (startPage > 0) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
+            }
+            for (var i = startPage; i < endPage; i++) {
+                $('<li>', {
+                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: i + 1,
+                        click: function (event) {
+                            api.page($(event.target).text() - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
+            }
+            if (endPage < pageInfo.pages) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
             }
 
-            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(0).draw(false);
-                })
-                .insertAfter('#after_sec')
-                .css(current_page_sec == 0 ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
-            if (startPage > 1) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter(oneButton);
+            // 10 >> 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '10 >>',
+                        click: function () {
+                            api.page(pageInfo.page + 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            for (var i = startPage; i <= endPage; i++) {
-                if (i == 0 || i == total_pages_sec - 1) continue;
-                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                if (i == current_page_sec) {
-                    btn.addClass('current');
-                    btn.css({
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    });
-                }
-                btn.on('click', function() {
-                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
-                });
-                btn.insertBefore('#nexts_sec');
+            // 마지막 페이지 번호 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 6) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: pageInfo.pages,
+                        click: function () {
+                            api.page(pageInfo.pages - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
-
-            if (endPage < total_pages_sec - 2) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertBefore('#nexts_sec');
-            }
-
-            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
-                })
-                .insertBefore('#nexts_sec')
-                .css(current_page_sec == (total_pages_sec - 1) ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
         },
         ajax: {
             url: 'subnet_chart/',
@@ -1867,106 +1809,99 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
             [3, "asc"]
         ],
         drawCallback: function (settings) {
-            // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({page: 'current'}).nodes();
-            var allCheckedOnCurrentPage = rows.length > 0;
+            var pageInfo = api.page.info();
+            var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
 
+            // 기존 페이지네이션 제거
+            $pagination.empty();
 
-            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var data = api.row(row).data();
-                var computer_id = data.computer_id;
+            // 부트스트랩 페이징 컨테이너 생성
+            var $ul = $('<ul>', {class: 'pagination small-pagination'}).appendTo($pagination);
 
-                if (checkedItems[computer_id]) {
-                    $(row).find('input[type="checkbox"]').prop('checked', true);
-                } else {
-                    $(row).find('input[type="checkbox"]').prop('checked', false);
-                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
-                }
-            }
-            $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_sec = hotfix_chart_list_Data.page();
-            var total_pages_sec = hotfix_chart_list_Data.page.info().pages;
-            $('#nexts').remove();
-            $('#after').remove();
-
-            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
-                    .insertAfter('#sec_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_sec">≪10</button>')
-                    .insertBefore('#sec_asset_list_paginate .paginate_button:first');
+            // 첫 페이지 번호 버튼 생성
+            if (pageInfo.page > 5) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '1',
+                        click: function () {
+                            api.page(0).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            var startPage = Math.floor(current_page_sec / 10) * 10;
-            var endPage = startPage + 9;
-            if (endPage > total_pages_sec - 1) {
-                endPage = total_pages_sec - 1;
+            // << 10 버튼 생성
+            if (pageInfo.page > 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '<< 10',
+                        click: function () {
+                            api.page(pageInfo.page - 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            // 중앙 페이지네이션 생성
+            var startPage = Math.max(0, pageInfo.page - 5);
+            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
 
-            var maxButtons = 10;
-            var halfWay = Math.floor(maxButtons / 2);
-
-            if (current_page_sec < halfWay) {
-                var startPage = 0;
-                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
-            } else if ((current_page_sec + halfWay) > total_pages_sec) {
-                var startPage = total_pages_sec - maxButtons;
-                var endPage = total_pages_sec - 1;
-            } else {
-                var startPage = current_page_sec - halfWay;
-                var endPage = current_page_sec + halfWay;
+            if (startPage > 0) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
+            }
+            for (var i = startPage; i < endPage; i++) {
+                $('<li>', {
+                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: i + 1,
+                        click: function (event) {
+                            api.page($(event.target).text() - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
+            }
+            if (endPage < pageInfo.pages) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
             }
 
-            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(0).draw(false);
-                })
-                .insertAfter('#after_sec')
-                .css(current_page_sec == 0 ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
-            if (startPage > 1) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter(oneButton);
+            // 10 >> 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '10 >>',
+                        click: function () {
+                            api.page(pageInfo.page + 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            for (var i = startPage; i <= endPage; i++) {
-                if (i == 0 || i == total_pages_sec - 1) continue;
-                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                if (i == current_page_sec) {
-                    btn.addClass('current');
-                    btn.css({
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    });
-                }
-                btn.on('click', function() {
-                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
-                });
-                btn.insertBefore('#nexts_sec');
+            // 마지막 페이지 번호 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 6) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: pageInfo.pages,
+                        click: function () {
+                            api.page(pageInfo.pages - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
-
-            if (endPage < total_pages_sec - 2) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertBefore('#nexts_sec');
-            }
-
-            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
-                })
-                .insertBefore('#nexts_sec')
-                .css(current_page_sec == (total_pages_sec - 1) ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
         },
         ajax: {
             url: 'hotfixChart/',
@@ -2126,106 +2061,99 @@ var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
             [3, "asc"]
         ],
         drawCallback: function (settings) {
-            // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({page: 'current'}).nodes();
-            var allCheckedOnCurrentPage = rows.length > 0;
+            var pageInfo = api.page.info();
+            var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
 
+            // 기존 페이지네이션 제거
+            $pagination.empty();
 
-            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var data = api.row(row).data();
-                var computer_id = data.computer_id;
+            // 부트스트랩 페이징 컨테이너 생성
+            var $ul = $('<ul>', {class: 'pagination small-pagination'}).appendTo($pagination);
 
-                if (checkedItems[computer_id]) {
-                    $(row).find('input[type="checkbox"]').prop('checked', true);
-                } else {
-                    $(row).find('input[type="checkbox"]').prop('checked', false);
-                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
-                }
-            }
-            $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_sec = tcpuChart_list_Data.page();
-            var total_pages_sec = tcpuChart_list_Data.page.info().pages;
-            $('#nexts').remove();
-            $('#after').remove();
-
-            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
-                    .insertAfter('#sec_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_sec">≪10</button>')
-                    .insertBefore('#sec_asset_list_paginate .paginate_button:first');
+            // 첫 페이지 번호 버튼 생성
+            if (pageInfo.page > 5) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '1',
+                        click: function () {
+                            api.page(0).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            var startPage = Math.floor(current_page_sec / 10) * 10;
-            var endPage = startPage + 9;
-            if (endPage > total_pages_sec - 1) {
-                endPage = total_pages_sec - 1;
+            // << 10 버튼 생성
+            if (pageInfo.page > 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '<< 10',
+                        click: function () {
+                            api.page(pageInfo.page - 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            // 중앙 페이지네이션 생성
+            var startPage = Math.max(0, pageInfo.page - 5);
+            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
 
-            var maxButtons = 10;
-            var halfWay = Math.floor(maxButtons / 2);
-
-            if (current_page_sec < halfWay) {
-                var startPage = 0;
-                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
-            } else if ((current_page_sec + halfWay) > total_pages_sec) {
-                var startPage = total_pages_sec - maxButtons;
-                var endPage = total_pages_sec - 1;
-            } else {
-                var startPage = current_page_sec - halfWay;
-                var endPage = current_page_sec + halfWay;
+            if (startPage > 0) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
+            }
+            for (var i = startPage; i < endPage; i++) {
+                $('<li>', {
+                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: i + 1,
+                        click: function (event) {
+                            api.page($(event.target).text() - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
+            }
+            if (endPage < pageInfo.pages) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
             }
 
-            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(0).draw(false);
-                })
-                .insertAfter('#after_sec')
-                .css(current_page_sec == 0 ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
-            if (startPage > 1) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter(oneButton);
+            // 10 >> 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '10 >>',
+                        click: function () {
+                            api.page(pageInfo.page + 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            for (var i = startPage; i <= endPage; i++) {
-                if (i == 0 || i == total_pages_sec - 1) continue;
-                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                if (i == current_page_sec) {
-                    btn.addClass('current');
-                    btn.css({
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    });
-                }
-                btn.on('click', function() {
-                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
-                });
-                btn.insertBefore('#nexts_sec');
+            // 마지막 페이지 번호 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 6) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: pageInfo.pages,
+                        click: function () {
+                            api.page(pageInfo.pages - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
-
-            if (endPage < total_pages_sec - 2) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertBefore('#nexts_sec');
-            }
-
-            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
-                })
-                .insertBefore('#nexts_sec')
-                .css(current_page_sec == (total_pages_sec - 1) ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
         },
         ajax: {
             url: 'tcpuChart/',
@@ -2385,106 +2313,99 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
             [3, "asc"]
         ],
         drawCallback: function (settings) {
-            // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
-            var rows = api.rows({page: 'current'}).nodes();
-            var allCheckedOnCurrentPage = rows.length > 0;
+            var pageInfo = api.page.info();
+            var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
 
+            // 기존 페이지네이션 제거
+            $pagination.empty();
 
-            // 현재 페이지의 체크박스 값을 확인하여 체크박스를 설정합니다.
-            for (var i = 0; i < rows.length; i++) {
-                var row = rows[i];
-                var data = api.row(row).data();
-                var computer_id = data.computer_id;
+            // 부트스트랩 페이징 컨테이너 생성
+            var $ul = $('<ul>', {class: 'pagination small-pagination'}).appendTo($pagination);
 
-                if (checkedItems[computer_id]) {
-                    $(row).find('input[type="checkbox"]').prop('checked', true);
-                } else {
-                    $(row).find('input[type="checkbox"]').prop('checked', false);
-                    allCheckedOnCurrentPage = false; // 하나라도 체크되지 않은 체크박스가 있으면 전체선택 체크박스를 비활성화
-                }
-            }
-            $('#select-all').prop('checked', allCheckedOnCurrentPage);
-            var current_page_sec = tcpuChart_list_Data.page();
-            var total_pages_sec = tcpuChart_list_Data.page.info().pages;
-            $('#nexts').remove();
-            $('#after').remove();
-
-            if (total_pages_sec >= 1) { // 페이지 수가 10개 이상일때  10칸이동버튼 활성화
-                $('<button type="button" class="btn" id="nexts_sec">10≫</button>')
-                    .insertAfter('#sec_asset_list_paginate .paginate_button:last');
-                $('<button type="button" class="btn" id="after_sec">≪10</button>')
-                    .insertBefore('#sec_asset_list_paginate .paginate_button:first');
+            // 첫 페이지 번호 버튼 생성
+            if (pageInfo.page > 5) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '1',
+                        click: function () {
+                            api.page(0).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            var startPage = Math.floor(current_page_sec / 10) * 10;
-            var endPage = startPage + 9;
-            if (endPage > total_pages_sec - 1) {
-                endPage = total_pages_sec - 1;
+            // << 10 버튼 생성
+            if (pageInfo.page > 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '<< 10',
+                        click: function () {
+                            api.page(pageInfo.page - 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            $('#sec_asset_list_paginate .paginate_button').not('.first, .last').remove();
+            // 중앙 페이지네이션 생성
+            var startPage = Math.max(0, pageInfo.page - 5);
+            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
 
-            var maxButtons = 10;
-            var halfWay = Math.floor(maxButtons / 2);
-
-            if (current_page_sec < halfWay) {
-                var startPage = 0;
-                var endPage = Math.min(maxButtons - 1, total_pages_sec - 1);
-            } else if ((current_page_sec + halfWay) > total_pages_sec) {
-                var startPage = total_pages_sec - maxButtons;
-                var endPage = total_pages_sec - 1;
-            } else {
-                var startPage = current_page_sec - halfWay;
-                var endPage = current_page_sec + halfWay;
+            if (startPage > 0) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
+            }
+            for (var i = startPage; i < endPage; i++) {
+                $('<li>', {
+                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: i + 1,
+                        click: function (event) {
+                            api.page($(event.target).text() - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
+            }
+            if (endPage < pageInfo.pages) {
+                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
             }
 
-            var oneButton = $('<button type="button" class="paginate_button btn">1</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(0).draw(false);
-                })
-                .insertAfter('#after_sec')
-                .css(current_page_sec == 0 ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
-            if (startPage > 1) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertAfter(oneButton);
+            // 10 >> 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 10) {
+                $('<li>', {
+                    class: 'page-item',
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: '10 >>',
+                        click: function () {
+                            api.page(pageInfo.page + 10).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
 
-            for (var i = startPage; i <= endPage; i++) {
-                if (i == 0 || i == total_pages_sec - 1) continue;
-                var btn = $('<button type="button" class="paginate_button btn"></button>').text(i + 1);
-                if (i == current_page_sec) {
-                    btn.addClass('current');
-                    btn.css({
-                        'font-weight': 'bold',
-                        'color': '#f39c12'
-                    });
-                }
-                btn.on('click', function() {
-                    all_asset_detail1_Data.page(parseInt($(this).text()) - 1).draw(false);
-                });
-                btn.insertBefore('#nexts_sec');
+            // 마지막 페이지 번호 버튼 생성
+            if (pageInfo.page < pageInfo.pages - 6) {
+                $('<li>', {
+                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                    html: $('<a>', {
+                        class: 'page-link',
+                        href: 'javascript:void(0)',
+                        text: pageInfo.pages,
+                        click: function () {
+                            api.page(pageInfo.pages - 1).draw(false);
+                        }
+                    })
+                }).appendTo($ul);
             }
-
-            if (endPage < total_pages_sec - 2) {
-                $('<button type="button" class="paginate_button btn">...</button>')
-                    .insertBefore('#nexts_sec');
-            }
-
-            $('<button type="button" class="paginate_button btn">' + total_pages_sec + '</button>')
-                .on('click', function() {
-                    all_asset_detail1_Data.page(total_pages_sec - 1).draw(false);
-                })
-                .insertBefore('#nexts_sec')
-                .css(current_page_sec == (total_pages_sec - 1) ? {
-                    'font-weight': 'bold',
-                    'color': '#f39c12'
-                } : {});
-
         },
         ajax: {
             url: 'discoverChart/',
