@@ -39,7 +39,6 @@ def um(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../home/')
     #메뉴
@@ -57,7 +56,6 @@ def um_user(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
     user = Xfactor_Xuser.objects.values('x_id', 'x_name', 'x_email', 'x_auth', 'create_date')

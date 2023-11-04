@@ -71,7 +71,6 @@ def export(request, model):
     now = utc_now.astimezone(local_tz)
     user = ''
     cache = ''
-    print(request.GET.get('selectedDate'))
     if request.GET.get('selectedDate') == None:
         pass
     elif request.GET.get('selectedDate') != '':
@@ -96,8 +95,6 @@ def export(request, model):
         cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     if parameter_value == 'all_asset1':
-        print(request.GET.get('categoryName'))
-        print(request.GET.get('seriesName'))
         data_list = []
         columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
         if request.GET.get('categoryName') == 'Online':
@@ -115,8 +112,6 @@ def export(request, model):
     elif parameter_value == 'asset_os_detail1':
         data_list = []
         columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
-        print(request.GET.get('categoryName'))
-        print(request.GET.get('seriesName'))
         if request.GET.get('categoryName') == 'Other':
             if request.GET.get('seriesName') == 'Other':
                 print("asd")
@@ -133,8 +128,6 @@ def export(request, model):
     elif parameter_value == 'asset_os_detail2':
         data_list = []
         columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
-        print(request.GET.get('categoryName'))
-        print(request.GET.get('seriesName'))
         if request.GET.get('categoryName') == 'Other':
             if request.GET.get('seriesName') == 'Other':
                 data_list = cache.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop, Notebook'])
@@ -147,10 +140,8 @@ def export(request, model):
             else:
                 data_list = cache.filter(os_simple=request.GET.get('categoryName'), chassistype=request.GET.get('seriesName'))
         data = Cacheserializer(data_list, many=True).data
-        print(data)
 
     elif parameter_value == 'office_chart':
-        print(request.GET.get('categoryName'))
         columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
         data_list = []
         if request.GET.get('categoryName') == 'Office 16 이상':
@@ -165,7 +156,6 @@ def export(request, model):
 
     elif parameter_value == 'oslistPieChart':
         data_list = []
-        print(request.GET.get('categoryName'))
         columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
         data_list = user.annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build__contains=request.GET.get('categoryName'), os_simple='Windows')
         data = Cacheserializer(data_list, many=True).data
@@ -196,7 +186,6 @@ def export(request, model):
 
     elif parameter_value == 'tcpuChart':
         data_list = []
-        print(request.GET.get('categoryName'))
         columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
         data_list = user.filter(t_cpu='True')
         data = Cacheserializer(data_list, many=True).data
@@ -205,7 +194,6 @@ def export(request, model):
         three_months_ago = datetime.now() - timedelta(days=90)
         data_list = []
         filtered_user_objects = []
-        print(request.GET.get('categoryName'))
         columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
         user_objects = user
         users_values = user_objects.values('hotfix_date', 'computer_id')

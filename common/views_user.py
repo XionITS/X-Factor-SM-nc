@@ -108,6 +108,8 @@ def login(request):
                 RS = selectUsers(x_id, x_pw)
                 print(RS)
                 print("asdasd")
+                if RS == None:
+                    return render(request, 'nouser_page.html')
                 user_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id = x_id)
                 # print(RS)
 
@@ -116,10 +118,17 @@ def login(request):
                     and user_check.filter(xfactor_auth_id='dash_month', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')))
 
-                if len(user_check.filter(xfactor_auth_id='dash_report',auth_use='false') and user_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and user_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
+                print(len(user_check.filter(xfactor_auth_id='HS_asset',auth_use='false') and user_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and user_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='PUR_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset_list', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='Asset', auth_use='false') and user_check.filter(xfactor_auth_id='History', auth_use='false') and user_check.filter(xfactor_auth_id='settings', auth_use='false')))
+
+                if len(user_check.filter(xfactor_auth_id='HS_asset',auth_use='false') and user_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and user_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='PUR_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset_list', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='Asset', auth_use='false') and user_check.filter(xfactor_auth_id='History', auth_use='false') and user_check.filter(xfactor_auth_id='settings', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='dash_report',auth_use='false') and user_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and user_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and user_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and user_check.filter(xfactor_auth_id='dash_office', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_month', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')) > 0:
+                    and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')) == 0:
                     print('asdasdasdasdasd')
                     request.session['sessionid'] = RS[0]
                     request.session['sessionname'] = RS[2]
@@ -141,9 +150,17 @@ def login(request):
                     Xfactor_log.save()
                     # res_data['error'] = '아이디 또는 비밀번호가 일치하지 않습니다'
                     return redirect('../home')
+                    # return render(request, 'noauth.html')
                     # return render(request, 'common/login.html', res_data)
-                elif RS == None:
-                    return render(request, 'nouser_page.html')
+                elif len(user_check.filter(xfactor_auth_id='HS_asset',auth_use='false') and user_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and user_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='PUR_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset_list', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='Asset', auth_use='false') and user_check.filter(xfactor_auth_id='History', auth_use='false') and user_check.filter(xfactor_auth_id='settings', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='dash_report',auth_use='false') and user_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and user_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and user_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and user_check.filter(xfactor_auth_id='dash_office', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='dash_month', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
+                    and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')) > 0:
+                    return render(request, 'noauth.html')
+
                 else:
                     request.session['sessionid'] = RS[0]
                     request.session['sessionname'] = RS[2]
@@ -888,11 +905,39 @@ def nano_user(request):
 
     # 유저 체크
     RS_user = selectUsers_nano(sub)
+    if RS_user == None:
+        return render(request, 'nouser_page.html')
     nano_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=sub)
-    if RS_user == (nano_check.filter(xfactor_auth_id='dash_report', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_all_asset',auth_use='false')
-                      and nano_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_office',auth_use='false')
-                      and nano_check.filter(xfactor_auth_id='dash_month', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
-                      and nano_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')):
+
+    if (nano_check.filter(xfactor_auth_id='HS_asset',auth_use='false') and nano_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
+        and nano_check.filter(xfactor_auth_id='PUR_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='SEC_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='SEC_asset_list', auth_use='false')
+        and nano_check.filter(xfactor_auth_id='Asset', auth_use='false') and nano_check.filter(xfactor_auth_id='History', auth_use='false') and nano_check.filter(xfactor_auth_id='settings', auth_use='false')
+        and nano_check.filter(xfactor_auth_id='dash_report', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_all_asset',auth_use='false')
+        and nano_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_office',auth_use='false')
+        and nano_check.filter(xfactor_auth_id='dash_month', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
+        and nano_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')) == 0:
+
+        # request.session['sessionid'] = RS_user[0]
+        # request.session['sessionname'] = RS_user[2]
+        # request.session['sessionemail'] = RS_user[3]
+        # function = 'Login'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+        # item = ' 계정'
+        # result = '성공'
+        # user = RS_user[0]
+        # now = timezone.now().replace(microsecond=0)
+        # date = now.strftime("%Y-%m-%d %H:%M:%S")
+        # print(date)
+        # Xfactor_log = Xfactor_Log(
+        #     log_func=function,
+        #     log_item=item,
+        #     log_result=result,
+        #     log_user=user,
+        #     log_date=date
+        # )
+        # Xfactor_log.save()
+        # res_data['error'] = '아이디 또는 비밀번호가 일치하지 않습니다'
+        return redirect('../home')
+
         return render(request, 'noauth.html')
 
         # RS = createUsers(sub, sub, name, email, dept)

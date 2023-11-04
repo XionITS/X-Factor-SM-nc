@@ -26,7 +26,7 @@ var hw_asset_list = function () {
         //         }
         //     }
         // ],
-        select: true,
+        // select: true,
 		ajax: {
 			url: 'hwpaging/',
 			type: "POST",
