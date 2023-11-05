@@ -43,7 +43,7 @@ def log(request):
 @csrf_exempt
 def log_paging(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                 xfactor_auth_id='VER_asset', auth_use='false')
+                                                 xfactor_auth_id='settings', auth_use='false')
     print(user_auth)
     if user_auth:
         return redirect('../../home/')
