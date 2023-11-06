@@ -1115,7 +1115,7 @@ def hotfixChart(request):
                  Q(mac_address__icontains=filter_text))
         filtered_user_objects = user.filter(query)
 
-    user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
+    user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
 
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))

@@ -39,7 +39,6 @@ def um(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../home/')
     #메뉴
@@ -57,7 +56,6 @@ def um_user(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
     user = Xfactor_Xuser.objects.values('x_id', 'x_name', 'x_email', 'x_auth', 'create_date')
@@ -145,6 +143,7 @@ def save_user_auth(request):
     x_ids_str = request.POST.get('x_id')  # 쉼표로 구분된 문자열을 얻음
     #x_ids = x_ids_str.split(',')
     auth_infos = request.POST.get('auth_info')
+    print(auth_infos)
     auth_infos = json.loads(auth_infos)
     try:
         for item in auth_infos:
@@ -165,8 +164,8 @@ def save_user_auth(request):
             #     print(x_ids_str)
 
 
-        function = 'User Auth Change'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-        item = 'User Auth Change ' + x_ids_str
+        function = 'User Auth'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+        item = 'Change user auth ' + x_ids_str
         result = '성공'
         user = request.session.get('sessionid')
         now = datetime.now().replace(microsecond=0)

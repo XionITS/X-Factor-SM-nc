@@ -25,8 +25,10 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 def asset(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='Asset', auth_use='false')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
+                                                    xfactor_auth_id='Asset', auth_use='false')
     print(user_auth)
-    if user_auth:
+    if user_auth and group_auth:
         return redirect('../home/')
     #메뉴
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
@@ -70,8 +72,10 @@ def search_box(request):
 def save_memo(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='Asset', auth_use='false')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
+                                                    xfactor_auth_id='Asset', auth_use='false')
     print(user_auth)
-    if user_auth:
+    if user_auth and group_auth:
         return redirect('../../home/')
     if request.method =='POST':
         memo = request.POST.get('memo')

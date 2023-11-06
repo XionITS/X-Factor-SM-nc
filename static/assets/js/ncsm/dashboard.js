@@ -1611,6 +1611,7 @@ $("#datepickerD").datetimepicker({
     format: 'Y-m-d H시',
     formatTime: 'H시',
     closeOnWithoutClick: false,
+    minDate: new Date('2023-10-18'),
     maxDate: new Date(),  // 오늘 날짜를 최대로 설정
     onGenerate:function(current_time, $input){
         var currentDate = new Date();

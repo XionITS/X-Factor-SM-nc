@@ -130,7 +130,7 @@ urlpatterns = [
     # path('callback/', CallbackView.as_view(), name='callback'),
 
 ]
-if not settings.DEBUG:
+if settings.DEBUG is False:
     urlpatterns += [
         re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
         re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_URL}),
