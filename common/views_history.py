@@ -27,7 +27,6 @@ def history(request):
                                                   xfactor_auth_id='History', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
                                                     xfactor_auth_id='History', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../home/')
     #메뉴
@@ -47,7 +46,6 @@ def search_h(request):
                                                   xfactor_auth_id='History', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
                                                     xfactor_auth_id='History', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
     if request.method == "POST":
@@ -79,7 +77,6 @@ def search_box_h(request):
                                                   xfactor_auth_id='History', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
                                                     xfactor_auth_id='History', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
     if request.method == "POST":

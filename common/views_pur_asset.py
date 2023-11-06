@@ -25,7 +25,6 @@ def pur_asset(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                  xfactor_auth_id='PUR_asset', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../home/')
     #메뉴
@@ -61,7 +60,6 @@ def pur_asset_paginghw(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='PUR_asset', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
@@ -373,7 +371,6 @@ def pur_asset_pagingsw(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='PUR_asset', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)

@@ -24,7 +24,6 @@ def sec_asset(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='SEC_asset', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='SEC_asset', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../home/')
     #메뉴
@@ -46,7 +45,6 @@ def sec_asset_paging(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='SEC_asset', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='SEC_asset', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
@@ -318,7 +316,6 @@ def sec_asset_list(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='SEC_asset_list', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='SEC_asset_list', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../home/')
     # 메뉴
@@ -342,7 +339,6 @@ def sec_asset_list_paging(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                  xfactor_auth_id='SEC_asset_list', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='SEC_asset_list', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)

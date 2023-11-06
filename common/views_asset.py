@@ -27,7 +27,6 @@ def asset(request):
                                                   xfactor_auth_id='Asset', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
                                                     xfactor_auth_id='Asset', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../home/')
     #메뉴
@@ -74,7 +73,6 @@ def save_memo(request):
                                                   xfactor_auth_id='Asset', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
                                                     xfactor_auth_id='Asset', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
     if request.method =='POST':
