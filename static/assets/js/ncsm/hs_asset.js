@@ -156,91 +156,76 @@ var hw_asset_list = function () {
             $pagination.empty();
 
             // 부트스트랩 페이징 컨테이너 생성
-            var $ul = $('<ul>', {class: 'pagination big-pagination'}).appendTo($pagination);
+            var $ul = $('<ul>', { class: 'pagination' }).appendTo($pagination);
 
-            // 첫 페이지 번호 버튼 생성
-            if (pageInfo.page > 5) {
-                $('<li>', {
-                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
-                    html: $('<a>', {
-                        class: 'page-link',
-                        href: 'javascript:void(0)',
-                        text: '1',
-                        click: function () {
-                            api.page(0).draw(false);
-                        }
-                    })
-                }).appendTo($ul);
-            }
+            // 첫 페이지 버튼
+            $('<li>', {
+                class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                html: $('<a>', {
+                    class: 'page-link',
+                    href: 'javascript:void(0)',
+                    text: '1', // '«' 대신 페이지 번호 사용
+                    click: function () {
+                        api.page('first').draw(false);
+                    }
+                })
+            }).appendTo($ul);
 
-            // << 10 버튼 생성
-            if (pageInfo.page > 10) {
-                $('<li>', {
-                    class: 'page-item',
-                    html: $('<a>', {
-                        class: 'page-link',
-                        href: 'javascript:void(0)',
-                        text: '<< 10',
-                        click: function () {
-                            api.page(pageInfo.page - 10).draw(false);
-                        }
-                    })
-                }).appendTo($ul);
-            }
+            // 이전 버튼 (10칸 이동)
+            $('<li>', {
+                class: 'page-item' + (pageInfo.page < 10 ? ' disabled' : ''),
+                html: $('<a>', {
+                    class: 'page-link',
+                    href: 'javascript:void(0)',
+                    text: '이전',
+                    click: function () {
+                        api.page(Math.max(pageInfo.page - 10, 0)).draw(false);
+                    }
+                })
+            }).appendTo($ul);
 
-            // 중앙 페이지네이션 생성
-            var startPage = Math.max(0, pageInfo.page - 5);
-            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
-
-            if (startPage > 0) {
-                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
-            }
+            // 중앙 페이지네이션
+            var startPage = Math.floor(pageInfo.page / 10) * 10;
+            var endPage = Math.min(startPage + 10, pageInfo.pages);
             for (var i = startPage; i < endPage; i++) {
                 $('<li>', {
-                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    class: 'page-item' + (pageInfo.page === i ? ' active' : ''),
                     html: $('<a>', {
                         class: 'page-link',
                         href: 'javascript:void(0)',
                         text: i + 1,
                         click: function (event) {
-                            api.page($(event.target).text() - 1).draw(false);
-                        }
-                    })
-                }).appendTo($ul);
-            }
-            if (endPage < pageInfo.pages) {
-                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
-            }
-
-            // 10 >> 버튼 생성
-            if (pageInfo.page < pageInfo.pages - 10) {
-                $('<li>', {
-                    class: 'page-item',
-                    html: $('<a>', {
-                        class: 'page-link',
-                        href: 'javascript:void(0)',
-                        text: '10 >>',
-                        click: function () {
-                            api.page(pageInfo.page + 10).draw(false);
+                            api.page(parseInt($(event.target).text()) - 1).draw(false);
                         }
                     })
                 }).appendTo($ul);
             }
 
-            // 마지막 페이지 번호 버튼 생성
-            if (pageInfo.page < pageInfo.pages - 6) {
-                $('<li>', {
-                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
-                    html: $('<a>', {
-                        class: 'page-link',
-                        href: 'javascript:void(0)',
-                        text: pageInfo.pages,
-                        click: function () {
-                            api.page(pageInfo.pages - 1).draw(false);
-                        }
-                    })
-                }).appendTo($ul);
-            }
+            // 다음 버튼 (10칸 이동)
+            $('<li>', {
+                class: 'page-item' + (pageInfo.page >= pageInfo.pages - 10 ? ' disabled' : ''),
+                html: $('<a>', {
+                    class: 'page-link',
+                    href: 'javascript:void(0)',
+                    text: '다음',
+                    click: function () {
+                        api.page(Math.min(pageInfo.page + 10, pageInfo.pages - 1)).draw(false);
+                    }
+                })
+            }).appendTo($ul);
+
+            // 마지막 페이지 버튼
+            $('<li>', {
+                class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                html: $('<a>', {
+                    class: 'page-link',
+                    href: 'javascript:void(0)',
+                    text: pageInfo.pages, // '»' 대신 마지막 페이지 번호 사용
+                    click: function () {
+                        api.page('last').draw(false);
+                    }
+                })
+            }).appendTo($ul);
         }
 });
       // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
@@ -411,7 +396,7 @@ var sw_asset_list = function () {
             pagingType: 'numbers',//이전 다음 버튼 히든처리
 
             //페이징 10칸식 이동 로직
-            drawCallback: function (settings) {
+        drawCallback: function (settings) {
             var api = this.api();
             var pageInfo = api.page.info();
             var $pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
@@ -420,91 +405,76 @@ var sw_asset_list = function () {
             $pagination.empty();
 
             // 부트스트랩 페이징 컨테이너 생성
-            var $ul = $('<ul>', {class: 'pagination big-pagination'}).appendTo($pagination);
+            var $ul = $('<ul>', { class: 'pagination' }).appendTo($pagination);
 
-            // 첫 페이지 번호 버튼 생성
-            if (pageInfo.page > 5) {
-                $('<li>', {
-                    class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
-                    html: $('<a>', {
-                        class: 'page-link',
-                        href: 'javascript:void(0)',
-                        text: '1',
-                        click: function () {
-                            api.page(0).draw(false);
-                        }
-                    })
-                }).appendTo($ul);
-            }
+            // 첫 페이지 버튼
+            $('<li>', {
+                class: 'page-item' + (pageInfo.page === 0 ? ' disabled' : ''),
+                html: $('<a>', {
+                    class: 'page-link',
+                    href: 'javascript:void(0)',
+                    text: '1', // '«' 대신 페이지 번호 사용
+                    click: function () {
+                        api.page('first').draw(false);
+                    }
+                })
+            }).appendTo($ul);
 
-            // << 10 버튼 생성
-            if (pageInfo.page > 10) {
-                $('<li>', {
-                    class: 'page-item',
-                    html: $('<a>', {
-                        class: 'page-link',
-                        href: 'javascript:void(0)',
-                        text: '<< 10',
-                        click: function () {
-                            api.page(pageInfo.page - 10).draw(false);
-                        }
-                    })
-                }).appendTo($ul);
-            }
+            // 이전 버튼 (10칸 이동)
+            $('<li>', {
+                class: 'page-item' + (pageInfo.page < 10 ? ' disabled' : ''),
+                html: $('<a>', {
+                    class: 'page-link',
+                    href: 'javascript:void(0)',
+                    text: '이전',
+                    click: function () {
+                        api.page(Math.max(pageInfo.page - 10, 0)).draw(false);
+                    }
+                })
+            }).appendTo($ul);
 
-            // 중앙 페이지네이션 생성
-            var startPage = Math.max(0, pageInfo.page - 5);
-            var endPage = Math.min(pageInfo.pages, pageInfo.page + 5);
-
-            if (startPage > 0) {
-                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
-            }
+            // 중앙 페이지네이션
+            var startPage = Math.floor(pageInfo.page / 10) * 10;
+            var endPage = Math.min(startPage + 10, pageInfo.pages);
             for (var i = startPage; i < endPage; i++) {
                 $('<li>', {
-                    class: 'page-item' + (i === pageInfo.page ? ' active' : ''),
+                    class: 'page-item' + (pageInfo.page === i ? ' active' : ''),
                     html: $('<a>', {
                         class: 'page-link',
                         href: 'javascript:void(0)',
                         text: i + 1,
                         click: function (event) {
-                            api.page($(event.target).text() - 1).draw(false);
-                        }
-                    })
-                }).appendTo($ul);
-            }
-            if (endPage < pageInfo.pages) {
-                $('<li>', {class: 'page-item'}).append($('<span>', {class: 'page-link'}).text('...')).appendTo($ul);
-            }
-
-            // 10 >> 버튼 생성
-            if (pageInfo.page < pageInfo.pages - 10) {
-                $('<li>', {
-                    class: 'page-item',
-                    html: $('<a>', {
-                        class: 'page-link',
-                        href: 'javascript:void(0)',
-                        text: '10 >>',
-                        click: function () {
-                            api.page(pageInfo.page + 10).draw(false);
+                            api.page(parseInt($(event.target).text()) - 1).draw(false);
                         }
                     })
                 }).appendTo($ul);
             }
 
-            // 마지막 페이지 번호 버튼 생성
-            if (pageInfo.page < pageInfo.pages - 6) {
-                $('<li>', {
-                    class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
-                    html: $('<a>', {
-                        class: 'page-link',
-                        href: 'javascript:void(0)',
-                        text: pageInfo.pages,
-                        click: function () {
-                            api.page(pageInfo.pages - 1).draw(false);
-                        }
-                    })
-                }).appendTo($ul);
-            }
+            // 다음 버튼 (10칸 이동)
+            $('<li>', {
+                class: 'page-item' + (pageInfo.page >= pageInfo.pages - 10 ? ' disabled' : ''),
+                html: $('<a>', {
+                    class: 'page-link',
+                    href: 'javascript:void(0)',
+                    text: '다음',
+                    click: function () {
+                        api.page(Math.min(pageInfo.page + 10, pageInfo.pages - 1)).draw(false);
+                    }
+                })
+            }).appendTo($ul);
+
+            // 마지막 페이지 버튼
+            $('<li>', {
+                class: 'page-item' + (pageInfo.page === pageInfo.pages - 1 ? ' disabled' : ''),
+                html: $('<a>', {
+                    class: 'page-link',
+                    href: 'javascript:void(0)',
+                    text: pageInfo.pages, // '»' 대신 마지막 페이지 번호 사용
+                    click: function () {
+                        api.page('last').draw(false);
+                    }
+                })
+            }).appendTo($ul);
         }
 });
 
