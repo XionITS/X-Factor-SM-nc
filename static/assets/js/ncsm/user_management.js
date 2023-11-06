@@ -1127,7 +1127,7 @@ $(document).on("click","#um_creategroup", function (e){
  /////////////////USER 검색기능 버튼삽입
     var modalbody =`<div class="asset-input-group justify-content-end">
                         <span class="fs-16px pb-2 pe-2">검색 : </span>
-                        <input type="search" class="asset-form-control mb-2" id="user_search_result" placeholder="검색할 계정을 입력하세요">
+                        <input type="search" class="asset-form-control mb-2" id="user_search_result" placeholder="추가할 계정을 입력하세요">
                     </div>`;
  /////////////////사용자 목록 가져오기
     $.ajax({
@@ -1270,8 +1270,9 @@ $(document).on("click",".um_groupalter", function (e){
         xuser_id_array = cleanedString.split(',').map(item => item.trim());
     };
 
-    var modalbody = `<div class="asset-input-group">
-                        <input type="search" class="asset-form-control before-init ps-5px" id="group_search_result" placeholder="추가할 계정을 입력하세요">
+    var modalbody = `<div class="asset-input-group justify-content-end">
+                            <span class="fs-16px pb-2 pe-2">검색 : </span>
+                        <input type="search" class="asset-form-control before-init mb-2" id="group_search_result" placeholder="추가할 계정을 입력하세요.">
                     </div>`;
     modalbody += '<input type="hidden" id="id" value="'+id+'">';
 

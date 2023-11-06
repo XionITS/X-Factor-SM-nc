@@ -213,11 +213,10 @@ $(document).ready(function(){
           searchText: request.term
         },
         success: function(data){
-          // 데이터 변환 후 반환
           var autocompleteData = data.data.map(function(item) {
             return item.computer_name;
           });
-          // console.log(autocompleteData)
+
           response(autocompleteData);
         }
       });
@@ -231,7 +230,11 @@ $('#asset_search').on('click', function(event) {
     // console.log(searchInput)
     var searchInput = document.getElementById('asset_search_result');
     var inputValue = searchInput.value;
-    searchPer(inputValue)
+    if (inputValue.trim().length < 2) {
+      alert("최소 2글자 이상 입력하세요.");
+    } else {
+      searchPer(inputValue);
+    }
 });
 
 
@@ -239,8 +242,12 @@ $('#asset_search_result').on('keyup', function(event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
             var searchInput = document.getElementById('asset_search_result');
             var inputValue = searchInput.value;
-            searchPer(inputValue)
-        }
+            if (inputValue.trim().length < 2) {
+        alert("최소 2글자 이상 입력하세요.");
+      } else {
+        searchPer(inputValue);
+      }
+    }
     });
 
 
@@ -447,6 +454,17 @@ $(document).ready(function () {
     var computernameValue = $('#asset_computer_name').text();
     var macaddressValue = $('#asset_mac_address').text();
 
+    // Function to escape HTML entities in the memoValue
+    function escapeHtml(unsafe) {
+        return $('<div/>').text(unsafe).html();
+    }
+
+    memoValue = escapeHtml(memoValue);
+
+    if (computernameValue === '-'){
+              alert('Computer Name을 선택해 주세요.');
+              return
+          }
     $.ajax({
       url: 'save_memo/',  // 저장할 URL 주소로 변경해야 합니다.
       method: 'POST',
@@ -457,9 +475,7 @@ $(document).ready(function () {
       success: function(response) {
           // console.log(computernameValue)
           //console.log(response)
-          if (computernameValue == '-'){
-              return
-          }
+
         alert('저장 완료')
         console.log('메모가 성공적으로 저장되었습니다.');
         // 원하는 작업 수행
