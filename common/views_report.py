@@ -47,8 +47,8 @@ def create(request):
     win_ver = DCDL['win_os_build']
     hotfix = DCDL['necessery']
     os_version_up = DCDL['old']
-    Notebook_chassis_total = DCDL['Notebook_chassis_total']
-    Desktop_chassis_total = DCDL['Desktop_chassis_total']
+    Notebook_chassis_total = DCDL['Notebook_cache_total']
+    Desktop_chassis_total = DCDL['Desktop_cache_total']
     dataList = {
         '150days': days_150,
         'win_ver': win_ver,
@@ -168,7 +168,7 @@ def report(selected_date=None):
     items_to_query = ['150_day_ago', 'old', 'necessery']  # 원하는 item들을 이 리스트에 추가하세요.
     RD = {item: get_data_for_item(item) for item in items_to_query}
     RD['win_os_build'] = get_win_os_build_data()
-    RD['Notebook_chassis_total'] = get_specific_classification_data('Notebook_chassis_total', 'Notebook')
-    RD['Desktop_chassis_total'] = get_specific_classification_data('Desktop_chassis_total', 'Desktop')
+    RD['Notebook_cache_total'] = get_specific_classification_data('Notebook_cache_total', 'Notebook')
+    RD['Desktop_cache_total'] = get_specific_classification_data('Desktop_cache_total', 'Desktop')
     #print(RD)
     return RD
