@@ -55,9 +55,6 @@ def pur_asset(request):
     #context = {'menu_list' : menu.data, 'asset' : asset, 'total_item_count' : total_item_count}
     return render(request, 'pur_asset.html', context)
 
-local_tz = pytz.timezone('Asia/Seoul')
-utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
-now = utc_now.astimezone(local_tz)
 @csrf_exempt
 def pur_asset_paginghw(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
@@ -65,6 +62,9 @@ def pur_asset_paginghw(request):
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='false')
     if user_auth and group_auth:
         return redirect('../../home/')
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     start_of_today1 = now.strftime('%Y-%m-%d %H')
     start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
     start_of_today = timezone.make_aware(start_of_today2)
@@ -380,6 +380,9 @@ def pur_asset_pagingsw(request):
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='false')
     if user_auth and group_auth:
         return redirect('../../home/')
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     start_of_today1 = now.strftime('%Y-%m-%d %H')
     start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
     start_of_today = timezone.make_aware(start_of_today2)

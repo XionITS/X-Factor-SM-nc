@@ -38,9 +38,6 @@ with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
 
-local_tz = pytz.timezone('Asia/Seoul')
-utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
-now = utc_now.astimezone(local_tz)
 @csrf_exempt
 def dashboard(request):
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
@@ -208,6 +205,9 @@ def hs_asset_paginghw(request):
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='HS_asset', auth_use='false')
     if user_auth and group_auth:
         return redirect('../../home/')
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     start_of_today1 = now.strftime('%Y-%m-%d %H')
     start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
     start_of_today = timezone.make_aware(start_of_today2)
@@ -516,6 +516,9 @@ def hs_asset_pagingsw(request):
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='HS_asset', auth_use='false')
     if user_auth and group_auth:
         return redirect('../../home/')
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     start_of_today1 = now.strftime('%Y-%m-%d %H')
     start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
     start_of_today = timezone.make_aware(start_of_today2)

@@ -22,10 +22,6 @@ with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
 
-local_tz = pytz.timezone('Asia/Seoul')
-utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
-now = utc_now.astimezone(local_tz)
-
 @csrf_exempt
 def up_asset(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
@@ -55,6 +51,9 @@ def up_asset_paging(request):
     print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
     start_of_today1 = now.strftime('%Y-%m-%d %H')
     start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
     start_of_today = timezone.make_aware(start_of_today2)
