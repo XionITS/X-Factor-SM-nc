@@ -31234,11 +31234,6 @@ label.no-before::before {
 }
 
 .small-pagination .page-link {
-    padding: .125rem .5rem;
+    padding: .5rem;
     font-size: .875rem;
-}
-
-.big-pagination .page-link {
-    padding: .5rem .75rem;
-    font-size: 1rem;
 }
