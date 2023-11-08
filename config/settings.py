@@ -139,3 +139,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'export')
 
 # 미디어 파일에 접근하기 위한 URL
 MEDIA_URL = '/export/'
+
+
+#Django Session Timeout Code
+SESSION_COOKIE_AGE = 14400
+SESSION_SAVE_EVERY_REQUEST = True
