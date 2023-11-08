@@ -26,8 +26,10 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 def log(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                  xfactor_auth_id='settings', auth_use='false')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
+                                                    xfactor_auth_id='settings', auth_use='false')
     #print(user_auth)
-    if user_auth:
+    if user_auth and group_auth:
         return redirect('../home/')
     #메뉴
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
@@ -43,7 +45,7 @@ def log(request):
 @csrf_exempt
 def log_paging(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                 xfactor_auth_id='VER_asset', auth_use='false')
+                                                 xfactor_auth_id='settings', auth_use='false')
     #print(user_auth)
     if user_auth:
         return redirect('../../home/')

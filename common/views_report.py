@@ -31,7 +31,6 @@ def create(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='dash_report', auth_use='false')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='dash_report', auth_use='false')
-    print(user_auth)
     if user_auth and group_auth:
         return redirect('../home/')
     datetime = request.GET.get('datetime')

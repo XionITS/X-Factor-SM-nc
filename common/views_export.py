@@ -96,7 +96,7 @@ def export(request, model):
 
     if parameter_value == 'all_asset1':
         data_list = []
-        columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         if request.GET.get('categoryName') == 'Online':
             if request.GET.get('seriesName') == 'Other':
                 data_list = user.exclude(chassistype__in=['Notebook', 'Desktop'])
@@ -111,7 +111,7 @@ def export(request, model):
 
     elif parameter_value == 'asset_os_detail1':
         data_list = []
-        columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         if request.GET.get('categoryName') == 'Other':
             if request.GET.get('seriesName') == 'Other':
                 print("asd")
@@ -127,7 +127,7 @@ def export(request, model):
 
     elif parameter_value == 'asset_os_detail2':
         data_list = []
-        columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         if request.GET.get('categoryName') == 'Other':
             if request.GET.get('seriesName') == 'Other':
                 data_list = cache.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop, Notebook'])
@@ -142,7 +142,7 @@ def export(request, model):
         data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'office_chart':
-        columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         data_list = []
         if request.GET.get('categoryName') == 'Office 16 이상':
             data_list = user.filter(essential5__in=['Office 21', 'Office 19', 'Office 16'])
@@ -156,13 +156,13 @@ def export(request, model):
 
     elif parameter_value == 'oslistPieChart':
         data_list = []
-        columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         data_list = user.annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build__contains=request.GET.get('categoryName'), os_simple='Windows')
         data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'osVerPieChart':
         data_list = []
-        columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         if request.GET.get('categoryName') == '업데이트 완료':
             data_list = user.filter(os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
         if request.GET.get('categoryName') == '업데이트 필요':
@@ -171,7 +171,7 @@ def export(request, model):
 
     elif parameter_value == 'subnet_chart':
         data_list = []
-        columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         if request.GET.get('categoryName') == 'VPN':
             data_list = user.filter(subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
         if request.GET.get('categoryName') == '사내망':
@@ -186,7 +186,7 @@ def export(request, model):
 
     elif parameter_value == 'tcpuChart':
         data_list = []
-        columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         data_list = user.filter(t_cpu='True')
         data = Cacheserializer(data_list, many=True).data
 
@@ -194,7 +194,7 @@ def export(request, model):
         three_months_ago = datetime.now() - timedelta(days=90)
         data_list = []
         filtered_user_objects = []
-        columns = ["deptName", "computer_name", "userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
         user_objects = user
         users_values = user_objects.values('hotfix_date', 'computer_id')
 

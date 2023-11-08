@@ -21,6 +21,10 @@ with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
 
+local_tz = pytz.timezone('Asia/Seoul')
+utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+now = utc_now.astimezone(local_tz)
+
 @csrf_exempt
 def ver_asset(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
@@ -72,6 +76,10 @@ def ver_asset_paging(request):
     #print(user_auth)
     if user_auth and group_auth:
         return redirect('../../home/')
+    start_of_today1 = now.strftime('%Y-%m-%d %H')
+    start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+    start_of_today = timezone.make_aware(start_of_today2)
+    start_of_day = start_of_today - timedelta(days=7)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
     default_os = request.POST.get('filter[defaultColumn]')
@@ -91,7 +99,7 @@ def ver_asset_paging(request):
 
     if filter_text and filter_column:
         if filter_column == "cache_date":
-            user = user.filter(user_date__gte=today_collect_date)
+            user = user.filter(user_date__gte=start_of_today)
             if all(char in "online" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
@@ -172,7 +180,7 @@ def ver_asset_paging(request):
                 user = user
         else:
             query = Q(**{f'{filter_column}__icontains': filter_text})
-            user = user.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+            user = user.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
             user = user.filter(query)
             #user = Xfactor_Common.objects.filter(query)
             if filter_value:
@@ -209,7 +217,7 @@ def ver_asset_paging(request):
                              Q(memo__icontains=filter_value))
                 user = user.filter(query)
     else:
-        user = user.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+        user = user.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')

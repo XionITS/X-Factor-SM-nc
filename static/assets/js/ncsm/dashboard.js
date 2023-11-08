@@ -856,7 +856,7 @@ var handleRenderChartNCOMG = function () {
                             document.getElementById('selectedDate').value = selectedDate;
                             document.getElementById('chartName').value = 'discoverChart';
                             $("#DashModal .modal-title").html(labelsName+' List');
-                            osVerPieChart_list(labelsName, seriesName, selectedDate);
+                            discoverChart_list(labelsName, seriesName, selectedDate);
                             // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                             $("#DashModal").modal("show");
                         }

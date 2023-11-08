@@ -67,10 +67,8 @@ def all_asset_paging1(request):
         start_of_today1 = now.strftime('%Y-%m-%d %H')
         start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
         start_of_today = timezone.make_aware(start_of_today2)
-        #print(start_of_today)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
-
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
         # 토탈
@@ -1044,35 +1042,22 @@ def subnet_chart(request):
 
 @csrf_exempt
 def hotfixChart(request):
+    user = ''
+    cache = ''
     three_months_ago = datetime.now() - timedelta(days=90)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
     local_tz = pytz.timezone('Asia/Seoul')
     utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
     now = utc_now.astimezone(local_tz)
-    user = ''
-    cache = ''
-    #print(request.POST.get('selectedDate'))
+    filtered_user_objects = []  # 조건을 만족하는 사용자들을 저장할 리스트
     if request.POST.get('selectedDate') != '':
-
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
-        start_of_day = start_of_today - timedelta(days=7)
-        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
-            start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
-            start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
-            end_of_today2 = start_of_today + timedelta(minutes=110)
-            # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
-            # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
-        else:
-            end_of_today = start_of_today + timedelta(minutes=50)
-            # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
-            # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
         start_of_today1 = now.strftime('%Y-%m-%d %H')
@@ -1080,17 +1065,13 @@ def hotfixChart(request):
         start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
-
+        print('1')
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
-        # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
-    filtered_user_objects = []  # 조건을 만족하는 사용자들을 저장할 리스트
-    #user_objects = Xfactor_Daily.objects.filter(user_date__gte=start_of_today)
+    # user_objects = Xfactor_Daily.objects.filter(user_date__gte=start_of_today)
     user_objects = user
     users_values = user_objects.values('hotfix_date', 'computer_id')
-
     for i, user in enumerate(users_values):
         date_strings = user['hotfix_date'].split('<br> ')
         date_objects = []
@@ -1106,6 +1087,25 @@ def hotfixChart(request):
                 filtered_user_objects.append(user['computer_id'])
             elif latest_date >= three_months_ago and request.POST.get('categoryName') == '보안패치 불필요':
                 filtered_user_objects.append(user['computer_id'])
+
+    if request.POST.get('selectedDate') != '':
+        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+        start_of_today = timezone.make_aware(start_date_naive)
+        end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
+
+    elif request.POST.get('selectedDate') == '':
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
+        start_of_day = start_of_today - timedelta(days=7)
+        end_of_today = start_of_today + timedelta(minutes=50)
+        print('1')
+        # 현재
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
+
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
                  Q(logged_name_id__deptName__icontains=filter_text) |
@@ -1113,9 +1113,8 @@ def hotfixChart(request):
                  Q(logged_name_id__userId__icontains=filter_text) |
                  Q(ip_address__icontains=filter_text) |
                  Q(mac_address__icontains=filter_text))
-        filtered_user_objects = user.filter(query)
+        user = user.filter(query)
 
-    user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
 
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))

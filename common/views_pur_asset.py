@@ -55,6 +55,9 @@ def pur_asset(request):
     #context = {'menu_list' : menu.data, 'asset' : asset, 'total_item_count' : total_item_count}
     return render(request, 'pur_asset.html', context)
 
+local_tz = pytz.timezone('Asia/Seoul')
+utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+now = utc_now.astimezone(local_tz)
 @csrf_exempt
 def pur_asset_paginghw(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
@@ -62,8 +65,13 @@ def pur_asset_paginghw(request):
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='false')
     if user_auth and group_auth:
         return redirect('../../home/')
+    start_of_today1 = now.strftime('%Y-%m-%d %H')
+    start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+    start_of_today = timezone.make_aware(start_of_today2)
+    start_of_day = start_of_today - timedelta(days=7)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
+
     filter_column =request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
@@ -76,7 +84,7 @@ def pur_asset_paginghw(request):
     # local_now = utc_now.astimezone(local_tz)
     # # 24시간 30분 이전의 시간 계산
     # today_collect_date = local_now - timedelta(minutes=7)
-    user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+    user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
     if filter_text and filter_column:
         if filter_column == "cache_date":
             user = user.filter(user_date__gte=today_collect_date)
@@ -250,7 +258,7 @@ def pur_asset_paginghw(request):
                              Q(disk_use__icontains=filter_value))
                 user = user.filter(query)
     else:
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -326,17 +334,16 @@ def pur_asset_paginghw(request):
     }
 
     order_column = order_column_map.get(order_column_index, 'computer_name')
-    print(order_column)
-    if order_column_dir == 'asc':
-        user = sorted(user, key=lambda x: cus_sort(x, order_column))
-        #user = user.order_by(order_column, '-computer_id')
-    else:
-        user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
-
     # if order_column_dir == 'asc':
-    #     user = user.order_by(order_column, '-computer_id')
+    #     user = sorted(user, key=lambda x: cus_sort(x, order_column))
+    #     #user = user.order_by(order_column, '-computer_id')
     # else:
-    #     user = user.order_by('-' + order_column, 'computer_id')
+    #     user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
+
+    if order_column_dir == 'asc':
+        user = user.order_by(order_column, '-computer_id')
+    else:
+        user = user.order_by('-' + order_column, 'computer_id')
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
@@ -373,6 +380,10 @@ def pur_asset_pagingsw(request):
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='false')
     if user_auth and group_auth:
         return redirect('../../home/')
+    start_of_today1 = now.strftime('%Y-%m-%d %H')
+    start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+    start_of_today = timezone.make_aware(start_of_today2)
+    start_of_day = start_of_today - timedelta(days=7)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
     filter_column = request.POST.get('filter[column]')
@@ -390,7 +401,7 @@ def pur_asset_pagingsw(request):
 
     if filter_text and filter_column:
         if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
@@ -509,7 +520,7 @@ def pur_asset_pagingsw(request):
             #filter_column = 'computer__' + filter_column
             query = Q(**{f'{filter_column}__icontains': filter_text})
             #user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
             #print(user)
             # service = Xfactor_Service.objects.filter(computer=user.computer_id)
             # print(service.essential1)
@@ -555,7 +566,7 @@ def pur_asset_pagingsw(request):
                 user = user.filter(query)
     else:
         #user = Xfactor_Common.objects.filter(user_date__gte=today_collect_date)
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
 
         # print(user.values_list('computer_id', flat=True))
         if filter_value:

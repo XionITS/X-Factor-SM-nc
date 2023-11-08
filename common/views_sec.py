@@ -1,5 +1,6 @@
 import json
 
+import pytz
 from django.http import HttpResponse
 import math
 import operator
@@ -19,6 +20,10 @@ from common.custom_sort_key import custom_sort_key as cus_sort
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']
+
+local_tz = pytz.timezone('Asia/Seoul')
+utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+now = utc_now.astimezone(local_tz)
 
 def sec_asset(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
@@ -47,13 +52,17 @@ def sec_asset_paging(request):
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='SEC_asset', auth_use='false')
     if user_auth and group_auth:
         return redirect('../../home/')
+    start_of_today1 = now.strftime('%Y-%m-%d %H')
+    start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+    start_of_today = timezone.make_aware(start_of_today2)
+    start_of_day = start_of_today - timedelta(days=7)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
     default_os = request.POST.get('filter[defaultColumn]')
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+    user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
 
     cososys_count = user.filter(security1='True ').count()
     symantec_count = user.filter(security2='True ').count()
@@ -65,7 +74,7 @@ def sec_asset_paging(request):
 
     if filter_text and filter_column:
         if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
@@ -209,7 +218,7 @@ def sec_asset_paging(request):
                              Q(memo__icontains=filter_value))
                 user = user.filter(query)
     else:
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -341,16 +350,20 @@ def sec_asset_list_paging(request):
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='SEC_asset_list', auth_use='false')
     if user_auth and group_auth:
         return redirect('../../home/')
+    start_of_today1 = now.strftime('%Y-%m-%d %H')
+    start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+    start_of_today = timezone.make_aware(start_of_today2)
+    start_of_day = start_of_today - timedelta(days=7)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+    user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
 
     if filter_text and filter_column:
         if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
                 user = user.annotate(time_difference=ExpressionWrapper(
                     F('user_date') - F('cache_date'),
@@ -541,7 +554,7 @@ def sec_asset_list_paging(request):
                              Q(memo__icontains=filter_value))
                 user = user.filter(query)
     else:
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).filter(cache_date__gte=seven_days_ago)
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
