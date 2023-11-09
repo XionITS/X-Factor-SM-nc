@@ -51,19 +51,18 @@ def search_h(request):
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
-        date1 = datetime.strptime(request.POST.get('date1'), "%Y-%m-%d %H시")
-        date2 = datetime.strptime(request.POST.get('date2'), "%Y-%m-%d %H시")
-        print(search_text)
+        datesource1 = request.POST.get('date1', None)
+        datesource2 = request.POST.get('date2', None)
+        if datesource1 == '' or datesource2 == '':
+            return HttpResponse(None)
+        date1 = datetime.strptime(datesource1, "%Y-%m-%d %H시")
+        date2 = datetime.strptime(datesource2, "%Y-%m-%d %H시")
         start_h_1 = timezone.make_aware(datetime.combine(date1.date(), datetime.min.time())) + timedelta(hours=date1.hour)
         end_h_1 = start_h_1 + timedelta(hours=1)
         start_h_2 = timezone.make_aware(datetime.combine(date1.date(), datetime.min.time())) + timedelta(hours=date2.hour)
         end_h_2 = start_h_2 + timedelta(hours=1)
-        print(date1)
-        print(date2)
-        print(end_h_1)
-        print(end_h_2)
         if search_text == '':
-            return
+            return HttpResponse(None)
         user1 = Xfactor_Common_Cache.objects.filter(user_date__range=(start_h_1, end_h_1)).filter(computer_name__icontains=search_text).order_by('-user_date').first()
         user2 = Xfactor_Common_Cache.objects.filter(user_date__range=(start_h_2, end_h_2)).filter(computer_name__icontains=search_text).order_by('-user_date').first()
 

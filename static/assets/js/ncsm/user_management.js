@@ -1086,6 +1086,9 @@ $(document).on("click", "#user_delete", function (event) {
 });
 //############################################################################
 
+function escapeSelector(s) {
+    return s.replace(/([!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~])/g, '\\$1');
+}
 
 //############################### Group 생성하기 ###############################
 $(document).on("click","#um_creategroup", function (e){
@@ -1093,7 +1096,7 @@ $(document).on("click","#um_creategroup", function (e){
     $("#groupName_auth").val("");
     $("#groupDescription_auth").val("");
     const check_id = [];
-
+    $("#group_insert_modal .form-check2").html('');
  /////////////////USER 검색기능 버튼삽입
     var modalbody =`<div class="asset-input-group justify-content-end">
                         <span class="fs-16px pb-2 pe-2">검색 : </span>
@@ -1135,10 +1138,20 @@ $(document).on("click","#um_creategroup", function (e){
                         $("#group_insert_modal .form-check2").append(newLine);
                 }
  ///////////////// 체크박스를 해제하면 modalbody2에서 제거
-                else {
-                    $("#div_" + x_id).remove();
+                else if (!this.checked) {
+                    $("#div_" + escapeSelector(x_id)).remove();
 //                    $(`#group_insert_modal .form-check2 label[for=${x_id}]`).remove(); // 라벨도 제거
 //                    $("#group_insert_modal .form-check2").find('br').last().remove();
+                }
+            });
+
+
+            $(document).on('change', '.form-check-input', function() {
+                var x_id = $(this).val();
+                if (!this.checked) { // 체크박스가 해제된 경우
+                    // 해당 체크박스를 #group_insert_modal .form-check2에서 제거
+                    $("#div_" + escapeSelector(x_id)).remove();
+                    $(".user-checkbox[data-x-id='" + escapeSelector(x_id) + "']").prop('checked', false);
                 }
             });
 
@@ -1181,6 +1194,7 @@ $(document).on("click","#group_insert", function(e) {
 //    const x_id = $(this).data("x_id");
 //    console.log(x_id);
 
+
     var form = document.getElementById("GroupCreateForm_auth");
     //console.log(form)
     var xgroup_name = form.elements.groupName_auth.value;
@@ -1217,7 +1231,11 @@ $(document).on("click","#group_insert", function(e) {
         } else {
             alert('실패 : ' + response.message);
         }
+
     }
+
+
+
     });
 });
 
@@ -1286,15 +1304,23 @@ $(document).on("click",".um_groupalter", function (e){
                 }
  ///////////////// 체크박스를 해제하면 modalbody2에서 제거
                 else {
-                    $("#div_" + x_id).remove();
+                    $("#div_" + escapeSelector(x_id)).remove();
                     $(`#group_alter_modal .form-check2 #${x_id}`).remove();
                     $(`#group_alter_modal .form-check2 label[for=${x_id}]`).remove();
-
                     //$(`#group_alter_modal .form-check2 label[for=${x_id}]`).remove();
 //                    var nextBr = $(`#group_alter_modal .form-check2 label[for=${x_id}] + br`);
 //                    if (nextBr.length > 0) {
 //                        nextBr.remove();
 //                    }
+                }
+            });
+
+            $(document).on('change', '.form-check-input', function() {
+                var x_id = $(this).val();
+                if (!this.checked) { // 체크박스가 해제된 경우
+                    // 해당 체크박스를 #group_insert_modal .form-check2에서 제거
+                    $("#div_" + escapeSelector(x_id)).remove();
+                    $(".user-checkbox[data-x-id='" + escapeSelector(x_id) + "']").prop('checked', false);
                 }
             });
 

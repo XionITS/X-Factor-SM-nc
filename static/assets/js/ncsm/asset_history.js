@@ -64,6 +64,12 @@ $(document).ready(function(){
 $('#search_his_btn').on('click', function(event) {
     var searchInput = document.getElementById('search_his');
     var inputValue = searchInput.value;
+    if (!date1 || !date2) {
+        alert('날짜를 선택해주세요')
+    }
+    else if (!inputValue) {
+        alert('검색어를 입력해주세요');
+    }
     searchPer_h(inputValue, date1, date2)
 });
 
@@ -71,6 +77,12 @@ $('#search_his').on('keyup', function(event) {
     if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
         var searchInput = document.getElementById('search_his');
         var inputValue = searchInput.value;
+        if (!date1 || !date2) {
+            alert('날짜를 선택해주세요')
+        }
+        else if (!inputValue) {
+            alert('검색어를 입력해주세요');
+        }
         searchPer_h(inputValue, date1, date2)
     }
 });
@@ -107,6 +119,16 @@ function searchPer_h(inputValue, date1, date2){
                     computerNameElement2.textContent = data2.computer_name;
                     if (computerNameElement.textContent !== computerNameElement2.textContent) {
                             computerNameElement2.style.color = 'red';
+                    }
+                }
+                var userElement = document.getElementById("asset_user");
+                var userElement2 = document.getElementById("asset_user2");
+                if (userElement && userElement2) {
+                    userElement2.style.color = '';
+                    userElement.textContent = data1.ncdb_data.userName;
+                    userElement2.textContent = data2.ncdb_data.userName;
+                    if (userElement.textContent !== userElement2.textContent) {
+                            userElement2.style.color = 'red';
                     }
                 }
                 var macAddressElement = document.getElementById("asset_mac_address");
