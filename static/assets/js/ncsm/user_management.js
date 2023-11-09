@@ -154,7 +154,7 @@ var um_user_list = function () {
                 title: '<span>선택</span>',
                 searchable: false
             },
-            {data: '', title: 'No', searchable: true},
+            {data: '', title: 'No', searchable: false},
             {data: 'x_id', title: ' 아이디', searchable: true},
             {data: 'x_name', title: '사용자 이름', searchable: true},
             {data: 'x_email', title: '이메일', searchable: true},
@@ -184,6 +184,8 @@ var um_user_list = function () {
             {
                 targets: 1,
                 width: "3%",
+                orderable: false,
+                searchable: false,
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.index + '" data-toggle="tooltip">' + data + '</span>'
@@ -233,6 +235,7 @@ var um_user_list = function () {
             {
                 targets: 7,
                 width: "10%",
+                orderable: false,
                 className: 'text-center text-truncate flex-cloumn column_hidden',
                 render: function (data, type, row) {
                     const x_id = row.x_id;
@@ -294,6 +297,9 @@ var um_group_list = function () {
 		serverSide: true,
 		displayLength: false,
 		autoWidth: false,
+		order: [
+            [2, "desc"]
+        ],
 		drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
             var api = this.api();
@@ -400,7 +406,7 @@ var um_group_list = function () {
                 var columnMap = {
                             2: 'xgroup_name',
                             3: 'xgroup_note',
-                            4: 'xuser_id_list',
+                            5: 'create_date',
                         };
 //                data.filter = {
 //                    column: column,
@@ -425,10 +431,10 @@ var um_group_list = function () {
                 title: '<span>선택</span>',
                 searchable: false
             },
-            {data: '', title: 'No', searchable: true},
+            {data: '', title: 'No', searchable: false},
             {data: 'xgroup_name', title: '그룹 이름', searchable: true},
             {data: 'xgroup_note', title: '그룹 설명', searchable: true},
-            {data: 'xuser_id_list', title: '그룹원', searchable: true},
+            {data: 'xuser_id_list', title: '그룹원', searchable: false},
             {data: 'create_date', title: '생성 날짜', searchable: true},
             {data: 'id', title: '권한 관리', searchable: false},
 
@@ -465,6 +471,8 @@ var um_group_list = function () {
             {
                 targets: 1,
                 width: "3%",
+                orderable: false,
+                searchable: false,
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + row.index + '" data-toggle="tooltip">' + data + '</span>'
@@ -493,6 +501,7 @@ var um_group_list = function () {
             {
                 targets: 4,
                 width: "20%",
+                orderable: false,
                 className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     const xuser_id_list = row.xuser_id_list.replace(/'/g, '').replace(']','').replace('[','').split(', ');
@@ -511,6 +520,7 @@ var um_group_list = function () {
             {
                 targets: 6,
                 width: "10%",
+                orderable: false,
                 className: 'text-center text-truncate flex-cloumn column_hidden',
                 render: function (data, type, row) {
                     const xgroup_name = row.xgroup_name;
@@ -969,7 +979,7 @@ $(document).on("keyup", "#ncuser_search_result", function (e) {
         var x_id = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
         var shouldShow = searchText.length >= 3 && x_id.includes(searchText);
 
-        if (shouldShow) {
+        if (searchText.length === 0 || shouldShow) {
             // 검색어가 3글자 이상이고 일치하는 경우 표시
             $(this).show();
         } else {

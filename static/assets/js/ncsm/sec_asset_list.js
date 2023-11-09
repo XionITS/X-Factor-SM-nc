@@ -240,12 +240,11 @@ var sec_asset_list2 = function () {
                 width: "5%",
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
+
                     if (row.ext_chr === 'unconfirmed' && row.ext_edg === 'unconfirmed' && row.ext_fir === 'unconfirmed') {
                         return '';
                     } else {
-                        return '<a class="extmore swmore-font" data-ext_chr="' + row.ext_chr + '" ' +
-                            'data-ext_chr_ver="' + row.ext_chr_ver + '" data-ext_edg="' + row.ext_edg + '" data-ext_edg_ver="' + row.ext_edg_ver + '" ' +
-                            'data-ext_fir="' + row.ext_fir + '" data-ext_fir_ver="' + row.ext_fir_ver + '" data-computer_name="' + row.computer_name + '" >더보기</a>'
+                        return '<a class="extmore swmore-font" data-ext_chr="' + row.ext_chr + '"data-ext_chr_ver="' + row.ext_chr_ver + '" data-ext_edg="' + row.ext_edg + '" data-ext_edg_ver="' + row.ext_edg_ver + '"data-ext_fir="' + row.ext_fir + '" data-ext_fir_ver="' + row.ext_fir_ver + '" data-computer_name="' + row.computer_name + '" >더보기</a>'
                     }
                 }
             },
@@ -254,9 +253,7 @@ var sec_asset_list2 = function () {
                 width: "5%",
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<a class="swListmore swmore-font" ' +
-                        'data-computer_name="' + row.computer_name + '" data-sw_list="' + row.sw_list + '" data-sw_ver_list="' + row.sw_ver_list + '" ' +
-                        'data-sw_install="' + row.sw_install + '">더보기</a>'
+                    return '<a class="swListmore swmore-font" data-computer_name="' + row.computer_name + '" data-sw_list="' + row.sw_list + '" data-sw_ver_list="' + row.sw_ver_list + '"data-sw_install="' + row.sw_install + '">더보기</a>'
                 }
             },
             {
@@ -352,7 +349,7 @@ var sec_asset_list2 = function () {
 
 //-----------------------------------브라우저 확장 프로그램------------------------------------------------
     $(document).on("click", ".extmore", function (e) {
-
+        $('#searchInput_ext').val("");
         const computer_name = $(this).data("computer_name");
         const extList1 = $(this).data("ext_chr").split('<br>');
         const extVer1 = $(this).data("ext_chr_ver").split('<br>');
@@ -386,32 +383,83 @@ var sec_asset_list2 = function () {
         //$("#swListModal .modal-body-2").html(swVerHTML);
         $("#ext_Modal").modal("show");
 
-        // Input 상자 값에 따라 해당 값을 노란색으로 처리
-        $("#searchInput_ext").on("input", function () {
-            const searchValue = $(this).val().trim().toLowerCase();
-            // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
-            if (searchValue === "") {
-                $("#ext_Modal .exttbody tr").removeClass("highlight");
-                return;
-            };
-            $("#ext_Modal .exttbody tr").each(function () {
-                const rowData = $(this).text().toLowerCase();
-                // 검색어가 rowData에 포함되면 highlight 클래스 추가
-                if (rowData.includes(searchValue)) {
-                    $(this).addClass("highlight");
-                }
-                // 포함되지 않으면 highlight 클래스 제거
-                else {
-                    $(this).removeClass("highlight");
+
+
+        $(document).off("click", ".sortable").on("click", ".sortable", function (e) {
+            const $table = $("#ext_Modal .exttbody");
+            const $rows = $table.find("tr").toArray();
+            const $th = $(this);
+            const index = $th.index();
+            const sortDirection = $th.data("sort") || 1;
+
+            // 행 정렬
+            $rows.sort(function (a, b) {
+                const aText = $(a).find("td").eq(index).text();
+                const bText = $(b).find("td").eq(index).text();
+                if (index === 0) {
+                    return aText.localeCompare(bText) * sortDirection;
+                } else if (index === 1) {
+                    return bText.localeCompare(aText) * sortDirection;
+//                    const aDate = new Date(aText);
+//                    const bDate = new Date(bText);
+//                    return (aDate - bDate) * sortDirection;
                 }
             });
+
+            // 정렬 순서 업데이트
+            $table.empty().append($rows);
+            $th.data("sort", sortDirection === 1 ? -1 : 1);
         });
+
+
+    ////////////////////////////검색한거로 SW 보이게
+    $(document).on("keyup", "#searchInput_ext", function (e) {
+        var searchText = $(this).val().toLowerCase(); // 입력된 검색어를 소문자로 변환
+        var userRows = $("#ext_Modal .exttable .exttbody tr");
+        userRows.each(function () {
+            var ext_chr = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var ext_edg = $(this).find("td:first-child").next().next().text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var ext_fir = $(this).find("td:first-child").next().next().next().next().text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var shouldShow_chr = searchText.length >= 2 && ext_chr.includes(searchText);
+            var shouldShow_edg = searchText.length >= 2 && ext_edg.includes(searchText);
+            var shouldShow_fir = searchText.length >= 2 && ext_fir.includes(searchText);
+
+            if (searchText.length === 0 || shouldShow_chr ||shouldShow_edg || shouldShow_fir ) {
+                // 검색어가 3글자 이상이고 일치하는 경우 표시
+                $(this).show();
+            } else {
+                // 그 외의 경우 숨김
+                $(this).hide();
+            }
+        });
+    });
+//        // Input 상자 값에 따라 해당 값을 노란색으로 처리
+//        $("#searchInput_ext").on("input", function () {
+//            const searchValue = $(this).val().trim().toLowerCase();
+//            // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+//            if (searchValue === "") {
+//                $("#ext_Modal .exttbody tr").removeClass("highlight");
+//                return;
+//            };
+//            $("#ext_Modal .exttbody tr").each(function () {
+//                const rowData = $(this).text().toLowerCase();
+//                // 검색어가 rowData에 포함되면 highlight 클래스 추가
+//                if (rowData.includes(searchValue)) {
+//                    $(this).addClass("highlight");
+//                }
+//                // 포함되지 않으면 highlight 클래스 제거
+//                else {
+//                    $(this).removeClass("highlight");
+//                }
+//            });
+//        });
     });
     //-----------------------------------------------------------------------------------
 
 
 //--------------------------핫픽스 목록-------------------------------
     $(document).on("click", ".hotmore", function (e) {
+        $('#searchInput_hot').val("");
         const computer_name = $(this).data("computer_name");
         const swList = $(this).data("hotfix");
         const swVer = $(this).data("hotfix_date");
@@ -437,33 +485,79 @@ var sec_asset_list2 = function () {
         //$("#swListModal .modal-body-2").html(swVerHTML);
         $("#hotModal").modal("show");
 
-     // Input 상자 값에 따라 해당 값을 노란색으로 처리
-    $("#searchInput_hot").on("input", function () {
-        const searchValue = $(this).val().trim().toLowerCase();
-        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
-        if (searchValue === "") {
-            $("#hotModal .hottbody tr").removeClass("highlight");
-            return;
-        };
-        $("#hotModal .hottbody tr").each(function () {
-            const rowData = $(this).text().toLowerCase();
-            // 검색어가 rowData에 포함되면 highlight 클래스 추가
-            if (rowData.includes(searchValue)) {
-                $(this).addClass("highlight");
-            }
-            // 포함되지 않으면 highlight 클래스 제거
-            else {
-                $(this).removeClass("highlight");
+        $(document).off("click", ".sortable").on("click", ".sortable", function (e) {
+            const $table = $("#hotModal .hottbody");
+            const $rows = $table.find("tr").toArray();
+            const $th = $(this);
+            const index = $th.index();
+            const sortDirection = $th.data("sort") || 1;
+
+            // 행 정렬
+            $rows.sort(function (a, b) {
+                const aText = $(a).find("td").eq(index).text();
+                const bText = $(b).find("td").eq(index).text();
+                if (index === 0) {
+                    return aText.localeCompare(bText) * sortDirection;
+                } else if (index === 1) {
+                    const aDate = new Date(aText);
+                    const bDate = new Date(bText);
+                    return (aDate - bDate) * sortDirection;
+                }
+            });
+
+            // 정렬 순서 업데이트
+            $table.empty().append($rows);
+            $th.data("sort", sortDirection === 1 ? -1 : 1);
+        });
+
+
+    ////////////////////////////검색한거로 SW 보이게
+    $(document).on("keyup", "#searchInput_hot", function (e) {
+        var searchText = $(this).val().toLowerCase(); // 입력된 검색어를 소문자로 변환
+        var userRows = $("#hotModal .hottable .hottbody tr");
+        userRows.each(function () {
+            var hotfix = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var hotfix_Date = $(this).find("td:first-child").next().text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var shouldShow = searchText.length >= 3 && hotfix.includes(searchText);
+            var shouldShow_Date = searchText.length >= 3 && hotfix_Date.includes(searchText);
+
+            if (searchText.length === 0 || shouldShow ||shouldShow_Date) {
+                // 검색어가 3글자 이상이고 일치하는 경우 표시
+                $(this).show();
+            } else {
+                // 그 외의 경우 숨김
+                $(this).hide();
             }
         });
     });
+//
+//     // Input 상자 값에 따라 해당 값을 노란색으로 처리
+//    $("#searchInput_hot").on("input", function () {
+//        const searchValue = $(this).val().trim().toLowerCase();
+//        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+//        if (searchValue === "") {
+//            $("#hotModal .hottbody tr").removeClass("highlight");
+//            return;
+//        };
+//        $("#hotModal .hottbody tr").each(function () {
+//            const rowData = $(this).text().toLowerCase();
+//            // 검색어가 rowData에 포함되면 highlight 클래스 추가
+//            if (rowData.includes(searchValue)) {
+//                $(this).addClass("highlight");
+//            }
+//            // 포함되지 않으면 highlight 클래스 제거
+//            else {
+//                $(this).removeClass("highlight");
+//            }
+//        });
+//    });
 });
     //-----------------------------------------------------------------------------------
 
 
     //-----------------------------------sw 설치된 프로그램------------------------------------------------
     $(document).on("click", ".swListmore", function (e) {
-
+        $('#searchInput_swList').val("");
         const computer_name = $(this).data("computer_name");
         const swList = $(this).data("sw_list");
         const swVer = $(this).data("sw_ver_list");
@@ -503,24 +597,83 @@ var sec_asset_list2 = function () {
         //$("#swListModal .modal-body-2").html(swVerHTML);
         $("#swList_Modal").modal("show");
 
-     // Input 상자 값에 따라 해당 값을 노란색으로 처리
-    $("#searchInput_swList").on("input", function () {
-        const searchValue = $(this).val().trim().toLowerCase();
-        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
-        if (searchValue === "") {
-            $("#swList_Modal .swListtbody tr").removeClass("highlight");
-            return;
-        };
-        $("#swList_Modal .swListtbody tr").each(function () {
+        $(document).off("click", ".sortable").on("click", ".sortable", function (e) {
+            const $table = $("#swList_Modal .swListtbody");
+            const $rows = $table.find("tr").toArray();
+            const $th = $(this);
+            const index = $th.index();
+            const sortDirection = $th.data("sort") || 1;
 
-            const rowData = $(this).text().toLowerCase();
-            if (rowData.includes(searchValue)) {
-                $(this).addClass("highlight");
+            // 행 정렬
+            $rows.sort(function (a, b) {
+                const aText = $(a).find("td").eq(index).text();
+                const bText = $(b).find("td").eq(index).text();
+                if (index === 0) {
+                    return aText.localeCompare(bText) * sortDirection;
+                } else if (index === 2) {
+                    // 처리할 N/A 값 확인
+                    const naValue = "N/A";
+
+                    // N/A 값 처리 및 정렬
+                    if (aText === naValue && bText !== naValue) {
+                        return 1 * sortDirection; // aText가 N/A이면 bText를 더 앞으로 보냄
+                    } else if (aText !== naValue && bText === naValue) {
+                        return -1 * sortDirection; // bText가 N/A이면 aText를 더 앞으로 보냄
+                    } else if (aText === naValue && bText === naValue) {
+                        return 0; // 둘 다 N/A이면 유지
+                    } else {
+                        // 일반적인 날짜 비교
+                        const aDate = new Date(aText);
+                        const bDate = new Date(bText);
+                        return (bDate - aDate) * sortDirection;
+                    }
+                }
+            });
+
+            // 정렬 순서 업데이트
+            $table.empty().append($rows);
+            $th.data("sort", sortDirection === 1 ? -1 : 1);
+        });
+
+
+    ////////////////////////////검색한거로 SW 보이게
+    $(document).on("keyup", "#searchInput_swList", function (e) {
+        var searchText = $(this).val().toLowerCase(); // 입력된 검색어를 소문자로 변환
+        var userRows = $("#swList_Modal .swListtable .swListtbody tr");
+        userRows.each(function () {
+            var swList = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var swList_Ver = $(this).find("td:first-child").next().next().text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var shouldShow = searchText.length >= 2 && swList.includes(searchText);
+            var shouldShow_Ver = searchText.length >= 2 && swList_Ver.includes(searchText);
+
+            if (searchText.length === 0 || shouldShow ||shouldShow_Ver) {
+                // 검색어가 3글자 이상이고 일치하는 경우 표시
+                $(this).show();
             } else {
-                $(this).removeClass("highlight");
+                // 그 외의 경우 숨김
+                $(this).hide();
             }
         });
     });
+
+//     // Input 상자 값에 따라 해당 값을 노란색으로 처리
+//    $("#searchInput_swList").on("input", function () {
+//        const searchValue = $(this).val().trim().toLowerCase();
+//        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+//        if (searchValue === "") {
+//            $("#swList_Modal .swListtbody tr").removeClass("highlight");
+//            return;
+//        };
+//        $("#swList_Modal .swListtbody tr").each(function () {
+//
+//            const rowData = $(this).text().toLowerCase();
+//            if (rowData.includes(searchValue)) {
+//                $(this).addClass("highlight");
+//            } else {
+//                $(this).removeClass("highlight");
+//            }
+//        });
+//    });
 });
     //-----------------------------------------------------------------------------------
 

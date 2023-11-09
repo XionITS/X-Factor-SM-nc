@@ -365,7 +365,7 @@ def um_group(request):
     order_column_map = {
         2: 'xgroup_name',
         3: 'xgroup_note',
-        4: 'xgroup_list',
+        5: 'create_date',
         # Add mappings for other columns here
     }
 

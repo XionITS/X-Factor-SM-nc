@@ -596,6 +596,7 @@ $(document).ready(function () {
 //    });
 
 $(document).on("click",".swmore", function (e){
+    $('#searchInput').val("");
     const computer_name = $(this).data("computer_name");
     const swList = $(this).data("swlist");
     const swVer = $(this).data("swver");
@@ -622,26 +623,77 @@ $(document).on("click",".swmore", function (e){
     //$("#swListModal .modal-body-2").html(swVerHTML);
     $("#swListModal").modal("show");
 
-     // Input 상자 값에 따라 해당 값을 노란색으로 처리
-    $("#searchInput").on("input", function () {
-        const searchValue = $(this).val().trim().toLowerCase();
-        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
-        if (searchValue === "") {
-            $("#swListModal .hstbody tr").removeClass("highlight");
-            return;
-        };
-        $("#swListModal .hstbody tr").each(function () {
-            const rowData = $(this).text().toLowerCase();
-            // 검색어가 rowData에 포함되면 highlight 클래스 추가
-            if (rowData.includes(searchValue)) {
-                $(this).addClass("highlight");
+
+
+
+
+    //############### 정렬기능?>
+    $(document).off("click", ".sortable").on("click", ".sortable", function (e) {
+        const $table = $("#swListModal .hstbody");
+        const $rows = $table.find("tr").toArray();
+        const $th = $(this);
+        const index = $th.index();
+        const sortDirection = $th.data("sort") || 1;
+
+        // 행 정렬
+        $rows.sort(function (a, b) {
+            const aText = $(a).find("td").eq(index).text();
+            const bText = $(b).find("td").eq(index).text();
+            if (index === 0) {
+                return aText.localeCompare(bText) * sortDirection;
+            } else if (index === 1) {
+                return bText.localeCompare(aText) * sortDirection;
+//                    const aDate = new Date(aText);
+//                    const bDate = new Date(bText);
+//                    return (aDate - bDate) * sortDirection;
             }
-            // 포함되지 않으면 highlight 클래스 제거
-            else {
-                $(this).removeClass("highlight");
+        });
+
+        // 정렬 순서 업데이트
+        $table.empty().append($rows);
+        $th.data("sort", sortDirection === 1 ? -1 : 1);
+    });
+
+
+    ////////////////////////////검색한거로 SW 보이게
+    $(document).on("keyup", "#searchInput", function (e) {
+        var searchText = $(this).val().toLowerCase(); // 입력된 검색어를 소문자로 변환
+        var userRows = $("#swListModal .hstable .hstbody tr");
+        userRows.each(function () {
+            var swList = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var swList_Ver = $(this).find("td:first-child").next().text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var shouldShow = searchText.length >= 2 && swList.includes(searchText);
+            var shouldShow_Ver = searchText.length >= 2 && swList_Ver.includes(searchText);
+
+            if (searchText.length === 0 || shouldShow ||shouldShow_Ver) {
+                // 검색어가 3글자 이상이고 일치하는 경우 표시
+                $(this).show();
+            } else {
+                // 그 외의 경우 숨김
+                $(this).hide();
             }
         });
     });
+//     // Input 상자 값에 따라 해당 값을 노란색으로 처리
+//    $("#searchInput").on("input", function () {
+//        const searchValue = $(this).val().trim().toLowerCase();
+//        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+//        if (searchValue === "") {
+//            $("#swListModal .hstbody tr").removeClass("highlight");
+//            return;
+//        };
+//        $("#swListModal .hstbody tr").each(function () {
+//            const rowData = $(this).text().toLowerCase();
+//            // 검색어가 rowData에 포함되면 highlight 클래스 추가
+//            if (rowData.includes(searchValue)) {
+//                $(this).addClass("highlight");
+//            }
+//            // 포함되지 않으면 highlight 클래스 제거
+//            else {
+//                $(this).removeClass("highlight");
+//            }
+//        });
+//    });
 });
 
 

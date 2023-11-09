@@ -296,6 +296,7 @@ var up_asset_list = function () {
 
 
     $(document).on("click", ".upmore", function (e) {
+        $('#searchInput').val("");
         const computer_name = $(this).data("computer_name");
         const swList = $(this).data("hotfix");
         const swVer = $(this).data("date");
@@ -323,7 +324,7 @@ var up_asset_list = function () {
 
 
         //############### 정렬기능?>
-        $(document).on("click", ".sortable", function (e) {
+        $(document).off("click", ".sortable").on("click", ".sortable", function (e) {
             const $table = $("#upAssetModal .uptbody");
             const $rows = $table.find("tr").toArray();
             const $th = $(this);
@@ -355,25 +356,47 @@ var up_asset_list = function () {
 
 
     // Input 상자 값에 따라 해당 값을 노란색으로 처리
-    $("#searchInput").on("input", function () {
-        const searchValue = $(this).val().trim().toLowerCase();
-        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
-        if (searchValue === "") {
-            $("#upAssetModal .uptbody tr").removeClass("highlight");
-            return;
-        };
-        $("#upAssetModal .uptbody tr").each(function () {
-            const rowData = $(this).text().toLowerCase();
-            // 검색어가 rowData에 포함되면 highlight 클래스 추가
-            if (rowData.includes(searchValue)) {
-                $(this).addClass("highlight");
-            }
-            // 포함되지 않으면 highlight 클래스 제거
-            else {
-                $(this).removeClass("highlight");
+
+////////////////////////////검색한거로 Hotfix 보이게
+    $(document).on("keyup", "#searchInput", function (e) {
+        var searchText = $(this).val().toLowerCase(); // 입력된 검색어를 소문자로 변환
+        var userRows = $("#upAssetModal .uptable .uptbody tr");
+        userRows.each(function () {
+            var hotfix = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var hotfix_Date = $(this).find("td:first-child").next().text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+            var shouldShow = searchText.length >= 3 && hotfix.includes(searchText);
+            var shouldShow_Date = searchText.length >= 3 && hotfix_Date.includes(searchText);
+
+            if (searchText.length === 0 || shouldShow ||shouldShow_Date) {
+                // 검색어가 3글자 이상이고 일치하는 경우 표시
+                $(this).show();
+            } else {
+                // 그 외의 경우 숨김
+                $(this).hide();
             }
         });
     });
+
+
+//    $("#searchInput").on("input", function () {
+//        const searchValue = $(this).val().trim().toLowerCase();
+//        // 검색어가 빈 문자열일 경우 모든 행에서 highlight 클래스 제거 후 함수 종료
+//        if (searchValue === "") {
+//            $("#upAssetModal .uptbody tr").removeClass("highlight");
+//            return;
+//        };
+//        $("#upAssetModal .uptbody tr").each(function () {
+//            const rowData = $(this).text().toLowerCase();
+//            // 검색어가 rowData에 포함되면 highlight 클래스 추가
+//            if (rowData.includes(searchValue)) {
+//                $(this).addClass("highlight");
+//            }
+//            // 포함되지 않으면 highlight 클래스 제거
+//            else {
+//                $(this).removeClass("highlight");
+//            }
+//        });
+//    });
 });
 
     // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
@@ -417,39 +440,6 @@ var up_asset_list = function () {
     var customStyle = '<style>#nexts_up, #after_up {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
     $('head').append(customStyle);
 };
-
-
-
-
-// function os_checkbox_check(){
-//     console.log("os_checkbox_check() called");
-//     $('#os_asset_list tbody').off('click', 'tr');
-//     $('#os_asset_list tbody').on('click', 'tr', function () {
-//         var checkbox = $(this).find('input[type="checkbox"]');
-//         var hidden = $(this).find('input[type="hidden"]');
-//         var computer_id = checkbox.attr('id');
-//         console.log(computer_id)
-//         checkbox.prop('checked', !checkbox.prop('checked'));
-//         if (checkbox.prop('checked')) {
-//             checkedItems[computer_id] = computer_id;
-//         } else {
-//             delete checkedItems[computer_id];
-//         }
-//     });
-//
-//     $('#os_asset_list tbody').on('click', 'input[type="checkbox"]', function (event) {
-//         event.stopPropagation(); // Prevent the row click event from firing when clicking the checkbox
-//         var computer_id = $(this).data('computer-id');
-//         console.log("Clicked checkbox for computer ID:", computer_id);
-//         console.log(computer_id)
-//
-//         if ($(this).prop('checked')) {
-//             checkedItems[computer_id] = computer_id;
-//         } else {
-//             delete checkedItems[computer_id];
-//         }
-//     });
-// }
 
 // 드롭다운 메뉴 클릭 시 선택한 컬럼 텍스트 변경
 function dropdown_text() {
