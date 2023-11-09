@@ -109,7 +109,7 @@ def login(request):
                 print(RS)
                 if RS == None:
                     return render(request, 'nouser_page.html')
-                user_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id = x_id)
+                user_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=x_id)
                 # print(RS)
                 if len(user_check.filter(xfactor_auth_id='HS_asset',auth_use='false') and user_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and user_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
                     and user_check.filter(xfactor_auth_id='PUR_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset_list', auth_use='false')
@@ -893,6 +893,21 @@ def nano_user(request):
     RS_user = selectUsers_nano(sub)
     nano_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=sub)
     if RS_user == None:
+        # function = 'Login'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+        #         # item = '권한이 없는 계정'
+        #         # result = '성공'
+        #         # user = sub
+        #         # now = timezone.now().replace(microsecond=0)
+        #         # date = now.strftime("%Y-%m-%d %H:%M:%S")
+        #         # print(date)
+        #         # Xfactor_log = Xfactor_Log(
+        #         #     log_func=function,
+        #         #     log_item=item,
+        #         #     log_result=result,
+        #         #     log_user=user,
+        #         #     log_date=date
+        #         # )
+        #         # Xfactor_log.save()
         return render(request, 'nouser_page.html')
     elif len(nano_check.filter(xfactor_auth_id='HS_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
             and nano_check.filter(xfactor_auth_id='PUR_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='SEC_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='SEC_asset_list', auth_use='false')
@@ -905,6 +920,25 @@ def nano_user(request):
         request.session['sessionname'] = name
         request.session['sessionemail'] = email
         request.session['sessionidtoken'] = id_token
+        function = 'Login'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+        item = ''
+        if sub == 'handlake2k@ncsoft.com':
+            item = 'admin 계정'
+        else:
+            item = '일반 계정'
+        result = '성공'
+        user = sub
+        now = timezone.now().replace(microsecond=0)
+        date = now.strftime("%Y-%m-%d %H:%M:%S")
+        print(date)
+        Xfactor_log = Xfactor_Log(
+            log_func=function,
+            log_item=item,
+            log_result=result,
+            log_user=user,
+            log_date=date
+        )
+        Xfactor_log.save()
         return redirect('../home')
         # RS = createUsers(sub, sub, name, email, dept)
         # xuser_instance = Xfactor_Xuser(
@@ -913,6 +947,21 @@ def nano_user(request):
         # )
         # xuser_instance.save()
     else:
+        function = 'Login'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+        item = '권한이 없는 계정'
+        result = '성공'
+        user = sub
+        now = timezone.now().replace(microsecond=0)
+        date = now.strftime("%Y-%m-%d %H:%M:%S")
+        print(date)
+        Xfactor_log = Xfactor_Log(
+            log_func=function,
+            log_item=item,
+            log_result=result,
+            log_user=user,
+            log_date=date
+        )
+        Xfactor_log.save()
         return render(request, 'noauth.html')
 
 
@@ -930,7 +979,7 @@ def exchange_code_for_token(code):
     token_payload = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": "http://tanium.ncsoft.com:8000/dashboard/",
+        "redirect_uri": "http://taniumstg.ncsoft.com:8000/dashboard/",
         "client_id": client_id,
         "client_secret": client_secret
     }

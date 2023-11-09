@@ -32,6 +32,8 @@ def all_asset_paging1(request):
     local_tz = pytz.timezone('Asia/Seoul')
     utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
     now = utc_now.astimezone(local_tz)
+    # date_150_days_ago = now - timedelta(days=150)
+    # discover_user = Xfactor_Common.objects.values('mac_address').distinct().count()
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     current_hour = timezone.now().replace(minute=0, second=0, microsecond=0)
     filter_text = request.POST.get('search[value]')

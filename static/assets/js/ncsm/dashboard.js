@@ -1449,7 +1449,7 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('categoryName').value = categoryName;
                         // document.getElementById('seriesName').value = seriesName;
                         document.getElementById('chartName').value = 'tcpuChart';
-                        document.getElementById('selectedDate').value = 'selectedDate';
+                        document.getElementById('selectedDate').value = selectedDate;
                         $("#DashModal .modal-title").html(categoryName+' List');
                         tcpuChart_list(categoryName, '', selectedDate);
                         // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
