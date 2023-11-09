@@ -125,6 +125,7 @@ var handleRenderChartNCOMG = function () {
                 },
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
                         $('#all_asset_detail1').DataTable().destroy();
                         $('#asset_os_detail1').DataTable().destroy();
                         $('#asset_os_detail2').DataTable().destroy();
@@ -285,6 +286,7 @@ var handleRenderChartNCOMG = function () {
                 },
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
                         $('#all_asset_detail1').DataTable().destroy();
                         $('#asset_os_detail1').DataTable().destroy();
                         $('#asset_os_detail2').DataTable().destroy();
@@ -429,6 +431,7 @@ var handleRenderChartNCOMG = function () {
                 },
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
                         $('#asset_os_detail1').DataTable().destroy();
                         $('#all_asset_detail1').DataTable().destroy();
                         $('#asset_os_detail2').DataTable().destroy();
@@ -589,6 +592,7 @@ var handleRenderChartNCOMG = function () {
                 height: 200,
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
                         $('#asset_os_detail1').DataTable().destroy();
                         $('#all_asset_detail1').DataTable().destroy();
                         $('#asset_os_detail2').DataTable().destroy();
@@ -681,6 +685,7 @@ var handleRenderChartNCOMG = function () {
                 height: 240,
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
                         $('#osVerPieChart').DataTable().destroy();
                         $('#asset_os_detail1').DataTable().destroy();
                         $('#all_asset_detail1').DataTable().destroy();
@@ -851,12 +856,17 @@ var handleRenderChartNCOMG = function () {
                             var urlParams = new URLSearchParams(window.location.search)
                             var selectedDate = urlParams.get('datetime')
                             var dataPointIndex = config.dataPointIndex;
-                            var labelsName = config.w.config.labels[dataPointIndex];
-                            document.getElementById('categoryName').value = labelsName;
-                            document.getElementById('selectedDate').value = selectedDate;
+                            var seriesIndex = config.seriesIndex;
+                            var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+                            var categoryName = config.w.config.xaxis.categories[dataPointIndex];
+                            var seriesName = '장기 미접속 자산';
+                            document.getElementById('categoryName').value = categoryName;
+                            document.getElementById('seriesName').value = seriesName;
                             document.getElementById('chartName').value = 'discoverChart';
-                            $("#DashModal .modal-title").html(labelsName+' List');
-                            discoverChart_list(labelsName, seriesName, selectedDate);
+                            document.getElementById('selectedDate').value = selectedDate;
+                            console.log(config);
+                            $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
+                            discoverChart_list(categoryName, seriesName, selectedDate);
                             // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                             $("#DashModal").modal("show");
                         }
@@ -955,6 +965,7 @@ var handleRenderChartNCOMG = function () {
                 height: 240,
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
                         $('#hotfix_chart').DataTable().destroy();
                         $('#asset_os_detail1').DataTable().destroy();
                         $('#all_asset_detail1').DataTable().destroy();
@@ -1067,6 +1078,7 @@ var handleRenderChartNCOMG = function () {
                 },
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
                         $('#subnet_chart').DataTable().destroy();
                         $('#all_asset_detail1').DataTable().destroy();
                         $('#asset_os_detail1').DataTable().destroy();
@@ -1180,6 +1192,7 @@ var handleRenderChartNCOMG = function () {
                 },
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
                         $('#office_chart').DataTable().destroy();
                         $('#all_asset_detail1').DataTable().destroy();
                         $('#asset_os_detail1').DataTable().destroy();
@@ -1415,6 +1428,7 @@ var handleRenderChartNCOMG = function () {
                 },
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
                         $('#tcpuChart').DataTable().destroy();
                         $('#subnet_chart').DataTable().destroy();
                         $('#all_asset_detail1').DataTable().destroy();

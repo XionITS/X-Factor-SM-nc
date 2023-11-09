@@ -38,7 +38,6 @@ def all_asset_paging1(request):
     cache = ''
     #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
-
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
@@ -1260,13 +1259,35 @@ def tcpuChart(request):
 
 @csrf_exempt
 def discoverChart(request):
+    #print(request.POST.get('selectedDate'))
     local_tz = pytz.timezone('Asia/Seoul')
     utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
     now = utc_now.astimezone(local_tz)
-    date_150_days_ago = now - timedelta(days=150)
-    today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
-    user = Xfactor_Common.objects.filter(user_date__gte=date_150_days_ago)
+    user = ''
+    cache = ''
     filter_text = request.POST.get('search[value]')
+    start_of_today1 = now.strftime('%Y-%m-%d %H')
+    start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+    start_of_today = timezone.make_aware(start_of_today2)  # 현재 시간대
+    end_of_today = start_of_today + timedelta(minutes=50)  # 현재 시간대 + 50분
+    if request.POST.get('selectedDate') != '':
+        select_now = datetime.strptime(request.POST.get('selectedDate'), '%Y-%m-%d-%H')
+        start_of_today1_sel = select_now.strftime('%Y-%m-%d %H')
+        start_of_today2_sel = datetime.strptime(start_of_today1_sel, '%Y-%m-%d %H')
+        start_of_today_sel = timezone.make_aware(start_of_today2_sel) #선택한 시간대
+        end_of_today_sel = start_of_today_sel + timedelta(minutes=50) #선택한 시간대 + 50분
+        date_150_days_ago = start_of_today_sel - timedelta(days=150) #선택한 시간대로부터 150일 전 시간대
+    elif request.POST.get('selectedDate') == '':
+        date_150_days_ago = start_of_today - timedelta(days=150) #현재로부터 150일 전 시간대
+    if request.POST.get('categoryName') == '1일 전':
+        date_150_yesterday_ago = date_150_days_ago - timedelta(days=1)
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_yesterday_ago)
+        #print('1일 전', date_150_yesterday_ago)
+    if request.POST.get('categoryName') == '현재':
+        #print('현재', date_150_days_ago)
+        #print(date_150_days_ago)
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_days_ago)
+
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
                  Q(logged_name_id__deptName__icontains=filter_text) |
