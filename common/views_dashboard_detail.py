@@ -1067,7 +1067,6 @@ def hotfixChart(request):
         start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
-        print('1')
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
 
@@ -1104,7 +1103,6 @@ def hotfixChart(request):
         start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
-        print('1')
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
 
