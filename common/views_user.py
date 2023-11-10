@@ -147,6 +147,9 @@ def login(request):
                     and user_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and user_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and user_check.filter(xfactor_auth_id='dash_office', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_month', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')) > 0:
+                    request.session['sessionid'] = RS[0]
+                    request.session['sessionname'] = RS[2]
+                    request.session['sessionemail'] = RS[3]
                     return render(request, 'noauth.html')
 
                 else:
@@ -908,6 +911,9 @@ def nano_user(request):
         #         #     log_date=date
         #         # )
         #         # Xfactor_log.save()
+        request.session['sessionid'] = sub
+        request.session['sessionname'] = name
+        request.session['sessionemail'] = email
         request.session['sessionidtoken'] = id_token
         return render(request, 'nouser_page.html')
     elif len(nano_check.filter(xfactor_auth_id='HS_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
@@ -963,6 +969,9 @@ def nano_user(request):
             log_date=date
         )
         Xfactor_log.save()
+        request.session['sessionid'] = sub
+        request.session['sessionname'] = name
+        request.session['sessionemail'] = email
         request.session['sessionidtoken'] = id_token
         return render(request, 'noauth.html')
 
