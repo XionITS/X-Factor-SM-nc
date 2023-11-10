@@ -39,7 +39,7 @@
             <div class="menu-img online">
                 <img src="{% static 'img/common/dashboard/user.png' %}" alt="Profile" height="30"/>
             </div>
-            <div class="menu-text d-sm-block d-none">{{ request.session.sessionid }}</div>
+            <div class="menu-text d-sm-block d-none">{{ request.session.sessionname }} ({{request.session.sessionid}})</div>
         </button>
 
         <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px top-100" >
@@ -104,5 +104,57 @@
 					window.location.href = "../logout/";
 				}
 			}
+
+
+
+// var sessionExpirationTime = 1 * 10 * 1000; // 30분
+//
+// // 세션 만료 타이머 시작
+// var sessionExpirationTimer = setTimeout(function() {
+//     // 세션 만료 시에 수행할 동작
+//     // 세션을 끊기 위한 로직을 여기에 작성합니다.
+//     // 예: 로그아웃 처리, 세션 데이터 삭제 등
+//     // 예시로 새로고침을 하는 경우 세션을 끊도록 설정합니다.
+//     location.reload(true);
+// }, sessionExpirationTime);
+//
+// // 페이지 로딩 시 세션 만료 타이머 초기화
+// function resetSessionExpirationTimer() {
+//     clearTimeout(sessionExpirationTimer);
+//     sessionExpirationTimer = setTimeout(function() {
+//         // 세션 만료 시에 수행할 동작
+//         // 세션을 끊기 위한 로직을 여기에 작성합니다.
+//         // 예: 로그아웃 처리, 세션 데이터 삭제 등
+//         // 예시로 새로고침을 하는 경우 세션을 끊도록 설정합니다.
+//         location.reload(true);
+//     }, sessionExpirationTime);
+// }
+//
+// // 페이지에서 사용자의 상호작용이 있을 때마다 세션 만료 타이머 재설정
+// document.addEventListener('mousemove', resetSessionExpirationTimer);
+// document.addEventListener('keydown', resetSessionExpirationTimer);
+// document.addEventListener('click', resetSessionExpirationTimer);
+// 필요한 다른 이벤트도 추가할 수 있습니다.
+
+
+//-----------------세션만료알림창---------------------------
+    var sessionTimeout = 60 * 60 * 1000; // 4시간을 밀리초로 변환
+
+    // 세션 만료 시간 후에 실행될 함수를 설정합니다.
+    var sessionTimeoutAlert = setTimeout(function() {
+        window.location.href="{% url 'logout/' %}";
+    }, sessionTimeout);
+
+    // 사용자의 행동을 감지해서 세션 만료 시간을 재설정하는 함수입니다.
+    // function resetSessionTimeout() {
+    //     clearTimeout(sessionTimeoutAlert);
+    //     sessionTimeoutAlert = setTimeout(function() {
+    //         alert('세션이 만료되었습니다. 다시 로그인 해주세요.'); location.reload();
+    //     }, sessionTimeout);
+    // }
+    //
+    // // 클릭 또는 키 입력 등 사용자의 행동을 감지하도록 이벤트 리스너를 추가합니다.
+    // window.addEventListener('mousemove', resetSessionTimeout);
+    // window.addEventListener('keypress', resetSessionTimeout);
 
 </script>

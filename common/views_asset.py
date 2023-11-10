@@ -81,6 +81,8 @@ def save_memo(request):
         largest_time = timezone.make_aware(datetime.max, timezone.utc)
         computername = request.POST.get('computername')
         macaddress = request.POST.get('macaddress')
+        print(computername)
+        print(macaddress)
         try:
             # X-Factor_Common 오브젝트 가져오기
             xfactor_common = Xfactor_Common.objects.get(computer_name=computername, mac_address=macaddress)

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django_session_timeout.middleware.SessionTimeoutMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -142,5 +143,6 @@ MEDIA_URL = '/export/'
 
 
 #Django Session Timeout Code
-SESSION_COOKIE_AGE = 14400
-SESSION_SAVE_EVERY_REQUEST = True
+# SESSION_EXPIRE_SECONDS = 10
+# SESSION_COOKIE_AGE = 10
+# SESSION_SAVE_EVERY_REQUEST = True

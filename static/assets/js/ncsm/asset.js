@@ -251,7 +251,7 @@ $(document).ready(function () {
     //asset_list();
     $('#memo_save').click(function() {
     var memoValue = $('#asset_memo').val();
-    var computernameValue = $('#asset_computer_name').text();
+    var computernameValue = $('#asset_search_result').val();
     var macaddressValue = $('#asset_mac_address').text();
 
     // Function to escape HTML entities in the memoValue

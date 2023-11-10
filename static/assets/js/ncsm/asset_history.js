@@ -71,6 +71,7 @@ $('#search_his_btn').on('click', function(event) {
         alert('검색어를 입력해주세요');
     }
     searchPer_h(inputValue, date1, date2)
+    $('#search_his').val('')
 });
 
 $('#search_his').on('keyup', function(event) {
@@ -84,6 +85,7 @@ $('#search_his').on('keyup', function(event) {
             alert('검색어를 입력해주세요');
         }
         searchPer_h(inputValue, date1, date2)
+        $('#search_his').val('')
     }
 });
 

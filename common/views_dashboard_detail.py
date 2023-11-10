@@ -149,9 +149,9 @@ def all_asset_paging1(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(Lower(order_column), '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + Lower(order_column), 'computer_id')
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -346,9 +346,9 @@ def asset_os_paging1(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(Lower(order_column), '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + Lower(order_column), 'computer_id')
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -535,9 +535,9 @@ def asset_os_paging2(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(Lower(order_column), '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + Lower(order_column), 'computer_id')
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -633,9 +633,9 @@ def oslistPieChart(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(Lower(order_column), '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + Lower(order_column), 'computer_id')
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -743,9 +743,9 @@ def osVerPieChart(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(Lower(order_column), '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + Lower(order_column), 'computer_id')
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -875,9 +875,9 @@ def office_chart(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(Lower(order_column), '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + Lower(order_column), 'computer_id')
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -1010,9 +1010,9 @@ def subnet_chart(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(Lower(order_column), '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + Lower(order_column), 'computer_id')
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -1129,9 +1129,9 @@ def hotfixChart(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(Lower(order_column), '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + Lower(order_column), 'computer_id')
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -1227,9 +1227,9 @@ def tcpuChart(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(Lower(order_column), '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + Lower(order_column), 'computer_id')
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -1311,9 +1311,9 @@ def discoverChart(request):
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
     if order_column_dir == 'asc':
-        user = user.order_by(Lower(order_column), '-computer_id')
+        user = user.order_by(order_column, '-computer_id')
     else:
-        user = user.order_by('-' + Lower(order_column), 'computer_id')
+        user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
