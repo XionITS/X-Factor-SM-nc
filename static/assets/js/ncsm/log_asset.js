@@ -16,8 +16,6 @@ var log_popupTable_list = function () {
 		lengthMenu: [[5, 10, 15, 20, 25], [5, 10, 15, 20, 25]],
 		pageLength: 10,
 		responsive: false,
-		searching: false,
-		ordering: false,
 		serverSide: true,
 		displayLength: false,
 		autoWidth: false,
@@ -105,7 +103,7 @@ var log_popupTable_list = function () {
 			url: 'paging/',
 			type: "POST",
             data: function (data) {
-
+                data.search = data.search['value']
                 // console.log(columnMap)
                 data.page = (data.start / data.length) + 1;
                 data.page_length = data.length;
@@ -113,7 +111,7 @@ var log_popupTable_list = function () {
 		},
 
 		columns: [
-            { data: '', title: 'No', searchable: true },
+            { data: '', title: 'No', orderable: false},
 			{ data: 'log_func', title: '기능 이름', searchable: true },
             { data: 'log_item', title: '항목 이름', searchable: true },
 			{ data: 'log_result', title: '결과', searchable: true },

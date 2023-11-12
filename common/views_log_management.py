@@ -46,11 +46,19 @@ def log(request):
 def log_paging(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                  xfactor_auth_id='settings', auth_use='false')
-    #print(user_auth)
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
+    if user_auth and group_auth:
         return redirect('../../home/')
-    korean_tz = pytz.timezone('Asia/Seoul')
+    search_value = request.POST.get('search')
     logs = Xfactor_Log.objects.order_by('-log_date')
+    if search_value:
+        query = (Q(log_func__icontains=search_value) |
+                Q(log_item__icontains=search_value) |
+                Q(log_result__icontains=search_value) |
+                Q(log_user__icontains=search_value)
+                )
+        logs = logs.filter(query)
+    korean_tz = pytz.timezone('Asia/Seoul')
     formatted_logs = [
         {
             'log_func': log.log_func,
@@ -61,6 +69,7 @@ def log_paging(request):
         }
         for log in logs
     ]
+
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page

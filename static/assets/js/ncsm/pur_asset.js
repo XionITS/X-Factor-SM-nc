@@ -169,7 +169,7 @@ var hw_pur_asset_list = function () {
                 title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>&nbsp;선택</span>',
                 searchable: false
             },
-            {data: '', title: 'No', searchable: true},
+            {data: '', title: 'No', searchable: true, orderable: false},
             {data: 'chassistype', title: '구분', searchable: true},
             { data: 'ncdb_data.deptName', title: '부서', searchable: true },
 			{ data: 'ncdb_data.userName', title: '이름', searchable: true },
@@ -543,7 +543,7 @@ var sw_pur_asset_list = function () {
                 title: '<input type="checkbox" class="form-check-input" id="select-all" /><span>&nbsp;선택</span>',
                 searchable: false
             },
-            {data: '', title: 'No', searchable: true},
+            {data: '', title: 'No', searchable: true, orderable: false},
             {data: 'chassistype', title: '구분', searchable: true},
             { data: 'ncdb_data.deptName', title: '부서', searchable: true },
 			{ data: 'ncdb_data.userName', title: '이름', searchable: true },
