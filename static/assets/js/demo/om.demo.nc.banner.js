@@ -466,7 +466,6 @@ var handleRenderChartNC2 = function () {
             vpDonutValue.push(a.virtual_pieChartData[i]['value']);
         }
     };
-    console.log(vpDonutValue);
     var om_vp_chartOptions = {
         chart: {
           height: 220,

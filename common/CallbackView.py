@@ -12,9 +12,9 @@ from common.models import Xfactor_Xuser
 
 class CallbackView(View):
     def get(self, request):
-        print("mmmmmmmmmmmmmmmmmmmmm")
+        #print("mmmmmmmmmmmmmmmmmmmmm")
         code = request.GET.get('code')
-        print(code)
+        #print(code)
 
         # access_token = exchange_code_for_token(code)
         # print(access_token)

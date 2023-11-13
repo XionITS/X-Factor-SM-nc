@@ -229,7 +229,7 @@ def updateform(request):
             Cur.execute(query)
             RS = Cur.fetchall()
             res_data = {}
-            print(RS)
+            # print(RS)
             if RS[0] != None:
                 res_data['x_id'] = RS[0][0]
                 res_data['x_name'] = RS[0][2]
@@ -285,7 +285,6 @@ def update(request):
 def logout(request):
     if Login_Method == "WEB":
         if 'sessionid' in request.session:
-
             function = 'Logout'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
             item = 'admin 계정'
             result = '성공'
@@ -873,10 +872,10 @@ def nano(request):
 
 def nano_user(request):
     code = request.GET.get('code')
-    print(code)
+    #print(code)
     access_token, id_token = exchange_code_for_token(code)
-    print(access_token)
-    print(id_token)
+    #print(access_token)
+    #print(id_token)
     # userinfo_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
     userinfo_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
 
