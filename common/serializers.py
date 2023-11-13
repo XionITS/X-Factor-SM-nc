@@ -177,6 +177,7 @@ class Cacheserializer(serializers.ModelSerializer):
 
 
 class XfactorLogserializer(serializers.ModelSerializer):
+    log_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Xfactor_Log

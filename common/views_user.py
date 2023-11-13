@@ -286,9 +286,12 @@ def logout(request):
     if Login_Method == "WEB":
         if 'sessionid' in request.session:
             function = 'Logout'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-            item = 'admin 계정'
             result = '성공'
             user = request.session.get('sessionid')
+            if user == 'handlake2k@ncsoft.com':
+                item = 'admin 계정'
+            else:
+                item = '일반 계정'
             date = timezone.now()
             Xfactor_log = Xfactor_Log(
                 log_func=function,

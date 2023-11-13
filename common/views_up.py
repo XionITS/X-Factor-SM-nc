@@ -61,12 +61,10 @@ def up_asset_paging(request):
     start_of_day = start_of_today - timedelta(days=7)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
-    default_os = request.POST.get('filter[defaultColumn]')
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common_Cache.objects.filter(os_simple__icontains=default_os).exclude(os_simple='Linux').exclude(os_simple='Mac')
-    hotfix_dates = user.values_list('hotfix_date', flat=True)
+    user = Xfactor_Common_Cache.objects.filter(os_simple='Windows')
     # user = user.datetime.strptime(user.hotfix_date, '%m/%d/%Y %H:%M:%S')
     if filter_text and filter_column:
         if filter_column == "cache_date":
