@@ -244,7 +244,13 @@ var sec_asset_list2 = function () {
                     if (row.ext_chr === 'unconfirmed' && row.ext_edg === 'unconfirmed' && row.ext_fir === 'unconfirmed') {
                         return '';
                     } else {
-                        return '<a class="extmore swmore-font" data-ext_chr="' + row.ext_chr + '"data-ext_chr_ver="' + row.ext_chr_ver + '" data-ext_edg="' + row.ext_edg + '" data-ext_edg_ver="' + row.ext_edg_ver + '"data-ext_fir="' + row.ext_fir + '" data-ext_fir_ver="' + row.ext_fir_ver + '" data-computer_name="' + row.computer_name + '" >더보기</a>'
+                        const ext_chr = row.ext_chr.replace(/\"/g, "");
+                        const ext_chr_ver = row.ext_chr_ver.replace(/\"/g, "");
+                        const ext_edg = row.ext_edg.replace(/\"/g, "");
+                        const ext_edg_ver = row.ext_edg_ver.replace(/\"/g, "");
+                        const ext_fir = row.ext_fir.replace(/\"/g, "");
+                        const ext_fir_ver = row.ext_fir_ver.replace(/\"/g, "");
+                        return '<a class="extmore swmore-font" data-ext_chr="' + ext_chr + '"data-ext_chr_ver="' + ext_chr_ver + '" data-ext_edg="' + ext_edg + '" data-ext_edg_ver="' + ext_edg_ver + '"data-ext_fir="' + ext_fir + '" data-ext_fir_ver="' + ext_fir_ver + '" data-computer_name="' + row.computer_name + '" >더보기</a>'
                     }
                 }
             },
@@ -253,7 +259,10 @@ var sec_asset_list2 = function () {
                 width: "5%",
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<a class="swListmore swmore-font" data-computer_name="' + row.computer_name + '" data-sw_list="' + row.sw_list + '" data-sw_ver_list="' + row.sw_ver_list + '"data-sw_install="' + row.sw_install + '">더보기</a>'
+                    const sw_list = row.sw_list.replace(/\"/g, "");
+                    const sw_ver_list = row.sw_ver_list.replace(/\"/g, "");
+                    const sw_install = row.sw_install.replace(/\"/g, "");
+                    return '<a class="swListmore swmore-font" data-computer_name="' + row.computer_name + '" data-sw_list="' + sw_list + '" data-sw_ver_list="' + sw_ver_list + '"data-sw_install="' + sw_install + '">더보기</a>'
                 }
             },
             {

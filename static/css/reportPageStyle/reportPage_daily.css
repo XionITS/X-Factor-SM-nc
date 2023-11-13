@@ -61,9 +61,9 @@ article {
 
 /* BEGIN a4 css*/
 .daily-report {
-    width: 210mm;
-    min-height: 297mm;
-    padding: 20mm;
+    width: 200mm;
+    min-height: 280mm;
+    padding: 5mm;
     margin: 10mm auto;
     border: 1px #D3D3D3 solid;
     border-radius: 5px;
