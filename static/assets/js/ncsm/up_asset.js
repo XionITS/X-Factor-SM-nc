@@ -219,7 +219,10 @@ var up_asset_list = function () {
                     }
                 }
             },
-            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                var color = row.cache_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+              }},
             {
                 targets: 10,
                 width: "10%",

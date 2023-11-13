@@ -222,7 +222,10 @@ var all_asset_list = function () {
                     return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
-            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                var color = row.cache_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+              }},
             {
                 targets: 10,
                 width: "10%",
@@ -551,7 +554,10 @@ var win_asset_list = function () {
                     return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
-            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                var color = row.cache_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+              }},
             {
                 targets: 10,
                 width: "10%",
@@ -878,7 +884,10 @@ var mac_asset_list = function () {
                     return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
-            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                var color = row.cache_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+              }},
             {
                 targets: 10,
                 width: "10%",
@@ -1206,7 +1215,10 @@ var other_asset_list = function () {
                     return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
-            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
+            {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+                var color = row.cache_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+              }},
             {
                 targets: 10,
                 width: "10%",

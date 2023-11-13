@@ -149,7 +149,6 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('selectedDate').value = selectedDate;
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
                         all_asset_detail_list1(categoryName, seriesName, selectedDate);
-                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
                 }
@@ -181,7 +180,6 @@ var handleRenderChartNCOMG = function () {
                     }
                 },
             },
-
             dataLabels: {
                 enabled: true,
                 enabledOnSeries: [0, 1, 2],
@@ -310,7 +308,6 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('chartName').value = 'asset_os_detail1';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
                         asset_os_detail_list1(categoryName, seriesName, selectedDate);
-                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
                 },
@@ -455,7 +452,6 @@ var handleRenderChartNCOMG = function () {
                         document.getElementById('chartName').value = 'asset_os_detail2';
                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
                         asset_os_detail_list2(categoryName, seriesName, selectedDate);
-                        // $("#DashModal .allAtbody").html("클릭한 부분의 리스트가 나와야 합니다."+ `<br>`+ "지금은 그냥 라벨값 : "+ categoryName + " " + selectedData + " " + seriesName );
                         $("#DashModal").modal("show");
                     }
                 },
@@ -1185,10 +1181,6 @@ var handleRenderChartNCOMG = function () {
                 width: '100%',
                 toolbar: {
                     show: false,
-                    tools: {
-                        zoom: false,
-                        pan: false
-                    }
                 },
                 events: {
                     dataPointSelection: function (event, chartContext, config) {
