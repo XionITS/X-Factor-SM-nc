@@ -44,7 +44,7 @@ $('#asset_search_result').on('keyup', function(event) {
         searchPer(inputValue);
       }
     }
-    });
+});
 
 
 function searchPer(inputValue){
@@ -136,7 +136,8 @@ function searchPer(inputValue){
              myComputerInfoElemnt.innerText="CPU: "+data.hw_cpu + " \n RAM : "+data.hw_ram+ " \n 메인보드 : "+data.hw_mb+ " \n 디스크 : "+data.hw_disk+ " \n 그래픽카드 : "+data.hw_gpu;
            }
         } else {
-                return
+                // 데이터가 없을 때
+                alert("유효하지 않은 컴퓨터 이름입니다.");
             }
 
         }
