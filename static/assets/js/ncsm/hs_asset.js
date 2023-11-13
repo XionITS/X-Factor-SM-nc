@@ -10,6 +10,10 @@ var hw_asset_list = function () {
 		serverSide: true,
 		displayLength: false,
         autoWidth: false,
+//        buttons: [
+//          { extend: 'print', className: 'btn btn-default' },
+//          { extend: 'csv', className: 'btn btn-default' }
+//        ],
         // buttons: [
         //     {
         //         text: 'Select All',
@@ -365,8 +369,9 @@ var sw_asset_list = function () {
 		    {targets: 6, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_name = row.computer_name;
-		        const swList = row.sw_list;
-                const swVer = row.sw_ver_list;
+		        const swList = row.sw_list.replace(/\"/g, "");
+                const swVer = row.sw_ver_list.replace(/\"/g, "");
+
 		        return '<span data-toggle="tooltip"></span><div class="swmore swmore-font align-middle text-center " data-swlist="' + swList + '" data-swver="' + swVer + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
             {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.cache_date+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {

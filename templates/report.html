@@ -21,7 +21,7 @@
     <button id="downloadPdfBtn" class="btn btn-outline-darkblue report_download">PDF로 저장</button>
     <div class="daily-report-wrap">
         <!-- BEGIN daily-report 1 page -->
-        <div class="daily-report">
+        <div id="daily-report" class="daily-report">
             <div class="daily-sub-page">
                 <!-- brand logo -->
                 <div class="sub-content brand">
@@ -151,8 +151,8 @@ document.getElementById('downloadPdfBtn').addEventListener('click', function() {
         filename: 'report.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    }).from(document.getElementById('app')).save();
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).from(document.getElementById('daily-report')).save();
 });
 
 </script>
