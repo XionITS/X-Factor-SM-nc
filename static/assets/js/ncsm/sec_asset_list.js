@@ -407,13 +407,12 @@ var sec_asset_list2 = function () {
             $rows.sort(function (a, b) {
                 const aText = $(a).find("td").eq(index).text();
                 const bText = $(b).find("td").eq(index).text();
-                if (index === 0) {
+                if (index === 0 || index === 2 || index === 4) {
                     return aText.localeCompare(bText) * sortDirection;
-                } else if (index === 1) {
-                    return bText.localeCompare(aText) * sortDirection;
-//                    const aDate = new Date(aText);
-//                    const bDate = new Date(bText);
-//                    return (aDate - bDate) * sortDirection;
+                } else {
+                    const aVersion = parseFloat(aText);
+                    const bVersion = parseFloat(bText);
+                    return (aVersion - bVersion) * sortDirection;
                 }
             });
 
