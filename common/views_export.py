@@ -3,13 +3,14 @@ from django.apps import apps
 from django.conf import settings
 from django.db.models import Value
 from django.db.models.functions import Concat
-from django.http import FileResponse
+from django.http import FileResponse, StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from openpyxl import Workbook
 import os
 import json
 from datetime import datetime, timedelta
 from django.utils import timezone
+from openpyxl.writer.excel import save_virtual_workbook
 
 from common.models import Xfactor_Common_Cache
 from common.serializers import CommonSerializer,Dailyserializer,Cacheserializer
@@ -231,7 +232,6 @@ def export(request, model):
     # 파일 업로드 처리
     file_path = os.path.join(settings.MEDIA_ROOT, f'{model}_{parameter_value}.xlsx')  # 저장될 파일 경로
 
-    # 엑셀 파일 생성
     wb = Workbook()
     ws = wb.active
 
@@ -263,10 +263,12 @@ def export(request, model):
     wb.save(file_path)
 
     # 파일 다운로드 응답 생성
-    response = FileResponse(open(file_path, 'rb'))
+    response = StreamingHttpResponse(
+        open(file_path, 'rb'), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    # response = FileResponse(open(file_path, 'rb'))
     response['Content-Disposition'] = f'attachment; filename="{model}_{parameter_value}.xlsx.xlsx"'
 
     # Close the file manually after generating the response
-    wb.close()
-
+    # wb.close()
+    # os.remove(file_path)
     return response

@@ -83,10 +83,13 @@ def ver_asset_paging(request):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     seven_days_ago = timezone.now() - timedelta(days=7)
     default_os = request.POST.get('filter[defaultColumn]')
+    print(default_os)
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
     user = Xfactor_Common_Cache.objects.filter(os_simple__icontains=default_os)
+    if default_os == 'Linux':
+        user = Xfactor_Common_Cache.objects.exclude(os_simple__in=['Windows', 'Mac'])
 
     # # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
     # local_tz = pytz.timezone('Asia/Seoul')

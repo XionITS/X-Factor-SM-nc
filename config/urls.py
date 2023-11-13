@@ -120,7 +120,7 @@ urlpatterns = [
     path('user_management/user_add/', views_user.createUsers_nano),
     #path('group_management', views_group_management.group),
     path('log_management/', views_log_management.log),
-    path('log_management/paging/', views_log_management.log_paging),
+    path('log_management/log_paging/', views_log_management.log_paging),
 
     #Report
     path('report/', views_report.create, name='report_date'),

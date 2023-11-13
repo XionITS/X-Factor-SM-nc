@@ -58,24 +58,29 @@ def log_paging(request):
                 Q(log_user__icontains=search_value)
                 )
         logs = logs.filter(query)
-    korean_tz = pytz.timezone('Asia/Seoul')
-    formatted_logs = [
-        {
-            'log_func': log.log_func,
-            'log_item': log.log_item,
-            'log_result': log.log_result,
-            'log_user': log.log_user,
-            'log_date': log.log_date.astimezone(korean_tz).strftime("%Y-%m-%d %H:%M:%S")
-        }
-        for log in logs
-    ]
+
+    order_column_index = int(request.POST.get('order[0][column]', 0))
+    order_column_dir = request.POST.get('order[0][dir]', 'asc')
+    order_column_map = {
+        1: 'log_func',
+        2: 'log_item',
+        3: 'log_result',
+        4: 'log_user',
+        # Add mappings for other columns here
+    }
+
+    order_column = order_column_map.get(order_column_index, 'log_date')
+    if order_column_dir == 'desc':
+        logs = logs.order_by(order_column)
+    else:
+        logs = logs.order_by('-' + order_column)
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
 
     # Paginate the queryset
-    paginator = Paginator(formatted_logs, length)
+    paginator = Paginator(logs, length)
     page_number = (start // length) + 1
 
     try:
