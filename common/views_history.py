@@ -65,7 +65,8 @@ def search_h(request):
             return HttpResponse(None)
         user1 = Xfactor_Common_Cache.objects.filter(user_date__range=(start_h_1, end_h_1)).filter(computer_name=search_text).order_by('-user_date').first()
         user2 = Xfactor_Common_Cache.objects.filter(user_date__range=(start_h_2, end_h_2)).filter(computer_name=search_text).order_by('-user_date').first()
-
+        # if user1 == None or user2 == None:
+        #     return HttpResponse('None')
         user_data1 = Cacheserializer(user1).data
         user_data2 = Cacheserializer(user2).data
         # response = {

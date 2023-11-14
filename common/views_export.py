@@ -213,9 +213,9 @@ def export(request, model):
                 latest_date = max(date_objects)
                 if latest_date < three_months_ago and request.GET.get('categoryName') == '보안패치 필요':
                     filtered_user_objects.append(user['computer_id'])
-                elif latest_date > three_months_ago and request.GET.get('categoryName') == '보안패치 불필요':
+                elif latest_date >= three_months_ago and request.GET.get('categoryName') == '보안패치 불필요':
                     filtered_user_objects.append(user['computer_id'])
-        data_list = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, computer_id__in=filtered_user_objects)
+        data_list = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
         data = Cacheserializer(data_list, many=True).data
 
     # 전체컬럼 조회

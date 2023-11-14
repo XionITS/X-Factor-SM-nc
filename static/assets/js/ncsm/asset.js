@@ -91,10 +91,6 @@ function searchPer(inputValue){
               memoElement.value = data.memo || "";
             }
 
-            var ipAddressElement = document.getElementById("asset_ip_address");
-            if (ipAddressElement) {
-              ipAddressElement.textContent = data.ip_address;
-            }
             var macAddressElement = document.getElementById("asset_mac_address");
             if (macAddressElement) {
              macAddressElement.textContent = data.mac_address;
@@ -261,7 +257,7 @@ $(document).ready(function () {
 
     memoValue = escapeHtml(memoValue);
 
-    if (computernameValue === '-'){
+    if (computernameValue === ''){
               alert('Computer Name을 선택해 주세요.');
               return
           }
