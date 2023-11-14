@@ -1,24 +1,54 @@
 
-$(document).ready(function(){
-  $('#asset_search_result').autocomplete({
-    source: function(request, response) {
-      $.ajax({
-        url: 'search_box/',
-        method: 'POST',
-        data: {
-          searchText: request.term
-        },
-        success: function(data){
-          var autocompleteData = data.data.map(function(item) {
-            return item.computer_name;
-          });
+// $(document).ready(function(){
+//   $('#asset_search_result').autocomplete({
+//     source: function(request, response) {
+//       $.ajax({
+//         url: 'search_box/',
+//         method: 'POST',
+//         data: {
+//           searchText: request.term
+//         },
+//         success: function(data){
+//           var autocompleteData = data.data.map(function(item) {
+//             return item.computer_name;
+//           });
+//
+//           response(autocompleteData);
+//         }
+//       });
+//     },
+//     minLength: function (term, input) {
+//       // 입력된 문자열이 한글인 경우 2글자, 영어인 경우 3글자로 제한
+//       return (/[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(input) ? 2 : 3);
+//     }
+//   });
+// });
+$(document).ready(function () {
+    $('#asset_search_result').autocomplete({
+        source: function (request, response) {
+            // 사용자가 입력한 문자열의 길이를 체크
+            var minLength = /[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(request.term) ? 2 : 3;
 
-          response(autocompleteData);
-        }
-      });
-    },
-    minLength: 2  // 최소 문자 수 설정
-  });
+            // 최소 길이를 만족하는 경우에만 Ajax 요청 보내기
+            if (request.term.length >= minLength) {
+                $.ajax({
+                    url: 'search_box/',
+                    method: 'POST',
+                    data: {
+                        searchText: request.term
+                    },
+                    success: function (data) {
+                        var autocompleteData = data.data.map(function (item) {
+                            return item.computer_name;
+                        });
+
+                        response(autocompleteData);
+                    }
+                });
+            }
+        },
+        minLength: 2  // Autocomplete 내에서의 최소 길이 설정
+    });
 });
 
 
@@ -26,8 +56,8 @@ $('#asset_search').on('click', function(event) {
     // console.log(searchInput)
     var searchInput = document.getElementById('asset_search_result');
     var inputValue = searchInput.value;
-    if (inputValue.trim().length < 2) {
-      alert("최소 2글자 이상 입력하세요.");
+    if (inputValue.trim().length < 2 ) {
+        alert("최소 2글자 입력해주세요.");
     } else {
       searchPer(inputValue);
     }
@@ -39,12 +69,12 @@ $('#asset_search_result').on('keyup', function(event) {
             var searchInput = document.getElementById('asset_search_result');
             var inputValue = searchInput.value;
             if (inputValue.trim().length < 2) {
-        alert("최소 2글자 이상 입력하세요.");
+        alert("최소 2글자 입력해주세요.");
       } else {
         searchPer(inputValue);
       }
     }
-    });
+});
 
 
 function searchPer(inputValue){
@@ -136,7 +166,8 @@ function searchPer(inputValue){
              myComputerInfoElemnt.innerText="CPU: "+data.hw_cpu + " \n RAM : "+data.hw_ram+ " \n 메인보드 : "+data.hw_mb+ " \n 디스크 : "+data.hw_disk+ " \n 그래픽카드 : "+data.hw_gpu;
            }
         } else {
-                return
+                // 데이터가 없을 때
+                alert("유효하지 않은 컴퓨터 이름입니다.");
             }
 
         }
