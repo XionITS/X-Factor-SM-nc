@@ -30,7 +30,8 @@ $(document).ready(function () {
             var minLength = /[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(request.term) ? 2 : 3;
 
             // 최소 길이를 만족하는 경우에만 Ajax 요청 보내기
-            if (request.term.length >= minLength) {
+            // if (request.term.length >= minLength) {
+            if (request.term.length >= 2) {
                 $.ajax({
                     url: 'search_box/',
                     method: 'POST',
@@ -163,7 +164,8 @@ function searchPer(inputValue){
            }
         } else {
                 // 데이터가 없을 때
-                alert("유효하지 않은 컴퓨터 이름입니다.");
+                return
+                // alert("유효하지 않은 컴퓨터 이름입니다.");
             }
 
         }
