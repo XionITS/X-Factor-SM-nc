@@ -142,8 +142,8 @@ var all_asset_list = function () {
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'cache_date',
-                    9: 'memo',
+                    9: 'cache_date',
+                    10: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -474,8 +474,8 @@ var win_asset_list = function () {
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'cache_date',
-                    9: 'memo',
+                    9: 'cache_date',
+                    10: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -804,8 +804,8 @@ var mac_asset_list = function () {
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'cache_date',
-                    9: 'memo',
+                    9: 'cache_date',
+                    10: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,
@@ -1135,8 +1135,8 @@ var other_asset_list = function () {
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    8: 'cache_date',
-                    9: 'memo',
+                    9: 'cache_date',
+                    10: 'memo',
                 };
                 data.filter = {
                     defaultColumn: defaultColumn,

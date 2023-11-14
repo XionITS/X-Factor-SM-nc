@@ -142,12 +142,12 @@ def group_auth(request):
 # def post_save_handler(sender, instance, created, **kwargs):
 #     if not created:
 #         if hasattr(instance, '_auth_use_origin') and instance._auth_use_origin != instance.auth_use:
-#             # print(f'auth_use field was updated from {instance.xfactor_auth_id} {instance._auth_use_origin} to {instance.auth_use}')
-#             cache.set(f'{instance.xfactor_auth_id}', instance.xfactor_auth_id, 1)
-#             cache.set(f'{instance.xfactor_auth_id}_origin', instance._auth_use_origin, 1)
-#             cache.set(f'{instance.xfactor_auth_id}_current', instance.auth_use, 1)
-#         if hasattr(instance, '_xfactor_auth_id_origin') and instance._xfactor_auth_id_origin != instance.xfactor_auth_id:
-#             print(f'xfactor_auth_id field was updated from {instance._xfactor_auth_id_origin} to {instance.xfactor_auth_id}')
+#             auth_value = Xfactor_Auth.objects.filter(auth_id=instance.xfactor_auth_id).values('auth_name')[0]['auth_name']
+#             cache.set('value_list', f'[{auth_value}] - {instance._auth_use_origin} 에서 {instance.auth_use}로 변경', 3)
+            # cache.set(f'{instance.xfactor_auth_id}_origin', instance._auth_use_origin, 1)
+            # cache.set(f'{instance.xfactor_auth_id}_current', instance.auth_use, 1)
+        # if hasattr(instance, '_xfactor_auth_id_origin') and instance._xfactor_auth_id_origin != instance.xfactor_auth_id:
+        #     print(f'xfactor_auth_id field was updated from {instance._xfactor_auth_id_origin} to {instance.xfactor_auth_id}')
 
 @csrf_exempt
 def save_user_auth(request):
@@ -161,6 +161,7 @@ def save_user_auth(request):
     auth_infos = request.POST.get('auth_info')
     auth_infos = json.loads(auth_infos)
     # print(auth_infos)
+    a = []
     try:
         for item in auth_infos:
             auth_id = item["auth_id"]
@@ -169,18 +170,18 @@ def save_user_auth(request):
             record = get_object_or_404(Xfactor_Xuser_Auth, xfactor_xuser_id=x_ids_str, xfactor_auth__auth_id=auth_id)
             record.auth_use = auth_use
             record.save()
-        #     if cache.get(f'{record.xfactor_auth_id}') != None:
-        #         auth_id_id = Xfactor_Auth.objects.filter(auth_id=cache.get(f'{record.xfactor_auth_id}')).values('auth_name')
-        #     if cache.get(f'{record.xfactor_auth_id}_origin') != None:
-        #         auth_use_origin = cache.get(f'{record.xfactor_auth_id}_origin')
-        #     if cache.get(f'{record.xfactor_auth_id}_current') != None:
-        #         auth_use_current = cache.get(f'{record.xfactor_auth_id}_current')
-        # print(auth_id_id[0]['auth_name'])
-        # print(auth_use_origin)
+
+
+        # if cache.get('value_list') != None:
+        #     for i in range(len(list(cache.get('value_list')))):
+        # a.append(cache.get('value_list'))
+        # print(a)
+
         # print(auth_use_current)
         function = 'User Auth'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-        item = 'Change user auth ' + x_ids_str
+        item = 'Change user auth - [' + x_ids_str + ']'
         result = '성공'
+        # result = '\n'.join(a)
         user = request.session.get('sessionid')
         now = datetime.now().replace(microsecond=0)
         date = now.strftime("%Y-%m-%d %H:%M:%S")

@@ -66,6 +66,7 @@ $('#search_his_btn').on('click', function(event) {
     var inputValue = searchInput.value;
     if (!date1 || !date2) {
         alert('날짜를 선택해주세요')
+        return;
     }
     else if (!inputValue) {
         alert('검색어를 입력해주세요');
@@ -80,6 +81,7 @@ $('#search_his').on('keyup', function(event) {
         var inputValue = searchInput.value;
         if (!date1 || !date2) {
             alert('날짜를 선택해주세요')
+            return;
         }
         else if (!inputValue) {
             alert('검색어를 입력해주세요');
@@ -100,6 +102,9 @@ function searchPer_h(inputValue, date1, date2){
             date2: date2
         },
         success: function(res) {
+            // if (res === 'None') {
+            //     alert('computer name을 입력하여 선택해 주세요')
+            // }
             if (res.data1 !== undefined){
                 var data1 = res.data1; // 첫 번째 객체 선택
                 var data2 = res.data2; // 첫 번째 객체 선택
@@ -113,16 +118,16 @@ function searchPer_h(inputValue, date1, date2){
                         ipAddressElement2.style.color = 'red';
                     }
                 }
-                var computerNameElement = document.getElementById("asset_computer_name");
-                var computerNameElement2 = document.getElementById("asset_computer_name2");
-                if (computerNameElement && computerNameElement2) {
-                    computerNameElement2.style.color = '';
-                    computerNameElement.textContent = data1.computer_name;
-                    computerNameElement2.textContent = data2.computer_name;
-                    if (computerNameElement.textContent !== computerNameElement2.textContent) {
-                            computerNameElement2.style.color = 'red';
-                    }
-                }
+                // var computerNameElement = document.getElementById("asset_computer_name");
+                // var computerNameElement2 = document.getElementById("asset_computer_name2");
+                // if (computerNameElement && computerNameElement2) {
+                //     computerNameElement2.style.color = '';
+                //     computerNameElement.textContent = data1.computer_name;
+                //     computerNameElement2.textContent = data2.computer_name;
+                //     if (computerNameElement.textContent !== computerNameElement2.textContent) {
+                //             computerNameElement2.style.color = 'red';
+                //     }
+                // }
                 var userElement = document.getElementById("asset_user");
                 var userElement2 = document.getElementById("asset_user2");
                 if (userElement && userElement2) {

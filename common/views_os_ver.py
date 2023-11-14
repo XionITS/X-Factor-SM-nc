@@ -267,8 +267,8 @@ def ver_asset_paging(request):
         5: 'computer_name',
         6: 'ip_address',
         7: 'mac_address',
-        8: 'cache_date',
-        9: 'memo',
+        9: 'cache_date',
+        10: 'memo',
         # Add mappings for other columns here
     }
     #order_column = order_column_map.get(order_column_index, 'computer_name')
