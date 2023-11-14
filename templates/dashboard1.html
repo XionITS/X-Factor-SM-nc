@@ -500,6 +500,7 @@
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px ">
                         <div class="flex-grow-1" style="font-size: 17px">Windows 버전별 자산 현황</div>
+<!--                        <a onclick="verSettingsModal()"><i class="bi bi-gear"></i></a>-->
                     </div>
                     {% if "dash_win_update" in menu_list|join:" " %}
                     <div id="os_pie"></div>
@@ -522,6 +523,8 @@
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px">
                         <div class="flex-grow-1" style="font-size: 17px">보안 패치별 자산 현황</div>
+<!--                        <i class="bi bi-gear"></i>-->
+
                     </div>
                     {% if "dash_win_hotfix" in menu_list|join:" " %}
                     <div id="hotfix_donut"></div>
@@ -698,6 +701,29 @@ document.getElementById('reportPop').addEventListener('click', function() {
             window.location.href = url.toString();
         }
 }
+
+
+<!--function verSettingsModal() {-->
+<!--  var modal = document.getElementById("settingsModal");-->
+<!--  modal.style.display = "block";-->
+<!--}-->
+
+<!--function closeSettingsModal() {-->
+<!--  var modal = document.getElementById("settingsModal");-->
+<!--  modal.style.display = "none";-->
+<!--}-->
+
+<!--function saveSetting() {-->
+<!--  var settingInput = document.getElementById("settingInput");-->
+<!--  var value = settingInput.value;-->
+
+<!--  // 설정값 처리 로직-->
+<!--  // ...-->
+
+<!--  closeSettingsModal();-->
+<!--}-->
+
+
 
 
 </script>
