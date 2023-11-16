@@ -1028,6 +1028,9 @@ def exchange_code_for_token(code):
     # client_id = "stg-tanium-dashboard"
     # client_secret = "whLXIZvLEZsAWfqbQIsiwSkhVpgKGJWP"  # 클라이언트 시크릿 키
 
+    LIVE = "https://tanium.ncsoft.com/dashboard/"
+    STAGE = "http://taniumstg.ncsoft.com:8000/dashboard/"
+
     token_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
     client_id = "tanium-dashboard"
     client_secret = "BzKFaj19XgtFfXuA3TUYKVACfEeANqga"  # 클라이언트 시크릿 키
