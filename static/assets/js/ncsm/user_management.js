@@ -1396,6 +1396,10 @@ $(document).on("click","#group_alter", function(e) {
     },
 
     success: function (response) {
+        // if (response.None == 'None') {
+        //         alert('값을 입력하세요')
+        //         return
+        //     }
     // response에 따른 처리 - 예: 경고창 띄우기
         if (response.success == "success") {
             alert(response.message);

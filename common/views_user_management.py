@@ -324,13 +324,11 @@ def alter_auth(request):
 
     # 삭제된 유저 확인
     deleted_user_ids = list(set(default_user_list) - set(xuserIds))
-
     # 추가된 유저 확인
     added_user_ids = list(set(xuserIds) - set(default_user_list))
-
     log_result = ''
     if added_user_ids:
-        log_result += f"추가된 유저 : {', '.join(added_user_ids)}\n"
+        log_result += f"추가된 유저 : {', '.join(added_user_ids)}\n\n"
     if deleted_user_ids:
         log_result += f"삭제된 유저 : {', '.join(deleted_user_ids)}"
 
@@ -357,6 +355,8 @@ def alter_auth(request):
     message_code = "success"
 
     message = "Group이 수정되었습니다. \n 그룹이름 : " +xgroup_name+""
+    if deleted_user_ids == [] and added_user_ids == []:
+        return JsonResponse({"success":message_code, "message": message})
 
     function = 'Xuser_Group Modify'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
     item = 'Xuser_Group Modify for the '+ xgroup_name

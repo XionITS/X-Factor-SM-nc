@@ -23,7 +23,7 @@
     <!-- BEGIN brand -->
     <div class="brand">
         {% if request.session.sessionid and request.session.sessionauth != 'noauth' %}
-            <a href="../home" class="brand-logo">
+        <a href="../home" class="brand-logo"><img src="{% static 'assets/css/images/nc_newlogo.png' %}"></a>
         {% elif request.session.sessionauth == 'noauth' %}
             <a href="../logout" class="brand-logo">
             <img src="{% static 'assets/css/images/nc_newlogo.png' %}">
