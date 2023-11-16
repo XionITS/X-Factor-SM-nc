@@ -2,7 +2,7 @@
 
 <div id="sidebar" class="app-sidebar">
     <!-- BEGIN scrollbar -->
-    <div class="app-sidebar-content" data-scrollbar="true" data-height="100%">
+    <div class="app-sidebar-content" data-scrollbar="false" data-height="100%">
         <!-- BEGIN menu -->
         <div class="menu">
             <div class="menu-header"></div>
@@ -12,7 +12,7 @@
                         <i class="bi bi-collection"></i>
                     </span>
                     <span class="menu-text">Dashboard</span>
-                    <span class="menu-caret"><b class="caret"></b></span>
+<!--                    <span class="menu-caret"><b class="caret"></b></span>-->
                 </a>
                 <div class="menu-submenu">
                     {% if menu_list %}
@@ -87,7 +87,7 @@
                                 <i class="bi bi-collection"></i>
                             </span>
                             <span class="menu-text">Settings</span>
-                            <span class="menu-caret"><b class="caret"></b></span>
+<!--                            <span class="menu-caret"><b class="caret"></b></span>-->
                         </a>
                         <div class="menu-submenu">
                             <div class="menu-item">
@@ -118,4 +118,8 @@
 <!-- END mobile-sidebar-backdrop -->
 
 <script>
+//     var dashboardMenuText = document.querySelector('.menu-text');
+//         dashboardMenuText.addEventListener('click', function(event) {
+//             event.preventDefault();
+// });
 </script>
