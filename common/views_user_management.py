@@ -324,13 +324,9 @@ def alter_auth(request):
 
     # 삭제된 유저 확인
     deleted_user_ids = list(set(default_user_list) - set(xuserIds))
-    print("deleted_user_ids")
-    print(deleted_user_ids)
 
     # 추가된 유저 확인
     added_user_ids = list(set(xuserIds) - set(default_user_list))
-    print("added_user_ids")
-    print(added_user_ids)
 
     log_result = ''
     if added_user_ids:
