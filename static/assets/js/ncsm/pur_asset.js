@@ -263,6 +263,7 @@ var hw_pur_asset_list = function () {
             {
                 targets: 11,
                 width: "15%",
+                //orderable: false,
                 className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     return '<span data-toggle="tooltip">' + data + '</span>'
@@ -629,6 +630,7 @@ var sw_pur_asset_list = function () {
             },
 
             {
+                //targets: 10, width: "10%", orderable: false, className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 targets: 10, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     const swInstall = row.sw_install.replace(/\"/g, "");;
@@ -638,6 +640,7 @@ var sw_pur_asset_list = function () {
             },
 
             {
+                //targets: 11, width: "5%", orderable: false, className: 'text-start text-truncate flex-cloumn column_hidden align-middle',
                 targets: 11, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;

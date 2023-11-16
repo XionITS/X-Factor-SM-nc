@@ -507,7 +507,9 @@ var sec_asset_list2 = function () {
                 const aText = $(a).find("td").eq(index).text();
                 const bText = $(b).find("td").eq(index).text();
                 if (index === 0) {
-                    return aText.localeCompare(bText) * sortDirection;
+                    const aVersion = parseFloat(aText.replace(/KB/g, ''));
+                    const bVersion = parseFloat(bText.replace(/KB/g, ''));
+                    return (aVersion - bVersion) * sortDirection;
                 } else if (index === 1) {
                     const aDate = new Date(aText);
                     const bDate = new Date(bText);

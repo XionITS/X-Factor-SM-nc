@@ -207,6 +207,7 @@ var up_asset_list = function () {
             {
                 targets: 8,
                 width: "10%",
+                //orderable: false,
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
@@ -339,7 +340,9 @@ var up_asset_list = function () {
                 const aText = $(a).find("td").eq(index).text();
                 const bText = $(b).find("td").eq(index).text();
                 if (index === 0) {
-                    return aText.localeCompare(bText) * sortDirection;
+                    const aVersion = parseFloat(aText.replace(/KB/g, ''));
+                    const bVersion = parseFloat(bText.replace(/KB/g, ''));
+                    return (aVersion - bVersion) * sortDirection;
                 } else if (index === 1) {
                     const aDate = new Date(aText);
                     const bDate = new Date(bText);

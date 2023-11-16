@@ -213,6 +213,7 @@ var all_asset_list = function () {
             {
                 targets: 8,
                 width: "22%",
+                //orderable: false,
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
@@ -545,6 +546,7 @@ var win_asset_list = function () {
             {
                 targets: 8,
                 width: "22%",
+                //orderable: false,
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
@@ -875,6 +877,7 @@ var mac_asset_list = function () {
             {
                 targets: 8,
                 width: "22%",
+                //orderable: false,
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
@@ -1206,6 +1209,7 @@ var other_asset_list = function () {
             {
                 targets: 8,
                 width: "22%",
+                //orderable: false,
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
