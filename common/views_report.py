@@ -29,9 +29,9 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 @csrf_exempt
 def create(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='dash_report', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='dash_report', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='dash_report', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='dash_report', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../home/')
     datetime = request.GET.get('datetime')
     #print(datetime)

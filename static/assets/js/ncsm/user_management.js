@@ -747,7 +747,7 @@ function escapeHTML(html) {
     return html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 $(document).on("click", ".um_groupmore", function (e) {
-    const xgroup_name = escapeHTML($(this).data("xgroup_name"));
+    const xgroup_name = escapeHTML($(this).data("xgroup_name").toString());
     const id = $(this).data("id");
     const xuser_id_list = $(this).data("xuser_id_list");
 
@@ -845,9 +845,9 @@ $(document).on("click", "#um_insert", function (e) {
 });
 
 // delete 모달 열기 버튼 클릭 이벤트 핸들러
-function escapeHTML(html) {
-    return html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
+// function escapeHTML(html) {
+//     return html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// }
 $(document).on("click", "#um_delete", function (e) {
     var modalbody = "";
     const checkedIds = Object.keys(checkedItems); // Assuming checkedItems is an object with IDs as keys
@@ -869,7 +869,7 @@ $(document).on("click", "#um_delete", function (e) {
                     modalbody += `
                         <label class="form-check-label" for="${x_group_id}">
                             <input type="hidden" class="delete_hidden" id="${x_group_id}" value="${x_group_id}">
-                            ${escapeHTML(xgroup_name)}
+                            ${escapeHTML(xgroup_name.toString())}
                         </label><br>`;
                     document.querySelector("#um_delete_modal .modal-title").innerText='그룹 삭제';
 
