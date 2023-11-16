@@ -8,9 +8,10 @@ from django.shortcuts import render, redirect
 import hashlib
 import psycopg2
 import json
+import ast
 from django.http import JsonResponse
 from urllib.parse import urlencode
-from common.models import Xfactor_Log, Xfactor_Xuser, Xfactor_Xuser_Auth, Xfactor_Xgroup_Auth
+from common.models import Xfactor_Log, Xfactor_Xuser, Xfactor_Xuser_Auth, Xfactor_Xgroup_Auth, Xfactor_Xuser_Group
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -779,7 +780,7 @@ def taniumUsers(x_id, x_pw):
 @csrf_exempt
 def delete(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
+                                                  xfactor_auth_id='settings', auth_use='true')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
     if not user_auth and not group_auth:
         return redirect('../../home/')
@@ -798,11 +799,27 @@ def delete(request):
             Cur.execute(query, (x_id,))
             query = """ 
                     DELETE FROM
+                        common_xfactor_xgroup_auth
+                    WHERE
+                        xfactor_xgroup = %s;
+                    """
+            Cur.execute(query, (x_id,))
+            query = """ 
+                    DELETE FROM
                         common_xfactor_xuser
                     WHERE
                         x_id = %s;
                     """
             Cur.execute(query, (x_id,))
+
+            # 그룹에서 유저 삭제
+            default_user_groups = Xfactor_Xuser_Group.objects.filter()
+            for group in default_user_groups:
+                default_user_list = ast.literal_eval(group.xuser_id_list)
+                while x_id in default_user_list:
+                    default_user_list.remove(x_id)
+                group.xuser_id_list = str(default_user_list)  # 수정된 리스트를 다시 문자열로 변환하여 저장
+                group.save()
         Conn.commit()
         Conn.close()
 
@@ -830,12 +847,14 @@ def delete(request):
 @csrf_exempt
 def group_delete(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
+                                                  xfactor_auth_id='settings', auth_use='true')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
     if not user_auth and not group_auth:
         return redirect('../../home/')
     xgroup_ids_str = request.POST.get('group_ids')  # 쉼표로 구분된 문자열을 얻음
     xgroup_ids = xgroup_ids_str.split(',')
+
+    xgroup_names = json.loads(request.POST.get('x_groups'))
 
     try:
         Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
@@ -859,8 +878,8 @@ def group_delete(request):
         Conn.close()
 
         function = 'Group Delete'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-        item = 'Delete group ' + xgroup_id
-        result = '성공'
+        item = 'Delete group '
+        result = ', '.join(xgroup_names) + ' 삭제'
         user = request.session.get('sessionid')
         now = datetime.now().replace(microsecond=0)
         date = now.strftime("%Y-%m-%d %H:%M:%S")

@@ -869,6 +869,7 @@ $(document).on("click", "#um_delete", function (e) {
                     modalbody += `
                         <label class="form-check-label" for="${x_group_id}">
                             <input type="hidden" class="delete_hidden" id="${x_group_id}" value="${x_group_id}">
+                            <input type="hidden"  class="delete_hidden_group" value="${xgroup_name}">
                             ${escapeHTML(xgroup_name.toString())}
                         </label><br>`;
                     document.querySelector("#um_delete_modal .modal-title").innerText='그룹 삭제';
@@ -1032,6 +1033,7 @@ $(document).on("click","#user_add_btn", function(e) {
 $(document).on("click", "#user_delete", function (event) {
     event.preventDefault(); // 기본 제출 동작을 막습니다.
     var x_ids = [];
+    var x_groups = [];
 
     $(".delete_hidden").each(function () {
         var value = $(this).val(); // 각 hidden 요소의 값을 가져오기
@@ -1041,11 +1043,16 @@ $(document).on("click", "#user_delete", function (event) {
         return !isNaN(id);
     });
     if (hasGroupItems) {
-        // 그룹 처리를 위한 AJAX
+        $(".delete_hidden_group").each(function () {
+            var value2 = $(this).val(); // 각 hidden 요소의 값을 가져오기
+            x_groups.push(value2); // 값을 배열에 추가
+        });
+        console.log(x_groups)
         $.ajax({
             url: "/user_management/group_delete/", // 그룹 삭제를 처리하는 URL
             method: "POST",
             data: {
+                'x_groups' : JSON.stringify(x_groups),
                 'group_ids': x_ids.filter(id => !isNaN(id)).join(',')
             },
             success: function (response) {
