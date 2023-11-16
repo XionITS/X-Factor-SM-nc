@@ -278,7 +278,7 @@ def create_auth(request):
 
     function = 'Xuser_Group Create'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
     item = 'Xuser_Group Create for the '+ xgroup_name
-    result = '성공'
+    result = f"추가된 유저: {', '.join(xuserIds)}"
     user = request.session.get('sessionid')
     date = timezone.now()
     Xfactor_log = Xfactor_Log(
