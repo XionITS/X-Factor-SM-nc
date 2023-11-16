@@ -334,9 +334,9 @@ def alter_auth(request):
 
     log_result = ''
     if added_user_ids:
-        log_result += f"Added User : {', '.join(added_user_ids)}\n"
+        log_result += f"추가된 유저 : {', '.join(added_user_ids)}\n"
     if deleted_user_ids:
-        log_result += f"Deleted User : {', '.join(deleted_user_ids)}"
+        log_result += f"삭제된 유저 : {', '.join(deleted_user_ids)}"
 
     #auth_id =
     # Computer Group 만들기
