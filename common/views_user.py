@@ -10,7 +10,7 @@ import psycopg2
 import json
 from django.http import JsonResponse
 from urllib.parse import urlencode
-from common.models import Xfactor_Log,Xfactor_Xuser,Xfactor_Xuser_Auth
+from common.models import Xfactor_Log, Xfactor_Xuser, Xfactor_Xuser_Auth, Xfactor_Xgroup_Auth
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -107,11 +107,12 @@ def login(request):
             else:
                 RS = selectUsers(x_id, x_pw)
                 print(RS)
-                if RS == None:
-                    return render(request, 'nouser_page.html')
                 user_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=x_id)
+                if RS == None:
+                    request.session['sessionauth'] = 'noauth'
+                    return render(request, 'nouser_page.html')
                 # print(RS)
-                if len(user_check.filter(xfactor_auth_id='HS_asset',auth_use='false') and user_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and user_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
+                elif len(user_check.filter(xfactor_auth_id='HS_asset',auth_use='false') and user_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and user_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
                     and user_check.filter(xfactor_auth_id='PUR_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset_list', auth_use='false')
                     and user_check.filter(xfactor_auth_id='Asset', auth_use='false') and user_check.filter(xfactor_auth_id='History', auth_use='false') and user_check.filter(xfactor_auth_id='settings', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_report',auth_use='false') and user_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and user_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
@@ -148,30 +149,31 @@ def login(request):
                     and user_check.filter(xfactor_auth_id='dash_month', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')) > 0:
                     request.session['sessionid'] = RS[0]
+                    request.session['sessionauth'] = 'noauth'
                     request.session['sessionname'] = RS[2]
                     request.session['sessionemail'] = RS[3]
                     return render(request, 'noauth.html')
 
-                else:
-                    request.session['sessionid'] = RS[0]
-                    request.session['sessionname'] = RS[2]
-                    request.session['sessionemail'] = RS[3]
-                    function = 'Login'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-                    item = 'admin 계정'
-                    result = '성공'
-                    user = RS[0]
-                    now = timezone.now().replace(microsecond=0)
-                    date = now.strftime("%Y-%m-%d %H:%M:%S")
-                    print(date)
-                    Xfactor_log = Xfactor_Log(
-                        log_func=function,
-                        log_item=item,
-                        log_result=result,
-                        log_user=user,
-                        log_date=date
-                    )
-                    Xfactor_log.save()
-                    return redirect('../home')
+                # else:
+                #     request.session['sessionid'] = RS[0]
+                #     request.session['sessionname'] = RS[2]
+                #     request.session['sessionemail'] = RS[3]
+                #     function = 'Login'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+                #     item = 'admin 계정'
+                #     result = '성공'
+                #     user = RS[0]
+                #     now = timezone.now().replace(microsecond=0)
+                #     date = now.strftime("%Y-%m-%d %H:%M:%S")
+                #     print(date)
+                #     Xfactor_log = Xfactor_Log(
+                #         log_func=function,
+                #         log_item=item,
+                #         log_result=result,
+                #         log_user=user,
+                #         log_date=date
+                #     )
+                #     Xfactor_log.save()
+                #     return redirect('../home')
     elif Login_Method == "Tanium":
         if request.method == 'GET':
             returnData = {'Login_Method': Login_Method}
@@ -320,9 +322,12 @@ def logout(request):
     elif Login_Method == "NANO":
         if 'sessionid' in request.session:
             function = 'Logout'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-            item = 'admin 계정'
-            result = '성공'
             user = request.session.get('sessionid')
+            if user == 'handlake2k@ncsoft.com':
+                item = 'admin 계정'
+            else:
+                item = '일반 계정'
+            result = '성공'
             date = timezone.now()
             Xfactor_log = Xfactor_Log(
                 log_func=function,
@@ -346,8 +351,8 @@ def logout(request):
                 # 'post_logout_redirect_uri': 'https://tanium.ncsoft.com/dashboard/'
             }
             # Make a GET request to the logout endpoint
-            # response = requests.get('https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
-            response = requests.get('https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
+            response = requests.get('https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
+            # response = requests.get('https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
             request.session.clear()
             return redirect("/")
             # Check the response
@@ -475,6 +480,22 @@ def createUsers_nano(request):
         Conn.close()
         # Auth 자동생성
         RS = AutoAuth(email)
+
+        function = 'User Add'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+        item = 'Add user ' + userId
+        result = userId + ' 추가'
+        user = request.session.get('sessionid')
+        now = datetime.now().replace(microsecond=0)
+        date = now.strftime("%Y-%m-%d %H:%M:%S")
+
+        Xfactor_log = Xfactor_Log(
+            log_func=function,
+            log_item=item,
+            log_result=result,
+            log_user=user,
+            log_date=date
+        )
+        Xfactor_log.save()
         if RS == "1":
             return JsonResponse({'result': 'success'}, status=200)  # 성공적으로 삭제되었을 때 응답
     except Exception as e:
@@ -688,7 +709,6 @@ def Group_modifyAuth(xuser_id_list, id, auths):
     Conn = psycopg2.connect('host={0} port={1} dbname={2} user={3} password={4}'.format(DBHost, DBPort, DBName, DBUser, DBPwd))
     Cur = Conn.cursor()
 
-    print(xuser_id_list)
     for auth in auths:
         auth_use = auth['auth_use']
         xfactor_auth_id = auth['auth_id']
@@ -758,8 +778,8 @@ def taniumUsers(x_id, x_pw):
 def delete(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    print(user_auth)
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     x_ids_str = request.POST.get('x_id')  # 쉼표로 구분된 문자열을 얻음
     x_ids = x_ids_str.split(',')
@@ -785,8 +805,8 @@ def delete(request):
         Conn.close()
 
         function = 'User Delete'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-        item = 'Delete user ' + x_id
-        result = '성공'
+        item = 'Delete user'
+        result = x_id + ' 삭제'
         user = request.session.get('sessionid')
         now = datetime.now().replace(microsecond=0)
         date = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -860,14 +880,14 @@ def group_delete(request):
 
 def nano(request):
     #스테이지
-    # auth_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
-    # client_id = "stg-tanium-dashboard"
-    # redirect_uri = "http://taniumstg.ncsoft.com:8000/dashboard/"
+    auth_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
+    client_id = "stg-tanium-dashboard"
+    redirect_uri = "http://taniumstg.ncsoft.com:8000/dashboard/"
 
     #라이브
-    auth_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
-    client_id = "tanium-dashboard"
-    redirect_uri = "https://tanium.ncsoft.com/dashboard/"
+    # auth_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
+    # client_id = "tanium-dashboard"
+    # redirect_uri = "https://tanium.ncsoft.com/dashboard/"
 
     # 사용자를 인증 페이지로 리디렉션합니다.
     return redirect(f"{auth_url}?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope=openid")
@@ -879,8 +899,8 @@ def nano_user(request):
     access_token, id_token = exchange_code_for_token(code)
     #print(access_token)
     #print(id_token)
-    # userinfo_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
-    userinfo_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
+    userinfo_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
+    # userinfo_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
 
     headers = {
         "Authorization": f"Bearer {access_token}"
@@ -914,6 +934,7 @@ def nano_user(request):
         #         # )
         #         # Xfactor_log.save()
         request.session['sessionid'] = sub
+        request.session['sessionauth'] = 'noauth'
         request.session['sessionname'] = name
         request.session['sessionemail'] = email
         request.session['sessionidtoken'] = id_token
@@ -925,6 +946,8 @@ def nano_user(request):
             and nano_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_office', auth_use='false')
             and nano_check.filter(xfactor_auth_id='dash_month', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
             and nano_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')) == 0:
+        if 'sessionid' in request.session:
+            return redirect('../home')
         request.session['sessionid'] = sub
         request.session['sessionname'] = name
         request.session['sessionemail'] = email
@@ -972,6 +995,7 @@ def nano_user(request):
         )
         Xfactor_log.save()
         request.session['sessionid'] = sub
+        request.session['sessionauth'] = 'noauth'
         request.session['sessionname'] = name
         request.session['sessionemail'] = email
         request.session['sessionidtoken'] = id_token
@@ -980,19 +1004,19 @@ def nano_user(request):
 
 
 def exchange_code_for_token(code):
-    # token_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
-    # client_id = "stg-tanium-dashboard"
-    # client_secret = "whLXIZvLEZsAWfqbQIsiwSkhVpgKGJWP"  # 클라이언트 시크릿 키
+    token_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
+    client_id = "stg-tanium-dashboard"
+    client_secret = "whLXIZvLEZsAWfqbQIsiwSkhVpgKGJWP"  # 클라이언트 시크릿 키
 
-    token_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
-    client_id = "tanium-dashboard"
-    client_secret = "BzKFaj19XgtFfXuA3TUYKVACfEeANqga"  # 클라이언트 시크릿 키
+    # token_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
+    # client_id = "tanium-dashboard"
+    # client_secret = "BzKFaj19XgtFfXuA3TUYKVACfEeANqga"  # 클라이언트 시크릿 키
 
     # 토큰 요청 파라미터 설정
     token_payload = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": "https://tanium.ncsoft.com/dashboard/",
+        "redirect_uri": "http://taniumstg.ncsoft.com:8000/dashboard/",
         "client_id": client_id,
         "client_secret": client_secret
     }

@@ -24,9 +24,9 @@ DBSettingTime = SETTING['DB']['DBSelectTime']
 @csrf_exempt
 def pur_asset(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                 xfactor_auth_id='PUR_asset', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='false')
-    if user_auth and group_auth:
+                                                 xfactor_auth_id='PUR_asset', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../home/')
     #메뉴
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
@@ -59,9 +59,9 @@ def pur_asset(request):
 @csrf_exempt
 def pur_asset_paginghw(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='PUR_asset', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='PUR_asset', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     local_tz = pytz.timezone('Asia/Seoul')
     utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
@@ -377,9 +377,9 @@ def pur_asset_paginghw(request):
 @csrf_exempt
 def pur_asset_pagingsw(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='PUR_asset', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='PUR_asset', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='PUR_asset', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     local_tz = pytz.timezone('Asia/Seoul')
     utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)

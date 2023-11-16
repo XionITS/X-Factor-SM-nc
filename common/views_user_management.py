@@ -1,3 +1,5 @@
+import ast
+
 from django.core.cache import cache
 from django.http import HttpResponse
 import math
@@ -38,9 +40,9 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 @csrf_exempt
 def um(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../home/')
     #메뉴
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
@@ -55,9 +57,9 @@ def um(request):
 @csrf_exempt
 def um_user(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     user = Xfactor_Xuser.objects.values('x_id', 'x_name', 'x_email', 'x_auth', 'create_date')
     #user = Xfactor_Common.objects.prefetch_related('purchase').filter(user_date__gte=today_collect_date)
@@ -107,9 +109,9 @@ def um_user(request):
 @csrf_exempt
 def user_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     x_id = request.POST.get("x_id")
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=x_id)
@@ -120,9 +122,9 @@ def user_auth(request):
 @csrf_exempt
 def group_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     id = request.POST.get("id")
     xgroup_auth = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=id).distinct('auth_use', 'xfactor_auth_id', 'xgroup_id')
@@ -143,18 +145,18 @@ def group_auth(request):
 #     if not created:
 #         if hasattr(instance, '_auth_use_origin') and instance._auth_use_origin != instance.auth_use:
 #             auth_value = Xfactor_Auth.objects.filter(auth_id=instance.xfactor_auth_id).values('auth_name')[0]['auth_name']
-#             cache.set('value_list', f'[{auth_value}] - {instance._auth_use_origin} 에서 {instance.auth_use}로 변경', 3)
-            # cache.set(f'{instance.xfactor_auth_id}_origin', instance._auth_use_origin, 1)
-            # cache.set(f'{instance.xfactor_auth_id}_current', instance.auth_use, 1)
-        # if hasattr(instance, '_xfactor_auth_id_origin') and instance._xfactor_auth_id_origin != instance.xfactor_auth_id:
-        #     print(f'xfactor_auth_id field was updated from {instance._xfactor_auth_id_origin} to {instance.xfactor_auth_id}')
+#             cache.set(instance.xfactor_auth_id, f'[{auth_value}] - {instance._auth_use_origin} 에서 {instance.auth_use}로 변경', 3)
+#             # cache.set(f'{instance.xfactor_auth_id}_origin', instance._auth_use_origin, 1)
+#             # cache.set(f'{instance.xfactor_auth_id}_current', instance.auth_use, 1)
+#         if hasattr(instance, '_xfactor_auth_id_origin') and instance._xfactor_auth_id_origin != instance.xfactor_auth_id:
+#             print(f'xfactor_auth_id field was updated from {instance._xfactor_auth_id_origin} to {instance.xfactor_auth_id}')
 
 @csrf_exempt
 def save_user_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     x_ids_str = request.POST.get('x_id')  # 쉼표로 구분된 문자열을 얻음
     #x_ids = x_ids_str.split(',')
@@ -171,11 +173,10 @@ def save_user_auth(request):
             record.auth_use = auth_use
             record.save()
 
+            # if cache.get(record.xfactor_auth_id) != None:
+            #     # for i in range(len(list(cache.get('value_list')))):
+            #     a.append(cache.get(record.xfactor_auth_id))
 
-        # if cache.get('value_list') != None:
-        #     for i in range(len(list(cache.get('value_list')))):
-        # a.append(cache.get('value_list'))
-        # print(a)
 
         # print(auth_use_current)
         function = 'User Auth'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
@@ -204,9 +205,9 @@ def save_user_auth(request):
 @csrf_exempt
 def save_group_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     xgroup_id = request.POST.get('id')
     x_ids_str = request.POST.get('x_id_array')  # 쉼표로 구분된 문자열을 얻음
@@ -247,9 +248,9 @@ def save_group_auth(request):
 @csrf_exempt
 def create_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     xgroup_name = request.POST['xgroup_name']
     xgroup_description = request.POST['xgroup_description']
@@ -294,9 +295,9 @@ def create_auth(request):
 @csrf_exempt
 def alter_auth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     xgroup_name = request.POST['xgroup_name']
     id = request.POST['id']
@@ -317,6 +318,25 @@ def alter_auth(request):
         auth_use = item['auth_use']  # 'auth_user' 키의 값을 가져옴
         # auth_id와 auth_user만 따로 저장하거나 활용
         auth.append({'auth_id': auth_id, 'auth_use': auth_use})
+
+    default_user_list = Xfactor_Xuser_Group.objects.get(id=id).xuser_id_list
+    default_user_list = ast.literal_eval(default_user_list)
+
+    # 삭제된 유저 확인
+    deleted_user_ids = list(set(default_user_list) - set(xuserIds))
+    print("deleted_user_ids")
+    print(deleted_user_ids)
+
+    # 추가된 유저 확인
+    added_user_ids = list(set(xuserIds) - set(default_user_list))
+    print("added_user_ids")
+    print(added_user_ids)
+
+    log_result = ''
+    if added_user_ids:
+        log_result += f"Added User : {', '.join(added_user_ids)}\n"
+    if deleted_user_ids:
+        log_result += f"Deleted User : {', '.join(deleted_user_ids)}"
 
     #auth_id =
     # Computer Group 만들기
@@ -344,13 +364,12 @@ def alter_auth(request):
 
     function = 'Xuser_Group Modify'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
     item = 'Xuser_Group Modify for the '+ xgroup_name
-    result = '성공'
     user = request.session.get('sessionid')
     date = timezone.now()
     Xfactor_log = Xfactor_Log(
         log_func=function,
         log_item=item,
-        log_result=result,
+        log_result=log_result,
         log_user=user,
         log_date=date
     )
@@ -364,9 +383,9 @@ def alter_auth(request):
 @csrf_exempt
 def um_group(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     user = Xfactor_Xuser_Group.objects.all()
     #user = Xfactor_Common.objects.prefetch_related('purchase').filter(user_date__gte=today_collect_date)
@@ -415,9 +434,9 @@ def um_group(request):
 @csrf_exempt
 def search_box(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     if request.method == "POST":
         search_text = request.POST.get('searchText', None)
@@ -430,9 +449,9 @@ def search_box(request):
 @csrf_exempt
 def user_list(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     user = Xfactor_Xuser.objects.all()
 
@@ -445,9 +464,9 @@ def user_list(request):
 @csrf_exempt
 def db_list(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
-    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+                                                  xfactor_auth_id='settings', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     user = Xfactor_ncdb.objects.exclude(userName__isnull=True).exclude(email__isnull=True)
 
@@ -497,9 +516,9 @@ def db_list(request):
 @csrf_exempt
 def insertAuth(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='settings', auth_use='false')
+                                                  xfactor_auth_id='settings', auth_use='true')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='false')
-    if user_auth and group_auth:
+    if not user_auth and not group_auth:
         return redirect('../../home/')
 
     user = Xfactor_Xuser.objects.all()

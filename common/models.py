@@ -247,7 +247,7 @@ class Xfactor_Report(models.Model):
 class Xfactor_Log(models.Model):
     log_func = models.CharField(max_length=100)
     log_item = models.CharField(max_length=100)
-    log_result = models.CharField(max_length=100)
+    log_result = models.TextField(null=True)
     log_user = models.CharField(max_length=100)
     log_date = models.DateTimeField(auto_now_add=True)
 

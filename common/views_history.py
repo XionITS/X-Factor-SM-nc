@@ -24,10 +24,10 @@ today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
 @csrf_exempt
 def history(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='History', auth_use='false')
+                                                  xfactor_auth_id='History', auth_use='true')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
-                                                    xfactor_auth_id='History', auth_use='false')
-    if user_auth and group_auth:
+                                                    xfactor_auth_id='History', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../home/')
     #메뉴
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
@@ -43,10 +43,10 @@ def history(request):
 @csrf_exempt
 def search_h(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='History', auth_use='false')
+                                                  xfactor_auth_id='History', auth_use='true')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
-                                                    xfactor_auth_id='History', auth_use='false')
-    if user_auth and group_auth:
+                                                    xfactor_auth_id='History', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
@@ -59,7 +59,7 @@ def search_h(request):
         date2 = datetime.strptime(datesource2, "%Y-%m-%d %H시")
         start_h_1 = timezone.make_aware(datetime.combine(date1.date(), datetime.min.time())) + timedelta(hours=date1.hour)
         end_h_1 = start_h_1 + timedelta(hours=1)
-        start_h_2 = timezone.make_aware(datetime.combine(date1.date(), datetime.min.time())) + timedelta(hours=date2.hour)
+        start_h_2 = timezone.make_aware(datetime.combine(date2.date(), datetime.min.time())) + timedelta(hours=date2.hour)
         end_h_2 = start_h_2 + timedelta(hours=1)
         if search_text == '':
             return HttpResponse(None)
@@ -79,10 +79,10 @@ def search_h(request):
 @csrf_exempt
 def search_box_h(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
-                                                  xfactor_auth_id='History', auth_use='false')
+                                                  xfactor_auth_id='History', auth_use='true')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'],
-                                                    xfactor_auth_id='History', auth_use='false')
-    if user_auth and group_auth:
+                                                    xfactor_auth_id='History', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
