@@ -829,8 +829,8 @@ def delete(request):
 def group_delete(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='settings', auth_use='false')
-    print(user_auth)
-    if user_auth:
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='settings', auth_use='true')
+    if not user_auth and not group_auth:
         return redirect('../../home/')
     xgroup_ids_str = request.POST.get('group_ids')  # 쉼표로 구분된 문자열을 얻음
     xgroup_ids = xgroup_ids_str.split(',')
