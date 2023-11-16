@@ -24186,7 +24186,10 @@ height: 2rem;*/
     font-weight: 600;
     color: rgba(255, 255, 255, .7);
 }
+.app-sidebar .app-sidebar-content .menu .menu-header .menu-item {
 
+    pointer-events: none;
+}
 .app-sidebar .app-sidebar-content .menu .menu-item .menu-link {
     text-decoration: none;
     position: relative;
@@ -24225,7 +24228,7 @@ height: 2rem;*/
 .app-sidebar .app-sidebar-content .menu .menu-item .menu-submenu {
     background: 0 0;
     display: none;
-    padding: 0 0 1rem
+    padding: 0 0 1rem;
 }
 
 .app-sidebar .app-sidebar-content .menu .menu-item .menu-submenu .menu-item {
@@ -24246,7 +24249,7 @@ height: 2rem;*/
 }
 
 .app-sidebar .app-sidebar-content .menu .menu-item.active.has-sub>.menu-submenu {
-    display: block
+    display: block !important;
 }
 
 .app-sidebar .app-sidebar-content .menu .menu-item.expand>.menu-submenu {

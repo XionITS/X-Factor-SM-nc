@@ -805,10 +805,9 @@ def delete(request):
             Cur.execute(query, (x_id,))
         Conn.commit()
         Conn.close()
-
         function = 'User Delete'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-        item = 'Delete user ' + x_id
-        result = x_id + ' 삭제'
+        item = "Delete user"
+        result = f"{', '.join(x_ids)} 삭제"
         user = request.session.get('sessionid')
         now = datetime.now().replace(microsecond=0)
         date = now.strftime("%Y-%m-%d %H:%M:%S")
