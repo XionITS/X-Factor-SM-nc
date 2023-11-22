@@ -116,10 +116,11 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
                 var orderDir = data.order[0].dir;
                 var columnMap = {
                     1: 'logged_name_id__deptName',
-                    2: 'computer_name',
-                    3: 'logged_name_id__userId',
+                    2: 'logged_name_id__userId',
+                    3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
+                    // 6: 'os_simple'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -143,6 +144,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
             {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
+            // {data: 'os_simple', title: 'OS', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -205,6 +207,14 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            // {
+            //     targets: 6,
+            //     width: "10%",
+            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
+            //     render: function (data, type, row) {
+            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+            //     }
+            // },
         ],
         language: {
             "decimal": "",
@@ -360,6 +370,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
                     3: 'logged_name',
                     4: 'ip_address.',
                     5: 'mac_address',
+                    // 6: 'os_simple',
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -383,6 +394,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
             {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
+            // {data: 'os_simple', title: 'OS', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -445,6 +457,14 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            // {
+            //     targets: 6,
+            //     width: "10%",
+            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
+            //     render: function (data, type, row) {
+            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+            //     }
+            // },
         ],
         language: {
             "decimal": "",
@@ -598,6 +618,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
                     3: 'logged_name',
                     4: 'ip_address.',
                     5: 'mac_address',
+                    6: 'os_simple',
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -621,6 +642,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
             {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
+            // {data: 'os_simple', title: 'OS', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -683,6 +705,14 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            // {
+            //     targets: 6,
+            //     width: "10%",
+            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
+            //     render: function (data, type, row) {
+            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+            //     }
+            // },
         ],
         language: {
             "decimal": "",
@@ -833,7 +863,7 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
                     1: 'deptName',
                     2: 'computer_name',
                     3: 'logged_name',
-                    4: 'ip_address.',
+                    4: 'ip_address',
                     5: 'mac_address',
                 };
                 //console.log(columnMap)
@@ -858,6 +888,7 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
             {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
+            // {data: 'os_build', title: 'OS', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -920,6 +951,14 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            // {
+            //     targets: 6,
+            //     width: "10%",
+            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
+            //     render: function (data, type, row) {
+            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+            //     }
+            // },
         ],
         language: {
             "decimal": "",
@@ -1096,6 +1135,7 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
             {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
+            // {data: 'os_build', title: 'OS', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1158,6 +1198,14 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            // {
+            //     targets: 6,
+            //     width: "10%",
+            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
+            //     render: function (data, type, row) {
+            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+            //     }
+            // },
         ],
         language: {
             "decimal": "",
@@ -1311,6 +1359,7 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
                     3: 'logged_name',
                     4: 'ip_address.',
                     5: 'mac_address',
+                    // 6: 'essential5',
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -1334,6 +1383,7 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
             {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
+            // {data: 'essential5', title: 'VERSION', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1396,6 +1446,14 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            // {
+            //     targets: 6,
+            //     width: "10%",
+            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
+            //     render: function (data, type, row) {
+            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+            //     }
+            // },
         ],
         language: {
             "decimal": "",
@@ -1578,6 +1636,7 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
             {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
+            // {data: 'subnet', title: 'SUBNET', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1640,6 +1699,14 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            // {
+            //     targets: 6,
+            //     width: "10%",
+            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
+            //     render: function (data, type, row) {
+            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+            //     }
+            // },
         ],
         language: {
             "decimal": "",
@@ -1821,6 +1888,7 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
             {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
+            // {data: 'hotfix_date', title: 'HOTFIX', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1883,6 +1951,14 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
+            // {
+            //     targets: 6,
+            //     width: "10%",
+            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
+            //     render: function (data, type, row) {
+            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+            //     }
+            // },
         ],
         language: {
             "decimal": "",

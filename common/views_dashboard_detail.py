@@ -85,6 +85,7 @@ def all_asset_paging1(request):
             #print(user)
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -100,6 +101,7 @@ def all_asset_paging1(request):
             user  = user.filter(chassistype=request.POST.get('seriesName'))
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -115,6 +117,7 @@ def all_asset_paging1(request):
             user = cache.exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -127,6 +130,7 @@ def all_asset_paging1(request):
             user = cache.filter(chassistype=request.POST.get('seriesName'))
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -145,6 +149,7 @@ def all_asset_paging1(request):
         3: 'logged_name_id__userName',
         4: 'ip_address',
         5: 'mac_address',
+        6: 'os_simple'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -235,6 +240,7 @@ def asset_os_paging1(request):
             user = user.filter( chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -245,6 +251,7 @@ def asset_os_paging1(request):
             user = user.filter( chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -256,6 +263,7 @@ def asset_os_paging1(request):
             user = user.exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -269,6 +277,7 @@ def asset_os_paging1(request):
             user = user.filter( chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -280,6 +289,7 @@ def asset_os_paging1(request):
             user =user.filter(chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -291,6 +301,7 @@ def asset_os_paging1(request):
             user = user.filter(os_simple='Mac').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -304,6 +315,7 @@ def asset_os_paging1(request):
             user = user.filter( chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -315,6 +327,7 @@ def asset_os_paging1(request):
             user = user.filter(chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -326,6 +339,7 @@ def asset_os_paging1(request):
             user = user.filter( os_simple='Windows').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -338,10 +352,11 @@ def asset_os_paging1(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'logged_name_id__deptName',
-        2: 'computer_name',
-        3: 'logged_name_id__userName',
+        2: 'logged_name_id__userName',
+        3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
+        # 6: 'os_simple'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -431,6 +446,7 @@ def asset_os_paging2(request):
             user = cache.filter(chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -441,6 +457,7 @@ def asset_os_paging2(request):
             user =cache.filter(chassistype=request.POST.get('seriesName')).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -451,6 +468,7 @@ def asset_os_paging2(request):
             user = cache.exclude(chassistype__in=['Notebook', 'Desktop']).exclude(os_simple='Windows').exclude(os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -463,6 +481,7 @@ def asset_os_paging2(request):
             user = cache.filter( chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -473,6 +492,7 @@ def asset_os_paging2(request):
             user = cache.filter(chassistype=request.POST.get('seriesName'), os_simple='Mac')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -483,6 +503,7 @@ def asset_os_paging2(request):
             user = cache.filter( os_simple='Mac').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -495,6 +516,7 @@ def asset_os_paging2(request):
             user = cache.filter(chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -505,6 +527,7 @@ def asset_os_paging2(request):
             user = cache.filter(chassistype=request.POST.get('seriesName'), os_simple='Windows')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -515,6 +538,7 @@ def asset_os_paging2(request):
             user = cache.filter(os_simple='Windows').exclude(chassistype='Notebook').exclude(chassistype='Desktop')
             if filter_text:
                 query = (Q(computer_name__icontains=filter_text) |
+                         # Q(os_simple__icontains=filter_text) |
                          Q(logged_name_id__deptName__icontains=filter_text) |
                          Q(logged_name_id__userName__icontains=filter_text) |
                          Q(logged_name_id__userId__icontains=filter_text) |
@@ -531,6 +555,7 @@ def asset_os_paging2(request):
         3: 'logged_name_id__userName',
         4: 'ip_address',
         5: 'mac_address',
+        # 6: 'os_simple',
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -613,6 +638,7 @@ def oslistPieChart(request):
     user = user.filter(os_simple='Windows', os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
+                 # Q(os_build__icontains=filter_text) |
                  Q(logged_name_id__deptName__icontains=filter_text) |
                  Q(logged_name_id__userName__icontains=filter_text) |
                  Q(logged_name_id__userId__icontains=filter_text) |
@@ -712,6 +738,7 @@ def osVerPieChart(request):
         user = user.filter( os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     # Q(os_build__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -723,6 +750,7 @@ def osVerPieChart(request):
         user = user.filter(os_simple='Windows', os_build__lt='19044').exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     # Q(os_build__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -822,6 +850,7 @@ def office_chart(request):
         user = user.filter( essential5__in=['Office 21', 'Office 19', 'Office 16'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     # Q(essential5__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -833,6 +862,7 @@ def office_chart(request):
         user = user.filter(essential5='Office 15')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     # Q(essential5__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -844,6 +874,7 @@ def office_chart(request):
         user = user.filter(essential5='오피스 없음')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     # Q(essential5__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -855,6 +886,7 @@ def office_chart(request):
         user =user.filter(essential5__in=['unconfirmed', ''])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     # Q(essential5__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -955,6 +987,7 @@ def subnet_chart(request):
         user = user.filter(subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     # Q(subnet__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -967,6 +1000,7 @@ def subnet_chart(request):
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     # Q(subnet__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -978,6 +1012,7 @@ def subnet_chart(request):
         user = user.filter(subnet='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     # Q(subnet__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -990,6 +1025,7 @@ def subnet_chart(request):
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
+                     # Q(subnet__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -1108,13 +1144,13 @@ def hotfixChart(request):
 
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
+                 # Q(hotfix_date__icontains=filter_text) |
                  Q(logged_name_id__deptName__icontains=filter_text) |
                  Q(logged_name_id__userName__icontains=filter_text) |
                  Q(logged_name_id__userId__icontains=filter_text) |
                  Q(ip_address__icontains=filter_text) |
                  Q(mac_address__icontains=filter_text))
         user = user.filter(query)
-
 
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))

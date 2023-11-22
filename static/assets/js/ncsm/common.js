@@ -133,12 +133,22 @@ $(document).on("click","#creategroup", function (e){
         //modalbody += '<input type="hidden" name="'+computer_name+'" id="'+computer_name+'" value="'+computer_name+'">'
         //modalbody += '컴퓨터아이디'+computer_id + '<br/>';
         //modalbody += '컴퓨터이름'+computer_name + '<br/>';
-        modalbody += '<input class="form-check-input" type="checkbox" value="'+computer_id+'" id="'+computer_id+'" computer-name="' + computer_name +'" checked><label class="form-check-label" for="'+computer_id+'">'+computer_name+'</label><br>'
+        modalbody += '<div id="'+computer_id+'"><input class="form-check-input" type="checkbox" value="'+computer_id+'" id="'+computer_id+'" computer-name="' + computer_name +'" checked><label class="form-check-label" for="'+computer_id+'">'+computer_name+'</label><br></div>'
     }
     $("#groupModal .modal-title").html("그룹 생성 팝업창");
     $("#groupModal .form-check").html(modalbody);
     $("#groupModal").modal("show");
+    $(document).on('change', '.form-check-input', function() {
+        var x_id = $(this).val();
+        if (!this.checked) { // 체크박스가 해제된 경우
+            // 해당 체크박스를 #group_insert_modal .form-check2에서 제거
+            // $('label[for="'+x_id+'"]').remove();
+            $('div[id="'+x_id+'"]').remove();
+            // $(".user-checkbox[data-x-id='" + escapeSelector(x_id) + "']").prop('checked', false);
+        }
+    });
 });
+
 
 
 $(document).on("click","#groupCreate", function(event) {

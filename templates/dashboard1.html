@@ -68,9 +68,24 @@
                         <!--                        <div class='text-end mx-50px' style="font-size:14px;" id="totalDataDiv"></div>-->
                         <div id="asset_all_chart"></div>
                     </div>
-                    <div id="auth_all_asset2"  class="col-6">
-                        <div id="asset_all_os_chart1"></div>
-                        <div id="asset_all_os_chart2"></div>
+                    <div id="auth_all_asset2" class="col-6" style="position: relative;">
+<!--                        <ul class="nav nav-pills" style="position: absolute; z-index: 2; right: 0;">-->
+<!--                            <li class="nav-item">-->
+<!--                                <a class="nav-link active tablinks" data-target="Online" id="online-tab" data-bs-toggle="pill" href="#online">Online</a>-->
+<!--                            </li>-->
+<!--                            <li class="nav-item">-->
+<!--                                <a class="nav-link tablinks" data-target="Total" id="total-tab" data-bs-toggle="pill" href="#total">Total</a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+
+                        <!-- Online 탭 컨텐츠 -->
+<!--                        <div id="Online" class="tabcontent" style="margin-top: 25px;">-->
+                          <div id="asset_all_os_chart1"></div>
+<!--                        </div>-->
+                        <!-- Total 탭 컨텐츠 -->
+<!--                        <div id="Total" class="tabcontent" style="margin-top: 25px;">-->
+                          <div id="asset_all_os_chart2"></div>
+<!--                        </div>-->
                     </div>
                     {% else %}
                     <div id="auth_all_asset1" class="col-6">
@@ -634,7 +649,7 @@
     <!-- END row -->
 </div>
 {% endif %}
-<div class="modal" name="DashModal" id="DashModal" tabindex="-1">
+        <div class="modal" name="DashModal" id="DashModal" tabindex="-1">
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content" style="background-color:#1d2835;">
                     <div class="modal-header">
@@ -646,12 +661,12 @@
                         <table id="" class="table m" style="width: 100%">
                             <thead class="allAthead">
                             <tr class="">
-                                <th style="text-align: center">No</th>
-                                <th style="text-align: center">부서</th>
-                                <th style="text-align: center">컴퓨터이름</th>
-                                <th style="text-align: center">사용자</th>
-                                <th style="text-align: center">IP</th>
-                                <th style="text-align: center">MAC</th>
+<!--                                <th style="text-align: center">No</th>-->
+<!--                                <th style="text-align: center">부서</th>-->
+<!--                                <th style="text-align: center">컴퓨터이름</th>-->
+<!--                                <th style="text-align: center">사용자</th>-->
+<!--                                <th style="text-align: center">IP</th>-->
+<!--                                <th style="text-align: center">MAC</th>-->
 <!--                                <th scope="col" style="text-align: center">Email</th>-->
                             </tr>
 <!--                            <th scope="col" style="text-align: center">업데이트 날짜</th>-->
@@ -717,8 +732,6 @@ document.getElementById('reportPop').addEventListener('click', function() {
 <!--  var settingInput = document.getElementById("settingInput");-->
 <!--  var value = settingInput.value;-->
 
-<!--  // 설정값 처리 로직-->
-<!--  // ...-->
 
 <!--  closeSettingsModal();-->
 <!--}-->

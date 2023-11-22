@@ -72,10 +72,10 @@ def create(request):
         group_insert.computer_name_list = computerNames
         group_insert.save()
         message_code = "success"
-        message = "Group이 생성되었습니다. \n 그룹이름 : " +group_name+"\n 그룹번호 : " +CGID
+        message = "Computer Group이 생성되었습니다. \n 그룹이름 : " +group_name+"\n 그룹번호 : " +CGID
 
-        function = 'Group Create'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-        item = 'Create Group for the '+ group_name
+        function = 'Computer Group Create'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
+        item = 'Create Computer Group for the ' + group_name
         result = '성공'
         user = request.session.get('sessionid')
         date = timezone.now()
