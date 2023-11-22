@@ -68,9 +68,24 @@
                         <!--                        <div class='text-end mx-50px' style="font-size:14px;" id="totalDataDiv"></div>-->
                         <div id="asset_all_chart"></div>
                     </div>
-                    <div id="auth_all_asset2"  class="col-6">
-                        <div id="asset_all_os_chart1"></div>
-                        <div id="asset_all_os_chart2"></div>
+                    <div id="auth_all_asset2" class="col-6" style="position: relative;">
+                        <ul class="nav nav-pills" style="position: absolute; z-index: 2; right: 0;">
+                            <li class="nav-item">
+                                <a class="nav-link active tablinks" data-target="Online" id="online-tab" data-bs-toggle="pill" href="#online">Online</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link tablinks" data-target="Total" id="total-tab" data-bs-toggle="pill" href="#total">Total</a>
+                            </li>
+                        </ul>
+
+                        <!-- Online 탭 컨텐츠 -->
+                        <div id="Online" class="tabcontent" style="margin-top: 25px;">
+                          <div id="asset_all_os_chart1"></div>
+                        </div>
+                        <!-- Total 탭 컨텐츠 -->
+                        <div id="Total" class="tabcontent" style="margin-top: 25px;">
+                          <div id="asset_all_os_chart2"></div>
+                        </div>
                     </div>
                     {% else %}
                     <div id="auth_all_asset1" class="col-6">

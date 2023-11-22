@@ -277,7 +277,7 @@ var handleRenderChartNCOMG = function () {
                 type: 'bar',
                 background: 'transparent',
                 foreColor: 'rgba(255, 255, 255, 0.75)',
-                height: 110,
+                height: 225,
                 stacked: true,
                 toolbar: {
                     show: false
@@ -335,38 +335,22 @@ var handleRenderChartNCOMG = function () {
             dataLabels: {
                 enabled: true,
                 style: {
-                    fontSize: '9px',
+                    fontSize: '13px',
                     colors: ["#fff"],
                 }
             },
             xaxis: {
-                type: 'category',
                 categories: ['Other', 'Mac', 'Windows'],
                 labels: {
-                    show: false,
                     style: {
-                        fontSize: "8px",
-                    },
-                },
-                max: 10000,
+                        fontSize: "13px",
+                    }
+                }
             },
             yaxis: {
                 labels: {
                     fontSize: "8px",
                 },
-            },
-            legend: {
-                fontSize: '10px',
-                markers: {
-                    fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',]
-                },
-                itemMargin: {
-                    horizontal: 20
-                },
-                labels: {
-                    colors: 'rgba(255, 255, 255, 0.75)',
-                },
-                position: 'top'
             }
         };
         var asset_all_os_chart1 = new ApexCharts(document.querySelector('#asset_all_os_chart1'), asset_all_os_chart_options1);
@@ -421,7 +405,7 @@ var handleRenderChartNCOMG = function () {
                 type: 'bar',
                 background: 'transparent',
                 foreColor: 'rgba(255, 255, 255, 0.75)',
-                height: 112,
+                height: 225,
                 stacked: true,
                 toolbar: {
                     show: false
@@ -478,39 +462,22 @@ var handleRenderChartNCOMG = function () {
             dataLabels: {
                 enabled: true,
                 style: {
-                    fontSize: '9px',
+                    fontSize: '13px',
                     colors: ["#fff"],
                 }
             },
             xaxis: {
-                type: 'category',
                 categories: ['Other', 'Mac', 'Windows',],
                 labels: {
-                    show: false,
                     style: {
-                        fontSize: "8px",
-                    },
-                },
-                max: 10000,
+                        fontSize: "13px",
+                    }
+                }
             },
             yaxis: {
                 labels: {
                     fontSize: "8px",
                 }
-            },
-
-            legend: {
-                fontSize: '8px',
-                markers: {
-                    fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',]
-                },
-                itemMargin: {
-                    horizontal: 20
-                },
-                labels: {
-                    colors: 'rgba(255, 255, 255, 0.75)',
-                },
-                position: 'bottom'
             }
         };
         var asset_all_os_chart2 = new ApexCharts(document.querySelector('#asset_all_os_chart2'), asset_all_os_chart_options2);
@@ -1691,5 +1658,23 @@ $("button.input-group-text").click(function() {
 ///////////////////////Chart////////////////////
     handleRenderChartNCOMG();
     //console.log(dataList);
+
+    $(document).ready(function() {
+  $('.tablinks').click(function() {
+    // 모든 탭 컨텐츠 숨기기
+    $('.tabcontent').hide();
+
+    // 모든 탭 버튼의 'active' 클래스 제거
+    $('.tablinks').removeClass('active');
+
+    // 선택된 탭 컨텐츠 표시 및 버튼에 'active' 클래스 추가
+    var target = $(this).data('target');
+    $('#' + target).show();
+    $(this).addClass('active');
+  });
+
+  // 기본적으로 'Online' 탭 활성화
+  $('.tablinks[data-target="Online"]').click();
+});
 
 });
