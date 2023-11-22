@@ -30,8 +30,8 @@ $(document).ready(function () {
             var minLength = /[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(request.term) ? 2 : 3;
 
             // 최소 길이를 만족하는 경우에만 Ajax 요청 보내기
-            // if (request.term.length >= minLength) {
-            if (request.term.length >= 2) {
+            if (request.term.length >= minLength) {
+            // if (request.term.length >= 2) {
                 $.ajax({
                     url: 'search_box/',
                     method: 'POST',
@@ -164,8 +164,8 @@ function searchPer(inputValue){
            }
         } else {
                 // 데이터가 없을 때
-                return
-                // alert("유효하지 않은 컴퓨터 이름입니다.");
+                // return
+                alert("유효하지 않은 컴퓨터 이름입니다.");
             }
 
         }
@@ -291,7 +291,7 @@ $(document).ready(function () {
     memoValue = escapeHtml(memoValue);
 
     if (computernameValue === ''){
-              alert('Computer Name을 선택해 주세요.');
+              alert('컴퓨터 이름을 선택해 주세요.');
               return
           }
     $.ajax({
@@ -304,8 +304,11 @@ $(document).ready(function () {
       success: function(response) {
           // console.log(computernameValue)
           //console.log(response)
-
-        alert('저장 완료')
+        if (response.error) {
+            alert(response.error)
+        } else {
+            alert('저장 완료')
+        }
         console.log('메모가 성공적으로 저장되었습니다.');
         // 원하는 작업 수행
       },

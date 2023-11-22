@@ -100,6 +100,6 @@ def save_memo(request):
             return JsonResponse({'success': computer_name})
 
 
-        except Xfactor_Daily.DoesNotExist:
-            return JsonResponse({'error': 'X-Xfactor_Daily 오브젝트가 존재하지 않습니다.'})
+        except Xfactor_Common.DoesNotExist:
+            return JsonResponse({'error': '유효하지 않은 컴퓨터 이름입니다.'})
 

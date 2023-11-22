@@ -209,286 +209,286 @@ var handleRenderChartNCOMG = function () {
     asset_all_chart("asset_all_chart", asset_all_notebook, asset_all_desktop, asset_all_other);
 
 
-//############################### 전체 자산 수(Online OS) #######################################
-    function asset_all_os_chart1(divId, a, b, c) {
-        if (!document.getElementById(divId)) {
-            return;
-        }
-
-        // a, b, c 변수에서 각각의 카운트 값을 추출
-        var countA = a.map(function (item) {
-            return item.count;
-        });
-
-        var countB = b.map(function (item) {
-            return item.count;
-        });
-
-        var countC = c.map(function (item) {
-            return item.count;
-        });
-
-        var asset_all_os_chart_options1 = {
-            series: [
-                {
-                    name: 'Desktop',
-                    group: 'budget',
-                    data: countA // a 변수의 카운트 값을 할당
-                },
-                {
-                    name: 'Notebook',
-                    group: 'budget',
-                    data: countB // b 변수의 카운트 값을 할당
-                },
-                {
-                    name: 'Other',
-                    group: 'budget',
-                    data: countC // c 변수의 카운트 값을 할당
-                }
-            ],
-            //   chart: {
-            //     type: 'bar',
-            //     background: 'transparent',
-            //     foreColor: 'rgba(255, 255, 255, 0.75)',
-            //     height: 200,
-            //       stacked: true,
-            //     width: '100%',
-            //     toolbar: {
-            //         show: true,
-            //         tools: {
-            //             zoom: false,
-            //             pan: false
-            //         }
-            //     }
-            //   },
-            //     plotOptions: {
-            //   bar: {
-            //     horizontal: true,
-            //     // dataLabels: { position: 'top' }
-            //   }
-            // },
-            //   stroke: {
-            //     width: 3
-            //   },
-            //   grid: {
-            //     borderColor: 'rgba(144, 164, 174, 0.5)'
-            //   },
-            chart: {
-                type: 'bar',
-                background: 'transparent',
-                foreColor: 'rgba(255, 255, 255, 0.75)',
-                height: 225,
-                stacked: true,
-                toolbar: {
-                    show: false
-                },
-                events: {
-                    dataPointSelection: function (event, chartContext, config) {
-                        $('#discoverChart').DataTable().destroy();
-                        $('#all_asset_detail1').DataTable().destroy();
-                        $('#asset_os_detail1').DataTable().destroy();
-                        $('#asset_os_detail2').DataTable().destroy();
-                        $('#oslistPieChart').DataTable().destroy();
-                        $('#osVerPieChart').DataTable().destroy();
-                        $('#office_chart').DataTable().destroy();
-                        $('#subnet_chart').DataTable().destroy();
-                        $('#hotfix_chart').DataTable().destroy();
-                        $('#tcpuChart').DataTable().destroy();
-                        document.getElementsByClassName('table m')[0].id = 'asset_os_detail1';
-                        var urlParams = new URLSearchParams(window.location.search)
-                        var selectedDate = urlParams.get('datetime')
-                        var dataPointIndex = config.dataPointIndex;
-                        var seriesIndex = config.seriesIndex;
-                        var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
-                        var categoryName = config.w.config.xaxis.categories[dataPointIndex];
-                        var seriesName = config.w.config.series[seriesIndex].name;
-                        document.getElementById('categoryName').value = categoryName;
-                        document.getElementById('seriesName').value = seriesName;
-                        document.getElementById('selectedDate').value = selectedDate;
-                        document.getElementById('chartName').value = 'asset_os_detail1';
-                        $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
-                        asset_os_detail_list1(categoryName, seriesName, selectedDate);
-                        $("#DashModal").modal("show");
-                    }
-                },
-            },
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    legend: {
-                        position: 'top',
-                        offsetX: -10,
-                        offsetY: 0
-                    }
-                }
-            }],
-            plotOptions: {
-                bar: {
-                    horizontal: true,
-                },
-            },
-            grid: {
-                borderColor: 'rgba(144, 164, 174, 0.5)'
-            },
-            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', 'rgba(0,0,0,0)'],
-
-            dataLabels: {
-                enabled: true,
-                style: {
-                    fontSize: '13px',
-                    colors: ["#fff"],
-                }
-            },
-            xaxis: {
-                categories: ['Other', 'Mac', 'Windows'],
-                labels: {
-                    style: {
-                        fontSize: "13px",
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    fontSize: "8px",
-                },
-            }
-        };
-        var asset_all_os_chart1 = new ApexCharts(document.querySelector('#asset_all_os_chart1'), asset_all_os_chart_options1);
-        asset_all_os_chart1.render();
-    }
-
-    desk_online_list = dataList.desk_online_list
-    note_online_list = dataList.note_online_list
-    other_online_list = dataList.other_online_list
-
-    asset_all_os_chart1("asset_all_os_chart1", desk_online_list, note_online_list, other_online_list);
-
-
-
-//#######################################전체 자산 수(Total OS)#################################
-    function asset_all_os_chart2(divId, a, b, c) {
-        if (!document.getElementById(divId)) {
-            return;
-        }
-        // a, b, c 변수에서 각각의 카운트 값을 추출
-        var countA = a.map(function (item) {
-            return item.count;
-        });
-
-        var countB = b.map(function (item) {
-            return item.count;
-        });
-
-        var countC = c.map(function (item) {
-            return item.count;
-        });
-
-        var asset_all_os_chart_options2 = {
-            series: [
-                {
-                    name: 'Desktop',
-                    group: 'budget',
-                    data: countA // a 변수의 카운트 값을 할당
-                },
-                {
-                    name: 'Notebook',
-                    group: 'budget',
-                    data: countB // b 변수의 카운트 값을 할당
-                },
-                {
-                    name: 'Other',
-                    group: 'budget',
-                    data: countC // c 변수의 카운트 값을 할당
-                }
-            ],
-            chart: {
-                type: 'bar',
-                background: 'transparent',
-                foreColor: 'rgba(255, 255, 255, 0.75)',
-                height: 225,
-                stacked: true,
-                toolbar: {
-                    show: false
-                },
-                events: {
-                    dataPointSelection: function (event, chartContext, config) {
-                        $('#discoverChart').DataTable().destroy();
-                        $('#asset_os_detail1').DataTable().destroy();
-                        $('#all_asset_detail1').DataTable().destroy();
-                        $('#asset_os_detail2').DataTable().destroy();
-                        $('#oslistPieChart').DataTable().destroy();
-                        $('#osVerPieChart').DataTable().destroy();
-                        $('#office_chart').DataTable().destroy();
-                        $('#subnet_chart').DataTable().destroy();
-                        $('#hotfix_chart').DataTable().destroy();
-                        $('#tcpuChart').DataTable().destroy();
-                        document.getElementsByClassName('table m')[0].id = 'asset_os_detail2';
-                        var urlParams = new URLSearchParams(window.location.search)
-                        var selectedDate = urlParams.get('datetime')
-                        var dataPointIndex = config.dataPointIndex;
-                        var seriesIndex = config.seriesIndex;
-                        var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
-                        var categoryName = config.w.config.xaxis.categories[dataPointIndex];
-                        var seriesName = config.w.config.series[seriesIndex].name;
-                        document.getElementById('categoryName').value = categoryName;
-                        document.getElementById('seriesName').value = seriesName;
-                        document.getElementById('selectedDate').value = selectedDate;
-                        document.getElementById('chartName').value = 'asset_os_detail2';
-                        $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
-                        asset_os_detail_list2(categoryName, seriesName, selectedDate);
-                        $("#DashModal").modal("show");
-                    }
-                },
-            },
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    legend: {
-                        position: 'bottom',
-                        offsetX: -10,
-                        offsetY: 0
-                    }
-                }
-            }],
-            plotOptions: {
-                bar: {
-                    horizontal: true,
-                },
-            },
-            grid: {
-                borderColor: 'rgba(144, 164, 174, 0.5)'
-            },
-            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', 'rgba(0,0,0,0)'],
-            dataLabels: {
-                enabled: true,
-                style: {
-                    fontSize: '13px',
-                    colors: ["#fff"],
-                }
-            },
-            xaxis: {
-                categories: ['Other', 'Mac', 'Windows',],
-                labels: {
-                    style: {
-                        fontSize: "13px",
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    fontSize: "8px",
-                }
-            }
-        };
-        var asset_all_os_chart2 = new ApexCharts(document.querySelector('#asset_all_os_chart2'), asset_all_os_chart_options2);
-        asset_all_os_chart2.render();
-    }
-
-    desk_total_list = dataList.desk_total_list
-    note_total_list = dataList.note_total_list
-    other_total_list = dataList.other_total_list
-
-    asset_all_os_chart2("asset_all_os_chart2", desk_total_list, note_total_list, other_total_list);
+// //############################### 전체 자산 수(Online OS) #######################################
+//     function asset_all_os_chart1(divId, a, b, c) {
+//         if (!document.getElementById(divId)) {
+//             return;
+//         }
+//
+//         // a, b, c 변수에서 각각의 카운트 값을 추출
+//         var countA = a.map(function (item) {
+//             return item.count;
+//         });
+//
+//         var countB = b.map(function (item) {
+//             return item.count;
+//         });
+//
+//         var countC = c.map(function (item) {
+//             return item.count;
+//         });
+//
+//         var asset_all_os_chart_options1 = {
+//             series: [
+//                 {
+//                     name: 'Desktop',
+//                     group: 'budget',
+//                     data: countA // a 변수의 카운트 값을 할당
+//                 },
+//                 {
+//                     name: 'Notebook',
+//                     group: 'budget',
+//                     data: countB // b 변수의 카운트 값을 할당
+//                 },
+//                 {
+//                     name: 'Other',
+//                     group: 'budget',
+//                     data: countC // c 변수의 카운트 값을 할당
+//                 }
+//             ],
+//             //   chart: {
+//             //     type: 'bar',
+//             //     background: 'transparent',
+//             //     foreColor: 'rgba(255, 255, 255, 0.75)',
+//             //     height: 200,
+//             //       stacked: true,
+//             //     width: '100%',
+//             //     toolbar: {
+//             //         show: true,
+//             //         tools: {
+//             //             zoom: false,
+//             //             pan: false
+//             //         }
+//             //     }
+//             //   },
+//             //     plotOptions: {
+//             //   bar: {
+//             //     horizontal: true,
+//             //     // dataLabels: { position: 'top' }
+//             //   }
+//             // },
+//             //   stroke: {
+//             //     width: 3
+//             //   },
+//             //   grid: {
+//             //     borderColor: 'rgba(144, 164, 174, 0.5)'
+//             //   },
+//             chart: {
+//                 type: 'bar',
+//                 background: 'transparent',
+//                 foreColor: 'rgba(255, 255, 255, 0.75)',
+//                 height: 225,
+//                 stacked: true,
+//                 toolbar: {
+//                     show: false
+//                 },
+//                 events: {
+//                     dataPointSelection: function (event, chartContext, config) {
+//                         $('#discoverChart').DataTable().destroy();
+//                         $('#all_asset_detail1').DataTable().destroy();
+//                         $('#asset_os_detail1').DataTable().destroy();
+//                         $('#asset_os_detail2').DataTable().destroy();
+//                         $('#oslistPieChart').DataTable().destroy();
+//                         $('#osVerPieChart').DataTable().destroy();
+//                         $('#office_chart').DataTable().destroy();
+//                         $('#subnet_chart').DataTable().destroy();
+//                         $('#hotfix_chart').DataTable().destroy();
+//                         $('#tcpuChart').DataTable().destroy();
+//                         document.getElementsByClassName('table m')[0].id = 'asset_os_detail1';
+//                         var urlParams = new URLSearchParams(window.location.search)
+//                         var selectedDate = urlParams.get('datetime')
+//                         var dataPointIndex = config.dataPointIndex;
+//                         var seriesIndex = config.seriesIndex;
+//                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+//                         var categoryName = config.w.config.xaxis.categories[dataPointIndex];
+//                         var seriesName = config.w.config.series[seriesIndex].name;
+//                         document.getElementById('categoryName').value = categoryName;
+//                         document.getElementById('seriesName').value = seriesName;
+//                         document.getElementById('selectedDate').value = selectedDate;
+//                         document.getElementById('chartName').value = 'asset_os_detail1';
+//                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
+//                         asset_os_detail_list1(categoryName, seriesName, selectedDate);
+//                         $("#DashModal").modal("show");
+//                     }
+//                 },
+//             },
+//             responsive: [{
+//                 breakpoint: 480,
+//                 options: {
+//                     legend: {
+//                         position: 'top',
+//                         offsetX: -10,
+//                         offsetY: 0
+//                     }
+//                 }
+//             }],
+//             plotOptions: {
+//                 bar: {
+//                     horizontal: true,
+//                 },
+//             },
+//             grid: {
+//                 borderColor: 'rgba(144, 164, 174, 0.5)'
+//             },
+//             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', 'rgba(0,0,0,0)'],
+//
+//             dataLabels: {
+//                 enabled: true,
+//                 style: {
+//                     fontSize: '13px',
+//                     colors: ["#fff"],
+//                 }
+//             },
+//             xaxis: {
+//                 categories: ['Other', 'Mac', 'Windows'],
+//                 labels: {
+//                     style: {
+//                         fontSize: "13px",
+//                     }
+//                 }
+//             },
+//             yaxis: {
+//                 labels: {
+//                     fontSize: "8px",
+//                 },
+//             }
+//         };
+//         var asset_all_os_chart1 = new ApexCharts(document.querySelector('#asset_all_os_chart1'), asset_all_os_chart_options1);
+//         asset_all_os_chart1.render();
+//     }
+//
+//     desk_online_list = dataList.desk_online_list
+//     note_online_list = dataList.note_online_list
+//     other_online_list = dataList.other_online_list
+//
+//     asset_all_os_chart1("asset_all_os_chart1", desk_online_list, note_online_list, other_online_list);
+//
+//
+//
+// //#######################################전체 자산 수(Total OS)#################################
+//     function asset_all_os_chart2(divId, a, b, c) {
+//         if (!document.getElementById(divId)) {
+//             return;
+//         }
+//         // a, b, c 변수에서 각각의 카운트 값을 추출
+//         var countA = a.map(function (item) {
+//             return item.count;
+//         });
+//
+//         var countB = b.map(function (item) {
+//             return item.count;
+//         });
+//
+//         var countC = c.map(function (item) {
+//             return item.count;
+//         });
+//
+//         var asset_all_os_chart_options2 = {
+//             series: [
+//                 {
+//                     name: 'Desktop',
+//                     group: 'budget',
+//                     data: countA // a 변수의 카운트 값을 할당
+//                 },
+//                 {
+//                     name: 'Notebook',
+//                     group: 'budget',
+//                     data: countB // b 변수의 카운트 값을 할당
+//                 },
+//                 {
+//                     name: 'Other',
+//                     group: 'budget',
+//                     data: countC // c 변수의 카운트 값을 할당
+//                 }
+//             ],
+//             chart: {
+//                 type: 'bar',
+//                 background: 'transparent',
+//                 foreColor: 'rgba(255, 255, 255, 0.75)',
+//                 height: 225,
+//                 stacked: true,
+//                 toolbar: {
+//                     show: false
+//                 },
+//                 events: {
+//                     dataPointSelection: function (event, chartContext, config) {
+//                         $('#discoverChart').DataTable().destroy();
+//                         $('#asset_os_detail1').DataTable().destroy();
+//                         $('#all_asset_detail1').DataTable().destroy();
+//                         $('#asset_os_detail2').DataTable().destroy();
+//                         $('#oslistPieChart').DataTable().destroy();
+//                         $('#osVerPieChart').DataTable().destroy();
+//                         $('#office_chart').DataTable().destroy();
+//                         $('#subnet_chart').DataTable().destroy();
+//                         $('#hotfix_chart').DataTable().destroy();
+//                         $('#tcpuChart').DataTable().destroy();
+//                         document.getElementsByClassName('table m')[0].id = 'asset_os_detail2';
+//                         var urlParams = new URLSearchParams(window.location.search)
+//                         var selectedDate = urlParams.get('datetime')
+//                         var dataPointIndex = config.dataPointIndex;
+//                         var seriesIndex = config.seriesIndex;
+//                         var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+//                         var categoryName = config.w.config.xaxis.categories[dataPointIndex];
+//                         var seriesName = config.w.config.series[seriesIndex].name;
+//                         document.getElementById('categoryName').value = categoryName;
+//                         document.getElementById('seriesName').value = seriesName;
+//                         document.getElementById('selectedDate').value = selectedDate;
+//                         document.getElementById('chartName').value = 'asset_os_detail2';
+//                         $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
+//                         asset_os_detail_list2(categoryName, seriesName, selectedDate);
+//                         $("#DashModal").modal("show");
+//                     }
+//                 },
+//             },
+//             responsive: [{
+//                 breakpoint: 480,
+//                 options: {
+//                     legend: {
+//                         position: 'bottom',
+//                         offsetX: -10,
+//                         offsetY: 0
+//                     }
+//                 }
+//             }],
+//             plotOptions: {
+//                 bar: {
+//                     horizontal: true,
+//                 },
+//             },
+//             grid: {
+//                 borderColor: 'rgba(144, 164, 174, 0.5)'
+//             },
+//             colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', 'rgba(0,0,0,0)'],
+//             dataLabels: {
+//                 enabled: true,
+//                 style: {
+//                     fontSize: '13px',
+//                     colors: ["#fff"],
+//                 }
+//             },
+//             xaxis: {
+//                 categories: ['Other', 'Mac', 'Windows',],
+//                 labels: {
+//                     style: {
+//                         fontSize: "13px",
+//                     }
+//                 }
+//             },
+//             yaxis: {
+//                 labels: {
+//                     fontSize: "8px",
+//                 }
+//             }
+//         };
+//         var asset_all_os_chart2 = new ApexCharts(document.querySelector('#asset_all_os_chart2'), asset_all_os_chart_options2);
+//         asset_all_os_chart2.render();
+//     }
+//
+//     desk_total_list = dataList.desk_total_list
+//     note_total_list = dataList.note_total_list
+//     other_total_list = dataList.other_total_list
+//
+//     asset_all_os_chart2("asset_all_os_chart2", desk_total_list, note_total_list, other_total_list);
 
 
     //--------------------------------------------------------------------------
@@ -1572,6 +1572,328 @@ var handleRenderChartNCOMG = function () {
     // document.querySelectorAll('#today_deploy_chart .apexcharts-text title').forEach(title => {
     //     title.remove();
     // });
+
+
+
+
+
+//############################### 전체 자산 수(Online OS) #######################################
+    function asset_all_os_chart1(divId, a, b, c) {
+        if (!document.getElementById(divId)) {
+            return;
+        }
+
+        // a, b, c 변수에서 각각의 카운트 값을 추출
+        var countA = a.map(function (item) {
+            return item.count;
+        });
+
+        var countB = b.map(function (item) {
+            return item.count;
+        });
+
+        var countC = c.map(function (item) {
+            return item.count;
+        });
+
+        var asset_all_os_chart_options1 = {
+            series: [
+                {
+                    name: 'Desktop',
+                    group: 'budget',
+                    data: countA // a 변수의 카운트 값을 할당
+                },
+                {
+                    name: 'Notebook',
+                    group: 'budget',
+                    data: countB // b 변수의 카운트 값을 할당
+                },
+                {
+                    name: 'Other',
+                    group: 'budget',
+                    data: countC // c 변수의 카운트 값을 할당
+                }
+            ],
+            //   chart: {
+            //     type: 'bar',
+            //     background: 'transparent',
+            //     foreColor: 'rgba(255, 255, 255, 0.75)',
+            //     height: 200,
+            //       stacked: true,
+            //     width: '100%',
+            //     toolbar: {
+            //         show: true,
+            //         tools: {
+            //             zoom: false,
+            //             pan: false
+            //         }
+            //     }
+            //   },
+            //     plotOptions: {
+            //   bar: {
+            //     horizontal: true,
+            //     // dataLabels: { position: 'top' }
+            //   }
+            // },
+            //   stroke: {
+            //     width: 3
+            //   },
+            //   grid: {
+            //     borderColor: 'rgba(144, 164, 174, 0.5)'
+            //   },
+            chart: {
+                type: 'bar',
+                background: 'transparent',
+                foreColor: 'rgba(255, 255, 255, 0.75)',
+                height: 110,
+                stacked: true,
+                toolbar: {
+                    show: false
+                },
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'asset_os_detail1';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
+                        var dataPointIndex = config.dataPointIndex;
+                        var seriesIndex = config.seriesIndex;
+                        var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+                        var categoryName = config.w.config.xaxis.categories[dataPointIndex];
+                        var seriesName = config.w.config.series[seriesIndex].name;
+                        document.getElementById('categoryName').value = categoryName;
+                        document.getElementById('seriesName').value = seriesName;
+                        document.getElementById('selectedDate').value = selectedDate;
+                        document.getElementById('chartName').value = 'asset_os_detail1';
+                        $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
+                        asset_os_detail_list1(categoryName, seriesName, selectedDate);
+                        $("#DashModal").modal("show");
+                    }
+                },
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'top',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                },
+            },
+            grid: {
+                borderColor: 'rgba(144, 164, 174, 0.5)'
+            },
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', 'rgba(0,0,0,0)'],
+
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '9px',
+                    colors: ["#fff"],
+                }
+            },
+            xaxis: {
+                type: 'category',
+                categories: ['Other', 'Mac', 'Windows'],
+                labels: {
+                    show: false,
+                    style: {
+                        fontSize: "8px",
+                    },
+                },
+                max: 10000,
+            },
+            yaxis: {
+                labels: {
+                    fontSize: "8px",
+                },
+            },
+            legend: {
+                fontSize: '10px',
+                markers: {
+                    fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',]
+                },
+                itemMargin: {
+                    horizontal: 20
+                },
+                labels: {
+                    colors: 'rgba(255, 255, 255, 0.75)',
+                },
+                position: 'top'
+            }
+        };
+        var asset_all_os_chart1 = new ApexCharts(document.querySelector('#asset_all_os_chart1'), asset_all_os_chart_options1);
+        asset_all_os_chart1.render();
+    }
+
+    desk_online_list = dataList.desk_online_list
+    note_online_list = dataList.note_online_list
+    other_online_list = dataList.other_online_list
+
+    asset_all_os_chart1("asset_all_os_chart1", desk_online_list, note_online_list, other_online_list);
+
+
+
+//#######################################전체 자산 수(Total OS)#################################
+    function asset_all_os_chart2(divId, a, b, c) {
+        if (!document.getElementById(divId)) {
+            return;
+        }
+        // a, b, c 변수에서 각각의 카운트 값을 추출
+        var countA = a.map(function (item) {
+            return item.count;
+        });
+
+        var countB = b.map(function (item) {
+            return item.count;
+        });
+
+        var countC = c.map(function (item) {
+            return item.count;
+        });
+
+        var asset_all_os_chart_options2 = {
+            series: [
+                {
+                    name: 'Desktop',
+                    group: 'budget',
+                    data: countA // a 변수의 카운트 값을 할당
+                },
+                {
+                    name: 'Notebook',
+                    group: 'budget',
+                    data: countB // b 변수의 카운트 값을 할당
+                },
+                {
+                    name: 'Other',
+                    group: 'budget',
+                    data: countC // c 변수의 카운트 값을 할당
+                }
+            ],
+            chart: {
+                type: 'bar',
+                background: 'transparent',
+                foreColor: 'rgba(255, 255, 255, 0.75)',
+                height: 112,
+                stacked: true,
+                toolbar: {
+                    show: false
+                },
+                events: {
+                    dataPointSelection: function (event, chartContext, config) {
+                        $('#discoverChart').DataTable().destroy();
+                        $('#asset_os_detail1').DataTable().destroy();
+                        $('#all_asset_detail1').DataTable().destroy();
+                        $('#asset_os_detail2').DataTable().destroy();
+                        $('#oslistPieChart').DataTable().destroy();
+                        $('#osVerPieChart').DataTable().destroy();
+                        $('#office_chart').DataTable().destroy();
+                        $('#subnet_chart').DataTable().destroy();
+                        $('#hotfix_chart').DataTable().destroy();
+                        $('#tcpuChart').DataTable().destroy();
+                        document.getElementsByClassName('table m')[0].id = 'asset_os_detail2';
+                        var urlParams = new URLSearchParams(window.location.search)
+                        var selectedDate = urlParams.get('datetime')
+                        var dataPointIndex = config.dataPointIndex;
+                        var seriesIndex = config.seriesIndex;
+                        var selectedData = config.w.config.series[seriesIndex].data[dataPointIndex];
+                        var categoryName = config.w.config.xaxis.categories[dataPointIndex];
+                        var seriesName = config.w.config.series[seriesIndex].name;
+                        document.getElementById('categoryName').value = categoryName;
+                        document.getElementById('seriesName').value = seriesName;
+                        document.getElementById('selectedDate').value = selectedDate;
+                        document.getElementById('chartName').value = 'asset_os_detail2';
+                        $("#DashModal .modal-title").html(categoryName+' '+seriesName+' List');
+                        asset_os_detail_list2(categoryName, seriesName, selectedDate);
+                        $("#DashModal").modal("show");
+                    }
+                },
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                },
+            },
+            grid: {
+                borderColor: 'rgba(144, 164, 174, 0.5)'
+            },
+            colors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A', 'rgba(0,0,0,0)'],
+            dataLabels: {
+                enabled: true,
+                style: {
+                    fontSize: '9px',
+                    colors: ["#fff"],
+                }
+            },
+            xaxis: {
+                type: 'category',
+                categories: ['Other', 'Mac', 'Windows',],
+                labels: {
+                    show: false,
+                    style: {
+                        fontSize: "8px",
+                    },
+                },
+                max: 10000,
+            },
+            yaxis: {
+                labels: {
+                    fontSize: "8px",
+                }
+            },
+
+            legend: {
+                fontSize: '8px',
+                markers: {
+                    fillColors: ['#009D83', 'rgba(' + app.color.themeRgb + ', 1)', '#B8A89A',]
+                },
+                itemMargin: {
+                    horizontal: 20
+                },
+                labels: {
+                    colors: 'rgba(255, 255, 255, 0.75)',
+                },
+                position: 'bottom'
+            }
+        };
+        var asset_all_os_chart2 = new ApexCharts(document.querySelector('#asset_all_os_chart2'), asset_all_os_chart_options2);
+        asset_all_os_chart2.render();
+    }
+
+    desk_total_list = dataList.desk_total_list
+    note_total_list = dataList.note_total_list
+    other_total_list = dataList.other_total_list
+
+    asset_all_os_chart2("asset_all_os_chart2", desk_total_list, note_total_list, other_total_list);
+
+
+
+
 
 
 };

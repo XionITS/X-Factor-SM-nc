@@ -133,23 +133,23 @@ def group_auth(request):
     response = {'auth_list': auth_list}
     return JsonResponse(response)
 
-# @receiver(pre_save, sender=Xfactor_Xuser_Auth)
-# def pre_save_handler(sender, instance, **kwargs):
-#     if instance.pk:
-#         original = Xfactor_Xuser_Auth.objects.get(pk=instance.pk)
-#         instance._auth_use_origin = original.auth_use
-#         instance._xfactor_auth_id_origin = original.xfactor_auth_id
-#
-# @receiver(post_save, sender=Xfactor_Xuser_Auth)
-# def post_save_handler(sender, instance, created, **kwargs):
-#     if not created:
-#         if hasattr(instance, '_auth_use_origin') and instance._auth_use_origin != instance.auth_use:
-#             auth_value = Xfactor_Auth.objects.filter(auth_id=instance.xfactor_auth_id).values('auth_name')[0]['auth_name']
-#             cache.set(instance.xfactor_auth_id, f'[{auth_value}] - {instance._auth_use_origin} 에서 {instance.auth_use}로 변경', 3)
-#             # cache.set(f'{instance.xfactor_auth_id}_origin', instance._auth_use_origin, 1)
-#             # cache.set(f'{instance.xfactor_auth_id}_current', instance.auth_use, 1)
-#         if hasattr(instance, '_xfactor_auth_id_origin') and instance._xfactor_auth_id_origin != instance.xfactor_auth_id:
-#             print(f'xfactor_auth_id field was updated from {instance._xfactor_auth_id_origin} to {instance.xfactor_auth_id}')
+@receiver(pre_save, sender=Xfactor_Xuser_Auth)
+def pre_save_handler(sender, instance, **kwargs):
+    if instance.pk:
+        original = Xfactor_Xuser_Auth.objects.get(pk=instance.pk)
+        instance._auth_use_origin = original.auth_use
+        instance._xfactor_auth_id_origin = original.xfactor_auth_id
+
+@receiver(post_save, sender=Xfactor_Xuser_Auth)
+def post_save_handler(sender, instance, created, **kwargs):
+    if not created:
+        if hasattr(instance, '_auth_use_origin') and instance._auth_use_origin != instance.auth_use:
+            auth_value = Xfactor_Auth.objects.filter(auth_id=instance.xfactor_auth_id).values('auth_name')[0]['auth_name']
+            cache.set(instance.xfactor_auth_id, f'[{auth_value}] - {instance._auth_use_origin}에서 {instance.auth_use}로 변경', 3)
+            # cache.set(f'{instance.xfactor_auth_id}_origin', instance._auth_use_origin, 1)
+            # cache.set(f'{instance.xfactor_auth_id}_current', instance.auth_use, 1)
+        if hasattr(instance, '_xfactor_auth_id_origin') and instance._xfactor_auth_id_origin != instance.xfactor_auth_id:
+            print(f'xfactor_auth_id field was updated from {instance._xfactor_auth_id_origin} to {instance.xfactor_auth_id}')
 
 @csrf_exempt
 def save_user_auth(request):
@@ -173,16 +173,16 @@ def save_user_auth(request):
             record.auth_use = auth_use
             record.save()
 
-            # if cache.get(record.xfactor_auth_id) != None:
-            #     # for i in range(len(list(cache.get('value_list')))):
-            #     a.append(cache.get(record.xfactor_auth_id))
+            if cache.get(record.xfactor_auth_id) != None:
+                # for i in range(len(list(cache.get('value_list')))):
+                a.append(cache.get(record.xfactor_auth_id))
 
 
         # print(auth_use_current)
         function = 'User Auth'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
         item = 'Change user auth - [' + x_ids_str + ']'
-        result = '성공'
-        # result = '\n'.join(a)
+        # result = '성공'
+        result = '\n'.join(a)
         user = request.session.get('sessionid')
         now = datetime.now().replace(microsecond=0)
         date = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -319,6 +319,8 @@ def alter_auth(request):
         # auth_id와 auth_user만 따로 저장하거나 활용
         auth.append({'auth_id': auth_id, 'auth_use': auth_use})
 
+    default_group_name = Xfactor_Xuser_Group.objects.get(id=id).xgroup_name
+    default_group_description = Xfactor_Xuser_Group.objects.get(id=id).xgroup_note
     default_user_list = Xfactor_Xuser_Group.objects.get(id=id).xuser_id_list
     default_user_list = ast.literal_eval(default_user_list)
 
@@ -326,7 +328,12 @@ def alter_auth(request):
     deleted_user_ids = list(set(default_user_list) - set(xuserIds))
     # 추가된 유저 확인
     added_user_ids = list(set(xuserIds) - set(default_user_list))
+
     log_result = ''
+    if xgroup_name != default_group_name:
+        log_result += f"수정된 그룹이름 : {default_group_name}에서 {xgroup_name}로 변경\n\n"
+    if xgroup_description != default_group_description:
+        log_result += f"수정된 그룹설명 : {xgroup_description}\n\n"
     if added_user_ids:
         log_result += f"추가된 유저 : {', '.join(added_user_ids)}\n\n"
     if deleted_user_ids:
@@ -355,7 +362,7 @@ def alter_auth(request):
     message_code = "success"
 
     message = "Group이 수정되었습니다. \n 그룹이름 : " +xgroup_name+""
-    if deleted_user_ids == [] and added_user_ids == []:
+    if deleted_user_ids == [] and added_user_ids == []  and xgroup_name == default_group_name and xgroup_description == default_group_description:
         return JsonResponse({"success":message_code, "message": message})
 
     function = 'Xuser_Group Modify'  # 분류 정보를 원하시는 텍스트로 변경해주세요.

@@ -291,7 +291,7 @@ def logout(request):
             function = 'Logout'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
             result = '성공'
             user = request.session.get('sessionid')
-            if user == 'handlake2k@ncsoft.com':
+            if user == 'admin':
                 item = 'admin 계정'
             else:
                 item = '일반 계정'
