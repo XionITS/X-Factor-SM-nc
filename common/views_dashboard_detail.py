@@ -5,7 +5,7 @@ from django.db.models.functions import Concat
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
-from django.db.models import Q, Value, Count
+from django.db.models import Q, Value, Count, Max
 from django.db.models.functions import Lower
 from functools import reduce
 from datetime import datetime, timedelta
@@ -1282,12 +1282,26 @@ def discoverChart(request):
         date_150_days_ago = start_of_today - timedelta(days=150) #현재로부터 150일 전 시간대
     if request.POST.get('categoryName') == '1일 전':
         date_150_yesterday_ago = date_150_days_ago - timedelta(days=1)
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_yesterday_ago)
+        #user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_yesterday_ago)
         #print('1일 전', date_150_yesterday_ago)
+        filtered_records = (
+            Xfactor_Common_Cache.objects
+            .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+            .filter(cache_date__lt=date_150_yesterday_ago)
+        )
+        base = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_yesterday_ago)
+        user = filtered_records.exclude(mac_address__in=base.values('mac_address'))
     if request.POST.get('categoryName') == '현재':
         #print('현재', date_150_days_ago)
         #print(date_150_days_ago)
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_days_ago)
+        #user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_days_ago)
+        filtered_records = (
+            Xfactor_Common_Cache.objects
+            .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+            .filter(cache_date__lt=date_150_days_ago)
+        )
+        base = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_days_ago)
+        user = filtered_records.exclude(mac_address__in=base.values('mac_address'))
 
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |

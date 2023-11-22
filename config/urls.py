@@ -54,6 +54,7 @@ urlpatterns = [
     path('hs_asset/', views_main_hs.hs_asset),
     path('hs_asset/hwpaging/', views_main_hs.hs_asset_paginghw),
     path('hs_asset/swpaging/', views_main_hs.hs_asset_pagingsw),
+    #path('hs_asset/select_all/', views_main_hs.hs_asset_select_all),
     path('export/<str:model>/', views_export.export, name='export'),
 
 
