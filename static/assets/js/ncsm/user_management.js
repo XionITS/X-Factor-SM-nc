@@ -812,6 +812,7 @@ $(document).on("click", ".um_groupmore", function (e) {
                     method: 'POST',
                     data: {
                         id : id,
+                        xgroup_name : xgroup_name,
                         x_id_array: JSON.stringify(x_id_array),
                         auth_info: JSON.stringify(authInfo) // authInfo 배열을 JSON 문자열로 변환하여 전송
                     },

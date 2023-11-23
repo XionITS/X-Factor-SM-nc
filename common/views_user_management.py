@@ -212,19 +212,32 @@ def save_group_auth(request):
     xgroup_id = request.POST.get('id')
     x_ids_str = request.POST.get('x_id_array')  # 쉼표로 구분된 문자열을 얻음
     x_ids = x_ids_str.replace('[', '').replace(']', '').replace('"', '').split(',')
-
     auth_infos = request.POST.get('auth_info')
     auth_infos = json.loads(auth_infos)
+    xgroup_name = request.POST['xgroup_name']
+    a= []
     try:
         for x_id in x_ids:
             for item in auth_infos:
                 auth_id = item["auth_id"]
                 auth_use = item["auth_use"]
+
+                old_state = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=x_id, xfactor_auth_id=auth_id, xgroup_id=xgroup_id).values().first()
+                # Update the record
                 Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=x_id, xfactor_auth_id=auth_id, xgroup_id=xgroup_id).update(auth_use=auth_use)
 
+                # Get the updated state
+                new_state = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=x_id, xfactor_auth_id=auth_id, xgroup_id=xgroup_id).values().first()
+
+                if old_state['auth_use'] != new_state['auth_use']:
+                    auth_name = Xfactor_Auth.objects.filter(auth_id=old_state['xfactor_auth_id']).values('auth_name')
+                    # 딕셔너리에 변경 사항 저장
+                    a.append(f"[{auth_name[0]['auth_name']}] - {old_state['auth_use']}에서 {new_state['auth_use']}로 변경")
+
+        result = list(set(a))
+        result_data = '\n'.join(result)
         function = 'Group Auth Change'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
-        item = 'Group Auth Change ' + x_ids_str
-        result = '성공'
+        item = 'Group Auth Change - [' + xgroup_name + ']'
         user = request.session.get('sessionid')
         now = datetime.now().replace(microsecond=0)
         date = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -232,7 +245,7 @@ def save_group_auth(request):
         Xfactor_log = Xfactor_Log(
             log_func=function,
             log_item=item,
-            log_result=result,
+            log_result=result_data,
             log_user=user,
             log_date=date
         )
