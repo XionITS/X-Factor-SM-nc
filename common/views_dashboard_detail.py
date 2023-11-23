@@ -1313,11 +1313,11 @@ def discoverChart(request):
         start_of_today2_sel = datetime.strptime(start_of_today1_sel, '%Y-%m-%d %H')
         start_of_today_sel = timezone.make_aware(start_of_today2_sel) #선택한 시간대
         end_of_today_sel = start_of_today_sel + timedelta(minutes=50) #선택한 시간대 + 50분
-        date_150_days_ago = start_of_today_sel - timedelta(days=10) #선택한 시간대로부터 150일 전 시간대
-        date_180_days_ago = start_of_today_sel - timedelta(days=20) #선택한 시간대로부터 150일 전 시간대
+        date_150_days_ago = start_of_today_sel - timedelta(days=150) #선택한 시간대로부터 150일 전 시간대
+        date_180_days_ago = start_of_today_sel - timedelta(days=180) #선택한 시간대로부터 150일 전 시간대
     elif request.POST.get('selectedDate') == '':
-        date_150_days_ago = start_of_today - timedelta(days=10) #현재로부터 150일 전 시간대
-        date_180_days_ago = start_of_today - timedelta(days=20)
+        date_150_days_ago = start_of_today - timedelta(days=150) #현재로부터 150일 전 시간대
+        date_180_days_ago = start_of_today - timedelta(days=180)
     if request.POST.get('categoryName') == '1일 전':
         date_150_yesterday_ago = date_150_days_ago - timedelta(days=1)
         date_180_yesterday_ago = date_180_days_ago - timedelta(days=1)
