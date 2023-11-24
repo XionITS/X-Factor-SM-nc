@@ -140,11 +140,11 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
         columns: [
             {data: '', title: 'No', searchable: true},
             {data: 'ncdb_data.deptName', title: '부서', searchable: true},
+            {data: 'ncdb_data.userName', title: '사용자', searchable: true},
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
-            {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            // {data: 'os_simple', title: 'OS', searchable: true},
+            {data: 'os_simple', title: 'OS', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -176,19 +176,19 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "15%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 3,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
                     return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "15%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -207,14 +207,14 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            // {
-            //     targets: 6,
-            //     width: "10%",
-            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
-            //     render: function (data, type, row) {
-            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
-            //     }
-            // },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
         ],
         language: {
             "decimal": "",
@@ -390,11 +390,11 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
         columns: [
             {data: '', title: 'No', searchable: true},
             {data: 'ncdb_data.deptName', title: '부서', searchable: true},
+            {data: 'ncdb_data.userName', title: '사용자', searchable: true},
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
-            {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            // {data: 'os_simple', title: 'OS', searchable: true},
+            {data: 'os_simple', title: 'OS', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -426,19 +426,19 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "15%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 3,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
                     return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "15%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -457,14 +457,14 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            // {
-            //     targets: 6,
-            //     width: "10%",
-            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
-            //     render: function (data, type, row) {
-            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
-            //     }
-            // },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
         ],
         language: {
             "decimal": "",
@@ -638,11 +638,11 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
         columns: [
             {data: '', title: 'No', searchable: true},
             {data: 'ncdb_data.deptName', title: '부서', searchable: true},
+            {data: 'ncdb_data.userName', title: '사용자', searchable: true},
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
-            {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            // {data: 'os_simple', title: 'OS', searchable: true},
+            {data: 'os_simple', title: 'OS', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -674,19 +674,19 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "15%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 3,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
                     return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "15%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -705,14 +705,14 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            // {
-            //     targets: 6,
-            //     width: "10%",
-            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
-            //     render: function (data, type, row) {
-            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
-            //     }
-            // },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
         ],
         language: {
             "decimal": "",
@@ -884,11 +884,11 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
         columns: [
             {data: '', title: 'No', searchable: true},
             {data: 'ncdb_data.deptName', title: '부서', searchable: true},
+            {data: 'ncdb_data.userName', title: '사용자', searchable: true},
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
-            {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            // {data: 'os_build', title: 'OS', searchable: true},
+            {data: 'os_build', title: 'OS', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -920,19 +920,19 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "15%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 3,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
                     return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "15%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -951,14 +951,14 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            // {
-            //     targets: 6,
-            //     width: "10%",
-            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
-            //     render: function (data, type, row) {
-            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
-            //     }
-            // },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
         ],
         language: {
             "decimal": "",
@@ -1131,11 +1131,11 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
         columns: [
             {data: '', title: 'No', searchable: true},
             {data: 'ncdb_data.deptName', title: '부서', searchable: true},
+            {data: 'ncdb_data.userName', title: '사용자', searchable: true},
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
-            {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            // {data: 'os_build', title: 'OS', searchable: true},
+            {data: 'os_build', title: 'OS', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1167,19 +1167,19 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "15%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 3,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
                     return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "15%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1198,14 +1198,14 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            // {
-            //     targets: 6,
-            //     width: "10%",
-            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
-            //     render: function (data, type, row) {
-            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
-            //     }
-            // },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
         ],
         language: {
             "decimal": "",
@@ -1359,7 +1359,7 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
                     3: 'logged_name',
                     4: 'ip_address.',
                     5: 'mac_address',
-                    // 6: 'essential5',
+                    6: 'essential5',
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -1379,11 +1379,11 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
         columns: [
             {data: '', title: 'No', searchable: true},
             {data: 'ncdb_data.deptName', title: '부서', searchable: true},
+            {data: 'ncdb_data.userName', title: '사용자', searchable: true},
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
-            {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            // {data: 'essential5', title: 'VERSION', searchable: true},
+            {data: 'essential5', title: 'VERSION', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1415,19 +1415,19 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "15%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 3,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
                     return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "15%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1446,14 +1446,14 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            // {
-            //     targets: 6,
-            //     width: "10%",
-            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
-            //     render: function (data, type, row) {
-            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
-            //     }
-            // },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
         ],
         language: {
             "decimal": "",
@@ -1632,11 +1632,11 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
         columns: [
             {data: '', title: 'No', searchable: true},
             {data: 'ncdb_data.deptName', title: '부서', searchable: true},
+            {data: 'ncdb_data.userName', title: '사용자', searchable: true},
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
-            {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            // {data: 'subnet', title: 'SUBNET', searchable: true},
+            {data: 'subnet', title: 'SUBNET', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1668,19 +1668,19 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "15%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 3,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
                     return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "15%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1699,14 +1699,14 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            // {
-            //     targets: 6,
-            //     width: "10%",
-            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
-            //     render: function (data, type, row) {
-            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
-            //     }
-            // },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
         ],
         language: {
             "decimal": "",
@@ -1884,11 +1884,11 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
         columns: [
             {data: '', title: 'No', searchable: true},
             {data: 'ncdb_data.deptName', title: '부서', searchable: true},
+            {data: 'ncdb_data.userName', title: '사용자', searchable: true},
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
-            {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            // {data: 'hotfix_date', title: 'HOTFIX', searchable: true},
+            {data: 'hotfix_date', title: 'HOTFIX', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1920,19 +1920,19 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "15%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 3,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
                     return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "15%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -1951,14 +1951,29 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
-            // {
-            //     targets: 6,
-            //     width: "10%",
-            //     className: 'text-center new-text-truncate flex-cloumn align-middle',
-            //     render: function (data, type, row) {
-            //         return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
-            //     }
-            // },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    const dates = data.split('<br> ');
+
+                    const validDates = dates.filter(date => date.trim() !== '');
+
+                    if (validDates.length > 0) {
+                        // Convert date strings to moment objects and find the latest date
+                        const latestMoment = moment.max(validDates.map(date => moment(date, 'MM/DD/YYYY HH:mm:ss')));
+
+                        const latestDateFormatted = latestMoment.format('MM/DD/YYYY');
+
+                        return '<span title="' + latestDateFormatted + '" data-toggle="tooltip">' + latestDateFormatted + '</span>';
+                    } else {
+                        // If no valid dates, return an empty string or handle it as needed
+                        return '';
+                    }
+
+                }
+            },
         ],
         language: {
             "decimal": "",
@@ -2130,10 +2145,11 @@ var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
         columns: [
             {data: '', title: 'No', searchable: true},
             {data: 'ncdb_data.deptName', title: '부서', searchable: true},
+            {data: 'ncdb_data.userName', title: '사용자', searchable: true},
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
-            {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
+            {data: 't_cpu', title: 'USED', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -2165,19 +2181,19 @@ var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "15%",
-                className: 'text-center new-text-truncate flex-cloumn align-middle',
-                render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
-                }
-            },
-            {
-                targets: 3,
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
                     return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
+                }
+            },
+            {
+                targets: 3,
+                width: "15%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -2193,6 +2209,17 @@ var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    if (data === 'True') {
+                        data = '초과'
+                    }
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
@@ -2367,10 +2394,11 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
         columns: [
             {data: '', title: 'No', searchable: true},
             {data: 'ncdb_data.deptName', title: '부서', searchable: true},
+            {data: 'ncdb_data.userName', title: '사용자', searchable: true},
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
-            {data: 'ncdb_data.userId', title: '사용자', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
+            {data: 'cache_date', title: '접속일', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -2396,23 +2424,25 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
                 width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.deptName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
                 targets: 2,
-                width: "15%",
+                width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.os_simple + '" data-toggle="tooltip">' + data + '</span>'
+                    var title = row.ncdb_data && row.ncdb_data.userName || '';
+                    return '<span title="' + title + '" data-toggle="tooltip">' + title + '</span>'
                 }
             },
             {
                 targets: 3,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -2420,7 +2450,7 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.computer_name + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
             {
@@ -2428,7 +2458,15 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<span title="' + row.security1 + '" data-toggle="tooltip">' + data + '</span>'
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
+                }
+            },
+            {
+                targets: 6,
+                width: "10%",
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
+                render: function (data, type, row) {
+                    return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
         ],

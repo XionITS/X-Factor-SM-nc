@@ -13,7 +13,7 @@ from django.utils import timezone
 from openpyxl.writer.excel import save_virtual_workbook
 
 from common.models import Xfactor_Common_Cache
-from common.serializers import CommonSerializer,Dailyserializer,Cacheserializer
+from common.serializers import CommonSerializer, Dailyserializer, Cacheserializer, Cacheserializer2
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -30,8 +30,9 @@ def export(request, model):
     start_of_today = timezone.make_aware(start_of_today2)
     start_of_day = start_of_today - timedelta(days=7)
     end_of_today = start_of_today + timedelta(minutes=58)
-    # 현재
-    # 토탈
+    date_150_days_ago = ''
+    date_180_days_ago = ''
+
     cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
     columns =[]
     parameter_value = request.GET.get('parameter_name')
@@ -80,6 +81,15 @@ def export(request, model):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
+
+        select_now = datetime.strptime(request.POST.get('selectedDate'), '%Y-%m-%d-%H')
+        start_of_today1_sel = select_now.strftime('%Y-%m-%d %H')
+        start_of_today2_sel = datetime.strptime(start_of_today1_sel, '%Y-%m-%d %H')
+        start_of_today_sel = timezone.make_aware(start_of_today2_sel)  # 선택한 시간대
+        end_of_today_sel = start_of_today_sel + timedelta(minutes=50)  # 선택한 시간대 + 50분
+        date_150_days_ago = start_of_today_sel - timedelta(days=7)  # 선택한 시간대로부터 150일 전 시간대
+        date_180_days_ago = start_of_today_sel - timedelta(days=10)  # 선택한 시간대로부터 150일 전 시간대
+
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
         # 토탈
@@ -91,6 +101,10 @@ def export(request, model):
         start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
+
+        date_150_days_ago = start_of_today - timedelta(days=7)  # 현재로부터 150일 전 시간대
+        date_180_days_ago = start_of_today - timedelta(days=10)
+
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
         # 토탈
@@ -98,7 +112,7 @@ def export(request, model):
 
     if parameter_value == 'all_asset1':
         data_list = []
-        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_simple", "user_date"]
         if request.GET.get('categoryName') == 'Online':
             if request.GET.get('seriesName') == 'Other':
                 data_list = user.exclude(chassistype__in=['Notebook', 'Desktop'])
@@ -113,7 +127,7 @@ def export(request, model):
 
     elif parameter_value == 'asset_os_detail1':
         data_list = []
-        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_simple", "user_date"]
         if request.GET.get('categoryName') == 'Other':
             if request.GET.get('seriesName') == 'Other':
                 print("asd")
@@ -129,7 +143,7 @@ def export(request, model):
 
     elif parameter_value == 'asset_os_detail2':
         data_list = []
-        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_simple", "user_date"]
         if request.GET.get('categoryName') == 'Other':
             if request.GET.get('seriesName') == 'Other':
                 data_list = cache.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop, Notebook'])
@@ -144,7 +158,7 @@ def export(request, model):
         data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'office_chart':
-        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "essential5", "user_date"]
         data_list = []
         if request.GET.get('categoryName') == 'Office 16 이상':
             data_list = user.filter(essential5__in=['Office 21', 'Office 19', 'Office 16'])
@@ -158,13 +172,13 @@ def export(request, model):
 
     elif parameter_value == 'oslistPieChart':
         data_list = []
-        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_build", "user_date"]
         data_list = user.annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build__contains=request.GET.get('categoryName'), os_simple='Windows')
         data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'osVerPieChart':
         data_list = []
-        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_build", "user_date"]
         if request.GET.get('categoryName') == '업데이트 완료':
             data_list = user.filter(os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
         if request.GET.get('categoryName') == '업데이트 필요':
@@ -173,7 +187,7 @@ def export(request, model):
 
     elif parameter_value == 'subnet_chart':
         data_list = []
-        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "subnet", "user_date"]
         if request.GET.get('categoryName') == 'VPN':
             data_list = user.filter(subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
         if request.GET.get('categoryName') == '사내망':
@@ -188,7 +202,7 @@ def export(request, model):
 
     elif parameter_value == 'tcpuChart':
         data_list = []
-        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "t_cpu", "user_date"]
         data_list = user.filter(t_cpu='True')
         data = Cacheserializer(data_list, many=True).data
 
@@ -196,7 +210,7 @@ def export(request, model):
         three_months_ago = datetime.now() - timedelta(days=90)
         data_list = []
         filtered_user_objects = []
-        columns = ["ncdb_data__deptName", "computer_name", "ncdb_data__userId", "chassistype", "ip_address", "mac_address", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "hotfix_date", "user_date"]
         user_objects = user
         users_values = user_objects.values('hotfix_date', 'computer_id')
 
@@ -218,6 +232,34 @@ def export(request, model):
         data_list = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
         data = Cacheserializer(data_list, many=True).data
 
+    elif parameter_value == 'discoverChart':
+        data_list = []
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "hotfix_date", "user_date"]
+        if request.GET.get('categoryName') == '1일 전':
+            date_150_yesterday_ago = date_150_days_ago - timedelta(days=1)
+            date_180_yesterday_ago = date_180_days_ago - timedelta(days=1)
+            # user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_yesterday_ago)
+            # print('1일 전', date_150_yesterday_ago)
+            filtered_records = (
+                Xfactor_Common_Cache.objects
+                    .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+                    .filter(cache_date__gte=date_180_yesterday_ago, cache_date__lt=date_150_yesterday_ago)
+            )
+            base = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_yesterday_ago)
+            data_list = filtered_records.exclude(mac_address__in=base.values('mac_address'))
+        if request.GET.get('categoryName') == '현재':
+            print('aasdasdasd')
+            # print('현재', date_150_days_ago)
+            # print(date_150_days_ago)
+            # user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_days_ago)
+            filtered_records = (
+                Xfactor_Common_Cache.objects
+                    .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+                    .filter(cache_date__gte=date_180_days_ago, cache_date__lt=date_150_days_ago)
+            )
+            base = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_days_ago)
+            data_list = filtered_records.exclude(mac_address__in=base.values('mac_address'))
+        data = Cacheserializer2(data_list, many=True).data
     # 전체컬럼 조회
     # 동적으로 모델에서 컬럼명 추출
     # model_class = apps.get_model('common', model)  # 앱 이름과 모델명을 지정하여 모델 클래스를 가져옵니다
