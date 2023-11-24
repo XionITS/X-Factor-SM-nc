@@ -118,8 +118,8 @@ var hw_asset_list = function () {
 		],
 		language: {
 			"decimal": "",
-			//"info": "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='all_select'>필터된 자산 그룹 생성</button>",
-			"info": "전체 _TOTAL_건 ",
+			"info": "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='hw_all_select'>필터된 자산 그룹 생성</button>",
+			//"info": "전체 _TOTAL_건 ",
 			"infoEmpty": "데이터가 없습니다.",
 			"emptyTable": "데이터가 없습니다.",
 			"thousands": ",",
@@ -260,54 +260,56 @@ $('#search-input-hs').on('keyup', function(event) {
             performSearch(column, searchValue, hs_asset_list_Data);
         }
     });
+
+    $(document).on('click', '#hw_all_select', function() {
+        $.ajax({
+            url: 'hw_select_all/',  // AJAX 요청을 보낼 URL (해당 URL에 파이썬 코드를 작성해야 합니다)
+            type: 'POST',
+            data: {
+                data: hs_asset_list_Data.ajax.params(),  // 데이터 테이블의 현재 요청에 대한 파라미터 정보를 전달합니다
+                filter: {
+                    column: $('#column-dropdown').data('column'),
+//                    orderColumn: hs_asset_list_Data.order()[0][0],
+//                    orderDir: hs_asset_list_Data.order()[0][1],
+                    value: $('#search-input-hs').val(),
+                    value2: $('#hs_asset_list_filter input[type="search"]').val(),
+                    regex: false
+                }
+            },
+            success: function(response) {
+                //$("#groupModal").modal("show");
+                $("#groupName").val("");
+                $("#groupDescription").val("");
+                const check_id = [];
+                const check_name = [];
+                checkedItems_all = response;
+                //console.log(response);
+                //console.log(checkedItems_all);
+                //console.log(checkedItems_all.count);
+                const count = checkedItems_all.count
+                var modalbody = "";
+                for (var i = 0; i < checkedItems_all.computer_id.length; i++) {
+                    const computer_id = checkedItems_all.computer_id[i].computer_id
+                    const computer_name = checkedItems_all.computer_name[i].computer_name
+
+
+                    modalbody += '<input class="form-check-input" type="hidden" value="'+computer_id+'" id="'+computer_id+'" computer-name="' + computer_name +'" checked>'
+                }
+                modalbody += '<br><br><label class="form-check-label">선택된 총 자산의 갯수는 '+ count+'개 입니다.</label>';
+                $("#groupModal .modal-title").html("그룹 생성 팝업창");
+                $("#groupModal .form-check").html(modalbody);
+                $("#groupModal").modal("show");
+
+                // AJAX 요청이 성공적으로 처리되었을 때의 동작...
+            },
+//                dataSrc: function (res) {
+//                    var data = res.data;
 //
-//    	$(document).on('click', '#all_select', function() {
-//            console.log("aa");
-//            $.ajax({
-//                url: 'select_all/',  // AJAX 요청을 보낼 URL (해당 URL에 파이썬 코드를 작성해야 합니다)
-//                type: 'POST',
-//                data: {
-//                    data: hs_asset_list_Data.ajax.params(),  // 데이터 테이블의 현재 요청에 대한 파라미터 정보를 전달합니다
-//                    filter: {
-//                        column: $('#column-dropdown').data('column'),
-//                        orderColumn: hs_asset_list_Data.order()[0][0],
-//                        orderDir: hs_asset_list_Data.order()[0][1],
-//                        value: $('#search-input-hs').val(),
-//                        value2: $('#hs_asset_list_filter input[type="search"]').val(),
-//                        regex: false
-//                    }
-//                },
-//                success: function(response) {
-//                    //$("#groupModal").modal("show");
-//                    $("#groupName").val("");
-//                    $("#groupDescription").val("");
-//                    const check_id = [];
-//                    const check_name = [];
-//                    checkedItems_all = response;
-//
-//                    console.log(response);
-//                    console.log(checkedItems_all);
-//                    var modalbody = "";
-//                    for (var i = 0; i < checkedItems_all.computer_id.length; i++) {
-//                        const computer_id = checkedItems_all.computer_id[i].computer_id
-//                        const computer_name = checkedItems_all.computer_name[i].computer_name
-//                        modalbody += '<input class="form-check-input" type="hidden" value="'+computer_id+'" id="'+computer_id+'" computer-name="' + computer_name +'" checked>'
-//                        //modalbody += '<input class="form-check-input" type="hidden" value="' + computer_id + '" id="' + computer_id + '" checked>';
-//                    }
-//                    $("#groupModal .modal-title").html("그룹 생성 팝업창");
-//                    $("#groupModal .form-check").html(modalbody);
-//                    $("#groupModal").modal("show");
-//
-//                    // AJAX 요청이 성공적으로 처리되었을 때의 동작...
-//                },
-////                dataSrc: function (res) {
-////                    var data = res.data;
-////
-////                    console.log(data);
-////                    return data;
-////                }
-//            });
-//        });
+//                    console.log(data);
+//                    return data;
+//                }
+        });
+    });
 
 
 	$(document).on('click', '#nexts_hw, #after_hw', function() {
@@ -438,7 +440,8 @@ var sw_asset_list = function () {
 		],
 		language: {
 			"decimal": "",
-			"info": "전체 _TOTAL_건",
+            "info": "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='sw_all_select'>필터된 자산 그룹 생성</button>",
+			//"info": "전체 _TOTAL_건 ",
 			"infoEmpty": "데이터가 없습니다.",
 			"emptyTable": "데이터가 없습니다.",
 			"thousands": ",",
@@ -563,6 +566,56 @@ var sw_asset_list = function () {
 
             performSearch(column, searchValue, sw_asset_list_Data);
         }
+    });
+
+$(document).on('click', '#sw_all_select', function() {
+        $.ajax({
+            url: 'sw_select_all/',  // AJAX 요청을 보낼 URL (해당 URL에 파이썬 코드를 작성해야 합니다)
+            type: 'POST',
+            data: {
+                data: sw_asset_list_Data.ajax.params(),  // 데이터 테이블의 현재 요청에 대한 파라미터 정보를 전달합니다
+                filter: {
+                    column: $('#column-dropdown').data('column'),
+//                    orderColumn: sw_asset_list_Data.order()[0][0],
+//                    orderDir: sw_asset_list_Data.order()[0][1],
+                    value: $('#search-input-hs').val(),
+                    value2: $('#hs_asset_list_filter input[type="search"]').val(),
+                    regex: false
+                }
+            },
+            success: function(response) {
+                //$("#groupModal").modal("show");
+                $("#groupName").val("");
+                $("#groupDescription").val("");
+                const check_id = [];
+                const check_name = [];
+                checkedItems_all = response;
+                //console.log(response);
+                //console.log(checkedItems_all);
+                //console.log(checkedItems_all.count);
+                const count = checkedItems_all.count
+                var modalbody = "";
+                for (var i = 0; i < checkedItems_all.computer_id.length; i++) {
+                    const computer_id = checkedItems_all.computer_id[i].computer_id
+                    const computer_name = checkedItems_all.computer_name[i].computer_name
+
+
+                    modalbody += '<input class="form-check-input" type="hidden" value="'+computer_id+'" id="'+computer_id+'" computer-name="' + computer_name +'" checked>'
+                }
+                modalbody += '<br><br><label class="form-check-label">선택된 총 자산의 갯수는 '+ count+'개 입니다.</label>';
+                $("#groupModal .modal-title").html("그룹 생성 팝업창");
+                $("#groupModal .form-check").html(modalbody);
+                $("#groupModal").modal("show");
+
+                // AJAX 요청이 성공적으로 처리되었을 때의 동작...
+            },
+//                dataSrc: function (res) {
+//                    var data = res.data;
+//
+//                    console.log(data);
+//                    return data;
+//                }
+        });
     });
 
 	$(document).on('click', '#nexts_sw, #after_sw', function() {

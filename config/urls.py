@@ -54,11 +54,13 @@ urlpatterns = [
     path('hs_asset/', views_main_hs.hs_asset),
     path('hs_asset/hwpaging/', views_main_hs.hs_asset_paginghw),
     path('hs_asset/swpaging/', views_main_hs.hs_asset_pagingsw),
-    #path('hs_asset/select_all/', views_main_hs.hs_asset_select_all),
+    path('hs_asset/hw_select_all/', views_main_hs.hw_asset_select_all),
+    path('hs_asset/sw_select_all/', views_main_hs.sw_asset_select_all),
     path('export/<str:model>/', views_export.export, name='export'),
 
 
     path('ver_asset/', views_os_ver.ver_asset),
+    path('ver_asset/ver_select_all/', views_os_ver.ver_asset_select_all),
     path('ver_asset/paging/', views_os_ver.ver_asset_paging),
     path('export/<str:model>/', views_export.export, name='export'),
 
@@ -67,12 +69,15 @@ urlpatterns = [
     path('os_asset/paging/', views_os_ver.os_asset_paging),
 
     path('up_asset/', views_up.up_asset),
+    path('up_asset/up_select_all/', views_up.up_asset_select_all),
     path('up_asset/paging/', views_up.up_asset_paging),
 
     path('sec_asset/', views_sec.sec_asset),
     path('sec_asset/paging/', views_sec.sec_asset_paging),
+    path('sec_asset/sec_select_all/', views_sec.sec_asset_select_all),
     path('sec_asset_list/', views_sec.sec_asset_list),
     path('sec_asset_list/paging/', views_sec.sec_asset_list_paging),
+    path('sec_asset_list/sec_list_select_all/', views_sec.sec_list_asset_select_all),
 
 
     path('create/', views_group.create),
@@ -85,7 +90,9 @@ urlpatterns = [
     #구매팀 페이지
     path('pur_asset/', views_pur_asset.pur_asset),
     path('pur_asset/pur_hwpaging/', views_pur_asset.pur_asset_paginghw),
+    path('pur_asset/hw_pur_select_all/', views_pur_asset.hw_pur_asset_select_all),
     path('pur_asset/pur_swpaging/', views_pur_asset.pur_asset_pagingsw),
+    path('pur_asset/sw_pur_select_all/', views_pur_asset.sw_pur_asset_select_all),
 
     #Asset 페이지
     path('asset/', views_asset.asset),

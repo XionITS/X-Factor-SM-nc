@@ -464,3 +464,207 @@ def os_asset_paging(request):
 
     return JsonResponse(response)
 
+
+
+@csrf_exempt
+def ver_asset_select_all(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                 xfactor_auth_id='VER_asset', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='VER_asset', auth_use='true')
+    #print(user_auth)
+    if not user_auth and not group_auth:
+        return redirect('../../home/')
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
+    start_of_today1 = now.strftime('%Y-%m-%d %H')
+    start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+    start_of_today = timezone.make_aware(start_of_today2)
+    start_of_day = start_of_today - timedelta(days=7)
+    today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+    seven_days_ago = timezone.now() - timedelta(days=7)
+    default_os = request.POST.get('filter[defaultColumn]')
+    print(default_os)
+    filter_column = request.POST.get('filter[column]')
+    filter_text = request.POST.get('filter[value]')
+    filter_value = request.POST.get('filter[value2]')
+    user = Xfactor_Common_Cache.objects.filter(os_simple__icontains=default_os)
+    if default_os == 'Linux':
+        user = Xfactor_Common_Cache.objects.exclude(os_simple__in=['Windows', 'Mac'])
+
+    # # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
+    # local_tz = pytz.timezone('Asia/Seoul')
+    # # UTC 시간대를 사용하여 현재 시간을 얻음
+    # utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    # # 현재 시간대로 시간 변환
+    # local_now = utc_now.astimezone(local_tz)
+    # # 24시간 30분 이전의 시간 계산
+    # today_collect_date = local_now - timedelta(minutes=7)
+
+    if filter_text and filter_column:
+        if filter_column == "cache_date":
+            user = user.filter(user_date__gte=start_of_today)
+            if all(char in "online" for char in filter_text.lower()):
+                user = user.annotate(time_difference=ExpressionWrapper(
+                    F('user_date') - F('cache_date'),
+                    output_field=fields.DurationField()
+                )).filter(time_difference__lte=timedelta(hours=1))
+                if filter_value:
+                    if ' and ' in filter_value:
+                        search_terms = filter_value.split(' and ')
+                        query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                                       Q(logged_name_id__deptName__icontains=term) |
+                                                       Q(logged_name_id__userName__icontains=term) |
+                                                       Q(logged_name_id__userId__icontains=term) |
+                                                       Q(computer_name__icontains=term) |
+                                                       Q(ip_address__icontains=term) |
+                                                       Q(sw_list__icontains=term) |
+                                                       Q(memo__icontains=term)
+                                                       for term in search_terms])
+                    elif ' or ' in filter_value:
+                        search_terms = filter_value.split(' or ')
+                        query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                                      Q(logged_name_id__deptName__icontains=term) |
+                                                      Q(logged_name_id__userName__icontains=term) |
+                                                      Q(logged_name_id__userId__icontains=term) |
+                                                      Q(computer_name__icontains=term) |
+                                                      Q(ip_address__icontains=term) |
+                                                      Q(sw_list__icontains=term) |
+                                                      Q(memo__icontains=term)
+                                                      for term in search_terms])
+                    else:
+                        query = (Q(chassistype__icontains=filter_value) |
+                                 Q(logged_name_id__deptName__icontains=filter_value) |
+                                 Q(logged_name_id__userName__icontains=filter_value) |
+                                 Q(logged_name_id__userId__icontains=filter_value) |
+                                 Q(computer_name__icontains=filter_value) |
+                                 Q(ip_address__icontains=filter_value) |
+                                 Q(sw_list__icontains=filter_value) |
+                                 Q(memo__icontains=filter_value))
+                    user = user.filter(query)
+            elif all(char in "offline" for char in filter_text.lower()):
+                user = user.annotate(time_difference=ExpressionWrapper(
+                    F('user_date') - F('cache_date'),
+                    output_field=fields.DurationField()
+                )).filter(time_difference__gt=timedelta(hours=1))
+                if filter_value:
+                    if ' and ' in filter_value:
+                        search_terms = filter_value.split(' and ')
+                        query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                                       Q(logged_name_id__deptName__icontains=term) |
+                                                       Q(logged_name_id__userName__icontains=term) |
+                                                       Q(logged_name_id__userId__icontains=term) |
+                                                       Q(computer_name__icontains=term) |
+                                                       Q(ip_address__icontains=term) |
+                                                       Q(sw_list__icontains=term) |
+                                                       Q(memo__icontains=term)
+                                                       for term in search_terms])
+                    elif ' or ' in filter_value:
+                        search_terms = filter_value.split(' or ')
+                        query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                                      Q(logged_name_id__deptName__icontains=term) |
+                                                      Q(logged_name_id__userName__icontains=term) |
+                                                      Q(logged_name_id__userId__icontains=term) |
+                                                      Q(computer_name__icontains=term) |
+                                                      Q(ip_address__icontains=term) |
+                                                      Q(sw_list__icontains=term) |
+                                                      Q(memo__icontains=term)
+                                                      for term in search_terms])
+                    else:
+                        query = (Q(chassistype__icontains=filter_value) |
+                                 Q(logged_name_id__deptName__icontains=filter_value) |
+                                 Q(logged_name_id__userName__icontains=filter_value) |
+                                 Q(logged_name_id__userId__icontains=filter_value) |
+                                 Q(computer_name__icontains=filter_value) |
+                                 Q(ip_address__icontains=filter_value) |
+                                 Q(sw_list__icontains=filter_value) |
+                                 Q(memo__icontains=filter_value))
+                    user = user.filter(query)
+            else:
+                user = user
+        else:
+            query = Q(**{f'{filter_column}__icontains': filter_text})
+            user = user.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+            user = user.filter(query)
+            #user = Xfactor_Common.objects.filter(query)
+            if filter_value:
+                if ' and ' in filter_value:
+                    search_terms = filter_value.split(' and ')
+                    query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                                   Q(logged_name_id__deptName__icontains=term) |
+                                                   Q(logged_name_id__userName__icontains=term) |
+                                                   Q(logged_name_id__userId__icontains=term) |
+                                                   Q(computer_name__icontains=term) |
+                                                   Q(ip_address__icontains=term) |
+                                                   Q(sw_list__icontains=term) |
+                                                   Q(memo__icontains=term)
+                                                   for term in search_terms])
+                elif ' or ' in filter_value:
+                    search_terms = filter_value.split(' or ')
+                    query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                                  Q(logged_name_id__deptName__icontains=term) |
+                                                  Q(logged_name_id__userName__icontains=term) |
+                                                  Q(logged_name_id__userId__icontains=term) |
+                                                  Q(computer_name__icontains=term) |
+                                                  Q(ip_address__icontains=term) |
+                                                  Q(sw_list__icontains=term) |
+                                                  Q(memo__icontains=term)
+                                                  for term in search_terms])
+                else:
+                    query = (Q(chassistype__icontains=filter_value) |
+                            Q(logged_name_id__deptName__icontains=filter_value) |
+                            Q(logged_name_id__userName__icontains=filter_value) |
+                            Q(logged_name_id__userId__icontains=filter_value) |
+                             Q(computer_name__icontains=filter_value) |
+                             Q(ip_address__icontains=filter_value) |
+                             Q(sw_list__icontains=filter_value) |
+                             Q(memo__icontains=filter_value))
+                user = user.filter(query)
+    else:
+        user = user.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        if filter_value:
+            if ' and ' in filter_value:
+                search_terms = filter_value.split(' and ')
+                query = reduce(operator.and_, [Q(chassistype__icontains=term) |
+                                               Q(logged_name_id__deptName__icontains=term) |
+                                               Q(logged_name_id__userName__icontains=term) |
+                                               Q(logged_name_id__userId__icontains=term) |
+                                               Q(computer_name__icontains=term) |
+                                               Q(ip_address__icontains=term) |
+                                               Q(sw_list__icontains=term) |
+                                               Q(memo__icontains=term)
+                                               for term in search_terms])
+            elif ' or ' in filter_value:
+                search_terms = filter_value.split(' or ')
+                query = reduce(operator.or_, [Q(chassistype__icontains=term) |
+                                              Q(logged_name_id__deptName__icontains=term) |
+                                              Q(logged_name_id__userName__icontains=term) |
+                                              Q(logged_name_id__userId__icontains=term) |
+                                              Q(computer_name__icontains=term) |
+                                              Q(ip_address__icontains=term) |
+                                              Q(sw_list__icontains=term) |
+                                              Q(memo__icontains=term)
+                                              for term in search_terms])
+            else:
+                query = (Q(chassistype__icontains=filter_value) |
+                        Q(logged_name_id__deptName__icontains=filter_value) |
+                        Q(logged_name_id__userName__icontains=filter_value) |
+                        Q(logged_name_id__userId__icontains=filter_value) |
+                         Q(computer_name__icontains=filter_value) |
+                         Q(ip_address__icontains=filter_value) |
+                         Q(sw_list__icontains=filter_value) |
+                         Q(memo__icontains=filter_value))
+            user = user.filter(query)
+    computer_id= list(user.values('computer_id'))
+    computer_name= list(user.values('computer_name'))
+    count = user.values('computer_id').count()
+    data = {
+        'message': 'Data received successfully.',
+        'computer_id': computer_id,
+        'computer_name': computer_name,
+        'count': count,
+
+    }
+
+    # JsonResponse 객체로 응답 반환
+    return JsonResponse(data)
