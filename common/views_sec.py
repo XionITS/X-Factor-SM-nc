@@ -64,13 +64,20 @@ def sec_asset_paging(request):
     filter_value = request.POST.get('filter[value2]')
     user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
 
-    cososys_count = user.filter(security1='True ').count()
-    symantec_count = user.filter(security2='True ').count()
-    cbr_count = user.filter(security3='True ').count()
-    cbc_count = user.filter(security4='True ').count()
-    mcafee_count = user.filter(security5='True ').count()
+    # cososys_count = user.filter(security1='True ').count()
+    # symantec_count = user.filter(security2='True ').count()
+    # cbr_count = user.filter(security3='True ').count()
+    # cbc_count = user.filter(security4='True ').count()
+    # mcafee_count = user.filter(security5='True ').count()
 
-    count_list = cososys_count, symantec_count, cbr_count, cbc_count, mcafee_count
+    cososys_count = Daily_Statistics_log.objects.filter(item='cososys', statistics_collection_date__gte=start_of_today).values_list('item_count', flat=True)
+    symantec_count = Daily_Statistics_log.objects.filter(item='symantec', statistics_collection_date__gte=start_of_today).values_list('item_count', flat=True)
+    cbr_count = Daily_Statistics_log.objects.filter(item='cbr', statistics_collection_date__gte=start_of_today).values_list('item_count', flat=True)
+    cbc_count = Daily_Statistics_log.objects.filter(item='cbc', statistics_collection_date__gte=start_of_today).values_list('item_count', flat=True)
+    mcafee_count = Daily_Statistics_log.objects.filter(item='mcafee', statistics_collection_date__gte=start_of_today).values_list('item_count', flat=True)
+
+    count_list = cososys_count[0], symantec_count[0], cbr_count[0], cbc_count[0], mcafee_count[0]
+    # count_list = cososys_count, symantec_count, cbr_count, cbc_count, mcafee_count
 
     if filter_text and filter_column:
         if filter_column == "cache_date":
