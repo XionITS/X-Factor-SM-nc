@@ -31254,3 +31254,11 @@ label.no-before::before {
     border-radius: var(--bs-modal-border-radius);
     outline: 0
 }
+
+.form-select.form-setting{
+    width: 50%;
+      display: flex;
+  justify-content: center;
+  align-items: center;
+    text-align: center;
+}

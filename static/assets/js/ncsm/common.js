@@ -197,6 +197,165 @@ $(document).on("click","#groupCreate", function(event) {
     });
 });
 // ------------------------------------------ create group end ------------------------------------------
+// ------------------------------------------ setting start ------------------------------------------
+
+
+// setting_ver 모달 열기 버튼 클릭 이벤트 핸들러
+$(document).on("click", "#settingVerBtn", function (e) {
+    $.ajax({
+        url: 'setting_ver_list/',
+        method: 'POST',
+        success: function (res) {
+            var modalbody = '<br><div class=h5>&nbsp;&nbsp;&nbsp; Windows 버전별 자산현황</div><br>';
+            modalbody += '<div style="display: flex; align-items:center; justify-content: center;"> <div class=h6>Version : &nbsp;</div><select class="form-select form-select-lg form-setting h5">';
+            for (var i = 0; i < res.ver_list.length; i++) {
+                if (res.ver_list[i] === res.current_value) {
+                    modalbody += '<option class=h6 selected>' + res.ver_list[i] + '</option>';
+                }else{
+                    modalbody += '<option class=h6>' + res.ver_list[i] + '</option>';
+                }
+            }
+
+            modalbody += '</select></div><br><br>';
+            $("#settingsModal .setting_modal-body").html(modalbody);
+            $("#settingsModal .Save_changes").attr("id", "setting_ver_save");
+            $("#settingsModal").modal("show");
+        }
+    });
+});
+
+// setting_ver 세팅 세이브 버튼 클릭 이벤트 핸들러
+$(document).on("click", "#setting_ver_save", function (e) {
+    var selectedValue = $(".form-setting").val(); // 선택한 버전 값 가져오기
+    $.ajax({
+        url: 'update_ver_module/',
+        method: 'POST',
+        data: { value: selectedValue }, // 선택한 버전을 서버로 전달
+        success: function (res) {
+            alert("Windows 버전 기준 수정이 변경되었습니다.")
+            $("#settingsModal").modal("hide");
+        },
+        error: function (err) {
+            alert("Windows 버전 기준 수정 중 오류가 발생했습니다.");
+            $("#settingsModal").modal("hide");
+        }
+    });
+})
+
+
+// setting_hot 모달 열기 버튼 클릭 이벤트 핸들러
+$(document).on("click", "#settingHotBtn", function (e) {
+    $.ajax({
+        url: 'setting_hot_list/',
+        method: 'POST',
+        success: function (res) {
+            var modalbody = '<br><div class=h5>&nbsp;&nbsp;&nbsp; 보안 패치별 자산현황</div><br>';
+            modalbody += '<div style="display: flex; align-items:center; justify-content: center;"><select class="form-select form-select-lg form-setting h5">';
+            for (var i = 0; i < res.hot_list.length; i++) {
+                if (res.hot_list[i] === res.current_value) {
+                    modalbody += '<option class=h6 selected>' + res.hot_list[i] + '</option>';
+                }else{
+                    modalbody += '<option class=h6>' + res.hot_list[i] + '</option>';
+                }
+            }
+
+            modalbody += '</select><div class=h6>&nbsp; 개월</div></div><br><br>';
+            $("#settingsModal .setting_modal-body").html(modalbody);
+            $("#settingsModal .Save_changes").attr("id", "setting_hot_save");
+            $("#settingsModal").modal("show");
+        }
+    });
+});
+
+
+// setting_hot 세팅 세이브 버튼 클릭 이벤트 핸들러
+$(document).on("click", "#setting_hot_save", function (e) {
+    var selectedValue = $(".form-setting").val(); // 선택한 버전 값 가져오기
+    $.ajax({
+        url: 'update_hot_module/',
+        method: 'POST',
+        data: { value: selectedValue }, // 선택한 버전을 서버로 전달
+        success: function (res) {
+            alert("보안패치 기간 기준 수정이 변경되었습니다.")
+            $("#settingsModal").modal("hide");
+        },
+        error: function (err) {
+            alert("보안패치 기간 기준 수정 중 오류가 발생했습니다.");
+            $("#settingsModal").modal("hide");
+        }
+    });
+})
+
+
+// setting_discover 모달 열기 버튼 클릭 이벤트 핸들러
+$(document).on("click", "#settingDiscoverBtn", function (e) {
+    $.ajax({
+        url: 'setting_discover_list/',
+        method: 'POST',
+        success: function (res) {
+            var modalbody = '<br><div class=h5>&nbsp;&nbsp;&nbsp; 장기 미접속 자산</div><br>';
+            modalbody += '<div style="display: flex; align-items:center; justify-content: center;"><select class="form-select form-select-lg form-setting h5">';
+            for (var i = 0; i < res.discover_list.length; i++) {
+                if (res.discover_list[i] === res.current_value) {
+                    modalbody += '<option class=h6 selected>' + res.discover_list[i] + '</option>';
+                }else{
+                    modalbody += '<option class=h6>' + res.discover_list[i] + '</option>';
+                }
+            }
+
+            modalbody += '</select><div class=h6>&nbsp; 일</div></div><br><br>';
+            $("#settingsModal .setting_modal-body").html(modalbody);
+            $("#settingsModal .Save_changes").attr("id", "setting_discover_save");
+            $("#settingsModal").modal("show");
+        }
+    });
+});
+
+
+// setting_discover 세팅 세이브 버튼 클릭 이벤트 핸들러
+$(document).on("click", "#setting_discover_save", function (e) {
+    var selectedValue = $(".form-setting").val(); // 선택한 버전 값 가져오기
+    $.ajax({
+        url: 'update_discover_module/',
+        method: 'POST',
+        data: { value: selectedValue }, // 선택한 버전을 서버로 전달
+        success: function (res) {
+            alert("장기미접속 기간 기준 수정이 변경되었습니다.")
+            $("#settingsModal").modal("hide");
+        },
+        error: function (err) {
+            alert("장기미접속 기간 기준 수정 중 오류가 발생했습니다.");
+            $("#settingsModal").modal("hide");
+        }
+    });
+})
+
+
+
+// setting_ver 모달 닫기 버튼 클릭 이벤트 핸들러
+$(document).on("click", "#settingCloseBtn", function (e) {
+    $("#settingsModal").modal("hide");
+});
+
+
+// 모달 외부 클릭 시 닫기 이벤트 핸들러
+window.onclick = function (event) {
+    if (event.target == modal) {
+        $("#settingsModal").modal("hide");
+    }
+};
+
+//  ------------------------------------------ setting end ------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 
 // 검색 버튼 클릭, 엔터 키로 선택한 컬럼과 검색어로 검색 수행

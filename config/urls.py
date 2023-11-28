@@ -17,6 +17,7 @@ from common import views_user_management
 from common import views_group_management
 from common import views_log_management
 from common import views_report
+from common import views_setting
 from common.CallbackView import CallbackView
 from common.LoginView import LoginView
 from django.conf import settings
@@ -133,6 +134,13 @@ urlpatterns = [
     #Report
     path('report/', views_report.create, name='report_date'),
 
+    #대시보드 차트 설정
+    path('home/setting_ver_list/', views_setting.ver_list),
+    path('home/update_ver_module/', views_setting.update_ver_module),
+    path('home/setting_hot_list/', views_setting.hot_list),
+    path('home/update_hot_module/', views_setting.update_hot_module),
+    path('home/setting_discover_list/', views_setting.discover_list),
+    path('home/update_discover_module/', views_setting.update_discover_module),
 
     # path('login/', LoginView.as_view(), name='login'),
     # path('callback/', CallbackView.as_view(), name='callback'),
