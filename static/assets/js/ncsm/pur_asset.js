@@ -141,7 +141,7 @@ var hw_pur_asset_list = function () {
                     8: 'first_network',
                     9: 'mem_use',
                     10: 'disk_use',
-                    12: 'cache_date',
+                    12: 'user_date',
                     13: 'memo',
 
                 };
@@ -185,7 +185,7 @@ var hw_pur_asset_list = function () {
                     return "CPU : " + row.hw_cpu + "<br>메인보드 : " + row.hw_mb + "<br>RAM : " + row.hw_ram + "<br>디스크 : " + row.hw_disk + "<br>VGA : " + row.hw_gpu;
                 }, searchable: true
             },
-            { data: 'cache_date', title: '온/오프라인', searchable: true },
+            { data: 'user_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -272,8 +272,8 @@ var hw_pur_asset_list = function () {
                 }
             },
             {targets: 12, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-                var color = row.cache_date === "Online" ? "lime" : "red";
-                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+                var color = row.user_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.user_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
               }},
             {
                 targets: 13,
@@ -575,7 +575,7 @@ var sw_pur_asset_list = function () {
                     5: 'logged_name_id__userId',
                     6: 'computer_name',
                     7: 'ip_address',
-                    12: 'cache_date',
+                    12: 'user_date',
                     13: 'memo',
 
                 };
@@ -611,7 +611,7 @@ var sw_pur_asset_list = function () {
             {data: 'sw_ver_list', title: '소프트웨어 버전', searchable: true},
             {data: 'sw_install', title: '설치 일자', searchable: true},
             {data: '', title: '더보기', searchable: false},
-            { data: 'cache_date', title: '온/오프라인', searchable: true },
+            { data: 'user_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true},
 
         ],
@@ -704,8 +704,8 @@ var sw_pur_asset_list = function () {
                 }
             },
             {targets: 12, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-                var color = row.cache_date === "Online" ? "lime" : "red";
-                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+                var color = row.user_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.user_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
               }},
             {
                 targets: 13,
@@ -799,7 +799,7 @@ var sw_pur_asset_list = function () {
     });
 
     // 검색창 enter 작동
-    $('#search-input-ver').on('keyup', function (event) {
+    $('#search-input-pur').on('keyup', function (event) {
         if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
             var column = $('#column-dropdown').data('column');
             var searchValue = $('#search-input-pur').val().trim();

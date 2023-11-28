@@ -937,7 +937,7 @@ $(document).on("click","#um_insert", function (e) {
                         }
                     </style>
                     <div class="asset-input-group">
-                        <input type="search" class="asset-form-control" id="ncuser_search_result" placeholder="계정을 입력하세요"> @ncsoft.com
+                        <input type="search" class="asset-form-control" id="ncuser_search_result" placeholder="계정이나 이름을 입력하세요." style="width: 250px;">
                     </div>`;
     /////////////////사용자 목록 가져오기
     $.ajax({
@@ -979,9 +979,11 @@ $(document).on("keyup", "#ncuser_search_result", function (e) {
 
     userRows.each(function () {
         var x_id = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+        var x_name = $(this).find("td:nth-child(2)").text().toLowerCase();
         var shouldShow = searchText.length >= 3 && x_id.includes(searchText);
+        var shouldShow1 = searchText.length >= 2 && x_name.includes(searchText);
 
-        if (searchText.length === 0 || shouldShow) {
+        if ((searchText.length === 0 || shouldShow) || (searchText.length === 0 || shouldShow1)) {
             // 검색어가 3글자 이상이고 일치하는 경우 표시
             $(this).show();
         } else {
@@ -1196,7 +1198,8 @@ $(document).on("keyup", "#user_search_result", function (e) {
 
     userRows.each(function () {
         var x_id = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
-        if (x_id.includes(searchText)) {
+        var x_username = $(this).find("td:nth-child(2)").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+        if (x_id.includes(searchText) || x_username.includes(searchText)) {
             // 검색어와 일치하는 경우 표시
             $(this).show();
         } else {

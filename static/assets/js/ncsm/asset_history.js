@@ -22,7 +22,20 @@ $(document).ready(function(){
         maxDate: currentDateTime,
         roundTime:'floor',
         onChangeDateTime:function(dp,$input){
+            if (!dp){
+                return
+            }
+            var selectedTime = dp.getTime();
+            var currentTime = new Date();
+
+            if (selectedTime > currentTime.getTime()) {
+                // 선택된 시간이 현재 시간보다 뒤인 경우, 다시 이전의 시간으로 설정
+                var futureTime = new Date();
+
+                $input.val('');
+            } else {
             date1 = $input.val();
+                }
         }
     });
 
@@ -36,7 +49,20 @@ $(document).ready(function(){
         maxDate: currentDateTime,
         roundTime:'floor',
         onChangeDateTime:function(dp,$input){
-            date2 = $input.val();
+            if (!dp){
+                return
+            }
+            var selectedTime = dp.getTime();
+            var currentTime = new Date();
+
+            if (selectedTime > currentTime.getTime()) {
+                // 선택된 시간이 현재 시간보다 뒤인 경우, 다시 이전의 시간으로 설정
+                var futureTime = new Date();
+
+                $input.val('');
+            } else {
+                date2 = $input.val();
+                }
         }
     });
 

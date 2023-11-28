@@ -36,11 +36,43 @@ $(document).ready(function () {
                     url: 'search_box/',
                     method: 'POST',
                     data: {
-                        searchText: request.term
+                        searchText: request.term,
+                        type: 'asset'
                     },
                     success: function (data) {
                         var autocompleteData = data.data.map(function (item) {
                             return item.computer_name;
+                        });
+
+                        response(autocompleteData);
+                    }
+                });
+            }
+        },
+        minLength: 2  // Autocomplete 내에서의 최소 길이 설정
+    });
+
+    $('#asset_user').autocomplete({
+        source: function (request, response) {
+            // 사용자가 입력한 문자열의 길이를 체크
+            var minLength = /[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(request.term) ? 2 : 3;
+
+            // 최소 길이를 만족하는 경우에만 Ajax 요청 보내기
+            if (request.term.length >= minLength) {
+            // if (request.term.length >= 2) {
+                $.ajax({
+                    url: 'search_box/',
+                    method: 'POST',
+                    data: {
+                        searchText: request.term,
+                        type: 'user'
+                    },
+                    success: function (data) {
+                        var autocompleteData = data.data.map(function (item) {
+                            return {
+                            label: item.userName + ' (' + item.userId + ')', /// Autocomplete에서 보여질 값,
+                            value: item.userName
+                            };
                         });
 
                         response(autocompleteData);
@@ -60,7 +92,7 @@ $('#asset_search').on('click', function(event) {
     if (inputValue.trim().length < 2 ) {
         alert("최소 2글자 입력해주세요.");
     } else {
-      searchPer(inputValue);
+      searchPer(inputValue, 'asset');
     }
 });
 
@@ -72,20 +104,50 @@ $('#asset_search_result').on('keyup', function(event) {
             if (inputValue.trim().length < 2) {
         alert("최소 2글자 입력해주세요.");
       } else {
-        searchPer(inputValue);
+        searchPer(inputValue, 'asset');
       }
     }
 });
 
 
-function searchPer(inputValue){
+$('#user_search').on('click', function(event) {
+    // console.log(searchInput)
+    var searchInput = document.getElementById('asset_user');
+    var inputValue = searchInput.value;
+    if (inputValue.trim().length < 2 ) {
+        alert("최소 2글자 입력해주세요.");
+    } else {
+      searchPer(inputValue, 'user');
+    }
+});
+
+
+$('#asset_user').on('keyup', function(event) {
+        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+            var searchInput = document.getElementById('asset_user');
+            var inputValue = searchInput.value;
+            if (inputValue.trim().length < 2) {
+        alert("최소 2글자 입력해주세요.");
+      } else {
+        searchPer(inputValue, 'user');
+      }
+    }
+});
+
+
+function searchPer(inputValue, type){
     $.ajax({
         type: "POST",
         url: "search/",
         data: {
-            searchText: inputValue
+            searchText: inputValue,
+            type: type
         },
         success: function(res) {
+            if (res === 'error') {
+                alert('유효하지 않은 값입니다.')
+                return
+            }
             if (res.data[0] !== undefined){
                 var data = res.data[0]; // 첫 번째 객체 선택
 
@@ -108,13 +170,18 @@ function searchPer(inputValue){
             if (ipAddressElement) {
               ipAddressElement.textContent = valueMap['IP 주소'];
             }
-            var computerNameElement = document.getElementById("asset_computer_name");
+            var statusElement = document.getElementById("asset_status");
+            if (statusElement) {
+              statusElement.textContent = data.cache_date;
+              statusElement.style.color = data.cache_date === "Online" ? "lime" : "red";
+            }
+            var computerNameElement = document.getElementById("asset_search_result");
             if (computerNameElement) {
-              computerNameElement.textContent = data.computer_name;
+              computerNameElement.value = data.computer_name;
             }
             var userElement = document.getElementById("asset_user");
             if (userElement) {
-              userElement.textContent = data.ncdb_data.userName;
+              userElement.value = data.ncdb_data.userName;
             }
 
             var memoElement = document.getElementById("asset_memo");
@@ -165,7 +232,7 @@ function searchPer(inputValue){
         } else {
                 // 데이터가 없을 때
                 // return
-                alert("유효하지 않은 컴퓨터 이름입니다.");
+                alert("유효하지 않은 값입니다.");
             }
 
         }
@@ -281,6 +348,7 @@ $(document).ready(function () {
     $('#memo_save').click(function() {
     var memoValue = $('#asset_memo').val();
     var computernameValue = $('#asset_search_result').val();
+    var usernameValue = $('#asset_user').val();
     var macaddressValue = $('#asset_mac_address').text();
 
     // Function to escape HTML entities in the memoValue
@@ -290,8 +358,8 @@ $(document).ready(function () {
 
     memoValue = escapeHtml(memoValue);
 
-    if (computernameValue === ''){
-              alert('컴퓨터 이름을 선택해 주세요.');
+    if (computernameValue === '' || usernameValue === ''){
+              alert('컴퓨터 이름이나 사용자를 선택해 주세요.');
               return
           }
     $.ajax({

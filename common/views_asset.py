@@ -1,3 +1,4 @@
+import pytz
 from django.http import HttpResponse
 import math
 import operator
@@ -44,13 +45,23 @@ def asset(request):
 @csrf_exempt
 def search(request):
     if request.method == "POST":
-        today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+        local_tz = pytz.timezone('Asia/Seoul')
+        utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+        now = utc_now.astimezone(local_tz)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
+        start_of_day = start_of_today - timedelta(days=7)
         search_text = request.POST.get('searchText', None)
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date, cache_date__gte=today_collect_date).filter(computer_name=search_text)
-        #print(user)
-        #print("11")
+        type = request.POST.get('type', None)
+        if type == 'asset':
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).filter(computer_name=search_text)
+        if type == 'user':
+            userId = Xfactor_ncdb.objects.filter(userName=search_text).values('userId')
+            if not userId:
+                return HttpResponse({'error': '유효하지 않은 값입니다.'})
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).filter(logged_name_id=userId[0]['userId'])
         user_data = Cacheserializer(user, many=True).data
-        #print(user_data.data)
         # response = {
         #     'data': user_data,  # Serialized data for the current page
         # }
@@ -60,10 +71,19 @@ def search(request):
 @csrf_exempt
 def search_box(request):
     if request.method == "POST":
-        today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+        local_tz = pytz.timezone('Asia/Seoul')
+        utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+        now = utc_now.astimezone(local_tz)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
+        start_of_day = start_of_today - timedelta(days=7)
         search_text = request.POST.get('searchText', None)
-        user_data = Xfactor_Common.objects.filter(user_date__gte=today_collect_date).filter(computer_name__icontains=search_text).values('computer_name')
-        # user_data = XfactorServiceserializer(user, many=True).data
+        type = request.POST.get('type', None)
+        if type == 'asset':
+            user_data = Xfactor_Common.objects.filter(user_date__gte=start_of_day, computer_name__icontains=search_text).values('computer_name')
+        if type == 'user':
+            user_data = Xfactor_ncdb.objects.filter(userName__icontains=search_text).values('userName', 'userId')
         return JsonResponse({'data': list(user_data)})
 
 
@@ -76,14 +96,19 @@ def save_memo(request):
     if not user_auth and not group_auth:
         return redirect('../../home/')
     if request.method =='POST':
+        local_tz = pytz.timezone('Asia/Seoul')
+        utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+        now = utc_now.astimezone(local_tz)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
+        start_of_day = start_of_today - timedelta(days=7)
         memo = request.POST.get('memo')
-        today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
-        largest_time = timezone.make_aware(datetime.max, timezone.utc)
         computername = request.POST.get('computername')
         macaddress = request.POST.get('macaddress')
         try:
             # X-Factor_Common 오브젝트 가져오기
-            xfactor_common = Xfactor_Common.objects.get(computer_name=computername, mac_address=macaddress)
+            xfactor_common = Xfactor_Common.objects.filter(user_date__gte=start_of_day).get(computer_name=computername, mac_address=macaddress)
 
             # memo 필드 값 설정 및 저장
             xfactor_common.memo = memo
@@ -91,7 +116,7 @@ def save_memo(request):
             computer_name = xfactor_common.computer_name
 
             # X-Factor_Common 오브젝트 가져오기
-            xfactor_common_cache = Xfactor_Common_Cache.objects.filter(user_date__gte=today_collect_date).get(computer_name=computername, mac_address=macaddress)
+            xfactor_common_cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).get(computer_name=computername, mac_address=macaddress)
 
             # memo 필드 값 설정 및 저장
             xfactor_common_cache.memo = memo
@@ -101,5 +126,5 @@ def save_memo(request):
 
 
         except Xfactor_Common.DoesNotExist:
-            return JsonResponse({'error': '유효하지 않은 컴퓨터 이름입니다.'})
+            return JsonResponse({'error': '유효하지 않은 값입니다.'})
 

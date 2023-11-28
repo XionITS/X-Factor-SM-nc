@@ -1,3 +1,4 @@
+import pytz
 from rest_framework import serializers
 from .models import *
 from datetime import datetime, timedelta
@@ -163,6 +164,35 @@ class Cacheserializer2(serializers.ModelSerializer):
     class Meta:
         model = Xfactor_Common_Cache
         fields = '__all__'
+    def to_representation(self, instance):
+        if instance.logged_name_id:
+            # If `logged_name_id` is not None, serialize `Xfactor_ncdb` using `NcdbSerializer`
+            ncdb_data = NcdbSerializer(instance.logged_name_id)
+            data = super().to_representation(instance)
+            data['ncdb_data'] = ncdb_data.data
+        else:
+            # If `logged_name_id` is None, just use `CommonSerializer`
+            data = super().to_representation(instance)
+            data['ncdb_data'] = []
+
+        return data
+
+class Commonserializer2(serializers.ModelSerializer):
+    user_date = serializers.SerializerMethodField()
+    class Meta:
+        model = Xfactor_Common
+        fields = '__all__'
+    def get_user_date(self, obj):
+        local_tz = pytz.timezone('Asia/Seoul')
+        utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+        now = utc_now.astimezone(local_tz)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
+        if obj.user_date >= start_of_today:
+            return "Online"
+        else:
+            return "Offline"
     def to_representation(self, instance):
         if instance.logged_name_id:
             # If `logged_name_id` is not None, serialize `Xfactor_ncdb` using `NcdbSerializer`

@@ -45,12 +45,17 @@
             <div class="menu-text d-sm-block d-none">{{ request.session.sessionname }} ({{request.session.sessionid}})</div>
         </button>
 
-        <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-11px top-100" >
-            {% if Login_Method != 'Tanium'%}
-<!--            <a class="dropdown-item d-flex align-items-center" href="../updateform?user_id={{request.session.sessionid}}">{{ request.session.sessionid }} 회원정보 <i class="bi bi-person-circle ms-auto text-theme fs-16px my-n1"></i></a>-->
-<!--            <div class="dropdown-divider"></div>-->
-            {% endif %}
-            <a class="dropdown-item d-flex align-items-center" onclick="confirmLogout2()">로그아웃 <i class="bi bi-toggle-off ms-auto text-theme fs-16px my-n1"></i></a>
+        <div class="dropdown-menu dropdown-menu-end me-lg-3 fs-13px top-100" style="width: 250px">
+<!--            {% if Login_Method != 'Tanium'%}-->
+<!--&lt;!&ndash;            <a class="dropdown-item d-flex align-items-center" href="../updateform?user_id={{request.session.sessionid}}">{{ request.session.sessionid }} 회원정보 <i class="bi bi-person-circle ms-auto text-theme fs-16px my-n1"></i></a>&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="dropdown-divider"></div>&ndash;&gt;-->
+<!--            {% endif %}-->
+                    <a class="dropdown-item d-flex align-items-center">부  서 : {{ request.session.sessiondept }}</a>
+                    <a class="dropdown-item d-flex align-items-center">이  름 : {{ request.session.sessionname }}</a>
+                    <a class="dropdown-item d-flex align-items-center">계정명 : {{ request.session.sessionuserid }}</a>
+                    <a class="dropdown-item d-flex align-items-center">이메일 : {{ request.session.sessionid }}aaaaaaaaaaa</a>
+                    <br>
+                    <a class="dropdown-item d-flex align-items-center" onclick="confirmLogout2()">로그아웃 <i class="bi bi-toggle-off ms-auto text-theme fs-16px my-n1"></i></a>
         </div>
 
 <!--        <div>-->
