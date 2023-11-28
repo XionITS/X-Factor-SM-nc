@@ -143,7 +143,7 @@ var sec_asset_list = function () {
                     9: 'security3',
                     10: 'security4',
                     11: 'security5',
-                    13: 'cache_date',
+                    13: 'user_date',
                     14: 'memo'
                 };
                 //console.log(columnMap)
@@ -191,9 +191,9 @@ var sec_asset_list = function () {
             {data: 'security3', title: 'CarbonBlack CBR', searchable: true},
             {data: 'security4', title: 'CarbonBlack CBC', searchable: true},
             {data: 'security5', title: 'McAfee VSE', searchable: true},
-            {data: '', title: '더보기', searchable: true},
-            {data: 'cache_date', title: '온/오프라인', searchable: true },
-            {data: 'memo', title: '메모', searchable: true},
+            {data: '', title: '더보기', searchable: true, orderable: false},
+            {data: 'user_date', title: '온/오프라인', searchable: true},
+            {data: 'memo', title: '메모', searchable: true, orderable: false},
         ],
         rowCallback: function (row, data, index) {
             var api = this.api();
@@ -289,8 +289,8 @@ var sec_asset_list = function () {
             },
             {targets: 13, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle',
                render: function(data, type, row) {
-                var color = row.cache_date === "Online" ? "lime" : "red";
-                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+                var color = row.user_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.user_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
               }},
             {
                 targets: 14,

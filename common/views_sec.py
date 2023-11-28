@@ -62,7 +62,7 @@ def sec_asset_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+    user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
     # cososys_count = user.filter(security1='True ').count()
     # symantec_count = user.filter(security2='True ').count()
@@ -80,13 +80,10 @@ def sec_asset_paging(request):
     # count_list = cososys_count, symantec_count, cbr_count, cbc_count, mcafee_count
 
     if filter_text and filter_column:
-        if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        if filter_column == "user_date":
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__lte=timedelta(hours=1))
+                user = user.filter(user_date__gte=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -130,10 +127,7 @@ def sec_asset_paging(request):
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
             elif all(char in "offline" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__gt=timedelta(hours=1))
+                user = user.filter(user_date__lt=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -225,7 +219,7 @@ def sec_asset_paging(request):
                              Q(memo__icontains=filter_value))
                 user = user.filter(query)
     else:
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -285,7 +279,7 @@ def sec_asset_paging(request):
         9: 'security3',
         10: 'security4',
         11: 'security5',
-        13: 'cache_date',
+        13: 'user_date',
         14: 'memo'
         # Add mappings for other columns here
     }
@@ -314,7 +308,7 @@ def sec_asset_paging(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = Commonserializer2(page, many=True).data
     # Prepare the response
 
     response = {
@@ -348,24 +342,13 @@ def sec_asset_select_all(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
-
-    cososys_count = user.filter(security1='True ').count()
-    symantec_count = user.filter(security2='True ').count()
-    cbr_count = user.filter(security3='True ').count()
-    cbc_count = user.filter(security4='True ').count()
-    mcafee_count = user.filter(security5='True ').count()
-
-    count_list = cososys_count, symantec_count, cbr_count, cbc_count, mcafee_count
+    user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
     if filter_text and filter_column:
-        if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        if filter_column == "user_date":
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__lte=timedelta(hours=1))
+                user = user.filter(user_date__gte=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -409,10 +392,7 @@ def sec_asset_select_all(request):
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
             elif all(char in "offline" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__gt=timedelta(hours=1))
+                user = user.filter(user_date__lt=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -504,7 +484,7 @@ def sec_asset_select_all(request):
                              Q(memo__icontains=filter_value))
                 user = user.filter(query)
     else:
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -606,13 +586,10 @@ def sec_asset_list_paging(request):
     user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
 
     if filter_text and filter_column:
-        if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        if filter_column == "user_date":
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__lte=timedelta(hours=1))
+                user = user.filter(user_date__gte=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -672,10 +649,7 @@ def sec_asset_list_paging(request):
                                  )
                     user = user.filter(query)
             elif all(char in "offline" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__gt=timedelta(hours=1))
+                user = user.filter(user_date__lt=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -798,7 +772,7 @@ def sec_asset_list_paging(request):
                              Q(memo__icontains=filter_value))
                 user = user.filter(query)
     else:
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -873,7 +847,7 @@ def sec_asset_list_paging(request):
         10: 'ext_chr',
         11: 'sw_list',
         12: 'hotfix',
-        13: 'cache_date',
+        13: 'user_date',
         14: 'memo',
     }
     #order_column = order_column_map.get(order_column_index, 'chassistype')
@@ -900,7 +874,7 @@ def sec_asset_list_paging(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = Commonserializer2(page, many=True).data
     # Prepare the response
 
     response = {
@@ -936,13 +910,10 @@ def sec_list_asset_select_all(request):
     user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
 
     if filter_text and filter_column:
-        if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        if filter_column == "user_date":
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__lte=timedelta(hours=1))
+                user = user.filter(user_date__gte=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -1002,10 +973,7 @@ def sec_list_asset_select_all(request):
                                  )
                     user = user.filter(query)
             elif all(char in "offline" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__gt=timedelta(hours=1))
+                user = user.filter(user_date__lt=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -1128,7 +1096,7 @@ def sec_list_asset_select_all(request):
                              Q(memo__icontains=filter_value))
                 user = user.filter(query)
     else:
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')

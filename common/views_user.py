@@ -11,7 +11,7 @@ import json
 import ast
 from django.http import JsonResponse
 from urllib.parse import urlencode
-from common.models import Xfactor_Log, Xfactor_Xuser, Xfactor_Xuser_Auth, Xfactor_Xgroup_Auth, Xfactor_Xuser_Group
+from common.models import Xfactor_Log, Xfactor_Xuser, Xfactor_Xuser_Auth, Xfactor_Xgroup_Auth, Xfactor_Xuser_Group, Xfactor_ncdb
 
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
@@ -138,6 +138,8 @@ def login(request):
                         log_date=date
                     )
                     Xfactor_log.save()
+                    # if my_info(request) == 1:
+                    #     my_info(request)
                     # res_data['error'] = '아이디 또는 비밀번호가 일치하지 않습니다'
                     return redirect('../home')
                     # return render(request, 'noauth.html')
@@ -1059,3 +1061,12 @@ def exchange_code_for_token(code):
         return access_token, id_token
     else:
         return None
+
+def my_info(request):
+    info = Xfactor_ncdb.objects.filter(email=request.session['sessionid']).values_list('deptName', 'userId')
+    # info = Xfactor_ncdb.objects.filter(email=request.session['sessionid'])
+    first_tuple = info[0]
+    request.session['sessiondept'], request.session['sessionuserid'] = first_tuple
+    print(request.session['sessiondept'])
+    print(request.session['sessionuserid'])
+    return 1

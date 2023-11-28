@@ -140,7 +140,7 @@ var up_asset_list = function () {
                     5: 'computer_name',
                     6: 'ip_address',
                     7: 'mac_address',
-                    9: 'cache_date',
+                    9: 'user_date',
                     10: 'memo',
                 };
                 data.filter = {
@@ -174,9 +174,9 @@ var up_asset_list = function () {
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
             { data: 'mac_address', title: 'MAC' , searchable: true},
-            { data: 'hotfix', title: 'hotfix', searchable: true},
-            { data: 'cache_date', title: '온/오프라인', searchable: true },
-            { data: 'memo', title: '메모', searchable: true},
+            { data: 'hotfix', title: 'hotfix', searchable: true, orderable: false},
+            { data: 'user_date', title: '온/오프라인', searchable: true },
+            { data: 'memo', title: '메모', searchable: true, orderable: false},
         ],
         rowCallback: function (row, data, index) {
             var api = this.api();
@@ -221,8 +221,8 @@ var up_asset_list = function () {
                 }
             },
             {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-                var color = row.cache_date === "Online" ? "lime" : "red";
-                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+                var color = row.user_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.user_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
               }},
             {
                 targets: 10,

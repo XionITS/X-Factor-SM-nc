@@ -45,7 +45,6 @@ def dashboard(request):
     menu_user = XuserAuthSerializer(xuser_auths, many=True)
     xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
     menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
-
     all_menu = menu_user.data + menu_group.data
     unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
     selected_date = None
@@ -89,7 +88,7 @@ def dashboard(request):
                 'desk_total_list': desk_total_list,
                 'note_total_list': note_total_list,
                 'other_total_list': other_total_list,
-                'selected_date': selected_date if selected_date is not None else "select date..."
+                'selected_date': datetime.strptime(selected_date, '%Y-%m-%d-%H').strftime('%Y-%m-%d %H시') if selected_date is not None else "select date..."
     }
 
     context = {'menu_list' : unique_items, 'dataList': dataList}
@@ -230,13 +229,10 @@ def hs_asset_paginghw(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
     if filter_text and filter_column:
-        if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today)
+        if filter_column == "user_date":
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__lte=timedelta(hours=1))
+                user = user.filter(user_date__gte=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -283,10 +279,7 @@ def hs_asset_paginghw(request):
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
             elif all(char in "offline" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__gt=timedelta(hours=1))
+                user = user.filter(user_date__lt=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -337,7 +330,7 @@ def hs_asset_paginghw(request):
         else:
             query = Q(**{f'{filter_column}__icontains': filter_text})
             #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             users = user.values('chassistype').annotate(count=Count('chassistype'))
             user = user.filter(query)
             if filter_value:
@@ -387,7 +380,7 @@ def hs_asset_paginghw(request):
                 user = user.filter(query)
     else:
         #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -449,7 +442,7 @@ def hs_asset_paginghw(request):
         4: 'computer_name',
         5: 'ip_address',
         6: 'mac_address',
-        8: 'cache_date',
+        8: 'user_date',
         9: 'memo',
         # Add mappings for other columns here
     }
@@ -473,7 +466,7 @@ def hs_asset_paginghw(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = Commonserializer2(page, many=True).data
 
 
     # Prepare the response
@@ -540,13 +533,10 @@ def hs_asset_pagingsw(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
     if filter_text and filter_column:
-        if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today)
+        if filter_column == "user_date":
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__lte=timedelta(hours=1))
+                user = user.filter(user_date__gte=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -581,10 +571,7 @@ def hs_asset_pagingsw(request):
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
             elif all(char in "offline" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__gt=timedelta(hours=1))
+                user = user.filter(user_date__lt=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -623,7 +610,7 @@ def hs_asset_pagingsw(request):
         else:
             query = Q(**{f'{filter_column}__icontains': filter_text})
             #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             # service = Xfactor_Service.objects.filter(computer=user.computer_id)
             # print(service.essential1)
             user = user.filter(query)
@@ -662,7 +649,7 @@ def hs_asset_pagingsw(request):
                 user = user.filter(query)
     else:
         #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -709,7 +696,7 @@ def hs_asset_pagingsw(request):
         4: 'computer_name',
         5: 'ip_address',
         6: 'mac_address',
-        8: 'cache_date',
+        8: 'user_date',
         9: 'memo',
         # Add mappings for other columns here
     }
@@ -746,7 +733,7 @@ def hs_asset_pagingsw(request):
     # Serialize the paginated data
 
     #user_list = CommonSerializer(page, many=True).data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = Commonserializer2(page, many=True).data
 
 
     # Prepare the response
@@ -864,13 +851,10 @@ def hw_asset_select_all(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
     if filter_text and filter_column:
-        if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today)
+        if filter_column == "user_date":
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__lte=timedelta(hours=1))
+                user = user.filter(user_date__gte=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -917,10 +901,7 @@ def hw_asset_select_all(request):
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
             elif all(char in "offline" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__gt=timedelta(hours=1))
+                user = user.filter(user_date__lt=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -971,7 +952,7 @@ def hw_asset_select_all(request):
         else:
             query = Q(**{f'{filter_column}__icontains': filter_text})
             #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             users = user.values('chassistype').annotate(count=Count('chassistype'))
             user = user.filter(query)
             if filter_value:
@@ -1021,7 +1002,7 @@ def hw_asset_select_all(request):
                 user = user.filter(query)
     else:
         #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')
@@ -1113,13 +1094,10 @@ def sw_asset_select_all(request):
     # today_collect_date = local_now - timedelta(minutes=7)
 
     if filter_text and filter_column:
-        if filter_column == "cache_date":
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today)
+        if filter_column == "user_date":
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             if all(char in "online" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__lte=timedelta(hours=1))
+                user = user.filter(user_date__gte=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -1154,10 +1132,7 @@ def sw_asset_select_all(request):
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
             elif all(char in "offline" for char in filter_text.lower()):
-                user = user.annotate(time_difference=ExpressionWrapper(
-                    F('user_date') - F('cache_date'),
-                    output_field=fields.DurationField()
-                )).filter(time_difference__gt=timedelta(hours=1))
+                user = user.filter(user_date__lt=start_of_today)
                 if filter_value:
                     if ' and ' in filter_value:
                         search_terms = filter_value.split(' and ')
@@ -1196,7 +1171,7 @@ def sw_asset_select_all(request):
         else:
             query = Q(**{f'{filter_column}__icontains': filter_text})
             #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+            user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
             # service = Xfactor_Service.objects.filter(computer=user.computer_id)
             # print(service.essential1)
             user = user.filter(query)
@@ -1235,7 +1210,7 @@ def sw_asset_select_all(request):
                 user = user.filter(query)
     else:
         #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date)
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
         if filter_value:
             if ' and ' in filter_value:
                 search_terms = filter_value.split(' and ')

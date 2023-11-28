@@ -21,7 +21,7 @@ var sec_asset_list2 = function () {
         displayLength: false,
         autoWidth: false,
         order: [
-            [3, "asc"]
+            [4, "asc"]
         ],
         drawCallback: function (settings) {
             // 페이지 변경시 체크박스 값을 설정합니다.
@@ -142,7 +142,7 @@ var sec_asset_list2 = function () {
                     10: 'ext_chr',
                     11: 'sw_list',
                     12: 'hotfix',
-                    13: 'cache_date',
+                    13: 'user_date',
                     14: 'memo',
                 };
                 data.filter = {
@@ -178,11 +178,11 @@ var sec_asset_list2 = function () {
             {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
             {data: 'ip_address', title: 'IPv4', searchable: true},
             {data: 'mac_address', title: 'MAC주소', searchable: true},
-            {data: 'ext_chr', title: '확장프로그램', searchable: true},
-            {data: 'sw_list', title: '소프트웨어', searchable: true},
-            {data: 'hotfix', title: 'Hotfix', searchable: true},
-            { data: 'cache_date', title: '온/오프라인', searchable: true },
-            {data: 'memo', title: '메모', searchable: true},
+            {data: 'ext_chr', title: '확장프로그램', searchable: true, orderable: false},
+            {data: 'sw_list', title: '소프트웨어', searchable: true, orderable: false},
+            {data: 'hotfix', title: 'Hotfix', searchable: true, orderable: false},
+            { data: 'user_date', title: '온/오프라인', searchable: true },
+            {data: 'memo', title: '메모', searchable: true, orderable: false},
         ],
         rowCallback: function (row, data, index) {
             var api = this.api();
@@ -280,8 +280,8 @@ var sec_asset_list2 = function () {
             },
             {targets: 13, width: "5%", className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function(data, type, row) {
-                var color = row.cache_date === "Online" ? "lime" : "red";
-                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+                var color = row.user_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.user_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
               }},
             {
                 targets: 14,

@@ -10,6 +10,9 @@ var hw_asset_list = function () {
 		serverSide: true,
 		displayLength: false,
         autoWidth: false,
+        order: [
+            [1, "asc"]
+        ],
 //        buttons: [
 //          { extend: 'print', className: 'btn btn-default' },
 //          { extend: 'csv', className: 'btn btn-default' }
@@ -45,7 +48,7 @@ var hw_asset_list = function () {
                             4: 'computer_name',
                             5: 'ip_address',
                             6: 'mac_address',
-                            8: 'cache_date',
+                            8: 'user_date',
                             9: 'memo',
 
                         };
@@ -76,13 +79,13 @@ var hw_asset_list = function () {
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
             { data: 'mac_address', title: 'MAC' , searchable: true},
-			{ data: 'hw', title: '하드웨어 목록', searchable: true },
-			{ data: 'cache_date', title: '온/오프라인', searchable: true },
+			{ data: 'hw', title: '하드웨어 목록', searchable: true, orderable: false},
+			{ data: 'user_date', title: '온/오프라인', searchable: true },
 //			{ data: 'hw_mb', title: 'Mainboard', searchable: true },
 //			{ data: 'hw_ram', title: 'RAM', searchable: true },
 //			{ data: 'hw_disk', title: 'DISK', searchable: true },
 //			{ data: 'hw_gpu', title: 'VGA', searchable: true },
-			{ data: 'memo', title: '메모', searchable: true },
+			{ data: 'memo', title: '메모', searchable: true, orderable: false},
 		],
 		rowCallback: function (row, data, index) {
             var api = this.api();
@@ -109,8 +112,8 @@ var hw_asset_list = function () {
                 const hw_gpu = row.hw_gpu;
 		        return '<span data-toggle="tooltip"></span><div class="hwmore swmore-font text-center new-text-truncate flex-cloumn align-middle " data-hw_cpu="' + hw_cpu + '" data-hw_mb="' + hw_mb + '"  data-hw_ram="' + hw_ram + '"  data-hw_disk="' + hw_disk + '"  data-hw_gpu="' + hw_gpu + '"data-computer_name="' + computer_name +'">더보기...</div>'}},
 		    {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-                var color = row.cache_date === "Online" ? "lime" : "red";
-                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+                var color = row.user_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.user_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
               }},
 		    {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
                 if (data === null || data === undefined || data.trim() === '') { return '';
@@ -341,6 +344,9 @@ var sw_asset_list = function () {
 		serverSide: true,
 		displayLength: false,
         autoWidth: false,
+        order: [
+            [1, "asc"]
+        ],
 		ajax: {
 			url: 'swpaging/',
 			type: "POST",
@@ -355,7 +361,7 @@ var sw_asset_list = function () {
                             4: 'computer_name',
                             5: 'ip_address',
                             6: 'mac_address',
-                            8: 'cache_date',
+                            8: 'user_date',
                             9: 'memo',
 
                         };
@@ -393,13 +399,13 @@ var sw_asset_list = function () {
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
             { data: 'mac_address', title: 'MAC' , searchable: true},
-            { data: 'sw', title: '소프트웨어 목록', searchable: true },
+            { data: 'sw', title: '소프트웨어 목록', searchable: true, orderable: false},
     //			{ data: 'hw_mb', title: 'Mainboard', searchable: true },
     //			{ data: 'hw_ram', title: 'RAM', searchable: true },
     //			{ data: 'hw_disk', title: 'DISK', searchable: true },
     //			{ data: 'hw_gpu', title: 'VGA', searchable: true },
-            { data: 'cache_date', title: '온/오프라인', searchable: true },
-            { data: 'memo', title: '메모', searchable: true },
+            { data: 'user_date', title: '온/오프라인', searchable: true },
+            { data: 'memo', title: '메모', searchable: true, orderable: false},
 		],
 		rowCallback: function (row, data, index) {
             var api = this.api();
@@ -431,8 +437,8 @@ var sw_asset_list = function () {
 
 		        return '<span data-toggle="tooltip"></span><div class="swmore swmore-font align-middle text-center " data-swlist="' + swList + '" data-swver="' + swVer + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
             {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-                var color = row.cache_date === "Online" ? "lime" : "red";
-                return '<span title="'+row.cache_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
+                var color = row.user_date === "Online" ? "lime" : "red";
+                return '<span title="'+row.user_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
               }},
 		    {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
                 if (data === null || data === undefined || data.trim() === '') { return '';
