@@ -177,8 +177,8 @@ var hw_pur_asset_list = function () {
             {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
             {data: 'ip_address', title: 'IPv4', searchable: true},
             {data: 'first_network', title: '최초 네트워크 접속일', searchable: true},
-            {data: 'mem_use', title: '메모리 사용률', searchable: true},
-            {data: 'disk_use', title: '디스크 사용률', searchable: true},
+            {data: 'mem_use', title: '디스크 사용률', searchable: true},
+            {data: 'disk_use', title: '메모리 사용률', searchable: true},
             {
                 data: 'hw', title: '부품 목록',
                 render: function (data, type, row) {
@@ -878,7 +878,7 @@ var sw_pur_asset_list = function () {
 
 function pur_hwbutton(btn) {
     let newTableContent = '';
-    newTableContent = '<thead><tr class="table-active text-white text-opacity-75 text-center"><th>선택</th><th>No</th><th>구분</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>최초 네트워크 접속일</th><th>메모리 사용률</th><th>디스크 사용률</th><th>부품목록</th><th>온/오프라인</th><th>메모</th></tr></thead><tbody></tbody>';
+    newTableContent = '<thead><tr class="table-active text-white text-opacity-75 text-center"><th>선택</th><th>No</th><th>구분</th><th>부서</th><th>이름</th><th>계정</th><th>컴퓨터 이름</th><th>IPv4</th><th>최초 네트워크 접속일</th><th>디스크 사용률</th><th>메모리 사용률</th><th>부품목록</th><th>온/오프라인</th><th>메모</th></tr></thead><tbody></tbody>';
     $('#hs_pur_asset_list').DataTable().destroy();
     $('#hs_pur_asset_list').html(newTableContent);
     hw_pur_asset_list();

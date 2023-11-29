@@ -1,8 +1,8 @@
 import pytz
 from django.apps import apps
 from django.conf import settings
-from django.db.models import Value
-from django.db.models.functions import Concat
+from django.db.models import Value, BigIntegerField
+from django.db.models.functions import Concat, Cast
 from django.http import FileResponse, StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from openpyxl import Workbook
@@ -82,7 +82,7 @@ def export(request, model):
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
 
-        select_now = datetime.strptime(request.POST.get('selectedDate'), '%Y-%m-%d-%H')
+        select_now = datetime.strptime(request.GET.get('selectedDate'), '%Y-%m-%d-%H')
         start_of_today1_sel = select_now.strftime('%Y-%m-%d %H')
         start_of_today2_sel = datetime.strptime(start_of_today1_sel, '%Y-%m-%d %H')
         start_of_today_sel = timezone.make_aware(start_of_today2_sel)  # 선택한 시간대
@@ -178,11 +178,11 @@ def export(request, model):
 
     elif parameter_value == 'osVerPieChart':
         data_list = []
-        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_build", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_build_cast", "user_date"]
         if request.GET.get('categoryName') == '업데이트 완료':
-            data_list = user.filter(os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
+            data_list = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter(os_simple='Windows', os_build_cast__gt=19044).exclude(os_total='unconfirmed')
         if request.GET.get('categoryName') == '업데이트 필요':
-            data_list = user.filter(os_simple='Windows', os_build__lt='19044').exclude(os_total='unconfirmed')
+            data_list = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter(os_simple='Windows', os_build_cast__lte=19044).exclude(os_total='unconfirmed')
         data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'subnet_chart':

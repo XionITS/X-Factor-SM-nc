@@ -1,11 +1,11 @@
 import json
 
 import pytz
-from django.db.models.functions import Concat
+from django.db.models.functions import Concat, Cast
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
-from django.db.models import Q, Value, Count, Max
+from django.db.models import Q, Value, Count, Max, BigIntegerField
 from django.db.models.functions import Lower
 from functools import reduce
 from datetime import datetime, timedelta
@@ -145,8 +145,8 @@ def all_asset_paging1(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'logged_name_id__deptName',
-        2: 'computer_name',
-        3: 'logged_name_id__userName',
+        2: 'logged_name_id__userName',
+        3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
         6: 'os_simple'
@@ -356,7 +356,7 @@ def asset_os_paging1(request):
         3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
-        # 6: 'os_simple'
+        6: 'os_simple'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -551,11 +551,11 @@ def asset_os_paging2(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'logged_name_id__deptName',
-        2: 'computer_name',
-        3: 'logged_name_id__userName',
+        2: 'logged_name_id__userName',
+        3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
-        # 6: 'os_simple',
+        6: 'os_simple',
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -638,7 +638,7 @@ def oslistPieChart(request):
     user = user.filter(os_simple='Windows', os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
-                 # Q(os_build__icontains=filter_text) |
+                 Q(os_build__icontains=filter_text) |
                  Q(logged_name_id__deptName__icontains=filter_text) |
                  Q(logged_name_id__userName__icontains=filter_text) |
                  Q(logged_name_id__userId__icontains=filter_text) |
@@ -651,10 +651,11 @@ def oslistPieChart(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'logged_name_id__deptName',
-        2: 'computer_name',
-        3: 'logged_name_id__userName',
+        2: 'logged_name_id__userName',
+        3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
+        6: 'os_build'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -735,10 +736,10 @@ def osVerPieChart(request):
 
     if request.POST.get('categoryName') == '업데이트 완료':
         #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
-        user = user.filter( os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
+        user = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__gt=19044).exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
-                     # Q(os_build__icontains=filter_text) |
+                     Q(os_build__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -747,10 +748,10 @@ def osVerPieChart(request):
             user = user.filter(query)
     if request.POST.get('categoryName') == '업데이트 필요':
         #user = Xfactor_Daily.objects.filter(os_simple='Windows', os_build__lt='19044', user_date__gte=today_collect_date).exclude(os_total='unconfirmed')
-        user = user.filter(os_simple='Windows', os_build__lt='19044').exclude(os_total='unconfirmed')
+        user = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter(os_simple='Windows', os_build_cast__lte=19044).exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
-                     # Q(os_build__icontains=filter_text) |
+                     Q(os_build__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -763,13 +764,15 @@ def osVerPieChart(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'logged_name_id__deptName',
-        2: 'computer_name',
-        3: 'logged_name_id__userName',
+        2: 'logged_name_id__userName',
+        3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
+        6: 'os_build_cast'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
+    print(order_column)
     if order_column_dir == 'asc':
         user = user.order_by(order_column, '-computer_id')
     else:
@@ -850,7 +853,7 @@ def office_chart(request):
         user = user.filter( essential5__in=['Office 21', 'Office 19', 'Office 16'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
-                     # Q(essential5__icontains=filter_text) |
+                     Q(essential5__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -862,7 +865,7 @@ def office_chart(request):
         user = user.filter(essential5='Office 15')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
-                     # Q(essential5__icontains=filter_text) |
+                     Q(essential5__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -874,7 +877,7 @@ def office_chart(request):
         user = user.filter(essential5='오피스 없음')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
-                     # Q(essential5__icontains=filter_text) |
+                     Q(essential5__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -886,7 +889,7 @@ def office_chart(request):
         user =user.filter(essential5__in=['unconfirmed', ''])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
-                     # Q(essential5__icontains=filter_text) |
+                     Q(essential5__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -899,10 +902,11 @@ def office_chart(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'logged_name_id__deptName',
-        2: 'computer_name',
-        3: 'logged_name_id__userName',
+        2: 'logged_name_id__userName',
+        3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
+        6: 'essential5'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -987,7 +991,7 @@ def subnet_chart(request):
         user = user.filter(subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
-                     # Q(subnet__icontains=filter_text) |
+                     Q(subnet__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -1000,7 +1004,7 @@ def subnet_chart(request):
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
-                     # Q(subnet__icontains=filter_text) |
+                     Q(subnet__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -1012,7 +1016,7 @@ def subnet_chart(request):
         user = user.filter(subnet='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
-                     # Q(subnet__icontains=filter_text) |
+                     Q(subnet__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -1025,7 +1029,7 @@ def subnet_chart(request):
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
-                     # Q(subnet__icontains=filter_text) |
+                     Q(subnet__icontains=filter_text) |
                      Q(logged_name_id__deptName__icontains=filter_text) |
                      Q(logged_name_id__userName__icontains=filter_text) |
                      Q(logged_name_id__userId__icontains=filter_text) |
@@ -1038,10 +1042,11 @@ def subnet_chart(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'logged_name_id__deptName',
-        2: 'computer_name',
-        3: 'logged_name_id__userName',
+        2: 'logged_name_id__userName',
+        3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
+        6: 'subnet'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -1156,10 +1161,11 @@ def hotfixChart(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'logged_name_id__deptName',
-        2: 'computer_name',
-        3: 'logged_name_id__userName',
+        2: 'logged_name_id__userName',
+        3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
+        6: 'hotfix_date'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -1253,10 +1259,11 @@ def tcpuChart(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'logged_name_id__deptName',
-        2: 'computer_name',
-        3: 'logged_name_id__userName',
+        2: 'logged_name_id__userName',
+        3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
+        6: 't_cpu'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -1355,10 +1362,11 @@ def discoverChart(request):
     order_column_dir = request.POST.get('order[0][dir]', 'asc')
     order_column_map = {
         1: 'logged_name_id__deptName',
-        2: 'computer_name',
-        3: 'logged_name_id__userName',
+        2: 'logged_name_id__userName',
+        3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
+        6: 'cache_date'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
