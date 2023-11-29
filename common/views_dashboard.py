@@ -26,13 +26,26 @@ def Dashboard(unique_items, selected_date=None):
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     yesterday_collect_date = timezone.now() - timedelta(days=1)
     if selected_date:
+
+        setting_value_list = []
         start_date_naive = datetime.strptime(selected_date, "%Y-%m-%d-%H")
         start_date = timezone.make_aware(start_date_naive)
         end_date = start_date + timedelta(hours=1)
         asset_log = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_date, statistics_collection_date__lt=end_date)
         asset_log_prev = Daily_Statistics_log.objects.filter(statistics_collection_date__gte=start_date - timedelta(days=1), statistics_collection_date__lt=end_date - timedelta(days=1))
         #print("selected_Date있음")
+
+        # 세팅값 변수처리 부분
+        ver_current = Daily_Statistics_log.objects.filter(item='ver_web').filter(statistics_collection_date__gte=start_date, statistics_collection_date__lt=end_date).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        hot_current = Daily_Statistics_log.objects.filter(item='hot_web').filter(statistics_collection_date__gte=start_date, statistics_collection_date__lt=end_date).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        discover_current = Daily_Statistics_log.objects.filter(item='discover_web').filter(statistics_collection_date__gte=start_date, statistics_collection_date__lt=end_date).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+
+        setting_value_list.append({'item': 'ver_current', 'count': ver_current})
+        setting_value_list.append({'item': 'hot_current', 'count': hot_current})
+        setting_value_list.append({'item': 'discover_current', 'count': discover_current})
+
     else:
+        setting_value_list = []
         latest_date = Daily_Statistics_log.objects.latest('statistics_collection_date').statistics_collection_date
         previous_date = latest_date - timedelta(days=1)
         start_time = timezone.datetime(latest_date.year, latest_date.month, latest_date.day, latest_date.hour, tzinfo=timezone.utc)
@@ -183,7 +196,7 @@ def Dashboard(unique_items, selected_date=None):
     other_online_list = [other_online_other_list, other_online_mac_list, other_online_window_list]
 
 
-########################################################################################################################################
+    ########################################################################################################################################
     # 토탈 차트
     # desktop[other, mac, winodws]
     desk_total_other = asset_log.filter(classification='Desktop_os_cache_total').exclude(item__in=['Windows', 'Mac']).values('item_count')
@@ -339,7 +352,7 @@ def Dashboard(unique_items, selected_date=None):
     desk_total_list=desk_total_list
     note_total_list=note_total_list
     other_total_list=other_total_list
-
+    setting_value_list=setting_value_list
     #items_with_permission = [item[0] for item in unique_items]
 
 
@@ -406,7 +419,7 @@ def Dashboard(unique_items, selected_date=None):
         'desk_total_list' : desk_total_list,
         'note_total_list' : note_total_list,
         'other_total_list' : other_total_list,
-
+        'setting_value_list': setting_value_list
     }
     # 예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시
     # try:

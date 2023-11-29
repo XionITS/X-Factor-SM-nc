@@ -210,9 +210,11 @@ $(document).on("click", "#settingVerBtn", function (e) {
             modalbody += '<div style="display: flex; align-items:center; justify-content: center;"> <div class=h6>Version : &nbsp;</div><select class="form-select form-select-lg form-setting h5">';
             for (var i = 0; i < res.ver_list.length; i++) {
                 if (res.ver_list[i] === res.current_value) {
-                    modalbody += '<option class=h6 selected>' + res.ver_list[i] + '</option>';
-                }else{
-                    modalbody += '<option class=h6>' + res.ver_list[i] + '</option>';
+                    modalbody += '<option value="' + res.ver_list[i] + '" class=h6 selected> 현재값 : ' + res.ver_list[i] + '</option>';
+                }else if (res.ver_list[i] === res.next_value) {
+                    modalbody += '<option value="' + res.ver_list[i] + '" class=h6> 다음값 : ' + res.ver_list[i] + '</option>';
+                }else {
+                    modalbody += '<option value="' + res.ver_list[i] + '" class=h6>' + res.ver_list[i] + '</option>';
                 }
             }
 
@@ -253,9 +255,11 @@ $(document).on("click", "#settingHotBtn", function (e) {
             modalbody += '<div style="display: flex; align-items:center; justify-content: center;"><select class="form-select form-select-lg form-setting h5">';
             for (var i = 0; i < res.hot_list.length; i++) {
                 if (res.hot_list[i] === res.current_value) {
-                    modalbody += '<option class=h6 selected>' + res.hot_list[i] + '</option>';
-                }else{
-                    modalbody += '<option class=h6>' + res.hot_list[i] + '</option>';
+                    modalbody += '<option value="' + res.hot_list[i] + '" class=h6 selected> 현재값 : ' + res.hot_list[i] + '</option>';
+                }else if (res.hot_list[i] === res.next_value) {
+                    modalbody += '<option value="' + res.hot_list[i] + '" class=h6> 다음값 : ' + res.hot_list[i] + '</option>';
+                }else {
+                    modalbody += '<option value="' + res.hot_list[i] + '" class=h6>' + res.hot_list[i] + '</option>';
                 }
             }
 
@@ -297,9 +301,11 @@ $(document).on("click", "#settingDiscoverBtn", function (e) {
             modalbody += '<div style="display: flex; align-items:center; justify-content: center;"><select class="form-select form-select-lg form-setting h5">';
             for (var i = 0; i < res.discover_list.length; i++) {
                 if (res.discover_list[i] === res.current_value) {
-                    modalbody += '<option class=h6 selected>' + res.discover_list[i] + '</option>';
-                }else{
-                    modalbody += '<option class=h6>' + res.discover_list[i] + '</option>';
+                    modalbody += '<option value="' + res.discover_list[i] + '" class=h6 selected> 현재값 : ' + res.discover_list[i] + '</option>';
+                }else if (res.discover_list[i] === res.next_value) {
+                    modalbody += '<option value="' + res.discover_list[i] + '" class=h6> 다음값 : ' + res.discover_list[i] + '</option>';
+                }else {
+                    modalbody += '<option value="' + res.discover_list[i] + '" class=h6>' + res.discover_list[i] + '</option>';
                 }
             }
 

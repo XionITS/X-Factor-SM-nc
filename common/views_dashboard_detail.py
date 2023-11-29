@@ -1,11 +1,11 @@
 import json
 
 import pytz
-from django.db.models.functions import Concat
+from django.db.models.functions import Concat, Cast
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
-from django.db.models import Q, Value, Count, Max
+from django.db.models import Q, Value, Count, Max, BigIntegerField
 from django.db.models.functions import Lower
 from functools import reduce
 from datetime import datetime, timedelta
@@ -706,6 +706,13 @@ def osVerPieChart(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
+
+        # 세팅값 변수처리 부분
+        ver_current = Daily_Statistics_log.objects.filter(item='ver_web').filter(statistics_collection_date__gte=start_of_today, statistics_collection_date__lt=end_of_today).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if ver_current == None:
+            ver_current = 19044
+
+
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
@@ -728,6 +735,9 @@ def osVerPieChart(request):
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
+        # 세팅값 변수처리 부분
+        ver_current = Daily_Statistics_log.objects.filter(item='ver_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
         # 토탈
@@ -735,7 +745,10 @@ def osVerPieChart(request):
 
     if request.POST.get('categoryName') == '업데이트 완료':
         #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
-        user = user.filter( os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
+
+
+        #user = user.filter( os_simple='Windows', os_build__gt=ver_current).exclude(os_total='unconfirmed')
+        user = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__gt=ver_current).exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      # Q(os_build__icontains=filter_text) |
@@ -747,7 +760,7 @@ def osVerPieChart(request):
             user = user.filter(query)
     if request.POST.get('categoryName') == '업데이트 필요':
         #user = Xfactor_Daily.objects.filter(os_simple='Windows', os_build__lt='19044', user_date__gte=today_collect_date).exclude(os_total='unconfirmed')
-        user = user.filter(os_simple='Windows', os_build__lt='19044').exclude(os_total='unconfirmed')
+        user = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__lte=ver_current).exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      # Q(os_build__icontains=filter_text) |
@@ -1082,7 +1095,6 @@ def subnet_chart(request):
 def hotfixChart(request):
     user = ''
     cache = ''
-    three_months_ago = datetime.now() - timedelta(days=90)
     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
     filter_text = request.POST.get('search[value]')
     local_tz = pytz.timezone('Asia/Seoul')
@@ -1094,6 +1106,12 @@ def hotfixChart(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
 
+        # 세팅값 변수처리 부분
+        hot_current = Daily_Statistics_log.objects.filter(item='hot_web').filter(statistics_collection_date__gte=start_of_today, statistics_collection_date__lt=end_of_today).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if hot_current == None:
+            hot_current = 90
+        three_months_ago = datetime.now() - timedelta(days=hot_current)
+
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
 
@@ -1103,6 +1121,11 @@ def hotfixChart(request):
         start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
+
+        # 세팅값 변수처리 부분
+        hot_current = Daily_Statistics_log.objects.filter(item='hot_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        three_months_ago = datetime.now() - timedelta(days=hot_current)
+
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
 
@@ -1291,7 +1314,7 @@ def tcpuChart(request):
 
     return JsonResponse(response)
 
-
+#장기 미접속 차트
 @csrf_exempt
 def discoverChart(request):
     #print(request.POST.get('selectedDate'))
@@ -1311,11 +1334,18 @@ def discoverChart(request):
         start_of_today2_sel = datetime.strptime(start_of_today1_sel, '%Y-%m-%d %H')
         start_of_today_sel = timezone.make_aware(start_of_today2_sel) #선택한 시간대
         end_of_today_sel = start_of_today_sel + timedelta(minutes=50) #선택한 시간대 + 50분
-        date_150_days_ago = start_of_today_sel - timedelta(days=7) #선택한 시간대로부터 150일 전 시간대
-        date_180_days_ago = start_of_today_sel - timedelta(days=10) #선택한 시간대로부터 150일 전 시간대
+
+        # 세팅값 변수처리 부분
+        discover_current = Daily_Statistics_log.objects.filter(item='discover_web').filter(statistics_collection_date__gte=start_of_today_sel, statistics_collection_date__lt=end_of_today_sel).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if discover_current == None:
+            discover_current = 150
+        date_150_days_ago = start_of_today_sel - timedelta(days=discover_current) #선택한 시간대로부터 150일 전 시간대
+        date_180_days_ago = date_150_days_ago - timedelta(days=30) #선택한 시간대로부터 150일 전 시간대
     elif request.POST.get('selectedDate') == '':
-        date_150_days_ago = start_of_today - timedelta(days=7) #현재로부터 150일 전 시간대
-        date_180_days_ago = start_of_today - timedelta(days=10)
+        # 세팅값 변수처리 부분
+        discover_current = Daily_Statistics_log.objects.filter(item='discover_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        date_150_days_ago = start_of_today - timedelta(days=discover_current) #현재로부터 150일 전 시간대
+        date_180_days_ago = date_150_days_ago - timedelta(days=30)
     if request.POST.get('categoryName') == '1일 전':
         date_150_yesterday_ago = date_150_days_ago - timedelta(days=1)
         date_180_yesterday_ago = date_180_days_ago - timedelta(days=1)

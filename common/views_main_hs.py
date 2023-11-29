@@ -71,6 +71,7 @@ def dashboard(request):
     desk_total_list = DCDL['desk_total_list']
     note_total_list = DCDL['note_total_list']
     other_total_list = DCDL['other_total_list']
+    setting_value_list = DCDL['setting_value_list']
 
     dataList = {
                 'monthly_asset_data_list': monthly_asset_data_list,
@@ -89,7 +90,8 @@ def dashboard(request):
                 'desk_total_list': desk_total_list,
                 'note_total_list': note_total_list,
                 'other_total_list': other_total_list,
-                'selected_date': selected_date if selected_date is not None else "select date..."
+                'selected_date': selected_date if selected_date is not None else "select date...",
+                #'setting_value_list': setting_value_list
     }
 
     context = {'menu_list' : unique_items, 'dataList': dataList}
