@@ -1,8 +1,8 @@
 import pytz
 from django.apps import apps
 from django.conf import settings
-from django.db.models import Value
-from django.db.models.functions import Concat
+from django.db.models import Value, BigIntegerField
+from django.db.models.functions import Concat , Cast
 from django.http import FileResponse, StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from openpyxl import Workbook
@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from openpyxl.writer.excel import save_virtual_workbook
 
-from common.models import Xfactor_Common_Cache
+from common.models import Xfactor_Common_Cache, Daily_Statistics_log
 from common.serializers import CommonSerializer, Dailyserializer, Cacheserializer, Cacheserializer2
 
 with open("setting.json", encoding="UTF-8") as f:
@@ -82,13 +82,25 @@ def export(request, model):
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
 
-        select_now = datetime.strptime(request.POST.get('selectedDate'), '%Y-%m-%d-%H')
+        select_now = datetime.strptime(request.GET.get('selectedDate'), '%Y-%m-%d-%H')
         start_of_today1_sel = select_now.strftime('%Y-%m-%d %H')
         start_of_today2_sel = datetime.strptime(start_of_today1_sel, '%Y-%m-%d %H')
         start_of_today_sel = timezone.make_aware(start_of_today2_sel)  # 선택한 시간대
         end_of_today_sel = start_of_today_sel + timedelta(minutes=50)  # 선택한 시간대 + 50분
-        date_150_days_ago = start_of_today_sel - timedelta(days=7)  # 선택한 시간대로부터 150일 전 시간대
-        date_180_days_ago = start_of_today_sel - timedelta(days=10)  # 선택한 시간대로부터 150일 전 시간대
+
+        # 세팅값 변수처리 부분
+        ver_current = Daily_Statistics_log.objects.filter(item='ver_web').filter(statistics_collection_date__gte=start_of_today, statistics_collection_date__lt=end_of_today).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if ver_current == None:
+            ver_current = 19044
+        hot_current = Daily_Statistics_log.objects.filter(item='hot_web').filter(statistics_collection_date__gte=start_of_today, statistics_collection_date__lt=end_of_today).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if hot_current == None:
+            hot_current = 90
+        discover_current = Daily_Statistics_log.objects.filter(item='discover_web').filter(statistics_collection_date__gte=start_of_today, statistics_collection_date__lt=end_of_today).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if discover_current == None:
+            discover_current = 150
+        date_150_days_ago = start_of_today_sel - timedelta(days=discover_current)  # 선택한 시간대로부터 150일 전 시간대
+        date_180_days_ago = date_150_days_ago - timedelta(days=30)  # 선택한 시간대로부터 150일 전 시간대
+
 
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
@@ -102,8 +114,13 @@ def export(request, model):
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
 
-        date_150_days_ago = start_of_today - timedelta(days=7)  # 현재로부터 150일 전 시간대
-        date_180_days_ago = start_of_today - timedelta(days=10)
+        # 세팅값 변수처리 부분
+        ver_current = Daily_Statistics_log.objects.filter(item='ver_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        hot_current = Daily_Statistics_log.objects.filter(item='hot_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        discover_current = Daily_Statistics_log.objects.filter(item='discover_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+
+        date_150_days_ago = start_of_today - timedelta(days=discover_current)  # 현재로부터 150일 전 시간대
+        date_180_days_ago = date_150_days_ago - timedelta(days=30)
 
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
@@ -180,9 +197,9 @@ def export(request, model):
         data_list = []
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_build", "user_date"]
         if request.GET.get('categoryName') == '업데이트 완료':
-            data_list = user.filter(os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
+            data_list = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__gt=ver_current).exclude(os_total='unconfirmed')
         if request.GET.get('categoryName') == '업데이트 필요':
-            data_list = user.filter(os_simple='Windows', os_build__lt='19044').exclude(os_total='unconfirmed')
+            data_list = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__lte=ver_current).exclude(os_total='unconfirmed')
         data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'subnet_chart':
@@ -207,7 +224,7 @@ def export(request, model):
         data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'hotfix_chart':
-        three_months_ago = datetime.now() - timedelta(days=90)
+        three_months_ago = datetime.now() - timedelta(days=hot_current)
         data_list = []
         filtered_user_objects = []
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "hotfix_date", "user_date"]
@@ -248,7 +265,7 @@ def export(request, model):
             base = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_yesterday_ago)
             data_list = filtered_records.exclude(mac_address__in=base.values('mac_address'))
         if request.GET.get('categoryName') == '현재':
-            print('aasdasdasd')
+            #print('aasdasdasd')
             # print('현재', date_150_days_ago)
             # print(date_150_days_ago)
             # user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_days_ago)
