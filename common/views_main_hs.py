@@ -91,6 +91,7 @@ def dashboard(request):
                 'other_total_list': other_total_list,
                 'selected_date': selected_date if selected_date is not None else "select date...",
                 #'setting_value_list': setting_value_list
+                # 'selected_date': datetime.strptime(selected_date, '%Y-%m-%d-%H').strftime('%Y-%m-%d %H시') if selected_date is not None else "select date..."
     }
 
     context = {'menu_list' : unique_items, 'dataList': dataList}

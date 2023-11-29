@@ -20,7 +20,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "asc"]
+            [1, "asc"]
         ],
         drawCallback: function (settings) {
             var api = this.api();
@@ -116,11 +116,11 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
                 var orderDir = data.order[0].dir;
                 var columnMap = {
                     1: 'logged_name_id__deptName',
-                    2: 'logged_name_id__userId',
+                    2: 'logged_name_id__userName',
                     3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
-                    // 6: 'os_simple'
+                    6: 'os_simple'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -270,7 +270,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "asc"]
+            [1, "asc"]
         ],
         drawCallback: function (settings) {
             var api = this.api();
@@ -365,12 +365,12 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'deptName',
-                    2: 'computer_name',
-                    3: 'logged_name',
+                    1: 'logged_name_id__deptName',
+                    2: 'logged_name_id__userName',
+                    3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
-                    // 6: 'os_simple',
+                    6: 'os_simple',
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -518,7 +518,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "asc"]
+            [1, "asc"]
         ],
         drawCallback: function (settings) {
             var api = this.api();
@@ -613,9 +613,9 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'deptName',
-                    2: 'computer_name',
-                    3: 'logged_name',
+                    1: 'logged_name_id__deptName',
+                    2: 'logged_name_id__userName',
+                    3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
                     6: 'os_simple',
@@ -766,7 +766,7 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "asc"]
+            [1, "asc"]
         ],
         drawCallback: function (settings) {
             var api = this.api();
@@ -860,11 +860,12 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'deptName',
-                    2: 'computer_name',
-                    3: 'logged_name',
+                    1: 'logged_name_id__deptName',
+                    2: 'logged_name_id__userName',
+                    3: 'computer_name',
                     4: 'ip_address',
                     5: 'mac_address',
+                    6: 'os_build'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -1013,7 +1014,7 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "asc"]
+            [1, "asc"]
         ],
         drawCallback: function (settings) {
             var api = this.api();
@@ -1107,11 +1108,12 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'deptName',
-                    2: 'computer_name',
-                    3: 'logged_name',
+                    1: 'logged_name_id__deptName',
+                    2: 'logged_name_id__userName',
+                    3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
+                    6: 'os_build_cast'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -1203,6 +1205,8 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
+                                        console.log(typeof data)
+
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
@@ -1260,7 +1264,7 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "asc"]
+            [1, "asc"]
         ],
         drawCallback: function (settings) {
             var api = this.api();
@@ -1354,9 +1358,9 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'deptName',
-                    2: 'computer_name',
-                    3: 'logged_name',
+                    1: 'logged_name_id__deptName',
+                    2: 'logged_name_id__userName',
+                    3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
                     6: 'essential5',
@@ -1514,7 +1518,7 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "asc"]
+            [1, "asc"]
         ],
         drawCallback: function (settings) {
             var api = this.api();
@@ -1608,11 +1612,12 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'deptName',
-                    2: 'computer_name',
-                    3: 'logged_name',
+                    1: 'logged_name_id__deptName',
+                    2: 'logged_name_id__userName',
+                    3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
+                    6: 'subnet'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -1766,7 +1771,7 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "asc"]
+            [1, "asc"]
         ],
         drawCallback: function (settings) {
             var api = this.api();
@@ -1860,11 +1865,12 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'deptName',
-                    2: 'computer_name',
-                    3: 'logged_name',
+                    1: 'logged_name_id__deptName',
+                    2: 'logged_name_id__userName',
+                    3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
+                    6: 'hotfix_date'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -2027,7 +2033,7 @@ var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "asc"]
+            [1, "asc"]
         ],
         drawCallback: function (settings) {
             var api = this.api();
@@ -2121,11 +2127,12 @@ var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'deptName',
-                    2: 'computer_name',
-                    3: 'logged_name',
+                    1: 'logged_name_id__deptName',
+                    2: 'logged_name_id__userName',
+                    3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
+                    6: 't_cpu'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -2276,7 +2283,7 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
         serverSide: true,
         displayLength: false,
         order: [
-            [3, "asc"]
+            [1, "asc"]
         ],
         drawCallback: function (settings) {
             var api = this.api();
@@ -2370,11 +2377,12 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
                 //console.log(orderColumn)
                 var orderDir = data.order[0].dir;
                 var columnMap = {
-                    1: 'deptName',
-                    2: 'computer_name',
-                    3: 'logged_name',
+                    1: 'logged_name_id__deptName',
+                    2: 'logged_name_id__userName',
+                    3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
+                    6: 'cache_date'
                 };
                 //console.log(columnMap)
                 data.filter = {

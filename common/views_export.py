@@ -2,7 +2,7 @@ import pytz
 from django.apps import apps
 from django.conf import settings
 from django.db.models import Value, BigIntegerField
-from django.db.models.functions import Concat , Cast
+from django.db.models.functions import Concat, Cast
 from django.http import FileResponse, StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from openpyxl import Workbook
@@ -195,7 +195,7 @@ def export(request, model):
 
     elif parameter_value == 'osVerPieChart':
         data_list = []
-        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_build", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_build_cast", "user_date"]
         if request.GET.get('categoryName') == '업데이트 완료':
             data_list = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__gt=ver_current).exclude(os_total='unconfirmed')
         if request.GET.get('categoryName') == '업데이트 필요':
