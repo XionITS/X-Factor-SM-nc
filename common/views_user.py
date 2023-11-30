@@ -1041,7 +1041,7 @@ def exchange_code_for_token(code):
     token_payload = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": "http://taniumstg.ncsoft.com:8000/dashboard/",
+        "redirect_uri": "https://tanium.ncsoft.com/dashboard/",
         "client_id": client_id,
         "client_secret": client_secret
     }
