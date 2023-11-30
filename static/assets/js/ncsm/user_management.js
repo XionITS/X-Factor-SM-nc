@@ -1199,7 +1199,10 @@ $(document).on("keyup", "#user_search_result", function (e) {
     userRows.each(function () {
         var x_id = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
         var x_username = $(this).find("td:nth-child(2)").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
-        if (x_id.includes(searchText) || x_username.includes(searchText)) {
+        var shouldShow = searchText.length >= 3 && x_id.includes(searchText);
+        var shouldShow1 = searchText.length >= 2 && x_username.includes(searchText);
+
+        if ((searchText.length === 0 || shouldShow) || (searchText.length === 0 || shouldShow1)) {
             // 검색어와 일치하는 경우 표시
             $(this).show();
         } else {
@@ -1366,7 +1369,11 @@ $(document).on("keyup", "#group_search_result", function (e) {
 
     userRows.each(function () {
         var x_id = $(this).find("td:first-child").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
-        if (x_id.includes(searchText)) {
+        var x_username = $(this).find("td:nth-child(2)").text().toLowerCase(); // 첫 번째 열의 텍스트를 가져와 소문자로 변환
+        var shouldShow = searchText.length >= 3 && x_id.includes(searchText);
+        var shouldShow1 = searchText.length >= 2 && x_username.includes(searchText);
+
+        if ((searchText.length === 0 || shouldShow) || (searchText.length === 0 || shouldShow1)) {
             // 검색어와 일치하는 경우 표시
             $(this).show();
         } else {

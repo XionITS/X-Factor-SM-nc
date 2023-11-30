@@ -1135,7 +1135,6 @@ def hotfixChart(request):
 
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
-
     # user_objects = Xfactor_Daily.objects.filter(user_date__gte=start_of_today)
     user_objects = user
     users_values = user_objects.values('hotfix_date', 'computer_id')

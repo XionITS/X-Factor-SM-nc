@@ -1894,7 +1894,7 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            {data: 'hotfix_date', title: 'HOTFIX', searchable: true},
+            {data: 'hotfix_date', title: 'HOTFIX', searchable: true, type: 'date-eu', orderable: false},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1972,7 +1972,7 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
 
                         const latestDateFormatted = latestMoment.format('MM/DD/YYYY');
 
-                        return '<span title="' + latestDateFormatted + '" data-toggle="tooltip">' + latestDateFormatted + '</span>';
+                        return latestDateFormatted
                     } else {
                         // If no valid dates, return an empty string or handle it as needed
                         return '';
@@ -2517,3 +2517,70 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
     var customStyle = '<style>#nexts_sec, #after_sec {color: #FFFFFF; background-color: #FFFFFF26; margin-left: 5px; height: 33px; padding: 6px 12px; font-size: 15px; padding: 6px 12px; margin-right: 5px;}</style>';
     $('head').append(customStyle);
 };
+
+/**
+ * Similar to the Date (dd/mm/YY) data sorting plug-in, this plug-in offers
+ * additional  flexibility with support for spaces between the values and
+ * either . or / notation for the separators.
+ *
+ * Please note that this plug-in is **deprecated*. The
+ * [datetime](//datatables.net/blog/2014-12-18) plug-in provides enhanced
+ * functionality and flexibility.
+ *
+ *  @name Date (dd . mm[ . YYYY])
+ *  @summary Sort dates in the format `dd/mm/YY[YY]` (with optional spaces)
+ *  @author [Robert Sedovšek](http://galjot.si/)
+ *  @deprecated
+ *
+ *  @example
+ *    $('#example').dataTable( {
+ *       columnDefs: [
+ *         { type: 'date-eu', targets: 0 }
+ *       ]
+ *    } );
+ */
+
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+	"date-eu-pre": function ( date ) {
+        console.log('asdasd')
+		date = date.replace(" ", "");
+
+		if ( ! date ) {
+			return 0;
+		}
+
+		var year;
+		var eu_date = date.split(/[\.\-\/]/);
+        console.log(eu_date)
+
+		/*year (optional)*/
+		if ( eu_date[2] ) {
+			year = eu_date[2];
+		}
+		else {
+			year = 0;
+		}
+
+		/*month*/
+		var month = eu_date[1];
+		if ( month.length == 1 ) {
+			month = 0+month;
+		}
+
+		/*day*/
+		var day = eu_date[0];
+		if ( day.length == 1 ) {
+			day = 0+day;
+		}
+
+		return (year + month + day) * 1;
+	},
+
+	"date-eu-asc": function ( a, b ) {
+		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+	},
+
+	"date-eu-desc": function ( a, b ) {
+		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+	}
+} );

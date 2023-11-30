@@ -1,8 +1,14 @@
+import re
+
 import pytz
+from dateutil import parser
+from django.db.models import Max
 from rest_framework import serializers
 from .models import *
 from datetime import datetime, timedelta
-from django.utils.html import escape
+from django.utils.html import escape, strip_tags
+
+
 class NcdbSerializer(serializers.ModelSerializer):
     class Meta:
         model = Xfactor_ncdb
@@ -176,6 +182,35 @@ class Cacheserializer2(serializers.ModelSerializer):
             data['ncdb_data'] = []
 
         return data
+
+
+class Cacheserializer3(serializers.ModelSerializer):
+    class Meta:
+        model = Xfactor_Common_Cache
+        fields = '__all__'
+    def to_representation(self, instance):
+        if instance.logged_name_id:
+            # If `logged_name_id` is not None, serialize `Xfactor_ncdb` using `NcdbSerializer`
+            ncdb_data = NcdbSerializer(instance.logged_name_id)
+            data = super().to_representation(instance)
+            data['ncdb_data'] = ncdb_data.data
+        else:
+            # If `logged_name_id` is None, just use `CommonSerializer`
+            data = super().to_representation(instance)
+            data['ncdb_data'] = []
+        if instance.hotfix_date:
+            date_strings = instance.hotfix_date.split('<br>')
+            # 공백을 제거하고 빈 문자열을 필터링
+            date_strings = [date.strip() for date in date_strings if date.strip()]
+            # 문자열을 datetime 객체로 변환
+            date_objects = [datetime.strptime(date.split(' ')[0], '%m/%d/%Y') for date in date_strings]
+            # datetime 객체 중에서 가장 최근 날짜 찾기
+            latest_date = max(date_objects)
+            latest_date_formatted = latest_date.strftime('%Y/%m/%d')
+            data = super().to_representation(instance)
+            data['hotfix_date'] = latest_date_formatted
+            return data
+
 
 class Commonserializer2(serializers.ModelSerializer):
     user_date = serializers.SerializerMethodField()

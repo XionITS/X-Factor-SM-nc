@@ -168,7 +168,14 @@ $(document).on("click","#groupCreate", function(event) {
         computerIds.push(computer_id);
         computerNames.push(computer_name);
     });
-
+    if (group_name === ''){
+        alert('그룹이름을 작성해 주세요.')
+        return
+    }
+    if (computerNames.length === 0 || computerIds.length === 0){
+        alert('자산을 선택해 주세요.')
+        return
+    }
     $.ajax({
     url: '../create/', // views.py 파일의 URL을 여기에 넣으세요.
     type: 'POST',
