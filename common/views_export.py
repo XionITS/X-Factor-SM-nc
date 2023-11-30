@@ -116,8 +116,14 @@ def export(request, model):
 
         # 세팅값 변수처리 부분
         ver_current = Daily_Statistics_log.objects.filter(item='ver_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if ver_current == None:
+            ver_current = 19044
         hot_current = Daily_Statistics_log.objects.filter(item='hot_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if hot_current == None:
+            hot_current = 90
         discover_current = Daily_Statistics_log.objects.filter(item='discover_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if discover_current == None:
+            discover_current = 150
 
         date_150_days_ago = start_of_today - timedelta(days=discover_current)  # 현재로부터 150일 전 시간대
         date_180_days_ago = date_150_days_ago - timedelta(days=30)
@@ -194,12 +200,13 @@ def export(request, model):
         data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'osVerPieChart':
+        ver_user=user.exclude(os_build__in=['','unconfirmed'])
         data_list = []
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_build_cast", "user_date"]
         if request.GET.get('categoryName') == '업데이트 완료':
-            data_list = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__gt=ver_current).exclude(os_total='unconfirmed')
+            data_list = ver_user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__gte=ver_current).exclude(os_total='unconfirmed')
         if request.GET.get('categoryName') == '업데이트 필요':
-            data_list = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__lte=ver_current).exclude(os_total='unconfirmed')
+            data_list = ver_user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__lt=ver_current).exclude(os_total='unconfirmed')
         data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'subnet_chart':

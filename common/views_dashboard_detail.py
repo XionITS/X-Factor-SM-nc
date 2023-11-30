@@ -725,7 +725,7 @@ def osVerPieChart(request):
         else:
             end_of_today = start_of_today + timedelta(minutes=50)
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today).exclude(os_build='')
             # 토탈
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
@@ -738,9 +738,10 @@ def osVerPieChart(request):
 
         # 세팅값 변수처리 부분
         ver_current = Daily_Statistics_log.objects.filter(item='ver_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
-
+        if ver_current == None:
+            ver_current = 19044
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today).exclude(os_build='')
         # 토탈
         cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
@@ -749,7 +750,7 @@ def osVerPieChart(request):
 
 
         #user = user.filter( os_simple='Windows', os_build__gt=ver_current).exclude(os_total='unconfirmed')
-        user = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__gt=ver_current).exclude(os_total='unconfirmed')
+        user = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__gte=ver_current).exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(os_build__icontains=filter_text) |
@@ -761,7 +762,7 @@ def osVerPieChart(request):
             user = user.filter(query)
     if request.POST.get('categoryName') == '업데이트 필요':
         #user = Xfactor_Daily.objects.filter(os_simple='Windows', os_build__lt='19044', user_date__gte=today_collect_date).exclude(os_total='unconfirmed')
-        user = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__lte=ver_current).exclude(os_total='unconfirmed')
+        user = user.annotate(os_build_cast=Cast('os_build', BigIntegerField())).filter( os_simple='Windows', os_build_cast__lt=ver_current).exclude(os_total='unconfirmed')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(os_build__icontains=filter_text) |
@@ -1128,6 +1129,8 @@ def hotfixChart(request):
 
         # 세팅값 변수처리 부분
         hot_current = Daily_Statistics_log.objects.filter(item='hot_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if hot_current == None:
+            hot_current = 90
         three_months_ago = datetime.now() - timedelta(days=hot_current)
 
         # 현재
@@ -1350,6 +1353,8 @@ def discoverChart(request):
     elif request.POST.get('selectedDate') == '':
         # 세팅값 변수처리 부분
         discover_current = Daily_Statistics_log.objects.filter(item='discover_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if discover_current == None:
+            discover_current = 150
         date_150_days_ago = start_of_today - timedelta(days=discover_current) #현재로부터 150일 전 시간대
         date_180_days_ago = date_150_days_ago - timedelta(days=30)
     if request.POST.get('categoryName') == '1일 전':
