@@ -57,11 +57,11 @@ def search(request):
         if type == 'asset':
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).filter(computer_name=search_text)
         if type == 'user':
-            userId = Xfactor_ncdb.objects.filter(userName=search_text).values('userId')
+            # userId = Xfactor_ncdb.objects.filter(userName=search_text).values('userId')
+            userId = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).filter(computer_name=search_text)
             if not userId:
                 return HttpResponse({'error': '유효하지 않은 값입니다.'})
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).filter(logged_name_id=userId[0]['userId'])
-        user_data = Cacheserializer(user, many=True).data
+        user_data = Cacheserializer(userId, many=True).data
         # response = {
         #     'data': user_data,  # Serialized data for the current page
         # }
@@ -83,7 +83,7 @@ def search_box(request):
         if type == 'asset':
             user_data = Xfactor_Common.objects.filter(user_date__gte=start_of_day, computer_name__icontains=search_text).values('computer_name')
         if type == 'user':
-            user_data = Xfactor_ncdb.objects.filter(userName__icontains=search_text).values('userName', 'userId')
+            user_data = Xfactor_Common.objects.filter(user_date__gte=start_of_day, logged_name_id__userName__icontains=search_text).values('logged_name_id__userName', 'computer_name')
         return JsonResponse({'data': list(user_data)})
 
 

@@ -23,6 +23,7 @@
 //     }
 //   });
 // });
+var result = ''
 $(document).ready(function () {
     $('#asset_search_result').autocomplete({
         source: function (request, response) {
@@ -69,9 +70,10 @@ $(document).ready(function () {
                     },
                     success: function (data) {
                         var autocompleteData = data.data.map(function (item) {
+                            result = item.computer_name
                             return {
-                            label: item.userName + ' (' + item.userId + ')', /// Autocomplete에서 보여질 값,
-                            value: item.userName
+                            label: item.logged_name_id__userName + ' (' + item.computer_name + ')', /// Autocomplete에서 보여질 값,
+                            value: item.logged_name_id__userName
                             };
                         });
 
@@ -117,7 +119,7 @@ $('#user_search').on('click', function(event) {
     if (inputValue.trim().length < 2 ) {
         alert("최소 2글자 입력해주세요.");
     } else {
-      searchPer(inputValue, 'user');
+      searchPer(result, 'user');
     }
 });
 
@@ -129,7 +131,7 @@ $('#asset_user').on('keyup', function(event) {
             if (inputValue.trim().length < 2) {
         alert("최소 2글자 입력해주세요.");
       } else {
-        searchPer(inputValue, 'user');
+        searchPer(result, 'user');
       }
     }
 });
