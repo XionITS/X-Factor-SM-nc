@@ -55,13 +55,16 @@ def search(request):
         search_text = request.POST.get('searchText', None)
         type = request.POST.get('type', None)
         if type == 'asset':
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).filter(computer_name=search_text)
+            # user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).filter(computer_name=search_text)
+            userId = Xfactor_Common.objects.filter(user_date__gte=start_of_day, computer_name=search_text)
         if type == 'user':
             # userId = Xfactor_ncdb.objects.filter(userName=search_text).values('userId')
-            userId = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).filter(computer_name=search_text)
+            # userId = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).filter(computer_name=search_text)
+            userId = Xfactor_Common.objects.filter(user_date__gte=start_of_day, computer_name=search_text)
             if not userId:
                 return HttpResponse({'error': '유효하지 않은 값입니다.'})
-        user_data = Cacheserializer(userId, many=True).data
+        # user_data = Cacheserializer(userId, many=True).data
+        user_data = CommonSerializer(userId, many=True).data
         # response = {
         #     'data': user_data,  # Serialized data for the current page
         # }
