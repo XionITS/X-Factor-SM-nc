@@ -43,7 +43,7 @@ def all_asset_paging1(request):
     if request.POST.get('selectedDate') != '':
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
         start_of_today = timezone.make_aware(start_date_naive)
-        end_of_today = start_of_today + timedelta(minutes=50)
+        end_of_today = start_of_today + timedelta(minutes=59)
         start_of_day = start_of_today - timedelta(days=7)
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
             #print('111111111111')
@@ -56,7 +56,7 @@ def all_asset_paging1(request):
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
             #print('2222222222')
-            end_of_today = start_of_today + timedelta(minutes=50)
+            end_of_today = start_of_today + timedelta(minutes=59)
             # 현재
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
             # 토탈
@@ -70,7 +70,7 @@ def all_asset_paging1(request):
         start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
         start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
-        end_of_today = start_of_today + timedelta(minutes=50)
+        end_of_today = start_of_today + timedelta(minutes=59)
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
         # 토탈
