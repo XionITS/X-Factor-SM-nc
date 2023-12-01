@@ -1205,8 +1205,6 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                                        console.log(typeof data)
-
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
                 }
             },
