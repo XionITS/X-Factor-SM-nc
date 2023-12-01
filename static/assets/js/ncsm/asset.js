@@ -70,13 +70,24 @@ $(document).ready(function () {
                     },
                     success: function (data) {
                         var autocompleteData = data.data.map(function (item) {
-                            result = item.computer_name
                             return {
                             label: item.logged_name_id__userName + ' (' + item.computer_name + ')', /// Autocomplete에서 보여질 값,
-                            value: item.logged_name_id__userName
+                            value: item.logged_name_id__userName + ' (' + item.computer_name + ')',
+                            computer_name: item.computer_name
                             };
                         });
-
+                         // Autocomplete 초기화
+                        $('#asset_user').autocomplete({
+                            source: autocompleteData,
+                            select: function (event, ui) {
+                                // 선택된 항목의 label 및 value 값 가져오기
+                                var selectedLabel = ui.item.label;
+                                var selectedValue = ui.item.computer_name;
+                                result = selectedValue
+                                // 선택된 값 콘솔에 출력
+                                // 여기에 선택된 값에 대한 추가적인 로직을 구현할 수 있습니다.
+                            }
+                        });
                         response(autocompleteData);
                     }
                 });

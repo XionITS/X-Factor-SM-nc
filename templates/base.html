@@ -229,7 +229,9 @@
     </div>
 </div>
 <script>
-    var dataList = {{ dataList |  safe }};
+    {% if dataList %}
+        var dataList = {{ dataList | safe }};
+    {% endif %}
 </script>
 </body>
 <style>
