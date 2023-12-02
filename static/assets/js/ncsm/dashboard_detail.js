@@ -1892,7 +1892,7 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            {data: 'hotfix_date', title: 'HOTFIX', searchable: true, type: 'date-eu', orderable: false},
+            {data: 'hotfix_date', title: 'HOTFIX', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -2575,10 +2575,15 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 	},
 
 	"date-eu-asc": function ( a, b ) {
+        console.log('1111111111111')
 		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	},
 
 	"date-eu-desc": function ( a, b ) {
+        console.log('222222222')
 		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	}
 } );
+$('#hotfix_chart').on('order.dt', function () {
+    console.log('Order event triggered');
+});

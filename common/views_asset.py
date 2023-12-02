@@ -84,13 +84,15 @@ def search_box(request):
         start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
         start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
+        search_text = ""
         search_text = request.POST.get('searchText', None)
         type = request.POST.get('type', None)
         if type == 'asset':
             user_data = Xfactor_Common.objects.filter(user_date__gte=start_of_day, computer_name__icontains=search_text).values('computer_name')
         if type == 'user':
             user_data = Xfactor_Common.objects.filter(user_date__gte=start_of_day, logged_name_id__userName__icontains=search_text).values('logged_name_id__userName', 'computer_name')
-            print(user_data)
+            if not user_data:
+                return HttpResponse({'error': '유효하지 않은 값입니다.'})
         return JsonResponse({'data': list(user_data)})
 
 

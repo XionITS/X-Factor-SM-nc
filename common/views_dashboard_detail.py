@@ -1095,7 +1095,6 @@ def subnet_chart(request):
     return JsonResponse(response)
 
 
-
 @csrf_exempt
 def hotfixChart(request):
     user = ''
@@ -1135,6 +1134,7 @@ def hotfixChart(request):
 
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+
     # user_objects = Xfactor_Daily.objects.filter(user_date__gte=start_of_today)
     user_objects = user
     users_values = user_objects.values('hotfix_date', 'computer_id')
@@ -1149,6 +1149,7 @@ def hotfixChart(request):
                 continue
         if date_objects:
             latest_date = max(date_objects)
+            user['hotfix_date']=latest_date
             if latest_date < three_months_ago and request.POST.get('categoryName') == '보안패치 필요':
                 filtered_user_objects.append(user['computer_id'])
             elif latest_date >= three_months_ago and request.POST.get('categoryName') == '보안패치 불필요':
@@ -1171,6 +1172,43 @@ def hotfixChart(request):
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
 
+        user_objects = user
+        users_values = user_objects.values('hotfix_date', 'computer_id')
+        for i, users in enumerate(users_values):
+            date_strings = users['hotfix_date'].split('<br> ')
+            date_objects = []
+            for date_str in date_strings:
+                try:
+                    date_obj = datetime.strptime(date_str, '%m/%d/%Y %H:%M:%S')
+                    date_objects.append(date_obj)
+                except ValueError:
+                    continue
+            if date_objects:
+                latest_date = max(date_objects)
+                #users['hotfix_date'] = latest_date
+                users['hotfix_date'] = latest_date
+                user.hotfix_date = users['hotfix_date']
+                user1 = user.get(computer_id=users['computer_id'])
+                user1.hotfix_date = latest_date
+                #print(user['hotfix_date'])
+                #print(user)
+        # for user_object in user:
+        #     date_strings = user_object.hotfix_date.split('<br> ')
+        #     date_objects = []
+        #     for date_str in date_strings:
+        #         try:
+        #             date_obj = datetime.strptime(date_str, '%m/%d/%Y %H:%M:%S')
+        #             date_objects.append(date_obj)
+        #         except ValueError:
+        #             continue
+        #     if date_objects:
+        #         latest_date = max(date_objects)
+        #         user_object.hotfix_date = latest_date
+        #         #print(user_object.hotfix_date)
+        #         #print(user_object)
+        #
+
+
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
                  Q(hotfix_date__icontains=filter_text) |
@@ -1178,7 +1216,7 @@ def hotfixChart(request):
                  Q(logged_name_id__userName__icontains=filter_text) |
                  Q(ip_address__icontains=filter_text) |
                  Q(mac_address__icontains=filter_text))
-        user = user.filter(query)
+        user = user1.filter(query)
 
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))
@@ -1193,6 +1231,7 @@ def hotfixChart(request):
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
+
     if order_column_dir == 'asc':
         user = user.order_by(order_column, '-computer_id')
     else:
@@ -1223,6 +1262,135 @@ def hotfixChart(request):
     }
 
     return JsonResponse(response)
+
+
+# @csrf_exempt
+# def hotfixChart(request):
+#     user = ''
+#     cache = ''
+#     today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
+#     filter_text = request.POST.get('search[value]')
+#     local_tz = pytz.timezone('Asia/Seoul')
+#     utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+#     now = utc_now.astimezone(local_tz)
+#     filtered_user_objects = []  # 조건을 만족하는 사용자들을 저장할 리스트
+#     if request.POST.get('selectedDate') != '':
+#         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+#         start_of_today = timezone.make_aware(start_date_naive)
+#         end_of_today = start_of_today + timedelta(minutes=50)
+#
+#         # 세팅값 변수처리 부분
+#         hot_current = Daily_Statistics_log.objects.filter(item='hot_web').filter(statistics_collection_date__gte=start_of_today, statistics_collection_date__lt=end_of_today).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+#         if hot_current == None:
+#             hot_current = 90
+#         three_months_ago = datetime.now() - timedelta(days=hot_current)
+#
+#         # 현재
+#         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+#
+#     elif request.POST.get('selectedDate') == '':
+#         start_of_today1 = now.strftime('%Y-%m-%d %H')
+#         start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+#         start_of_today = timezone.make_aware(start_of_today2)
+#         start_of_day = start_of_today - timedelta(days=7)
+#         end_of_today = start_of_today + timedelta(minutes=50)
+#
+#         # 세팅값 변수처리 부분
+#         hot_current = Daily_Statistics_log.objects.filter(item='hot_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+#         if hot_current == None:
+#             hot_current = 90
+#         three_months_ago = datetime.now() - timedelta(days=hot_current)
+#
+#         # 현재
+#         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+#     # user_objects = Xfactor_Daily.objects.filter(user_date__gte=start_of_today)
+#     user_objects = user
+#     users_values = user_objects.values('hotfix_date', 'computer_id')
+#     for i, user in enumerate(users_values):
+#         date_strings = user['hotfix_date'].split('<br> ')
+#         date_objects = []
+#         for date_str in date_strings:
+#             try:
+#                 date_obj = datetime.strptime(date_str, '%m/%d/%Y %H:%M:%S')
+#                 date_objects.append(date_obj)
+#             except ValueError:
+#                 continue
+#         if date_objects:
+#             latest_date = max(date_objects)
+#             if latest_date < three_months_ago and request.POST.get('categoryName') == '보안패치 필요':
+#                 filtered_user_objects.append(user['computer_id'])
+#             elif latest_date >= three_months_ago and request.POST.get('categoryName') == '보안패치 불필요':
+#                 filtered_user_objects.append(user['computer_id'])
+#
+#     if request.POST.get('selectedDate') != '':
+#         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+#         start_of_today = timezone.make_aware(start_date_naive)
+#         end_of_today = start_of_today + timedelta(minutes=50)
+#
+#         # 현재
+#         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
+#
+#     elif request.POST.get('selectedDate') == '':
+#         start_of_today1 = now.strftime('%Y-%m-%d %H')
+#         start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+#         start_of_today = timezone.make_aware(start_of_today2)
+#         start_of_day = start_of_today - timedelta(days=7)
+#         end_of_today = start_of_today + timedelta(minutes=50)
+#         # 현재
+#         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
+#
+#     if filter_text:
+#         query = (Q(computer_name__icontains=filter_text) |
+#                  Q(hotfix_date__icontains=filter_text) |
+#                  Q(logged_name_id__deptName__icontains=filter_text) |
+#                  Q(logged_name_id__userName__icontains=filter_text) |
+#                  Q(ip_address__icontains=filter_text) |
+#                  Q(mac_address__icontains=filter_text))
+#         user = user.filter(query)
+#
+#     filter_columnmap = request.POST.get('filter[columnmap]')
+#     order_column_index = int(request.POST.get('order[0][column]', 0))
+#     order_column_dir = request.POST.get('order[0][dir]', 'asc')
+#     order_column_map = {
+#         1: 'logged_name_id__deptName',
+#         2: 'logged_name_id__userName',
+#         3: 'computer_name',
+#         4: 'ip_address',
+#         5: 'mac_address',
+#         6: 'hotfix_date'
+#         # Add mappings for other columns here
+#     }
+#     order_column = order_column_map.get(order_column_index, 'computer_name')
+#     if order_column_dir == 'asc':
+#         user = user.order_by(order_column, '-computer_id')
+#     else:
+#         user = user.order_by('-' + order_column, 'computer_id')
+#
+#     # Get start and length parameters from DataTables AJAX request
+#     start = int(request.POST.get('start', 0))
+#     length = int(request.POST.get('length', 10))  # Default to 10 items per page
+#
+#     # Paginate the queryset
+#     paginator = Paginator(user, length)
+#     page_number = (start // length) + 1
+#
+#     try:
+#         page = paginator.page(page_number)
+#     except EmptyPage:
+#         page = paginator.page(paginator.num_pages)
+#
+#     # Serialize the paginated data
+#     user_list = Cacheserializer(page, many=True).data
+#     # Prepare the response
+#
+#     response = {
+#         'draw': int(request.POST.get('draw', 1)),  # Echo back the draw parameter from the request
+#         'recordsTotal': paginator.count,  # Total number of items without filtering
+#         'recordsFiltered': paginator.count,  # Total number of items after filtering (you can update this based on your filtering logic)
+#         'data': user_list,  # Serialized data for the current page
+#     }
+#
+#     return JsonResponse(response)
 
 
 @csrf_exempt

@@ -241,9 +241,10 @@ var hw_pur_asset_list = function () {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
+                    var processedData = data === "unconfirmed" || data === "N/A on Mac" ? "" : data;
                     // var date = new Date(data); // data 값을 Date 객체로 변환합니다.
                     // var newFormat = date.toLocaleDateString('ko-KR');
-                    return '<span data-toggle="tooltip">' + data + '</span>'
+                    return '<span data-toggle="tooltip">' + processedData + '</span>'
                 }
             },
             {
