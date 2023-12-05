@@ -37,8 +37,14 @@ def Dashboard(unique_items, selected_date=None):
 
         # 세팅값 변수처리 부분
         ver_current = Daily_Statistics_log.objects.filter(item='ver_web').filter(statistics_collection_date__gte=start_date, statistics_collection_date__lt=end_date).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if not ver_current:
+            ver_current = 19045
         hot_current = Daily_Statistics_log.objects.filter(item='hot_web').filter(statistics_collection_date__gte=start_date, statistics_collection_date__lt=end_date).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if not hot_current:
+            hot_current = 90
         discover_current = Daily_Statistics_log.objects.filter(item='discover_web').filter(statistics_collection_date__gte=start_date, statistics_collection_date__lt=end_date).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if not discover_current:
+            discover_current = 150
 
         setting_value_list.append({'item': 'ver_current', 'count': ver_current})
         setting_value_list.append({'item': 'hot_current', 'count': hot_current})
@@ -55,6 +61,14 @@ def Dashboard(unique_items, selected_date=None):
         asset_cache = Xfactor_Common_Cache.objects.filter(cache_date__gte=start_time, cache_date__lt=end_time)
         asset_log_prev = Daily_Statistics_log.objects.filter(statistics_collection_date__date=previous_date)
         #print("selected_Date없음")
+
+        #몇일인지 체크
+        discover_current = Daily_Statistics_log.objects.filter(item='discover_web').filter(statistics_collection_date__gte=start_time, statistics_collection_date__lt=end_time).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+
+        setting_value_list.append({'item': 'ver_current', 'count': 'Now'})
+        setting_value_list.append({'item': 'hot_current', 'count': 'Now'})
+        setting_value_list.append({'item': 'discover_current', 'count': 'Now', 'days': discover_current})
+
 
     ###장기 미접속 자산###
     discover_min = asset_log.filter(item='150_day_ago').first()
@@ -97,24 +111,25 @@ def Dashboard(unique_items, selected_date=None):
 
     # Office 버전
     # office_data = asset.filter(classification='office_ver').exclude(item='').order_by('-item_count').values('item', 'item_count')
-    office_data_new = asset_log.filter(classification='office_ver', item__in=['Office 21', 'Office 19', 'Office 16']).aggregate(total=Sum('item_count'))
+    office_data_new = asset_log.filter(classification='office_ver', item='Office 365').aggregate(total=Sum('item_count'))
     if office_data_new['total'] == None:
         office_data_new['total'] = 0
-    office_data_old = asset_log.filter(classification='office_ver', item='Office 15').aggregate(total=Sum('item_count'))
+    office_data_old = asset_log.filter(classification='office_ver', item__in=['Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003']).aggregate(total=Sum('item_count'))
     if office_data_old['total'] == None:
         office_data_old['total'] = 0
-    office_data_none = asset_log.filter(classification='office_ver', item='오피스 없음').aggregate(
-        total=Sum('item_count'))
+    office_data_mac = asset_log.filter(classification='office_ver_mac').exclude(item__in=['오피스 없음', 'unconfirmed', '']).aggregate(total=Sum('item_count'))
+    if office_data_mac['total'] == None:
+        office_data_mac['total'] = 0
+    office_data_none = asset_log.filter(classification__in=['office_ver','office_ver_mac'], item='오피스 없음').aggregate(total=Sum('item_count'))
     if office_data_none['total'] == None:
         office_data_none['total'] = 0
-    office_data_unconfirmed = asset_log.filter(classification='office_ver', item__in=['unconfirmed', '']).aggregate(
-        total=Sum('item_count'))
+    office_data_unconfirmed = asset_log.filter(classification__in=['office_ver','office_ver_mac'], item__in=['unconfirmed', '']).aggregate(total=Sum('item_count'))
     if office_data_unconfirmed['total'] == None:
         office_data_unconfirmed['total'] = 0
     # office_items = [data['item'] for data in office_data]
     # office_item_counts = [data['item_count'] for data in office_data]
-    office_items = ['Office 16 이상', 'Office 16 미만', 'Office 설치 안됨', '미확인']
-    office_item_counts = [office_data_new['total'], office_data_old['total'], office_data_none['total'], office_data_unconfirmed['total']]
+    office_items = ['Office 365', 'Office 365 외', 'Mac Office','Office 설치 안됨', '미확인']
+    office_item_counts = [office_data_new['total'], office_data_old['total'], office_data_mac['total'] ,office_data_none['total'], office_data_unconfirmed['total']]
     office_data_list = [office_items, office_item_counts]
 
     ########################################################################################################################################

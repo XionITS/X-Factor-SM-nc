@@ -31257,8 +31257,8 @@ label.no-before::before {
 
 .form-select.form-setting{
     width: 50%;
-      display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
 }

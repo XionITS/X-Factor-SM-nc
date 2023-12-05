@@ -158,7 +158,6 @@ var hw_pur_asset_list = function () {
             },
             dataSrc: function (res) {
                 var data = res.data;
-                console.log(data);
                 return data;
             }
         },
@@ -195,14 +194,6 @@ var hw_pur_asset_list = function () {
             var index = (page * pageLength) + (index + 1);
             $('td:eq(1)', row).html(index);
         },
-//        columnDefs: [
-//		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
-//		    {targets: 1, width: "20%", className: 'text-start text-truncate'},
-//		    {targets: 2, width: "10%", className: 'text-start text-truncate'},
-//            {targets: 3, width: "10%", className: 'text-start text-truncate'},
-//		    {targets: 4, width: "40%", className: 'text-start text-truncate'},
-//		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
-//		],
         columnDefs: [
             {
                 targets: 0,
@@ -241,8 +232,15 @@ var hw_pur_asset_list = function () {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
-                    // var date = new Date(data); // data 값을 Date 객체로 변환합니다.
+                    //var date = new Date(data); // data 값을 Date 객체로 변환합니다.
                     // var newFormat = date.toLocaleDateString('ko-KR');
+                    if (isNaN(Date.parse(data))){
+                        //data = 'unconfirmed'
+                        data= data
+                    }else{
+                        var dateParts = data.split('/');
+                        data = dateParts[2] + '-' + dateParts[0] + '-' + dateParts[1];
+                    }
                     return '<span data-toggle="tooltip">' + data + '</span>'
                 }
             },

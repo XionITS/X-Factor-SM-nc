@@ -107,7 +107,7 @@ def login(request):
             # 모든 필드를 채웠을 경우
             else:
                 RS = selectUsers(x_id, x_pw)
-                print(RS)
+                # print(RS)
                 user_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=x_id)
                 if RS == None:
                     request.session['sessionauth'] = 'noauth'
@@ -480,7 +480,6 @@ def createUsers_nano(request):
                 );
         """
         Cur.execute(query)
-        print(Cur)
         Conn.commit()
         Conn.close()
         # Auth 자동생성
@@ -830,7 +829,6 @@ def delete(request):
         user = request.session.get('sessionid')
         now = datetime.now().replace(microsecond=0)
         date = now.strftime("%Y-%m-%d %H:%M:%S")
-        print(date)
         Xfactor_log = Xfactor_Log(
             log_func=function,
             log_item=item,
@@ -884,7 +882,7 @@ def group_delete(request):
         user = request.session.get('sessionid')
         now = datetime.now().replace(microsecond=0)
         date = now.strftime("%Y-%m-%d %H:%M:%S")
-        print(date)
+        # print(date)
         Xfactor_log = Xfactor_Log(
             log_func=function,
             log_item=item,
@@ -984,7 +982,6 @@ def nano_user(request):
         user = sub
         now = timezone.now().replace(microsecond=0)
         date = now.strftime("%Y-%m-%d %H:%M:%S")
-        print(date)
         Xfactor_log = Xfactor_Log(
             log_func=function,
             log_item=item,
@@ -1008,7 +1005,6 @@ def nano_user(request):
         user = sub
         now = timezone.now().replace(microsecond=0)
         date = now.strftime("%Y-%m-%d %H:%M:%S")
-        print(date)
         Xfactor_log = Xfactor_Log(
             log_func=function,
             log_item=item,

@@ -153,7 +153,7 @@ def export(request, model):
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_simple", "user_date"]
         if request.GET.get('categoryName') == 'Other':
             if request.GET.get('seriesName') == 'Other':
-                print("asd")
+                # print("asd")
                 data_list = user.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop, Notebook'])
             else:
                 data_list = user.filter(chassistype=request.GET.get('categoryName')).exclude(os_simple__in=['Windows', 'Mac'])
@@ -170,7 +170,7 @@ def export(request, model):
         if request.GET.get('categoryName') == 'Other':
             if request.GET.get('seriesName') == 'Other':
                 data_list = cache.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop, Notebook'])
-                print(data_list)
+                # print(data_list)
             else:
                 data_list = cache.filter(chassistype=request.GET.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
         else:
@@ -183,10 +183,12 @@ def export(request, model):
     elif parameter_value == 'office_chart':
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "essential5", "user_date"]
         data_list = []
-        if request.GET.get('categoryName') == 'Office 16 이상':
-            data_list = user.filter(essential5__in=['Office 21', 'Office 19', 'Office 16'])
-        if request.GET.get('categoryName') == 'Office 16 미만':
-            data_list = user.filter(essential5='Office 15')
+        if request.GET.get('categoryName') == 'Office 365':
+            data_list = user.filter(essential5='Office 365')
+        if request.GET.get('categoryName') == 'Office 365 외':
+            data_list = user.filter(essential5__in=['Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003'])
+        if request.GET.get('categoryName') == 'Mac Office':
+            data_list = user.exclude(essential5__in=['Office 365','Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003','오피스 없음','unconfirmed', ''])
         if request.GET.get('categoryName') == 'Office 설치 안됨':
             data_list = user.filter(essential5='오피스 없음')
         if request.GET.get('categoryName') == '미확인':
@@ -213,14 +215,14 @@ def export(request, model):
         data_list = []
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "subnet", "user_date"]
         if request.GET.get('categoryName') == 'VPN':
-            data_list = user.filter(subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
+            data_list = user.filter(subnet__in=['172.21.224.0/20','VPN','192.168.0.0/20'])
         if request.GET.get('categoryName') == '사내망':
             data_list = user.filter(subnet__in=['172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
-                    , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
+                    , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21','사내망'])
         if request.GET.get('categoryName') == '미확인':
-            data_list = user.filter(subnet='unconfirmed')
+            data_list = user.filter(subnet__in=['unconfirmed','','Other'])
         if request.GET.get('categoryName') == '외부망':
-            data_list = user.exclude(subnet__in=['unconfirmed', '172.21.224.0/20', '192.168.0.0/20', '172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
+            data_list = user.exclude(subnet__in=['사내망','VPN','unconfirmed', '', 'Other', '172.21.224.0/20','192.168.0.0/20', '172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
         data = Cacheserializer(data_list, many=True).data
 

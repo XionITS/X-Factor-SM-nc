@@ -60,7 +60,7 @@ def search(request):
             userId = Xfactor_Common.objects.filter(user_date__gte=start_of_day, computer_name=search_text)
 
         if type == 'user':
-            print(search_text)
+            # print(search_text)
             # userId = Xfactor_ncdb.objects.filter(userName=search_text).values('userId')
             # userId = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).filter(computer_name=search_text)
             userId = Xfactor_Common.objects.filter(user_date__gte=start_of_day, computer_name=search_text)
@@ -90,7 +90,7 @@ def search_box(request):
             user_data = Xfactor_Common.objects.filter(user_date__gte=start_of_day, computer_name__icontains=search_text).values('computer_name')
         if type == 'user':
             user_data = Xfactor_Common.objects.filter(user_date__gte=start_of_day, logged_name_id__userName__icontains=search_text).values('logged_name_id__userName', 'computer_name')
-            print(user_data)
+            # print(user_data)
         return JsonResponse({'data': list(user_data)})
 
 

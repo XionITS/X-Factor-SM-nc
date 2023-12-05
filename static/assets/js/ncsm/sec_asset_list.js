@@ -270,7 +270,7 @@ var sec_asset_list2 = function () {
                 width: "5%",
                 className: 'text-center text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    if (row.hotfix === 'not apply') {
+                    if (row.hotfix === 'not apply' || row.hotfix ==='Not available on Mac') {
                         return "";
                     } else {
                         return '<a class="hotmore swmore-font" ' +

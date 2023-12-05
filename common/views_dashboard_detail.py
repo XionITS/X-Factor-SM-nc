@@ -5,7 +5,7 @@ from django.db.models.functions import Concat, Cast
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.utils import timezone
-from django.db.models import Q, Value, Count, Max, BigIntegerField
+from django.db.models import Q, Value, Count, Max, BigIntegerField, DateTimeField, DateField
 from django.db.models.functions import Lower
 from functools import reduce
 from datetime import datetime, timedelta
@@ -861,9 +861,9 @@ def office_chart(request):
         # 토탈
         cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
-    if request.POST.get('categoryName') == 'Office 16 이상':
+    if request.POST.get('categoryName') == 'Office 365':
         #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5__in=['Office 21', 'Office 19', 'Office 16'])
-        user = user.filter( essential5__in=['Office 21', 'Office 19', 'Office 16'])
+        user = user.filter( essential5='Office 365')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(essential5__icontains=filter_text) |
@@ -873,9 +873,21 @@ def office_chart(request):
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
-    if request.POST.get('categoryName') == 'Office 16 미만':
+    if request.POST.get('categoryName') == 'Office 365 외':
         #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, essential5='Office 15')
-        user = user.filter(essential5='Office 15')
+        user = user.filter(essential5__in=['Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003'])
+        if filter_text:
+            query = (Q(computer_name__icontains=filter_text) |
+                     Q(essential5__icontains=filter_text) |
+                     Q(logged_name_id__deptName__icontains=filter_text) |
+                     Q(logged_name_id__userName__icontains=filter_text) |
+                     Q(logged_name_id__userId__icontains=filter_text) |
+                     Q(ip_address__icontains=filter_text) |
+                     Q(mac_address__icontains=filter_text))
+            user = user.filter(query)
+    if request.POST.get('categoryName') == 'Mac Office':
+        #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, essential5__in=['unconfirmed', ''])
+        user =user.exclude(essential5__in=['Office 365','Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003','오피스 없음','unconfirmed', ''])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(essential5__icontains=filter_text) |
@@ -909,6 +921,8 @@ def office_chart(request):
                      Q(ip_address__icontains=filter_text) |
                      Q(mac_address__icontains=filter_text))
             user = user.filter(query)
+
+
 
     filter_columnmap = request.POST.get('filter[columnmap]')
     order_column_index = int(request.POST.get('order[0][column]', 0))
@@ -1001,7 +1015,7 @@ def subnet_chart(request):
 
     if request.POST.get('categoryName') == 'VPN':
         #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
-        user = user.filter(subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
+        user = user.filter(subnet__in=['172.21.224.0/20','VPN','192.168.0.0/20'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(subnet__icontains=filter_text) |
@@ -1014,7 +1028,7 @@ def subnet_chart(request):
     if request.POST.get('categoryName') == '사내망':
         #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, subnet__in=['172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
         user = user.filter(subnet__in=['172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
-                    , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
+                    , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21','사내망'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(subnet__icontains=filter_text) |
@@ -1026,7 +1040,7 @@ def subnet_chart(request):
             user = user.filter(query)
     if request.POST.get('categoryName') == '미확인':
         #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, subnet='unconfirmed')
-        user = user.filter(subnet='unconfirmed')
+        user = user.filter(subnet__in=['unconfirmed','','Other'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(subnet__icontains=filter_text) |
@@ -1038,7 +1052,7 @@ def subnet_chart(request):
             user = user.filter(query)
     if request.POST.get('categoryName') == '외부망':
         #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today).exclude(subnet__in=['unconfirmed', '172.21.224.0/20', '192.168.0.0/20', '172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
-        user = user.exclude(subnet__in=['unconfirmed', '172.21.224.0/20', '192.168.0.0/20', '172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
+        user = user.exclude(subnet__in=['사내망','VPN','unconfirmed', '', 'Other', '172.21.224.0/20','192.168.0.0/20', '172.18.16.0/21', '172.18.24.0/21', '172.18.32.0/22', '172.18.40.0/22', '172.18.48.0/21', '172.18.56.0/22', '172.18.64.0/21', '172.18.72.0/22' \
                     , '172.18.88.0/21', '172.18.96.0/21', '172.18.104.0/22', '172.20.16.0/21', '172.20.40.0/22', '172.20.48.0/21', '172.20.56.0/21', '172.20.64.0/22', '172.20.68.0/22', '172.20.78.0/23', '172.20.8.0/21'])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
@@ -1116,7 +1130,7 @@ def hotfixChart(request):
         if hot_current == None:
             hot_current = 90
         three_months_ago = datetime.now() - timedelta(days=hot_current)
-
+        three_months_ago = three_months_ago.strftime('%Y-%m-%d')
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
 
@@ -1132,7 +1146,7 @@ def hotfixChart(request):
         if hot_current == None:
             hot_current = 90
         three_months_ago = datetime.now() - timedelta(days=hot_current)
-
+        three_months_ago = three_months_ago.strftime('%Y-%m-%d')
         # 현재
         user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
     # user_objects = Xfactor_Daily.objects.filter(user_date__gte=start_of_today)
@@ -1149,6 +1163,13 @@ def hotfixChart(request):
                 continue
         if date_objects:
             latest_date = max(date_objects)
+            latest_date = latest_date.strftime('%Y-%m-%d')
+            # print(three_months_ago)
+            # print(type(three_months_ago))
+            #
+            # print("aaaaa")
+            # print(latest_date)
+            # print(type(latest_date))
             if latest_date < three_months_ago and request.POST.get('categoryName') == '보안패치 필요':
                 filtered_user_objects.append(user['computer_id'])
             elif latest_date >= three_months_ago and request.POST.get('categoryName') == '보안패치 불필요':
@@ -1193,10 +1214,30 @@ def hotfixChart(request):
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
-    if order_column_dir == 'asc':
-        user = user.order_by(order_column, '-computer_id')
+
+    if order_column == 'hotfix_date':
+        print("----------------")
+        for a in user:
+            date_strings = a.hotfix_date.split('<br>')
+            date_strings = [date.strip() for date in date_strings if date.strip()]
+            date_objects = [datetime.strptime(date.split(' ')[0], '%m/%d/%Y') for date in date_strings]
+            latest_date = max(date_objects)
+            latest_date_formatted = latest_date.strftime('%Y-%m-%d')
+            a.latest_hotfix_date = latest_date_formatted  # 새로운 필드 생성
+
+
+        # user를 latest_hotfix_date 필드를 기준으로 정렬
+        if order_column_dir == 'asc':
+            user = sorted(user, key=lambda x: x.latest_hotfix_date or '0000-00-00')
+        else:
+            user = sorted(user, key=lambda x: x.latest_hotfix_date or '9999-99-99', reverse=True)
+
+
     else:
-        user = user.order_by('-' + order_column, 'computer_id')
+        if order_column_dir == 'asc':
+            user = user.order_by(order_column, '-computer_id')
+        else:
+            user = user.order_by('-' + order_column, 'computer_id')
 
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
@@ -1212,7 +1253,7 @@ def hotfixChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = Cacheserializer3(page, many=True).data
     # Prepare the response
 
     response = {
@@ -1349,6 +1390,10 @@ def discoverChart(request):
             discover_current = 150
         date_150_days_ago = start_of_today_sel - timedelta(days=discover_current) #선택한 시간대로부터 150일 전 시간대
         date_180_days_ago = date_150_days_ago - timedelta(days=30) #선택한 시간대로부터 150일 전 시간대
+
+        discover_current_1day = Daily_Statistics_log.objects.filter(item='discover_web').filter(statistics_collection_date__gte=start_of_today_sel - timedelta(days=1) , statistics_collection_date__lt=end_of_today_sel - timedelta(days=1)).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        date_150_days_ago_1day = start_of_today_sel - timedelta(days=discover_current_1day)
+        date_180_days_ago_1day = date_150_days_ago_1day - timedelta(days=30)
     elif request.POST.get('selectedDate') == '':
         # 세팅값 변수처리 부분
         discover_current = Daily_Statistics_log.objects.filter(item='discover_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
@@ -1356,9 +1401,16 @@ def discoverChart(request):
             discover_current = 150
         date_150_days_ago = start_of_today - timedelta(days=discover_current) #현재로부터 150일 전 시간대
         date_180_days_ago = date_150_days_ago - timedelta(days=30)
+
+        discover_current_1day = Daily_Statistics_log.objects.filter(item='discover_web').filter(statistics_collection_date__gte=start_of_today - timedelta(days=1) , statistics_collection_date__lt=end_of_today - timedelta(days=1)).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        date_150_days_ago_1day = start_of_today - timedelta(days=discover_current_1day)
+        date_180_days_ago_1day = date_150_days_ago_1day - timedelta(days=30)
+
     if request.POST.get('categoryName') == '1일 전':
-        date_150_yesterday_ago = date_150_days_ago - timedelta(days=1)
-        date_180_yesterday_ago = date_180_days_ago - timedelta(days=1)
+
+
+        date_150_yesterday_ago = date_150_days_ago_1day - timedelta(days=1)
+        date_180_yesterday_ago = date_180_days_ago_1day - timedelta(days=1)
         #user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_yesterday_ago)
         #print('1일 전', date_150_yesterday_ago)
         filtered_records = (

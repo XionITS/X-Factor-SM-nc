@@ -1639,7 +1639,7 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            {data: 'subnet', title: 'SUBNET', searchable: true},
+            {data: 'subnet', title: '위치', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1892,7 +1892,7 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            {data: 'hotfix_date', title: 'HOTFIX', searchable: true, type: 'date-eu', orderable: false},
+            {data: 'hotfix_date', title: 'HOTFIX', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {
@@ -1960,21 +1960,23 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
                 width: "10%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    const dates = data.split('<br> ');
+                    //console.log(data)
+//
+//                    const dates = data.split('<br> ');
+//
+//                    const validDates = dates.filter(date => date.trim() !== '');
+//
+//                    if (validDates.length > 0) {
+//                        // Convert date strings to moment objects and find the latest date
+//                        const latestMoment = moment.max(validDates.map(date => moment(date, 'MM/DD/YYYY HH:mm:ss')));
+//
+//                        const latestDateFormatted = latestMoment.format('MM/DD/YYYY');
 
-                    const validDates = dates.filter(date => date.trim() !== '');
-
-                    if (validDates.length > 0) {
-                        // Convert date strings to moment objects and find the latest date
-                        const latestMoment = moment.max(validDates.map(date => moment(date, 'MM/DD/YYYY HH:mm:ss')));
-
-                        const latestDateFormatted = latestMoment.format('MM/DD/YYYY');
-
-                        return latestDateFormatted
-                    } else {
-                        // If no valid dates, return an empty string or handle it as needed
-                        return '';
-                    }
+                        return data
+//                    } else {
+//                        // If no valid dates, return an empty string or handle it as needed
+//                        return '';
+//                    }
 
                 }
             },

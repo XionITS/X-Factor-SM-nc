@@ -193,5 +193,5 @@ def group_list(request):
             'computer_name_list': '-기존 Group입니다.-'
         }
     RD = {'group': group_data}
-    print(RD)
+    # print(RD)
     return JsonResponse(RD)

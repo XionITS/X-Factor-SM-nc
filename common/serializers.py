@@ -206,7 +206,7 @@ class Cacheserializer3(serializers.ModelSerializer):
             date_objects = [datetime.strptime(date.split(' ')[0], '%m/%d/%Y') for date in date_strings]
             # datetime 객체 중에서 가장 최근 날짜 찾기
             latest_date = max(date_objects)
-            latest_date_formatted = latest_date.strftime('%Y/%m/%d')
+            latest_date_formatted = latest_date.strftime('%Y-%m-%d')
             data = super().to_representation(instance)
             data['hotfix_date'] = latest_date_formatted
             return data
@@ -259,6 +259,29 @@ class Commonserializer2(serializers.ModelSerializer):
 #             # 일치하는 데이터가 없을 경우 빈 값을 반환
 #             return {}
 
+class Commonserializer_pur(serializers.ModelSerializer):
+    class Meta:
+        model = Xfactor_Common
+        fields = '__all__'
+    def to_representation(self, instance):
+        if instance.first_network:
+            date_strings = instance.first_network
+            latest_date_formatted = date_strings.strftime('%Y-%m-%d')
+            data = super().to_representation(instance)
+            data['first_network'] = latest_date_formatted
+            #print(data['hotfix_date'])
+            return data
+    def get_user_date(self, obj):
+        local_tz = pytz.timezone('Asia/Seoul')
+        utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+        now = utc_now.astimezone(local_tz)
+        start_of_today1 = now.strftime('%Y-%m-%d %H')
+        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+        start_of_today = timezone.make_aware(start_of_today2)
+        if obj.user_date >= start_of_today:
+            return "Online"
+        else:
+            return "Offline"
 
 class XfactorLogserializer(serializers.ModelSerializer):
     log_date = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")

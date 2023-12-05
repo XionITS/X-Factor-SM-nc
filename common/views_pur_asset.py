@@ -329,16 +329,30 @@ def pur_asset_paginghw(request):
     }
 
     order_column = order_column_map.get(order_column_index, 'computer_name')
-    # if order_column_dir == 'asc':
-    #     user = sorted(user, key=lambda x: cus_sort(x, order_column))
-    #     #user = user.order_by(order_column, '-computer_id')
-    # else:
-    #     user = sorted(user, key=lambda x: cus_sort(x, order_column), reverse=True)
+    if order_column == 'first_network':
 
-    if order_column_dir == 'asc':
-        user = user.order_by(order_column, '-computer_id')
+        for a in user:
+            try:
+                date_strings = a.first_network
+                date_objects = datetime.strptime(date_strings, '%m/%d/%Y')
+                latest_date_formatted = date_objects.strftime('%Y-%m-%d')
+                a.latest_first_network = latest_date_formatted  # 새로운 필드 생성
+            except ValueError:
+                a.latest_first_network=a.first_network
+                continue
+
+        # user를 latest_hotfix_date 필드를 기준으로 정렬
+        if order_column_dir == 'asc':
+            user = sorted(user, key=lambda x: x.latest_first_network or '0000-00-00')
+        else:
+            user = sorted(user, key=lambda x: x.latest_first_network or '9999-99-99', reverse=True)
+
+
     else:
-        user = user.order_by('-' + order_column, 'computer_id')
+        if order_column_dir == 'asc':
+            user = user.order_by(order_column, '-computer_id')
+        else:
+            user = user.order_by('-' + order_column, 'computer_id')
     # Get start and length parameters from DataTables AJAX request
     start = int(request.POST.get('start', 0))
     length = int(request.POST.get('length', 10))  # Default to 10 items per page
@@ -644,7 +658,7 @@ def pur_asset_pagingsw(request):
     # Serialize the paginated data
     #user_list = LimitedCommonSerializer(page, many=True).data
     #user_list = CommonSerializer(page, many=True).data
-    user_list = Commonserializer2(page, many=True).data
+    user_list = Commonserializer_pur(page, many=True).data
 
     # Prepare the response
     response = {

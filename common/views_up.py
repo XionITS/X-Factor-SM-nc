@@ -301,7 +301,7 @@ def up_asset_select_all(request):
     user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
                                                   xfactor_auth_id='UP_asset', auth_use='true')
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='UP_asset', auth_use='true')
-    print(user_auth)
+    # print(user_auth)
     if not user_auth and not group_auth:
         return redirect('../../home/')
     local_tz = pytz.timezone('Asia/Seoul')

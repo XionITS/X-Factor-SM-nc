@@ -162,13 +162,17 @@
             <div class="card mb-3" style="height: 275px;">
                 <div class="card-body h-220px">
                     <div class="d-flex fw-bold fs-12px ">
-                        <div class="flex-grow-1" style="font-size: 17px">장기 미접속 자산 ( 150 days )</div>
+                        {% if dataList.setting_value_list.2.count == 'Now' %}
+                            <div class="flex-grow-1" style="font-size: 17px">장기 미접속 자산 ( {{dataList.setting_value_list.2.days}} days )</div>
+                            {% else %}
+                            <div class="flex-grow-1" style="font-size: 17px">장기 미접속 자산 ( {{dataList.setting_value_list.2.count}} days )</div>
+                            {% endif %}
                         {% if "settings" in menu_list|join:" " %}
-<!--                            {% if dataList.setting_value_list.2.count == None %}-->
-<!--                            <a id="settingDiscoverBtn"><i class="bi bi-gear"> Setting</i></a>-->
-<!--                            {% else %}-->
-<!--                                설정 값 : {{dataList.setting_value_list.2.count}}-->
-<!--                            {% endif %}-->
+                            {% if dataList.setting_value_list.2.count == 'Now' %}
+                            <a id="settingDiscoverBtn"><i class="bi bi-gear"> Setting</i></a>
+                            {% else %}
+                                설정 값 : {{dataList.setting_value_list.2.count}}
+                            {% endif %}
                         {% endif %}
                     </div>
                     <div class="row align-items-center">
@@ -525,7 +529,11 @@
                     <div class="d-flex fw-bold fs-12px ">
                         <div class="flex-grow-1" style="font-size: 17px">Windows 버전별 자산 현황</div>
                         {% if "settings" in menu_list|join:" " %}
-<!--                        <a id="settingVerBtn"><i class="bi bi-gear"> Setting</i></a>-->
+                            {% if dataList.setting_value_list.0.count == 'Now' %}
+                            <a id="settingVerBtn"><i class="bi bi-gear"> Setting</i></a>
+                            {% else %}
+                                설정 값 : {{dataList.setting_value_list.0.count}}
+                            {% endif %}
                         {% endif %}
                     </div>
                     {% if "dash_win_update" in menu_list|join:" " %}
@@ -550,7 +558,11 @@
                     <div class="d-flex fw-bold fs-12px">
                         <div class="flex-grow-1" style="font-size: 17px">보안 패치별 자산 현황</div>
                         {% if "settings" in menu_list|join:" " %}
-<!--                        <a id="settingHotBtn"><i class="bi bi-gear"> Setting</i></a>-->
+                            {% if dataList.setting_value_list.1.count == 'Now' %}
+                            <a id="settingHotBtn"><i class="bi bi-gear"> Setting</i></a>
+                            {% else %}
+                                설정 값 : {{dataList.setting_value_list.1.count}}
+                            {% endif %}
                         {% endif %}
                     </div>
                     {% if "dash_win_hotfix" in menu_list|join:" " %}
