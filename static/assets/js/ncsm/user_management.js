@@ -693,7 +693,7 @@ $(document).on("click", ".ummore", function (e) {
                 modalbody += '> &nbsp;';
                 modalbody += authItem.xfactor_auth.auth_name;
                 modalbody += '</label><br>';
-                if (index === 8) {
+                if (index === 9) {
                     modalbody += '<br><div>'+x_id+' 대시보드 보기 권한</div>'; // 여기서 </div>를 추가
                 }
             });
@@ -781,7 +781,7 @@ $(document).on("click", ".um_groupmore", function (e) {
                 modalbody += '> &nbsp;';
                 modalbody += authItem.xfactor_auth.auth_name;
                 modalbody += '</label><br>';
-                if (index === 8) {
+                if (index === 9) {
                     modalbody += '<br><div>'+xgroup_name+' 대시보드 보기 권한</div>'; // 여기서 </div>를 추가
                 }
             });
@@ -1120,7 +1120,7 @@ $(document).on("click","#um_creategroup", function (e){
  /////////////////USER 검색기능 버튼삽입
     var modalbody =`<div class="asset-input-group justify-content-end">
                         <span class="fs-16px pb-2 pe-2">검색 : </span>
-                        <input type="search" class="asset-form-control mb-2" id="user_search_result" placeholder="추가할 계정을 입력하세요">
+                        <input type="search" class="asset-form-control mb-2" id="user_search_result" style="width: 250px" placeholder="계정이나 이름을 입력하세요.">
                     </div>`;
  /////////////////사용자 목록 가져오기
     $.ajax({
@@ -1284,7 +1284,7 @@ $(document).on("click",".um_groupalter", function (e){
 
     var modalbody = `<div class="asset-input-group justify-content-end">
                             <span class="fs-16px pb-2 pe-2">검색 : </span>
-                        <input type="search" class="asset-form-control before-init mb-2" id="group_search_result" placeholder="추가할 계정을 입력하세요.">
+                        <input type="search" class="asset-form-control before-init mb-2" id="group_search_result" style="width: 250px" placeholder="계정이나 이름을 입력하세요.">
                     </div>`;
     modalbody += '<input type="hidden" id="id" value="'+id+'">';
 

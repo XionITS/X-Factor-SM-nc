@@ -22,16 +22,14 @@
 <!--                </ul>-->
                 <br>
                 <div class="">
-                    <button class="btn btn-outline-warning me-3px float-start groupdeploy" type="button" id="creategroup" aria-expanded="false">
-                    그룹 생성
-                    </button>
-                    {% for item in menu_list %}
-                        {% if item.0 == 'settings' %}
-                            <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="createdeploy" aria-expanded="false">
-                            배포 하기
-                            </button>
-                        {% endif %}
-                    {% endfor %}
+                    {% if "deploy" in menu_list|join:" " %}
+                        <button class="btn btn-outline-warning me-3px float-start groupdeploy" type="button" id="creategroup" aria-expanded="false">
+                        그룹 생성
+                        </button>
+                        <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="createdeploy" aria-expanded="false">
+                        배포 하기
+                        </button>
+                    {% endif %}
                 </div>
                 <!-- 검색어 필터  -->
                 <div class="search-dropdown">

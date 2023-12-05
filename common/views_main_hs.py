@@ -71,6 +71,7 @@ def dashboard(request):
     note_total_list = DCDL['note_total_list']
     other_total_list = DCDL['other_total_list']
     setting_value_list = DCDL['setting_value_list']
+    current_time = DCDL['current_time']
 
     dataList = {
                 'monthly_asset_data_list': monthly_asset_data_list,
@@ -90,6 +91,7 @@ def dashboard(request):
                 'note_total_list': note_total_list,
                 'other_total_list': other_total_list,
                 'selected_date': selected_date if selected_date is not None else "select date...",
+                'current_time': current_time
                 #'setting_value_list': setting_value_list
                 # 'selected_date': datetime.strptime(selected_date, '%Y-%m-%d-%H').strftime('%Y-%m-%d %H시') if selected_date is not None else "select date..."
     }

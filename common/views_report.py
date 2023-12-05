@@ -33,10 +33,13 @@ def create(request):
     group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='dash_report', auth_use='true')
     if not user_auth and not group_auth:
         return redirect('../home/')
-    datetime = request.GET.get('datetime')
-    #print(datetime)
-    selected_date = datetime
+    datetime_day = request.GET.get('datetime')
+    selected_date = datetime_day
     DCDL = report(selected_date)
+
+    current_time = datetime.now()
+    # 원하는 형식으로 포맷팅합니다.
+    formatted_time = current_time.strftime('%Y-%m-%d-%H')
     xuser_auths = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser__x_id=request.session['sessionid'], auth_use='true')
     menu_user = XuserAuthSerializer(xuser_auths, many=True)
     xgroup_auths = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], auth_use='true')
@@ -46,6 +49,10 @@ def create(request):
     days_150 = DCDL['150_day_ago']
     win_ver = DCDL['win_os_build']
     hotfix = DCDL['necessery']
+    if selected_date == formatted_time:
+        if days_150['current_value'] == 'null' and DCDL['old']['current_value'] == 'null' and win_ver == [] and hotfix['current_value'] == 'null' and DCDL['Notebook_cache_total']['current_value'] == 'null' and DCDL['Desktop_cache_total']['current_value'] == 'null':
+            context = {'menu_list': unique_items, 'dataList': 'None'}
+            return render(request, 'report.html', context)
     os_version_up = DCDL['old']
     Notebook_chassis_total = DCDL['Notebook_cache_total']
     Desktop_chassis_total = DCDL['Desktop_cache_total']

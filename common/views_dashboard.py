@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import json
 import logging
-
+from datetime import datetime as dt
 import pandas as pd
 import pytz
 from dateutil.relativedelta import relativedelta
@@ -335,6 +335,31 @@ def Dashboard(unique_items, selected_date=None):
     except:
         os_up_data_list = ['-', '-']
 
+    #데이터 수집 시간 체크
+    module_time = []
+    korea_timezone = pytz.timezone('Asia/Seoul')
+    if selected_date:
+        datetime_obj = datetime.strptime(selected_date, "%Y-%m-%d-%H")
+        end_of_today = datetime_obj + timedelta(minutes=60)
+        selected_time = Xfactor_Common_Cache.objects.filter(user_date__gte=datetime_obj, user_date__lt=end_of_today, cache_date__gte=datetime_obj, cache_date__lt=end_of_today).values('user_date').first()
+        if not selected_time:
+            module_time = [{'current_time': '없음', 'color': 'red'}]
+        else:
+            user_date_korea = selected_time['user_date'].astimezone(korea_timezone)
+            current_time = user_date_korea.strftime('%Y-%m-%d %H:%M')
+            module_time = [{'current_time': current_time, 'color': 'lime'}]
+    else:
+        user_date = Xfactor_Common.objects.values('user_date').first()
+        user_date_korea = user_date['user_date'].astimezone(korea_timezone)
+        current_time_module = user_date_korea.strftime('%Y-%m-%d %H')
+        current_time = user_date_korea.strftime('%Y-%m-%d %H:%M')
+        # 현재 시간 가져오기
+        now_korea = dt.now().astimezone(korea_timezone)
+        current_time_now = now_korea.strftime('%Y-%m-%d %H')
+        if current_time_module == current_time_now:
+            module_time = [{'current_time': current_time, 'color': 'lime'}]
+        else:
+            module_time = [{'current_time': current_time, 'color': 'red'}]
 
     monthly_asset_data_list=monthly_asset_data_list
     cpu_data_list=cpu_data_list
@@ -374,9 +399,9 @@ def Dashboard(unique_items, selected_date=None):
     #     hotfix_data_list = ['-', '-']
     # if 'dash_tanium' not in items_with_permission:
     #     cpu_data_list = ['-','-']
-        
-        
-        
+
+
+
     # 값0으로떨어지게 추후 처리
     items_with_permission = [item[0] for item in unique_items]
 
@@ -419,7 +444,8 @@ def Dashboard(unique_items, selected_date=None):
         'desk_total_list' : desk_total_list,
         'note_total_list' : note_total_list,
         'other_total_list' : other_total_list,
-        'setting_value_list': setting_value_list
+        'setting_value_list': setting_value_list,
+        'current_time': module_time
     }
     # 예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시예시
     # try:

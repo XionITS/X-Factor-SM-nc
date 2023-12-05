@@ -1945,9 +1945,9 @@ $("#datepickerD").datetimepicker({
         // var currentTime = new Date();
         // if (selectedTime > currentTime.getTime()) {
         //     // 선택된 시간이 현재 시간보다 뒤인 경우, 다시 이전의 시간으로 설정
-        //     // $input.val('');
-        //     var newURL = "/home/?datetime=" + $input.val().replace(' ', '-').replace('시', '');
-        //     window.location.href = newURL;
+        //     $input.val('');
+        //     // var newURL = "/home/?datetime=" + $input.val().replace(' ', '-').replace('시', '');
+        //     // window.location.href = newURL;
         // } else {
         //     var newURL = "/home/?datetime=" + $input.val().replace(' ', '-').replace('시', '');
         //     window.location.href = newURL;
