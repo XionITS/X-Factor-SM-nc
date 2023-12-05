@@ -194,6 +194,14 @@ var hw_pur_asset_list = function () {
             var index = (page * pageLength) + (index + 1);
             $('td:eq(1)', row).html(index);
         },
+//        columnDefs: [
+//		    {targets: 0, width: "10%", className: 'text-start text-truncate'},
+//		    {targets: 1, width: "20%", className: 'text-start text-truncate'},
+//		    {targets: 2, width: "10%", className: 'text-start text-truncate'},
+//            {targets: 3, width: "10%", className: 'text-start text-truncate'},
+//		    {targets: 4, width: "40%", className: 'text-start text-truncate'},
+//		    {targets: 5, width: "10%", className: 'text-start text-truncate'},
+//		],
         columnDefs: [
             {
                 targets: 0,

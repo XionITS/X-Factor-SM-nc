@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse,HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from .models import Xfactor_Group, Xfactor_Log,Xfactor_Xuser_Auth
+from .models import Xfactor_Group, Xfactor_Log, Xfactor_Xuser_Auth, Xfactor_Xgroup_Auth
 import requests
 import json
 import math
@@ -32,6 +32,11 @@ DBPwd = SETTING['DB']['DBPwd']
 
 @csrf_exempt
 def create(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='deploy', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='deploy', auth_use='true')
+    if not user_auth and not group_auth:
+        return redirect('../home/')
     group_name = request.POST['group_name']
     group_description = request.POST['group_description']
     computerIds = json.loads(request.POST['computerIds'])

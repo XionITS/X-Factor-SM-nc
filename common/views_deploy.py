@@ -6,7 +6,7 @@ from django.http import JsonResponse,HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from .models import Xfactor_Group, Xfactor_Log
+from .models import Xfactor_Group, Xfactor_Log, Xfactor_Xuser_Auth, Xfactor_Xgroup_Auth
 import requests
 import json
 import math
@@ -115,6 +115,11 @@ def package(request):
 
 @csrf_exempt
 def deploy_action(request):
+    user_auth = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=request.session['sessionid'],
+                                                  xfactor_auth_id='deploy', auth_use='true')
+    group_auth = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=request.session['sessionid'], xfactor_auth_id='deploy', auth_use='true')
+    if not user_auth and not group_auth:
+        return redirect('../home/')
     comId = request.POST.get('selectedGroup')
     packID = request.POST.get('selectedPackage')
     groupName = request.POST.get('selectedGroupName')

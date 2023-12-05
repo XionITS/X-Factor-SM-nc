@@ -2577,10 +2577,15 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
 	},
 
 	"date-eu-asc": function ( a, b ) {
+        console.log('1111111111111')
 		return ((a < b) ? -1 : ((a > b) ? 1 : 0));
 	},
 
 	"date-eu-desc": function ( a, b ) {
+        console.log('222222222')
 		return ((a < b) ? 1 : ((a > b) ? -1 : 0));
 	}
 } );
+$('#hotfix_chart').on('order.dt', function () {
+    console.log('Order event triggered');
+});

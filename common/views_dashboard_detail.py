@@ -39,6 +39,28 @@ def all_asset_paging1(request):
     filter_text = request.POST.get('search[value]')
     user = ''
     cache = ''
+    aa = Xfactor_Xuser.objects.values('x_id')
+    print(aa)
+    for a in aa:
+        bb = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=a['x_id'], xfactor_auth_id='deploy')
+        if bb:
+            pass
+        else:
+            print(a['x_id'])
+            av = Xfactor_Xuser_Auth(xfactor_xuser_id=a['x_id'], xfactor_auth_id='deploy', auth_use='false')
+            av.save()
+
+    aaa = Xfactor_Xuser_Group.objects.values('pk')
+    for a in aaa:
+        b = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=a['pk'], xfactor_auth_id='deploy')
+        if b:
+            pass
+        else:
+            print(a['pk'])
+            cc = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=a['pk']).values('xfactor_xgroup').distinct()
+            for c in cc:
+                ca = Xfactor_Xgroup_Auth(xfactor_xgroup=c['xfactor_xgroup'], xfactor_auth_id='deploy', auth_use='false', xgroup_id=a['pk'])
+                ca.save()
     #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
@@ -46,7 +68,6 @@ def all_asset_paging1(request):
         end_of_today = start_of_today + timedelta(minutes=59)
         start_of_day = start_of_today - timedelta(days=7)
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
-            #print('111111111111')
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
@@ -55,16 +76,13 @@ def all_asset_paging1(request):
             # 토탈
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
-            #print('2222222222')
             end_of_today = start_of_today + timedelta(minutes=59)
             # 현재
             user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
             # 토탈
             cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
-        #print(len(user))
     elif request.POST.get('selectedDate') == '':
-        #print('3333333333')
         # 출력 형식을 설정합니다.
         start_of_today1 = now.strftime('%Y-%m-%d %H')
         start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
@@ -1107,7 +1125,6 @@ def subnet_chart(request):
     }
 
     return JsonResponse(response)
-
 
 
 @csrf_exempt

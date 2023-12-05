@@ -55,6 +55,7 @@ $(document).ready(function () {
 
     $('#asset_user').autocomplete({
         source: function (request, response) {
+            result = ''
             // 사용자가 입력한 문자열의 길이를 체크
             var minLength = /[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(request.term) ? 2 : 3;
 
@@ -76,9 +77,8 @@ $(document).ready(function () {
                             computer_name: item.computer_name
                             };
                         });
-                         // Autocomplete 초기화
+
                         $('#asset_user').autocomplete({
-                            source: autocompleteData,
                             select: function (event, ui) {
                                 // 선택된 항목의 label 및 value 값 가져오기
                                 var selectedLabel = ui.item.label;
@@ -136,14 +136,14 @@ $('#user_search').on('click', function(event) {
 
 
 $('#asset_user').on('keyup', function(event) {
-        if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
-            var searchInput = document.getElementById('asset_user');
-            var inputValue = searchInput.value;
-            if (inputValue.trim().length < 2) {
-        alert("최소 2글자 입력해주세요.");
-      } else {
-        searchPer(result, 'user');
-      }
+    if (event.keyCode === 13) { // 엔터 키의 키 코드는 13
+        var searchInput = document.getElementById('asset_user');
+        var inputValue = searchInput.value;
+        if (inputValue.trim().length < 2) {
+            alert("최소 2글자 입력해주세요.");
+        } else {
+            searchPer(result, 'user');
+        }
     }
 });
 

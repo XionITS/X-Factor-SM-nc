@@ -546,6 +546,10 @@ def AutoAuth(x_id):
             
             INSERT INTO public.common_xfactor_xuser_auth
             (auth_use, xfactor_auth_id, xfactor_xuser_id)
+            VALUES('false', 'deploy', '""" + x_id + """');
+            
+            INSERT INTO public.common_xfactor_xuser_auth
+            (auth_use, xfactor_auth_id, xfactor_xuser_id)
             VALUES('false', 'settings', '""" + x_id + """');
             
             INSERT INTO public.common_xfactor_xuser_auth
@@ -651,7 +655,11 @@ def Group_AutoAuth(xuser_id_list,id):
                 INSERT INTO public.common_xfactor_xgroup_auth
                 (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
                 VALUES('false', 'History', '""" + xgroup_id + """', '""" + id + """');
-    
+                
+                INSERT INTO public.common_xfactor_xgroup_auth
+                (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
+                VALUES('false', 'deploy', '""" + xgroup_id + """', '""" + id + """');
+                
                 INSERT INTO public.common_xfactor_xgroup_auth
                 (auth_use, xfactor_auth_id, xfactor_xgroup, xgroup_id)
                 VALUES('false', 'settings', '""" + xgroup_id + """', '""" + id + """');

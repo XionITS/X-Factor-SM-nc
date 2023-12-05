@@ -50,6 +50,12 @@
                         </ul>
                     </div>
                 </div>
+                {% if dataList == 'None'%}
+                <div class="center-container" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh;">
+                    <div>현재 월간 리포트 데이터를 수집 중입니다.</div>
+                    <div>잠시 후에 (최대 3분) 다시 시도해 주세요.</div>
+                </div>
+                {% else %}
                 <div class="sub-container">
                     <div class="sub-content brand-2">
                         <div class="daily-asset-state-title">
@@ -112,7 +118,6 @@
                                 <div class="card-arrow-bottom-right"></div>
                             </div>
                         </div>
-
                     </div>
                     <div class="sub-content brand-2">
                         <div class="daily-asset-state-title">
@@ -127,8 +132,8 @@
                                 <div class="card-arrow-bottom-right"></div>
                             </div>
                         </div>
-
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

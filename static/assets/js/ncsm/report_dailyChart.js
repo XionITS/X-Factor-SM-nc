@@ -88,6 +88,9 @@ var handleRenderdailyApexChart = function () {
 		}
 	};
 
+if (dataList === 'None') {
+    return;
+}
 // 장기 미접속 자산 증가율
 var dataFor150days = dataList['150days'];
 var currentDataValue = parseValue(dataFor150days['current_value']);
@@ -125,6 +128,9 @@ var options150days = {
     }
 }
 var chart150days = new ApexCharts(document.querySelector("#chart-150days"), options150days);
+if (!chart150days) {
+    return
+}
 chart150days.render();
 
 // 업데이트 대상 수 변화량
