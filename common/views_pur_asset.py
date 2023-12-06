@@ -658,7 +658,7 @@ def pur_asset_pagingsw(request):
     # Serialize the paginated data
     #user_list = LimitedCommonSerializer(page, many=True).data
     #user_list = CommonSerializer(page, many=True).data
-    user_list = Commonserializer_pur(page, many=True).data
+    user_list = Commonserializer2(page, many=True).data
 
     # Prepare the response
     response = {
