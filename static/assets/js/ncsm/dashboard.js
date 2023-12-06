@@ -1947,7 +1947,7 @@ $("#datepickerD").datetimepicker({
         // if (selectedTime > currentTime.getTime()) {
         //     //     // 선택된 시간이 현재 시간보다 뒤인 경우, 다시 이전의 시간으로 설정
         //     $input.val('');
-        //     dp.getTime('');
+        //     dateTimeSelected = false;
         // }else
             if (previousValue !== currentValue && dateTimeSelected) {
             previousValue = currentValue;

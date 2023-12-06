@@ -119,7 +119,7 @@ def login(request):
                     and user_check.filter(xfactor_auth_id='dash_report',auth_use='false') and user_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and user_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and user_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and user_check.filter(xfactor_auth_id='dash_office', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_month', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')) == 0:
+                    and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false') and user_check.filter(xfactor_auth_id='deploy', auth_use='false')) == 0:
                     request.session['sessionid'] = RS[0]
                     request.session['sessionname'] = RS[2]
                     request.session['sessionemail'] = RS[3]
@@ -150,7 +150,7 @@ def login(request):
                     and user_check.filter(xfactor_auth_id='dash_report',auth_use='false') and user_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and user_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and user_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and user_check.filter(xfactor_auth_id='dash_office', auth_use='false')
                     and user_check.filter(xfactor_auth_id='dash_month', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')) > 0:
+                    and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false') and user_check.filter(xfactor_auth_id='deploy', auth_use='false')) > 0:
                     request.session['sessionid'] = RS[0]
                     request.session['sessionauth'] = 'noauth'
                     request.session['sessionname'] = RS[2]
@@ -356,8 +356,8 @@ def logout(request):
                 # 'post_logout_redirect_uri': 'https://tanium.ncsoft.com/dashboard/'
             }
             # Make a GET request to the logout endpoint
-            # response = requests.get('https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
-            response = requests.get('https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
+            response = requests.get('https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
+            # response = requests.get('https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/logout', params=params)
             request.session.clear()
             return redirect("/")
             # Check the response
@@ -908,14 +908,14 @@ def group_delete(request):
 
 def nano(request):
     #스테이지
-    # auth_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
-    # client_id = "stg-tanium-dashboard"
-    # redirect_uri = "http://taniumstg.ncsoft.com:8000/dashboard/"
+    auth_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
+    client_id = "stg-tanium-dashboard"
+    redirect_uri = "http://taniumstg.ncsoft.com:8000/dashboard/"
 
     #라이브
-    auth_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
-    client_id = "tanium-dashboard"
-    redirect_uri = "https://tanium.ncsoft.com/dashboard/"
+    # auth_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/auth"
+    # client_id = "tanium-dashboard"
+    # redirect_uri = "https://tanium.ncsoft.com/dashboard/"
 
     # 사용자를 인증 페이지로 리디렉션합니다.
     return redirect(f"{auth_url}?client_id={client_id}&response_type=code&redirect_uri={redirect_uri}&scope=openid")
@@ -927,8 +927,8 @@ def nano_user(request):
     access_token, id_token = exchange_code_for_token(code)
     #print(access_token)
     #print(id_token)
-    # userinfo_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
-    userinfo_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
+    userinfo_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
+    # userinfo_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/userinfo"
 
     headers = {
         "Authorization": f"Bearer {access_token}"
@@ -973,7 +973,7 @@ def nano_user(request):
             and nano_check.filter(xfactor_auth_id='dash_report', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
             and nano_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_office', auth_use='false')
             and nano_check.filter(xfactor_auth_id='dash_month', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
-            and nano_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_tanium', auth_use='false')) == 0:
+            and nano_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_tanium', auth_use='false') and nano_check.filter(xfactor_auth_id='deploy', auth_use='false')) == 0:
         if 'sessionid' in request.session:
             return redirect('../home')
         request.session['sessionid'] = sub
@@ -1031,22 +1031,22 @@ def nano_user(request):
 
 
 def exchange_code_for_token(code):
-    # token_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
-    # client_id = "stg-tanium-dashboard"
-    # client_secret = "whLXIZvLEZsAWfqbQIsiwSkhVpgKGJWP"  # 클라이언트 시크릿 키
+    token_url = "https://sso.sandbox-nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
+    client_id = "stg-tanium-dashboard"
+    client_secret = "whLXIZvLEZsAWfqbQIsiwSkhVpgKGJWP"  # 클라이언트 시크릿 키
 
     LIVE = "https://tanium.ncsoft.com/dashboard/"
     STAGE = "http://taniumstg.ncsoft.com:8000/dashboard/"
 
-    token_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
-    client_id = "tanium-dashboard"
-    client_secret = "BzKFaj19XgtFfXuA3TUYKVACfEeANqga"  # 클라이언트 시크릿 키
+    # token_url = "https://sso.nano.ncsoft.com/realms/ncsoft/protocol/openid-connect/token"
+    # client_id = "tanium-dashboard"
+    # client_secret = "BzKFaj19XgtFfXuA3TUYKVACfEeANqga"  # 클라이언트 시크릿 키
 
     # 토큰 요청 파라미터 설정
     token_payload = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": LIVE,
+        "redirect_uri": STAGE,
         "client_id": client_id,
         "client_secret": client_secret
     }
