@@ -156,7 +156,7 @@ def export(request, model):
                 # print("asd")
                 data_list = user.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop, Notebook'])
             else:
-                data_list = user.filter(chassistype=request.GET.get('categoryName')).exclude(os_simple__in=['Windows', 'Mac'])
+                data_list = user.filter(chassistype=request.GET.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
         else:
             if request.GET.get('seriesName') == 'Other':
                 data_list = user.filter(os_simple=request.GET.get('categoryName')).exclude(chassistype__in=['Desktop, Notebook'])

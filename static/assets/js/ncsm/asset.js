@@ -55,7 +55,7 @@ $(document).ready(function () {
 
     $('#asset_user').autocomplete({
         source: function (request, response) {
-            result = ''
+            // result = ''
             // 사용자가 입력한 문자열의 길이를 체크
             var minLength = /[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(request.term) ? 2 : 3;
 
@@ -145,7 +145,9 @@ $('#asset_user').on('keyup', function(event) {
         if (inputValue.trim().length < 2) {
             alert("최소 2글자 입력해주세요.");
         } else {
-            searchPer(result, 'user');
+            setTimeout(function() {
+                searchPer(result, 'user');
+            }, 200);
         }
     }
 });
