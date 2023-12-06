@@ -31262,3 +31262,12 @@ label.no-before::before {
     align-items: center;
     text-align: center;
 }
+.icon-container {
+    color: white; /* 초기 아이콘 색상 설정 */
+}
+.icon-container:hover {
+    cursor: pointer;
+    /* 다른 스타일을 원하는 대로 추가할 수 있습니다. */
+    color: orange;
+    /* 아이콘 색상을 변경하는 예시입니다. */
+}

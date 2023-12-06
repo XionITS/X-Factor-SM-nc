@@ -172,7 +172,7 @@
                             {% endif %}
                         {% if "settings" in menu_list|join:" " %}
                             {% if dataList.setting_value_list.2.count == 'Now' %}
-                            <a id="settingDiscoverBtn"><i class="bi bi-gear"> Setting</i></a>
+                            <a id="settingDiscoverBtn" class="icon-container"><i class="bi bi-gear"></i></a>
                             {% else %}
                                 설정 값 : {{dataList.setting_value_list.2.count}}
                             {% endif %}
@@ -543,7 +543,7 @@
                         </div>
                         {% if "settings" in menu_list|join:" " %}
                             {% if dataList.setting_value_list.0.count == 'Now' %}
-                            <a id="settingVerBtn"><i class="bi bi-gear"> Setting</i></a>
+                            <a id="settingVerBtn" class="icon-container"><i class="bi bi-gear"></i></a>
                             {% else %}
                                 설정 값 : {{dataList.setting_value_list.0.count}}
                             {% endif %}
@@ -574,7 +574,7 @@
                         </div>
                         {% if "settings" in menu_list|join:" " %}
                             {% if dataList.setting_value_list.1.count == 'Now' %}
-                            <a id="settingHotBtn"><i class="bi bi-gear"> Setting</i></a>
+                            <a id="settingHotBtn" class="icon-container"><i class="bi bi-gear"></i></a>
                             {% else %}
                                 설정 값 : {{dataList.setting_value_list.1.count}}
                             {% endif %}
