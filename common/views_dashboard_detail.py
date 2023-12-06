@@ -40,13 +40,11 @@ def all_asset_paging1(request):
     user = ''
     cache = ''
     aa = Xfactor_Xuser.objects.values('x_id')
-    print(aa)
     for a in aa:
         bb = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=a['x_id'], xfactor_auth_id='deploy')
         if bb:
             pass
         else:
-            print(a['x_id'])
             av = Xfactor_Xuser_Auth(xfactor_xuser_id=a['x_id'], xfactor_auth_id='deploy', auth_use='false')
             av.save()
 
@@ -56,7 +54,6 @@ def all_asset_paging1(request):
         if b:
             pass
         else:
-            print(a['pk'])
             cc = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=a['pk']).values('xfactor_xgroup').distinct()
             for c in cc:
                 ca = Xfactor_Xgroup_Auth(xfactor_xgroup=c['xfactor_xgroup'], xfactor_auth_id='deploy', auth_use='false', xgroup_id=a['pk'])

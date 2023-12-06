@@ -70,6 +70,10 @@ $(document).ready(function () {
                         type: 'user'
                     },
                     success: function (data) {
+                        console.log(data)
+                        if (data.error) {
+                            return
+                        }
                         var autocompleteData = data.data.map(function (item) {
                             return {
                             label: item.logged_name_id__userName + ' (' + item.computer_name + ')', /// Autocomplete에서 보여질 값,

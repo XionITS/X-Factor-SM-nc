@@ -92,7 +92,7 @@ def search_box(request):
         if type == 'user':
             user_data = Xfactor_Common.objects.filter(user_date__gte=start_of_day, logged_name_id__userName__icontains=search_text).values('logged_name_id__userName', 'computer_name')
             if not user_data:
-                return HttpResponse({'error': '유효하지 않은 값입니다.'})
+                return JsonResponse({'error': '유효하지 않은 값입니다.'})
         return JsonResponse({'data': list(user_data)})
 
 
