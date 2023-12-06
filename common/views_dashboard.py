@@ -64,6 +64,8 @@ def Dashboard(unique_items, selected_date=None):
 
         #몇일인지 체크
         discover_current = Daily_Statistics_log.objects.filter(item='discover_web').filter(statistics_collection_date__gte=start_time, statistics_collection_date__lt=end_time).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if not discover_current:
+            discover_current = 150
 
         setting_value_list.append({'item': 'ver_current', 'count': 'Now'})
         setting_value_list.append({'item': 'hot_current', 'count': 'Now'})

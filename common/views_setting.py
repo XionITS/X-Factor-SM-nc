@@ -67,7 +67,10 @@ def hot_list(request):
         #현재 Web 값 가져오기
         hot_current = Daily_Statistics_log.objects.filter(item='hot_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
         hot_next = Daily_Statistics_log.objects.filter(item='hot_module').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
-
+        if hot_current == None:
+            hot_current = 90
+        if hot_next == None:
+            hot_next = 90
         data = {
             'hot_list': hot_list,
             'current_value': hot_current/30,

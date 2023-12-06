@@ -1406,6 +1406,8 @@ def discoverChart(request):
         date_180_days_ago = date_150_days_ago - timedelta(days=30) #선택한 시간대로부터 150일 전 시간대
 
         discover_current_1day = Daily_Statistics_log.objects.filter(item='discover_web').filter(statistics_collection_date__gte=start_of_today_sel - timedelta(days=1) , statistics_collection_date__lt=end_of_today_sel - timedelta(days=1)).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if discover_current_1day == None:
+            discover_current_1day = 150
         date_150_days_ago_1day = start_of_today_sel - timedelta(days=discover_current_1day)
         date_180_days_ago_1day = date_150_days_ago_1day - timedelta(days=30)
     elif request.POST.get('selectedDate') == '':
@@ -1417,6 +1419,8 @@ def discoverChart(request):
         date_180_days_ago = date_150_days_ago - timedelta(days=30)
 
         discover_current_1day = Daily_Statistics_log.objects.filter(item='discover_web').filter(statistics_collection_date__gte=start_of_today - timedelta(days=1) , statistics_collection_date__lt=end_of_today - timedelta(days=1)).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
+        if discover_current_1day == None:
+            discover_current_1day = 150
         date_150_days_ago_1day = start_of_today - timedelta(days=discover_current_1day)
         date_180_days_ago_1day = date_150_days_ago_1day - timedelta(days=30)
 
