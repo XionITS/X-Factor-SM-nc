@@ -11,7 +11,7 @@
     <div class="row justify-content-sm-between">
         <div class="d-flex justify-content-end mb-2">
         <div class="d-flex align-items-center justify-content-start me-2">
-            <div style="color: {{ dataList.current_time.0.color }}">데이터 수집시간 : {{dataList.current_time.0.current_time}}</div>
+<!--            <div style="color: {{ dataList.current_time.0.color }}">데이터 수집시간 : {{dataList.current_time.0.current_time}}</div>-->
         </div>
             {% if "dash_report" in menu_list|join:" " %}
             <button id="reportPop" class="btn btn-secondary" type="button" data-bs-display="static" aria-expanded="false">
@@ -365,7 +365,7 @@
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px">
                         <div class="flex-grow-1" style="font-size: 17px">위치별 자산 현황
-                            <a style="font-size:12px; color: lime">온라인</a>
+<!--                            <a style="font-size:12px; color: lime">온라인</a>-->
                         </div>
                     </div>
                     {% if "dash_locate" in menu_list|join:" " %}
@@ -389,7 +389,7 @@
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px mb-2">
                         <div class="flex-grow-1" style="font-size: 17px">Office 버전별 통계
-                            <a style="font-size:12px; color: lime">온라인</a>
+<!--                            <a style="font-size:12px; color: lime">온라인</a>-->
                         </div>
                     </div>
                     {% if "dash_office" in menu_list|join:" " %}
@@ -413,7 +413,7 @@
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px mb-2">
                         <div class="flex-grow-1" style="font-size: 17px">월별 자산 변화 수
-                            <a style="font-size:12px; color: deepskyblue">Total</a>
+<!--                            <a style="font-size:12px; color: deepskyblue">Total</a>-->
                         </div>
                     </div>
                 {% if "dash_month" in menu_list|join:" " %}
@@ -488,7 +488,7 @@
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px">
                         <div class="flex-grow-1" style="font-size: 17px">Windows 버전별 자산 목록 (Top 6)
-                            <a style="font-size:12px; color: lime">온라인</a>
+<!--                            <a style="font-size:12px; color: lime">온라인</a>-->
                         </div>
                     </div>
                     {% if "dash_win_ver" in menu_list|join:" " %}
@@ -539,7 +539,7 @@
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px ">
                         <div class="flex-grow-1" style="font-size: 17px">Windows 버전별 자산 현황
-                            <a style="font-size:12px; color: lime">온라인</a>
+<!--                            <a style="font-size:12px; color: lime">온라인</a>-->
                         </div>
                         {% if "settings" in menu_list|join:" " %}
                             {% if dataList.setting_value_list.0.count == 'Now' %}
@@ -570,7 +570,7 @@
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px">
                         <div class="flex-grow-1" style="font-size: 17px">보안 패치별 자산 현황
-                            <a style="font-size:12px; color: lime">온라인</a>
+<!--                            <a style="font-size:12px; color: lime">온라인</a>-->
                         </div>
                         {% if "settings" in menu_list|join:" " %}
                             {% if dataList.setting_value_list.1.count == 'Now' %}
@@ -602,7 +602,7 @@
                 <div class="card-body">
                     <div class="d-flex fw-bold fs-12px mb-2">
                         <div class="flex-grow-1" style="font-size: 17px">태니엄 프로세스 CPU 사용량
-                            <a style="font-size:12px; color: lime">온라인</a>
+<!--                            <a style="font-size:12px; color: lime">온라인</a>-->
                         </div>
                     </div>
                     {% if "dash_tanium" in menu_list|join:" " %}

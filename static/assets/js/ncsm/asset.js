@@ -70,7 +70,6 @@ $(document).ready(function () {
                         type: 'user'
                     },
                     success: function (data) {
-                        console.log(data)
                         if (data.error) {
                             return
                         }
