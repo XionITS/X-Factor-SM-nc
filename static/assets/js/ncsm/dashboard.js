@@ -1938,22 +1938,17 @@ $("#datepickerD").datetimepicker({
         }
     },
     onChangeDateTime: function(dp, $input) {
-        // if (!dp) {
-        //     return
-        // }
-        // var selectedTime = dp.getTime();
-        // var currentTime = new Date();
-        // if (selectedTime > currentTime.getTime()) {
-        //     // 선택된 시간이 현재 시간보다 뒤인 경우, 다시 이전의 시간으로 설정
-        //     $input.val('');
-        //     // var newURL = "/home/?datetime=" + $input.val().replace(' ', '-').replace('시', '');
-        //     // window.location.href = newURL;
-        // } else {
-        //     var newURL = "/home/?datetime=" + $input.val().replace(' ', '-').replace('시', '');
-        //     window.location.href = newURL;
-        // }
+        if (!dp) {
+            return
+        }
+        var selectedTime = dp.getTime();
+        var currentTime = new Date();
         var currentValue = $input.val().replace(' ', '-').replace('시', '');
-        if (previousValue !== currentValue && dateTimeSelected) {
+        if (selectedTime > currentTime.getTime()) {
+            //     // 선택된 시간이 현재 시간보다 뒤인 경우, 다시 이전의 시간으로 설정
+            $input.val('');
+            dp.getTime('');
+        }else if (previousValue !== currentValue && dateTimeSelected) {
             previousValue = currentValue;
             var newURL = "/home/?datetime=" + $input.val().replace(' ', '-').replace('시', '');
             window.location.href = newURL;
