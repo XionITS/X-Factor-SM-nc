@@ -108,18 +108,13 @@ def login(request):
             else:
                 RS = selectUsers(x_id, x_pw)
                 # print(RS)
-                user_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=x_id)
+                user_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=x_id, auth_use='false')
+                group_check = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=x_id, auth_use='true')
                 if RS == None:
                     request.session['sessionauth'] = 'noauth'
                     return render(request, 'nouser_page.html')
                 # print(RS)
-                elif len(user_check.filter(xfactor_auth_id='HS_asset',auth_use='false') and user_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and user_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='PUR_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset_list', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='Asset', auth_use='false') and user_check.filter(xfactor_auth_id='History', auth_use='false') and user_check.filter(xfactor_auth_id='settings', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_report',auth_use='false') and user_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and user_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and user_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and user_check.filter(xfactor_auth_id='dash_office', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_month', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false') and user_check.filter(xfactor_auth_id='deploy', auth_use='false')) == 0:
+                elif len(user_check) != 21 or len(group_check) > 0:
                     request.session['sessionid'] = RS[0]
                     request.session['sessionname'] = RS[2]
                     request.session['sessionemail'] = RS[3]
@@ -144,13 +139,7 @@ def login(request):
                     return redirect('../home')
                     # return render(request, 'noauth.html')
                     # return render(request, 'common/login.html', res_data)
-                elif len(user_check.filter(xfactor_auth_id='HS_asset',auth_use='false') and user_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and user_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='PUR_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset', auth_use='false') and user_check.filter(xfactor_auth_id='SEC_asset_list', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='Asset', auth_use='false') and user_check.filter(xfactor_auth_id='History', auth_use='false') and user_check.filter(xfactor_auth_id='settings', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_report',auth_use='false') and user_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and user_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and user_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and user_check.filter(xfactor_auth_id='dash_office', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_month', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and user_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
-                    and user_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and user_check.filter(xfactor_auth_id='dash_tanium', auth_use='false') and user_check.filter(xfactor_auth_id='deploy', auth_use='false')) > 0:
+                elif len(user_check) == 21 and len(group_check) == 0:
                     request.session['sessionid'] = RS[0]
                     request.session['sessionauth'] = 'noauth'
                     request.session['sessionname'] = RS[2]
@@ -944,7 +933,8 @@ def nano_user(request):
 
     # 유저 체크
     RS_user = selectUsers_nano(sub)
-    nano_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=sub)
+    nano_check = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=sub, auth_use='false')
+    nanogroup_check = Xfactor_Xgroup_Auth.objects.filter(xfactor_xgroup=sub, auth_use='true')
     if RS_user == None:
         # function = 'Login'  # 분류 정보를 원하시는 텍스트로 변경해주세요.
         #         # item = '권한이 없는 계정'
@@ -967,13 +957,7 @@ def nano_user(request):
         request.session['sessionemail'] = email
         request.session['sessionidtoken'] = id_token
         return render(request, 'nouser_page.html')
-    elif len(nano_check.filter(xfactor_auth_id='HS_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='VER_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='UP_asset', auth_use='false')
-            and nano_check.filter(xfactor_auth_id='PUR_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='SEC_asset', auth_use='false') and nano_check.filter(xfactor_auth_id='SEC_asset_list', auth_use='false')
-            and nano_check.filter(xfactor_auth_id='Asset', auth_use='false') and nano_check.filter(xfactor_auth_id='History', auth_use='false') and nano_check.filter(xfactor_auth_id='settings', auth_use='false')
-            and nano_check.filter(xfactor_auth_id='dash_report', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_daily', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_all_asset', auth_use='false')
-            and nano_check.filter(xfactor_auth_id='dash_longago', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_locate', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_office', auth_use='false')
-            and nano_check.filter(xfactor_auth_id='dash_month', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_ver', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_win_update', auth_use='false')
-            and nano_check.filter(xfactor_auth_id='dash_win_hotfix', auth_use='false') and nano_check.filter(xfactor_auth_id='dash_tanium', auth_use='false') and nano_check.filter(xfactor_auth_id='deploy', auth_use='false')) == 0:
+    elif len(nano_check) != 21 or len(nanogroup_check) > 0:
         if 'sessionid' in request.session:
             return redirect('../home')
         request.session['sessionid'] = sub

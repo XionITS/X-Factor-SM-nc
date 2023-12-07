@@ -23,6 +23,9 @@
                         <button class="btn btn-outline-warning float-start groupdeploy" type="button" id="createdeploy" aria-expanded="false">
                         배포 하기
                         </button>
+                        <input class="hidden" id="deployseclist" value='true'>
+                    {% else %}
+                        <input class="hidden" id="deployseclist" value='false'>
                     {% endif %}
                 </div>
 

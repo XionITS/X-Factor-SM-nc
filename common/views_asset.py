@@ -125,12 +125,12 @@ def save_memo(request):
             computer_name = xfactor_common.computer_name
 
             # X-Factor_Common 오브젝트 가져오기
-            xfactor_common_cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).get(computer_name=computername, mac_address=macaddress)
+            # xfactor_common_cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, cache_date__gte=start_of_day).get(computer_name=computername, mac_address=macaddress)
 
             # memo 필드 값 설정 및 저장
-            xfactor_common_cache.memo = memo
-            xfactor_common_cache.save()
-            computer_name = xfactor_common_cache.computer_name
+            # xfactor_common_cache.memo = memo
+            # xfactor_common_cache.save()
+            # computer_name = xfactor_common_cache.computer_name
             return JsonResponse({'success': computer_name})
 
 

@@ -446,8 +446,8 @@ var sw_asset_list = function () {
 		],
 		language: {
 			"decimal": "",
-            "info": "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='sw_all_select'>필터된 자산 그룹 생성</button>",
-			//"info": "전체 _TOTAL_건 ",
+            // "info": "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='sw_all_select'>필터된 자산 그룹 생성</button>",
+			"info": "전체 _TOTAL_건 ",
 			"infoEmpty": "데이터가 없습니다.",
 			"emptyTable": "데이터가 없습니다.",
 			"thousands": ",",

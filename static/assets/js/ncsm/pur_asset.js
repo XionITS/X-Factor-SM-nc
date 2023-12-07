@@ -8,6 +8,13 @@ Author: Sean Ngu
 var checkedItems = {};
 
 
+var showButtonpur = '';
+var dataElement = document.getElementById('deploypur')
+if (dataElement && dataElement.value === 'true') {
+    showButtonpur = true;
+} else {
+    showButtonpur = false;
+}
 var hw_pur_asset_list = function () {
     var hw_pur_asset_list_Data = $('#hs_pur_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
@@ -185,7 +192,7 @@ var hw_pur_asset_list = function () {
                 }, searchable: true
             },
             { data: 'user_date', title: '온/오프라인', searchable: true },
-            {data: 'memo', title: '메모', searchable: true},
+            {data: 'memo', title: '메모', searchable: true, orderable: false},
         ],
         rowCallback: function (row, data, index) {
             var api = this.api();
@@ -296,8 +303,8 @@ var hw_pur_asset_list = function () {
         ],
         language: {
             "decimal": "",
-            "info": "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='hw_pur_all_select'>필터된 자산 그룹 생성</button>",
-			//"info": "전체 _TOTAL_건 ",
+            "info": showButtonpur ? "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='hw_pur_all_select'>필터된 자산 그룹 생성</button>" : "전체 _TOTAL_건",
+			// "info": "전체 _TOTAL_건 ",
             "infoEmpty": "데이터가 없습니다.",
             "emptyTable": "데이터가 없습니다.",
             "thousands": ",",
@@ -316,6 +323,7 @@ var hw_pur_asset_list = function () {
             "infoPostFix": "",
         },
         pagingType: 'numbers',//이전 다음 버튼 히든처리
+
     });
 
     //체크박스 저장하기
@@ -616,9 +624,9 @@ var sw_pur_asset_list = function () {
             {data: 'sw_list', title: '소프트웨어 목록', searchable: true},
             {data: 'sw_ver_list', title: '소프트웨어 버전', searchable: true},
             {data: 'sw_install', title: '설치 일자', searchable: true},
-            {data: '', title: '더보기', searchable: false},
+            {data: '', title: '더보기', searchable: false, orderable: false},
             { data: 'user_date', title: '온/오프라인', searchable: true },
-            {data: 'memo', title: '메모', searchable: true},
+            {data: 'memo', title: '메모', searchable: true, orderable: false},
 
         ],
         rowCallback: function (row, data, index) {
@@ -728,7 +736,7 @@ var sw_pur_asset_list = function () {
         ],
         language: {
             "decimal": "",
-            "info": "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='sw_pur_all_select'>필터된 자산 그룹 생성</button>",
+            "info": showButtonpur ? "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='hw_pur_all_select'>필터된 자산 그룹 생성</button>" : "전체 _TOTAL_건",
 			//"info": "전체 _TOTAL_건 ",
             "infoEmpty": "데이터가 없습니다.",
             "emptyTable": "데이터가 없습니다.",

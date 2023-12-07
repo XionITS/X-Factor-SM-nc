@@ -87,9 +87,9 @@ def all_asset_paging1(request):
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=59)
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        cache = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
 
 
@@ -188,9 +188,9 @@ def all_asset_paging1(request):
 
     # Serialize the paginated data
     if request.POST.get('categoryName') == 'Total':
-        user_list = Cacheserializer(page, many=True).data
+        user_list = CommonSerializer(page, many=True).data
     elif request.POST.get('categoryName') == 'Online':
-        user_list = Cacheserializer(page, many=True).data
+        user_list = CommonSerializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -243,9 +243,9 @@ def asset_os_paging1(request):
         end_of_today = start_of_today + timedelta(minutes=50)
 
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        cache = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
     #print(request.POST.get('categoryName'))
     #print(request.POST.get('seriesName'))
@@ -394,7 +394,7 @@ def asset_os_paging1(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = CommonSerializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -450,9 +450,9 @@ def asset_os_paging2(request):
         end_of_today = start_of_today + timedelta(minutes=50)
 
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        cache = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
     filter_text = request.POST.get('search[value]')
 
@@ -593,7 +593,7 @@ def asset_os_paging2(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = CommonSerializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -645,9 +645,9 @@ def oslistPieChart(request):
         end_of_today = start_of_today + timedelta(minutes=50)
 
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        cache = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
     #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
     user = user.filter(os_simple='Windows', os_total__contains='Windows').annotate(windows_build=Concat('os_total', Value(' '), 'os_build')).filter(windows_build=request.POST.get('categoryName'))
@@ -693,7 +693,7 @@ def oslistPieChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = CommonSerializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -756,9 +756,9 @@ def osVerPieChart(request):
         if ver_current == None:
             ver_current = 19044
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today).exclude(os_build='')
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(os_build='')
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        cache = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
     if request.POST.get('categoryName') == '업데이트 완료':
         #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, os_simple='Windows', os_build__gte='19044').exclude(os_total='unconfirmed')
@@ -820,7 +820,7 @@ def osVerPieChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = CommonSerializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -872,9 +872,9 @@ def office_chart(request):
         end_of_today = start_of_today + timedelta(minutes=50)
 
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        cache = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
     if request.POST.get('categoryName') == 'Office 365':
         #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5__in=['Office 21', 'Office 19', 'Office 16'])
@@ -971,7 +971,7 @@ def office_chart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = CommonSerializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -1024,9 +1024,9 @@ def subnet_chart(request):
         end_of_today = start_of_today + timedelta(minutes=50)
 
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        cache = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
     if request.POST.get('categoryName') == 'VPN':
         #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, subnet__in=['172.21.224.0/20', '192.168.0.0/20'])
@@ -1111,7 +1111,7 @@ def subnet_chart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = CommonSerializer(page, many=True).data
     # Prepare the response
 
     response = {
@@ -1162,7 +1162,7 @@ def hotfixChart(request):
         three_months_ago = datetime.now() - timedelta(days=hot_current)
         three_months_ago = three_months_ago.strftime('%Y-%m-%d')
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today)
     # user_objects = Xfactor_Daily.objects.filter(user_date__gte=start_of_today)
     user_objects = user
     users_values = user_objects.values('hotfix_date', 'computer_id')
@@ -1188,23 +1188,23 @@ def hotfixChart(request):
                 filtered_user_objects.append(user['computer_id'])
             elif latest_date >= three_months_ago and request.POST.get('categoryName') == '보안패치 불필요':
                 filtered_user_objects.append(user['computer_id'])
-
-    if request.POST.get('selectedDate') != '':
-        start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
-        start_of_today = timezone.make_aware(start_date_naive)
-        end_of_today = start_of_today + timedelta(minutes=50)
-
-        # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
-
-    elif request.POST.get('selectedDate') == '':
-        start_of_today1 = now.strftime('%Y-%m-%d %H')
-        start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
-        start_of_today = timezone.make_aware(start_of_today2)
-        start_of_day = start_of_today - timedelta(days=7)
-        end_of_today = start_of_today + timedelta(minutes=50)
-        # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
+    user = user_objects.filter(computer_id__in=filtered_user_objects)
+    # if request.POST.get('selectedDate') != '':
+    #     start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
+    #     start_of_today = timezone.make_aware(start_date_naive)
+    #     end_of_today = start_of_today + timedelta(minutes=50)
+    #
+    #     # 현재
+    #     user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
+    #
+    # elif request.POST.get('selectedDate') == '':
+    #     start_of_today1 = now.strftime('%Y-%m-%d %H')
+    #     start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+    #     start_of_today = timezone.make_aware(start_of_today2)
+    #     start_of_day = start_of_today - timedelta(days=7)
+    #     end_of_today = start_of_today + timedelta(minutes=50)
+    #     # 현재
+    #     user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
 
     if filter_text:
         query = (Q(computer_name__icontains=filter_text) |
@@ -1319,7 +1319,7 @@ def tcpuChart(request):
         end_of_today = start_of_today + timedelta(minutes=50)
 
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         # 토탈
         cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
@@ -1365,7 +1365,7 @@ def tcpuChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer(page, many=True).data
+    user_list = CommonSerializer(page, many=True).data
     # Prepare the response
 
     response = {

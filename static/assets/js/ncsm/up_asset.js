@@ -9,7 +9,13 @@ Author: Sean Ngu
 
 // 전역 변수로 체크박스 값을 저장할 객체를 생성합니다.
 var checkedItems = {};
-
+var showButtonup = '';
+var dataElement = document.getElementById('deployup')
+if (dataElement && dataElement.value === 'true') {
+    showButtonup = true;
+} else {
+    showButtonup = false;
+}
 var up_asset_list = function () {
     var up_asset_list_Data = $('#up_asset_list').DataTable({
         dom: "<'d-flex justify-content-between mb-3'<'col-md-0 mb-md-0'l><'text-right'<'d-flex justify-content-end'fB>>>t<'align-items-center d-flex justify-content-between'<' mr-auto col-md-0 mb-md-0 mt-n2 'i><'mb-0 col-md-0'p>>",
@@ -239,7 +245,7 @@ var up_asset_list = function () {
         ],
         language: {
             "decimal": "",
-			"info": "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='up_all_select'>필터된 자산 그룹 생성</button>",
+			"info": showButtonup ? "전체 _TOTAL_건 <button class='btn btn-outline-info me-1px' type='button' id='up_all_select'>필터된 자산 그룹 생성</button>" : "전체 _TOTAL_건",
 			//"info": "전체 _TOTAL_건 ",
             "infoEmpty": "데이터가 없습니다.",
             "emptyTable": "데이터가 없습니다.",

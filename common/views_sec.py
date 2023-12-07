@@ -75,14 +75,14 @@ def sec_asset_paging(request):
     cbr_count = Daily_Statistics_log.objects.filter(item='cbr', statistics_collection_date__gte=start_of_today).values_list('item_count', flat=True).first()
     cbc_count = Daily_Statistics_log.objects.filter(item='cbc', statistics_collection_date__gte=start_of_today).values_list('item_count', flat=True).first()
     mcafee_count = Daily_Statistics_log.objects.filter(item='mcafee', statistics_collection_date__gte=start_of_today).values_list('item_count', flat=True).first()
-    if not cososys_count and not symantec_count and not cbr_count and not cbc_count and not mcafee_count:
-        cososys_count = Daily_Statistics_log.objects.filter(item='cososys').values_list('item_count', flat=True).first()
-        symantec_count = Daily_Statistics_log.objects.filter(item='symantec').values_list('item_count', flat=True).first()
-        cbr_count = Daily_Statistics_log.objects.filter(item='cbr').values_list('item_count', flat=True).first()
-        cbc_count = Daily_Statistics_log.objects.filter(item='cbc').values_list('item_count', flat=True).first()
-        mcafee_count = Daily_Statistics_log.objects.filter(item='mcafee').values_list('item_count', flat=True).first()
+    # if not cososys_count and not symantec_count and not cbr_count and not cbc_count and not mcafee_count:
+    #     cososys_count = Daily_Statistics_log.objects.filter(item='cososys').values_list('item_count', flat=True).first()
+    #     symantec_count = Daily_Statistics_log.objects.filter(item='symantec').values_list('item_count', flat=True).first()
+    #     cbr_count = Daily_Statistics_log.objects.filter(item='cbr').values_list('item_count', flat=True).first()
+    #     cbc_count = Daily_Statistics_log.objects.filter(item='cbc').values_list('item_count', flat=True).first()
+    #     mcafee_count = Daily_Statistics_log.objects.filter(item='mcafee').values_list('item_count', flat=True).first()
     # else:
-        count_list = cososys_count, symantec_count, cbr_count, cbc_count, mcafee_count
+    count_list = cososys_count, symantec_count, cbr_count, cbc_count, mcafee_count
     print(count_list)
     # count_list = cososys_count, symantec_count, cbr_count, cbc_count, mcafee_count
 
