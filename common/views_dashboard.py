@@ -52,7 +52,7 @@ def Dashboard(unique_items, selected_date=None):
 
     else:
         setting_value_list = []
-        latest_date = Daily_Statistics_log.objects.latest('statistics_collection_date').statistics_collection_date
+        latest_date = Daily_Statistics_log.objects.filter(classification='security_count').latest('statistics_collection_date').statistics_collection_date
         previous_date = latest_date - timedelta(days=1)
         start_time = timezone.datetime(latest_date.year, latest_date.month, latest_date.day, latest_date.hour, tzinfo=timezone.utc)
         end_time = start_time + timedelta(hours=1)
