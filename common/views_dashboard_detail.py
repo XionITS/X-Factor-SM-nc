@@ -39,25 +39,25 @@ def all_asset_paging1(request):
     filter_text = request.POST.get('search[value]')
     user = ''
     cache = ''
-    aa = Xfactor_Xuser.objects.values('x_id')
-    for a in aa:
-        bb = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=a['x_id'], xfactor_auth_id='deploy')
-        if bb:
-            pass
-        else:
-            av = Xfactor_Xuser_Auth(xfactor_xuser_id=a['x_id'], xfactor_auth_id='deploy', auth_use='false')
-            av.save()
-
-    aaa = Xfactor_Xuser_Group.objects.values('pk')
-    for a in aaa:
-        b = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=a['pk'], xfactor_auth_id='deploy')
-        if b:
-            pass
-        else:
-            cc = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=a['pk']).values('xfactor_xgroup').distinct()
-            for c in cc:
-                ca = Xfactor_Xgroup_Auth(xfactor_xgroup=c['xfactor_xgroup'], xfactor_auth_id='deploy', auth_use='false', xgroup_id=a['pk'])
-                ca.save()
+    # aa = Xfactor_Xuser.objects.values('x_id')
+    # for a in aa:
+    #     bb = Xfactor_Xuser_Auth.objects.filter(xfactor_xuser_id=a['x_id'], xfactor_auth_id='deploy')
+    #     if bb:
+    #         pass
+    #     else:
+    #         av = Xfactor_Xuser_Auth(xfactor_xuser_id=a['x_id'], xfactor_auth_id='deploy', auth_use='false')
+    #         av.save()
+    #
+    # aaa = Xfactor_Xuser_Group.objects.values('pk')
+    # for a in aaa:
+    #     b = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=a['pk'], xfactor_auth_id='deploy')
+    #     if b:
+    #         pass
+    #     else:
+    #         cc = Xfactor_Xgroup_Auth.objects.filter(xgroup_id=a['pk']).values('xfactor_xgroup').distinct()
+    #         for c in cc:
+    #             ca = Xfactor_Xgroup_Auth(xfactor_xgroup=c['xfactor_xgroup'], xfactor_auth_id='deploy', auth_use='false', xgroup_id=a['pk'])
+    #             ca.save()
     #print(request.POST.get('selectedDate'))
     if request.POST.get('selectedDate') != '':
         start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
