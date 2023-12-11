@@ -15,7 +15,7 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 import pytz
-from common.custom_sort_key import custom_sort_key as cus_sort
+
 with open("setting.json", encoding="UTF-8") as f:
     SETTING = json.loads(f.read())
 DBSettingTime = SETTING['DB']['DBSelectTime']

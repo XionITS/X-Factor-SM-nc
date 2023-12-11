@@ -2382,7 +2382,7 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
                     3: 'computer_name',
                     4: 'ip_address.',
                     5: 'mac_address',
-                    6: 'cache_date'
+                    6: 'user_date'
                 };
                 //console.log(columnMap)
                 data.filter = {
@@ -2406,7 +2406,7 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
             {data: 'computer_name', title: '컴퓨터이름', searchable: true},
             {data: 'ip_address', title: 'IP', searchable: true},
             {data: 'mac_address', title: 'MAC', searchable: true},
-            {data: 'cache_date', title: '접속일', searchable: true},
+            {data: 'user_date', title: '접속일', searchable: true},
             // {data: '', title: 'Email', searchable: true},
         ],
         rowCallback: function (row, data, index) {

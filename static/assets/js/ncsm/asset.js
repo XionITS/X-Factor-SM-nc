@@ -55,7 +55,7 @@ $(document).ready(function () {
 
     $('#asset_user').autocomplete({
         source: function (request, response) {
-            // result = ''
+            result = ''
             // 사용자가 입력한 문자열의 길이를 체크
             var minLength = /[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(request.term) ? 2 : 3;
 
@@ -75,20 +75,23 @@ $(document).ready(function () {
                         }
                         var autocompleteData = data.data.map(function (item) {
                             return {
-                            label: item.logged_name_id__userName + ' (' + item.computer_name + ')', /// Autocomplete에서 보여질 값,
-                            value: item.logged_name_id__userName + ' (' + item.computer_name + ')',
+                            label: item.logged_name_id__userName + ' (' + item.logged_name_id__userId + ')' + ' (' + item.computer_name + ')', /// Autocomplete에서 보여질 값,
+                            value: item.logged_name_id__userName + ' (' + item.logged_name_id__userId + ')' + ' (' + item.computer_name + ')',
                             computer_name: item.computer_name
                             };
                         });
 
                         $('#asset_user').autocomplete({
                             select: function (event, ui) {
+
                                 // 선택된 항목의 label 및 value 값 가져오기
                                 var selectedLabel = ui.item.label;
                                 var selectedValue = ui.item.computer_name;
-                                result = selectedValue
-                                // 선택된 값 콘솔에 출력
-                                // 여기에 선택된 값에 대한 추가적인 로직을 구현할 수 있습니다.
+                                setTimeout(function () {
+                                    result = selectedValue;
+
+                                    // 여기에 선택된 값에 대한 추가적인 로직을 구현할 수 있습니다.
+                                }, 200);
                             }
                         });
                         response(autocompleteData);
@@ -190,8 +193,8 @@ function searchPer(inputValue, type){
             }
             var statusElement = document.getElementById("asset_status");
             if (statusElement) {
-              statusElement.textContent = data.cache_date;
-              statusElement.style.color = data.cache_date === "Online" ? "lime" : "red";
+              statusElement.textContent = data.user_date;
+              statusElement.style.color = data.user_date === "Online" ? "lime" : "red";
             }
             var computerNameElement = document.getElementById("asset_search_result");
             if (computerNameElement) {
@@ -199,7 +202,7 @@ function searchPer(inputValue, type){
             }
             var userElement = document.getElementById("asset_user");
             if (userElement) {
-              userElement.value = data.ncdb_data.userName;
+              userElement.value = data.ncdb_data.userName + ' / ' + data.ncdb_data.userId + '';
             }
 
             var memoElement = document.getElementById("asset_memo");

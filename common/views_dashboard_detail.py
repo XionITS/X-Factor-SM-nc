@@ -1426,17 +1426,15 @@ def discoverChart(request):
 
     if request.POST.get('categoryName') == '1일 전':
 
-
         date_150_yesterday_ago = date_150_days_ago_1day - timedelta(days=1)
         date_180_yesterday_ago = date_180_days_ago_1day - timedelta(days=1)
         #user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_yesterday_ago)
         #print('1일 전', date_150_yesterday_ago)
         filtered_records = (
-            Xfactor_Common_Cache.objects
-            .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
-            .filter(cache_date__gte=date_180_yesterday_ago, cache_date__lt=date_150_yesterday_ago)
+            Xfactor_Common.objects
+            .filter(user_date__gte=date_180_yesterday_ago, user_date__lt=date_150_yesterday_ago)
         )
-        base = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_yesterday_ago)
+        base = Xfactor_Common.objects.exclude(user_date__lt=date_150_yesterday_ago)
         user = filtered_records.exclude(mac_address__in=base.values('mac_address'))
     if request.POST.get('categoryName') == '현재':
         #print('현재', date_150_days_ago)
@@ -1447,7 +1445,7 @@ def discoverChart(request):
             .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
             .filter(cache_date__gte=date_180_days_ago, cache_date__lt=date_150_days_ago)
         )
-        base = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude( cache_date__lt=date_150_days_ago)
+        base = Xfactor_Common.objects.exclude(user_date__lt=date_150_days_ago)
         user = filtered_records.exclude(mac_address__in=base.values('mac_address'))
         #print(user.count())
 
@@ -1469,7 +1467,7 @@ def discoverChart(request):
         3: 'computer_name',
         4: 'ip_address',
         5: 'mac_address',
-        6: 'cache_date'
+        6: 'user_date'
         # Add mappings for other columns here
     }
     order_column = order_column_map.get(order_column_index, 'computer_name')
@@ -1492,7 +1490,7 @@ def discoverChart(request):
         page = paginator.page(paginator.num_pages)
 
     # Serialize the paginated data
-    user_list = Cacheserializer2(page, many=True).data
+    user_list = CommonSerializer(page, many=True).data
     # Prepare the response
 
     response = {

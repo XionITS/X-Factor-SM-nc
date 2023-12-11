@@ -34,6 +34,7 @@ class NcdbSerializer(serializers.ModelSerializer):
 
 
 class CommonSerializer(serializers.ModelSerializer):  #user 정보
+    user_date = serializers.DateTimeField(format="%Y-%m-%d")
     class Meta:
         model = Xfactor_Common
         fields = '__all__'

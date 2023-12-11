@@ -16,7 +16,6 @@ from django.core.serializers import serialize
 from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
-from common.custom_sort_key import custom_sort_key as cus_sort
 
 #today_collect_date = timezone.now() - timedelta(minutes=7)
 with open("setting.json", encoding="UTF-8") as f:

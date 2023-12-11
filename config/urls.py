@@ -18,8 +18,6 @@ from common import views_group_management
 from common import views_log_management
 from common import views_report
 from common import views_setting
-from common.CallbackView import CallbackView
-from common.LoginView import LoginView
 from django.conf import settings
 from django.views.static import serve
 from django.urls import re_path

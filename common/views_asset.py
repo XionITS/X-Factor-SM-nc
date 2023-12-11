@@ -67,7 +67,7 @@ def search(request):
             if not userId:
                 return HttpResponse({'error': '유효하지 않은 값입니다.'})
         # user_data = Cacheserializer(userId, many=True).data
-        user_data = CommonSerializer(userId, many=True).data
+        user_data = Commonserializer2(userId, many=True).data
         # response = {
         #     'data': user_data,  # Serialized data for the current page
         # }
@@ -90,7 +90,10 @@ def search_box(request):
         if type == 'asset':
             user_data = Xfactor_Common.objects.filter(user_date__gte=start_of_day, computer_name__icontains=search_text).values('computer_name')
         if type == 'user':
-            user_data = Xfactor_Common.objects.filter(user_date__gte=start_of_day, logged_name_id__userName__icontains=search_text).values('logged_name_id__userName', 'computer_name')
+            user_data = Xfactor_Common.objects.filter(Q(user_date__gte=start_of_day) &
+                                                    (Q(logged_name_id__userName__icontains=search_text) |
+                                                    Q(logged_name_id__userId__icontains=search_text))
+                                                    ).values('logged_name_id__userName', 'computer_name', 'logged_name_id__userId')
             if not user_data:
                 return JsonResponse({'error': '유효하지 않은 값입니다.'})
         return JsonResponse({'data': list(user_data)})

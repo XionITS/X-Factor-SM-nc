@@ -15,7 +15,6 @@ from django.core.paginator import Paginator, EmptyPage
 from .models import *
 from .serializers import *
 import pytz
-from common.custom_sort_key import custom_sort_key as cus_sort
 
 # menu_list = Xfactor_Auth.objects.get(auth_id="OS_asset").auth_name
 # menu_list = Xfactor_Auth.objects.all()
@@ -90,11 +89,11 @@ def dashboard(request):
                 'desk_total_list': desk_total_list,
                 'note_total_list': note_total_list,
                 'other_total_list': other_total_list,
-                'selected_date': selected_date if selected_date is not None else "select date...",
+                # 'selected_date': selected_date if selected_date is not None else "select date...",
+                'selected_date': datetime.strptime(selected_date, '%Y-%m-%d-%H').strftime('%Y-%m-%d %H시') if selected_date is not None else "select date...",
                 'setting_value_list': setting_value_list,
                 'current_time': current_time
                 #'setting_value_list': setting_value_list
-                # 'selected_date': datetime.strptime(selected_date, '%Y-%m-%d-%H').strftime('%Y-%m-%d %H시') if selected_date is not None else "select date..."
     }
 
     context = {'menu_list' : unique_items, 'dataList': dataList}
