@@ -113,7 +113,8 @@ def Dashboard(unique_items, selected_date=None):
 
     # Office 버전
     # office_data = asset.filter(classification='office_ver').exclude(item='').order_by('-item_count').values('item', 'item_count')
-    office_data_new = asset_log.filter(classification='office_ver', item='Office 365').aggregate(total=Sum('item_count'))
+    #office_data_new = asset_log.filter(classification='office_ver', item='Office 365').aggregate(total=Sum('item_count'))
+    office_data_new = asset_log.filter(Q(classification='office_ver', item='Office 365') | Q(classification='office_ver_365')).aggregate(total=Sum('item_count'))
     if office_data_new['total'] == None:
         office_data_new['total'] = 0
     office_data_old = asset_log.filter(classification='office_ver', item__in=['Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003']).aggregate(total=Sum('item_count'))

@@ -285,7 +285,7 @@ var sec_asset_list = function () {
             {
                 targets: 12,
                 width: "5%",
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<a class="secmore swmore-font" data-cbr="' + row.security3 + '" ' +
                         'data-computer_name="' + row.computer_name + '" data-cososys="' + row.security1 + '" data-cososys_ver="' + row.security1_ver + '" ' +
@@ -301,7 +301,7 @@ var sec_asset_list = function () {
             {
                 targets: 14,
                 width: "5%",
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     if (data === null || data === undefined || data.trim() === '') {
                         return '';

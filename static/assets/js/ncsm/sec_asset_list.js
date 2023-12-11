@@ -244,7 +244,7 @@ var sec_asset_list2 = function () {
             {
                 targets: 10,
                 width: "5%",
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
 
                     if (row.ext_chr === 'unconfirmed' && row.ext_edg === 'unconfirmed' && row.ext_fir === 'unconfirmed') {
@@ -263,7 +263,7 @@ var sec_asset_list2 = function () {
             {
                 targets: 11,
                 width: "5%",
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const sw_list = row.sw_list.replace(/\"/g, "");
                     const sw_ver_list = row.sw_ver_list.replace(/\"/g, "");
@@ -274,7 +274,7 @@ var sec_asset_list2 = function () {
             {
                 targets: 12,
                 width: "5%",
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     if (row.hotfix === 'not apply' || row.hotfix ==='Not available on Mac' || row.hotfix === 'unconfirmed') {
                         return "";
@@ -292,7 +292,7 @@ var sec_asset_list2 = function () {
             {
                 targets: 14,
                 width: "5%",
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     if (data === null || data === undefined || data.trim() === '') {
                         return '';

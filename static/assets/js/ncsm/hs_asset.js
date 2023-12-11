@@ -103,7 +103,7 @@ var hw_asset_list = function () {
 		    {targets: 5, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 6, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
             //{targets: 7, width: "10%", orderable: false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-            {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+            {targets: 7, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_name = row.computer_name;
 		        const hw_cpu = row.hw_cpu;
                 const hw_mb = row.hw_mb;
@@ -430,7 +430,7 @@ var sw_asset_list = function () {
 		    {targets: 5, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.ip_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    {targets: 6, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {return '<span title="'+row.mac_address+'" data-toggle="tooltip">'+data+'</span>'}},
 		    //{targets: 7, width: "10%", orderable: false, className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
-		    {targets: 7, width: "10%", className: 'text-center text-truncate flex-cloumn align-middle', render: function(data, type, row) {
+		    {targets: 7, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
 		        const computer_name = row.computer_name;
 		        const swList = row.sw_list.replace(/\"/g, "");
                 const swVer = row.sw_ver_list.replace(/\"/g, "");

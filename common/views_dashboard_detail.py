@@ -878,7 +878,7 @@ def office_chart(request):
 
     if request.POST.get('categoryName') == 'Office 365':
         #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date, essential5__in=['Office 21', 'Office 19', 'Office 16'])
-        user = user.filter( essential5='Office 365')
+        user = user.filter(essential5__startswith='Office 365')
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(essential5__icontains=filter_text) |

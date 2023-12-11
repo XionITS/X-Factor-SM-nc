@@ -189,7 +189,7 @@ var hw_pur_asset_list = function () {
                 data: 'hw', title: '부품 목록',
                 render: function (data, type, row) {
                     return "CPU : " + row.hw_cpu + "<br>메인보드 : " + row.hw_mb + "<br>RAM : " + row.hw_ram + "<br>디스크 : " + row.hw_disk + "<br>VGA : " + row.hw_gpu;
-                }, searchable: true
+                }, searchable: true, orderable: false
             },
             { data: 'user_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true, orderable: false},
@@ -621,9 +621,9 @@ var sw_pur_asset_list = function () {
 			{ data: 'ncdb_data.userId', title: '계정', searchable: true },
             {data: 'computer_name', title: '컴퓨터 이름', searchable: true},
             {data: 'ip_address', title: 'IPv4', searchable: true},
-            {data: 'sw_list', title: '소프트웨어 목록', searchable: true},
-            {data: 'sw_ver_list', title: '소프트웨어 버전', searchable: true},
-            {data: 'sw_install', title: '설치 일자', searchable: true},
+            {data: 'sw_list', title: '소프트웨어 목록', searchable: true, orderable: false},
+            {data: 'sw_ver_list', title: '소프트웨어 버전', searchable: true, orderable: false},
+            {data: 'sw_install', title: '설치 일자', searchable: true, orderable: false},
             {data: '', title: '더보기', searchable: false, orderable: false},
             { data: 'user_date', title: '온/오프라인', searchable: true },
             {data: 'memo', title: '메모', searchable: true, orderable: false},
@@ -708,7 +708,7 @@ var sw_pur_asset_list = function () {
 
             {
                 //targets: 11, width: "5%", orderable: false, className: 'text-start text-truncate flex-cloumn column_hidden align-middle',
-                targets: 11, width: "5%", className: 'text-start text-truncate flex-cloumn column_hidden align-middle',
+                targets: 11, width: "5%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const swList = row.sw_list.replace(/\"/g, "");;

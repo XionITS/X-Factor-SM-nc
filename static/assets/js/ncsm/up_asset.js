@@ -214,7 +214,7 @@ var up_asset_list = function () {
                 targets: 8,
                 width: "10%",
                 //orderable: false,
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const hotfix = row.hotfix;

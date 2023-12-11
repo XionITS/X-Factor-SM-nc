@@ -184,7 +184,7 @@ def export(request, model):
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "essential5", "user_date"]
         data_list = []
         if request.GET.get('categoryName') == 'Office 365':
-            data_list = user.filter(essential5='Office 365')
+            data_list = user.filter(essential5__startswith='Office 365')
         if request.GET.get('categoryName') == 'Office 365 외':
             data_list = user.filter(essential5__in=['Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003'])
         if request.GET.get('categoryName') == 'Mac Office':

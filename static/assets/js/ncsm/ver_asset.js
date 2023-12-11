@@ -182,7 +182,7 @@ var all_asset_list = function () {
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
             { data: 'mac_address', title: 'MAC' , searchable: true},
-            { data: 'os', title: 'OS 정보', searchable: true, orderable: false},
+            { data: 'os', title: 'OS 정보', orderable: false},
 //            {data: 'os_total', title: 'OS', searchable: true},
 //            {data: 'os_version', title: '버전', searchable: true},
 //            {data: 'os_build', title: '빌드', searchable: true},
@@ -220,7 +220,7 @@ var all_asset_list = function () {
                 targets: 8,
                 width: "22%",
                 //orderable: false,
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -568,7 +568,7 @@ var win_asset_list = function () {
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
             { data: 'mac_address', title: 'MAC' , searchable: true},
-            { data: 'os', title: 'OS 정보', searchable: true, orderable: false},
+            { data: 'os', title: 'OS 정보', orderable: false},
 //            {data: 'os_total', title: 'OS', searchable: true},
 //            {data: 'os_version', title: '버전', searchable: true},
 //            {data: 'os_build', title: '빌드', searchable: true},
@@ -606,7 +606,7 @@ var win_asset_list = function () {
                 targets: 8,
                 width: "22%",
                 //orderable: false,
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -953,7 +953,7 @@ var mac_asset_list = function () {
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
             { data: 'mac_address', title: 'MAC' , searchable: true},
-            { data: 'os', title: 'OS 정보', searchable: true, orderable: false},
+            { data: 'os', title: 'OS 정보', orderable: false},
 //            {data: 'os_total', title: 'OS', searchable: true},
 //            {data: 'os_version', title: '버전', searchable: true},
 //            {data: 'os_build', title: '빌드', searchable: true},
@@ -991,7 +991,7 @@ var mac_asset_list = function () {
                 targets: 8,
                 width: "22%",
                 //orderable: false,
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
@@ -1339,7 +1339,7 @@ var other_asset_list = function () {
 			{ data: 'computer_name', title: '컴퓨터 이름', searchable: true },
             { data: 'ip_address', title: 'IPv4' , searchable: true},
             { data: 'mac_address', title: 'MAC' , searchable: true},
-            { data: 'os', title: 'OS 정보', searchable: true, orderable: false},
+            { data: 'os', title: 'OS 정보',  orderable: false},
 //            {data: 'os_total', title: 'OS', searchable: true},
 //            {data: 'os_version', title: '버전', searchable: true},
 //            {data: 'os_build', title: '빌드', searchable: true},
@@ -1377,7 +1377,7 @@ var other_asset_list = function () {
                 targets: 8,
                 width: "22%",
                 //orderable: false,
-                className: 'text-center text-truncate flex-cloumn align-middle',
+                className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     const computer_name = row.computer_name;
                     const os_total = row.os_total;
