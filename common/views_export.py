@@ -25,6 +25,7 @@ def export(request, model):
     local_tz = pytz.timezone('Asia/Seoul')
     utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
     now = utc_now.astimezone(local_tz)
+    index_time = now.strftime('%Y-%m-%d-%H')
     start_of_today1 = now.strftime('%Y-%m-%d %H')
     start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
     start_of_today = timezone.make_aware(start_of_today2)
@@ -33,7 +34,7 @@ def export(request, model):
     date_150_days_ago = ''
     date_180_days_ago = ''
 
-    cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+    cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
     columns =[]
     parameter_value = request.GET.get('parameter_name')
     parameter_value2 = request.GET.get('parameter_value')
@@ -81,6 +82,7 @@ def export(request, model):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
+        index_time = start_date_naive.strftime('%Y-%m-%d-%H')
 
         select_now = datetime.strptime(request.GET.get('selectedDate'), '%Y-%m-%d-%H')
         start_of_today1_sel = select_now.strftime('%Y-%m-%d %H')
@@ -103,12 +105,13 @@ def export(request, model):
 
 
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.GET.get('selectedDate') == '':
         start_of_today1 = now.strftime('%Y-%m-%d %H')
+        index_time = now.strftime('%Y-%m-%d-%H')
         start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
         start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
@@ -129,9 +132,9 @@ def export(request, model):
         date_180_days_ago = date_150_days_ago - timedelta(days=30)
 
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     if parameter_value == 'all_asset1':
         data_list = []
@@ -255,7 +258,7 @@ def export(request, model):
                     filtered_user_objects.append(user['computer_id'])
                 elif latest_date >= three_months_ago and request.GET.get('categoryName') == '보안패치 불필요':
                     filtered_user_objects.append(user['computer_id'])
-        data_list = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
+        data_list = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
         data = Cacheserializer(data_list, many=True).data
 
     elif parameter_value == 'discoverChart':
@@ -267,11 +270,11 @@ def export(request, model):
             # user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_yesterday_ago)
             # print('1일 전', date_150_yesterday_ago)
             filtered_records = (
-                Xfactor_Common_Cache.objects
+                Xfactor_Common_Cache.objects.filter(essential2=index_time)
                     .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
                     .filter(cache_date__gte=date_180_yesterday_ago, cache_date__lt=date_150_yesterday_ago)
             )
-            base = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_yesterday_ago)
+            base = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_yesterday_ago)
             data_list = filtered_records.exclude(mac_address__in=base.values('mac_address'))
         if request.GET.get('categoryName') == '현재':
             #print('aasdasdasd')
@@ -279,11 +282,11 @@ def export(request, model):
             # print(date_150_days_ago)
             # user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_days_ago)
             filtered_records = (
-                Xfactor_Common_Cache.objects
+                Xfactor_Common_Cache.objects.filter(essential2=index_time)
                     .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
                     .filter(cache_date__gte=date_180_days_ago, cache_date__lt=date_150_days_ago)
             )
-            base = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_days_ago)
+            base = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_days_ago)
             data_list = filtered_records.exclude(mac_address__in=base.values('mac_address'))
         data = Cacheserializer2(data_list, many=True).data
     # 전체컬럼 조회

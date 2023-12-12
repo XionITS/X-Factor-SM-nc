@@ -64,20 +64,22 @@ def all_asset_paging1(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=59)
         start_of_day = start_of_today - timedelta(days=7)
+        index_time = start_date_naive.strftime('%Y-%m-%d-%H')
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
+            index_time = start_date_naive.strftime('%Y-%m-%d-%H')
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
             end_of_today = start_of_today + timedelta(minutes=59)
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
         # 출력 형식을 설정합니다.
@@ -219,20 +221,22 @@ def asset_os_paging1(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
+        index_time = start_date_naive.strftime('%Y-%m-%d-%H')
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
+            index_time = start_date_naive.strftime('%Y-%m-%d-%H')
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
             end_of_today = start_of_today + timedelta(minutes=50)
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
         start_of_today1 = now.strftime('%Y-%m-%d %H')
@@ -426,20 +430,22 @@ def asset_os_paging2(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
+        index_time = start_date_naive.strftime('%Y-%m-%d-%H')
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
+            index_time = start_date_naive.strftime('%Y-%m-%d-%H')
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
             end_of_today = start_of_today + timedelta(minutes=50)
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
         start_of_today1 = now.strftime('%Y-%m-%d %H')
@@ -622,20 +628,22 @@ def oslistPieChart(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
+        index_time = start_date_naive.strftime('%Y-%m-%d-%H')
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
+            index_time = start_date_naive.strftime('%Y-%m-%d-%H')
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
             end_of_today = start_of_today + timedelta(minutes=50)
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
         start_of_today1 = now.strftime('%Y-%m-%d %H')
@@ -722,6 +730,7 @@ def osVerPieChart(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
+        index_time = start_date_naive.strftime('%Y-%m-%d-%H')
 
         # 세팅값 변수처리 부분
         ver_current = Daily_Statistics_log.objects.filter(item='ver_web').filter(statistics_collection_date__gte=start_of_today, statistics_collection_date__lt=end_of_today).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
@@ -733,16 +742,17 @@ def osVerPieChart(request):
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
+            index_time = start_date_naive.strftime('%Y-%m-%d-%H')
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
             end_of_today = start_of_today + timedelta(minutes=50)
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today).exclude(os_build='')
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today).exclude(os_build='')
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
         start_of_today1 = now.strftime('%Y-%m-%d %H')
@@ -849,20 +859,22 @@ def office_chart(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
+        index_time = start_date_naive.strftime('%Y-%m-%d-%H')
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
+            index_time = start_date_naive.strftime('%Y-%m-%d-%H')
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
             end_of_today = start_of_today + timedelta(minutes=50)
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
         start_of_today1 = now.strftime('%Y-%m-%d %H')
@@ -1001,20 +1013,22 @@ def subnet_chart(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
+        index_time = start_date_naive.strftime('%Y-%m-%d-%H')
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
+            index_time = start_date_naive.strftime('%Y-%m-%d-%H')
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
             end_of_today = start_of_today + timedelta(minutes=50)
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
         start_of_today1 = now.strftime('%Y-%m-%d %H')
@@ -1139,6 +1153,8 @@ def hotfixChart(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
 
+        index_time = start_date_naive.strftime('%Y-%m-%d-%H')
+
         # 세팅값 변수처리 부분
         hot_current = Daily_Statistics_log.objects.filter(item='hot_web').filter(statistics_collection_date__gte=start_of_today, statistics_collection_date__lt=end_of_today).order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
         if hot_current == None:
@@ -1146,7 +1162,7 @@ def hotfixChart(request):
         three_months_ago = datetime.now() - timedelta(days=hot_current)
         three_months_ago = three_months_ago.strftime('%Y-%m-%d')
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today).exclude(hotfix_date='unconfirmed')
 
     elif request.POST.get('selectedDate') == '':
         start_of_today1 = now.strftime('%Y-%m-%d %H')
@@ -1162,7 +1178,7 @@ def hotfixChart(request):
         three_months_ago = datetime.now() - timedelta(days=hot_current)
         three_months_ago = three_months_ago.strftime('%Y-%m-%d')
         # 현재
-        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today)
+        user = Xfactor_Common.objects.filter(user_date__gte=start_of_today).exclude(hotfix_date='unconfirmed')
     # user_objects = Xfactor_Daily.objects.filter(user_date__gte=start_of_today)
     user_objects = user
     users_values = user_objects.values('hotfix_date', 'computer_id')
@@ -1296,20 +1312,22 @@ def tcpuChart(request):
         start_of_today = timezone.make_aware(start_date_naive)
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
+        index_time = start_date_naive.strftime('%Y-%m-%d-%H')
         if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
+            index_time = start_date_naive.strftime('%Y-%m-%d-%H')
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today2)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         else:
             end_of_today = start_of_today + timedelta(minutes=50)
             # 현재
-            user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+            user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
             # 토탈
-            cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+            cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     elif request.POST.get('selectedDate') == '':
         start_of_today1 = now.strftime('%Y-%m-%d %H')
@@ -1321,7 +1339,7 @@ def tcpuChart(request):
         # 현재
         user = Xfactor_Common.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        #cache = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, t_cpu='True')
     user = user.filter(t_cpu='True')
@@ -1441,7 +1459,7 @@ def discoverChart(request):
         #print(date_150_days_ago)
         #user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_days_ago)
         filtered_records = (
-            Xfactor_Common_Cache.objects
+            Xfactor_Common.objects
             .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
             .filter(cache_date__gte=date_180_days_ago, cache_date__lt=date_150_days_ago)
         )
