@@ -36,7 +36,6 @@ def pur_asset(request):
     menu_group = XgroupAuthSerializer(xgroup_auths, many=True)
     all_menu = menu_user.data + menu_group.data
     unique_items = list({(item['xfactor_auth']['auth_id'], item['xfactor_auth']['auth_name'], item['xfactor_auth']['auth_url'], item['xfactor_auth']['auth_num'], item['auth_use']) for item in all_menu})
-    print(unique_items)
     # #테이블아래 자산현황
     # # 현재 시간대 객체 생성, 예시: "Asia/Seoul"
     # local_tz = pytz.timezone('Asia/Seoul')

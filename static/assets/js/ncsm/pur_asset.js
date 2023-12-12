@@ -700,9 +700,16 @@ var sw_pur_asset_list = function () {
                 //targets: 10, width: "10%", orderable: false, className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 targets: 10, width: "10%", className: 'text-start new-text-truncate flex-cloumn column_hidden align-middle',
                 render: function (data, type, row) {
-                    const swInstall = row.sw_install.replace(/\"/g, "");;
+                    const swInstall = row.sw_install.replace(/\"/g, "");
                     const swInstallArray = swInstall ? swInstall.split('<br>') : [];
-                    return '<span data-toggle="tooltip">' + (swInstallArray[0] || '') + '<br>' + (swInstallArray[1] || '') + '<br>' + (swInstallArray[2] || '') + '<br>' + (swInstallArray[3] || '')
+                    const sanitizedArray = swInstallArray.map(value => value.trim() === 'N/A' ? '' : value);
+
+                    const value1 = sanitizedArray[0] ? sanitizedArray[0] : '';
+                    const value2 = sanitizedArray[1] ? '<br>' + sanitizedArray[1] : '';
+                    const value3 = sanitizedArray[2] ? '<br>' + sanitizedArray[2] : '';
+                    const value4 = sanitizedArray[3] ? '<br>' + sanitizedArray[3] : '';
+
+                    return '<span data-toggle="tooltip">' + value1 + value2 + value3 + value4 + '</span>';
                 }
             },
 

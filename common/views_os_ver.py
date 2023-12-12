@@ -112,6 +112,7 @@ def ver_asset_paging(request):
                                                        Q(logged_name_id__userId__icontains=term) |
                                                        Q(computer_name__icontains=term) |
                                                        Q(ip_address__icontains=term) |
+                                                       Q(mac_address__icontains=term) |
                                                        Q(sw_list__icontains=term) |
                                                        Q(memo__icontains=term)
                                                        for term in search_terms])
@@ -123,6 +124,7 @@ def ver_asset_paging(request):
                                                       Q(logged_name_id__userId__icontains=term) |
                                                       Q(computer_name__icontains=term) |
                                                       Q(ip_address__icontains=term) |
+                                                      Q(mac_address__icontains=term) |
                                                       Q(sw_list__icontains=term) |
                                                       Q(memo__icontains=term)
                                                       for term in search_terms])
@@ -133,6 +135,7 @@ def ver_asset_paging(request):
                                  Q(logged_name_id__userId__icontains=filter_value) |
                                  Q(computer_name__icontains=filter_value) |
                                  Q(ip_address__icontains=filter_value) |
+                                 Q(mac_address__icontains=filter_value) |
                                  Q(sw_list__icontains=filter_value) |
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
@@ -147,6 +150,7 @@ def ver_asset_paging(request):
                                                        Q(logged_name_id__userId__icontains=term) |
                                                        Q(computer_name__icontains=term) |
                                                        Q(ip_address__icontains=term) |
+                                                       Q(mac_address__icontains=term) |
                                                        Q(sw_list__icontains=term) |
                                                        Q(memo__icontains=term)
                                                        for term in search_terms])
@@ -158,6 +162,7 @@ def ver_asset_paging(request):
                                                       Q(logged_name_id__userId__icontains=term) |
                                                       Q(computer_name__icontains=term) |
                                                       Q(ip_address__icontains=term) |
+                                                      Q(mac_address__icontains=term) |
                                                       Q(sw_list__icontains=term) |
                                                       Q(memo__icontains=term)
                                                       for term in search_terms])
@@ -168,6 +173,7 @@ def ver_asset_paging(request):
                                  Q(logged_name_id__userId__icontains=filter_value) |
                                  Q(computer_name__icontains=filter_value) |
                                  Q(ip_address__icontains=filter_value) |
+                                 Q(mac_address__icontains=filter_value) |
                                  Q(sw_list__icontains=filter_value) |
                                  Q(memo__icontains=filter_value))
                     user = user.filter(query)
@@ -187,6 +193,7 @@ def ver_asset_paging(request):
                                                    Q(logged_name_id__userId__icontains=term) |
                                                    Q(computer_name__icontains=term) |
                                                    Q(ip_address__icontains=term) |
+                                                   Q(mac_address__icontains=term) |
                                                    Q(sw_list__icontains=term) |
                                                    Q(memo__icontains=term)
                                                    for term in search_terms])
@@ -198,6 +205,7 @@ def ver_asset_paging(request):
                                                   Q(logged_name_id__userId__icontains=term) |
                                                   Q(computer_name__icontains=term) |
                                                   Q(ip_address__icontains=term) |
+                                                  Q(mac_address__icontains=term) |
                                                   Q(sw_list__icontains=term) |
                                                   Q(memo__icontains=term)
                                                   for term in search_terms])
@@ -208,6 +216,7 @@ def ver_asset_paging(request):
                             Q(logged_name_id__userId__icontains=filter_value) |
                              Q(computer_name__icontains=filter_value) |
                              Q(ip_address__icontains=filter_value) |
+                             Q(mac_address__icontains=filter_value) |
                              Q(sw_list__icontains=filter_value) |
                              Q(memo__icontains=filter_value))
                 user = user.filter(query)
@@ -222,6 +231,7 @@ def ver_asset_paging(request):
                                                Q(logged_name_id__userId__icontains=term) |
                                                Q(computer_name__icontains=term) |
                                                Q(ip_address__icontains=term) |
+                                               Q(mac_address__icontains=term) |
                                                Q(sw_list__icontains=term) |
                                                Q(memo__icontains=term)
                                                for term in search_terms])
@@ -233,6 +243,7 @@ def ver_asset_paging(request):
                                               Q(logged_name_id__userId__icontains=term) |
                                               Q(computer_name__icontains=term) |
                                               Q(ip_address__icontains=term) |
+                                              Q(mac_address__icontains=term) |
                                               Q(sw_list__icontains=term) |
                                               Q(memo__icontains=term)
                                               for term in search_terms])
@@ -243,6 +254,7 @@ def ver_asset_paging(request):
                         Q(logged_name_id__userId__icontains=filter_value) |
                          Q(computer_name__icontains=filter_value) |
                          Q(ip_address__icontains=filter_value) |
+                         Q(mac_address__icontains=filter_value) |
                          Q(sw_list__icontains=filter_value) |
                          Q(memo__icontains=filter_value))
             user = user.filter(query)

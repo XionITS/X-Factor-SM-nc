@@ -34,7 +34,7 @@ def export(request, model):
     date_150_days_ago = ''
     date_180_days_ago = ''
 
-    cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+    cache = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
     columns =[]
     parameter_value = request.GET.get('parameter_name')
     parameter_value2 = request.GET.get('parameter_value')
@@ -43,35 +43,35 @@ def export(request, model):
     if parameter_value == 'hs_asset':
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'hw_cpu','hw_mb','hw_ram','hw_disk','hw_gpu','sw_list','sw_ver_list','memo',"user_date"]
         data_list = cache
-        data = Cacheserializer(data_list, many=True).data
+        data = CommonSerializer(data_list, many=True).data
 
     elif parameter_value == 'ver_asset':
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'os_simple','os_total','os_version','os_build','memo','user_date']
         data_list = cache
-        data = Cacheserializer(data_list, many=True).data
+        data = CommonSerializer(data_list, many=True).data
 
     elif parameter_value == 'up_asset':
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'hotfix','hotfix_date','memo','user_date']
         data_list = cache.filter(os_simple='Windows')
-        data = Cacheserializer(data_list, many=True).data
+        data = CommonSerializer(data_list, many=True).data
 
     elif parameter_value == 'pur_asset':
         columns = ["chassistype","ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'first_network','mem_use','disk_use','hw_cpu'
             ,'hw_mb','hw_ram','hw_disk','hw_gpu','sw_list','sw_ver_list','sw_install','memo','user_date']
         data_list = cache
-        data = Cacheserializer(data_list, many=True).data
+        data = CommonSerializer(data_list, many=True).data
 
     elif parameter_value == 'sec_asset':
         columns = ["chassistype","ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address",'security1','security1_ver'
             ,'security2','security2_ver','security3','security3_ver','security4','security4_ver','security5','security5_ver','uuid','user_date']
         data_list =cache
-        data = Cacheserializer(data_list, many=True).data
+        data = CommonSerializer(data_list, many=True).data
 
     elif parameter_value == 'sec_asset2':
         columns = ["chassistype","ncdb_data__deptName", "ncdb_data__userName", "ncdb_data__userId", "computer_name", "ip_address", "mac_address"
             ,'ext_chr','ext_chr_ver','ext_edg','ext_edg_ver','ext_fir','ext_fir_ver','uuid','user_date']
         data_list = cache
-        data = Cacheserializer(data_list, many=True).data
+        data = CommonSerializer(data_list, many=True).data
 
     user = ''
     cache = ''
