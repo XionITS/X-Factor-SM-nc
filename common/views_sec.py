@@ -589,7 +589,7 @@ def sec_asset_list_paging(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+    user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
     if filter_text and filter_column:
         if filter_column == "user_date":
@@ -913,7 +913,7 @@ def sec_list_asset_select_all(request):
     filter_column = request.POST.get('filter[column]')
     filter_text = request.POST.get('filter[value]')
     filter_value = request.POST.get('filter[value2]')
-    user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today).filter(cache_date__gte=start_of_day)
+    user = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
     if filter_text and filter_column:
         if filter_column == "user_date":
