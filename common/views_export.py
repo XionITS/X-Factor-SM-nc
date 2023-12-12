@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from openpyxl.writer.excel import save_virtual_workbook
 
-from common.models import Xfactor_Common_Cache, Daily_Statistics_log
+from common.models import Xfactor_Common_Cache, Daily_Statistics_log, Xfactor_Common
 from common.serializers import CommonSerializer, Dailyserializer, Cacheserializer, Cacheserializer2
 
 with open("setting.json", encoding="UTF-8") as f:
@@ -116,7 +116,7 @@ def export(request, model):
         start_of_today = timezone.make_aware(start_of_today2)
         start_of_day = start_of_today - timedelta(days=7)
         end_of_today = start_of_today + timedelta(minutes=50)
-
+        index_7day = start_of_day.strftime('%Y-%m-%d-%H')
         # 세팅값 변수처리 부분
         ver_current = Daily_Statistics_log.objects.filter(item='ver_web').order_by('-statistics_collection_date').values_list('item_count', flat=True).first()
         if ver_current == None:
@@ -132,9 +132,9 @@ def export(request, model):
         date_180_days_ago = date_150_days_ago - timedelta(days=30)
 
         # 현재
-        user = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
+        user = Xfactor_Common_Cache.objects.filter(essential2__gte=index_7day).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today)
         # 토탈
-        cache = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
+        cache = Xfactor_Common_Cache.objects.filter(essential2__gte=index_7day).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_day, cache_date__lt=end_of_today)
 
     if parameter_value == 'all_asset1':
         data_list = []
@@ -263,18 +263,17 @@ def export(request, model):
 
     elif parameter_value == 'discoverChart':
         data_list = []
-        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "hotfix_date", "user_date"]
+        columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "user_date"]
         if request.GET.get('categoryName') == '1일 전':
             date_150_yesterday_ago = date_150_days_ago - timedelta(days=1)
             date_180_yesterday_ago = date_180_days_ago - timedelta(days=1)
             # user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_yesterday_ago)
             # print('1일 전', date_150_yesterday_ago)
             filtered_records = (
-                Xfactor_Common_Cache.objects.filter(essential2=index_time)
-                    .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
-                    .filter(cache_date__gte=date_180_yesterday_ago, cache_date__lt=date_150_yesterday_ago)
+                Xfactor_Common.objects
+                .filter(user_date__gte=date_180_yesterday_ago, user_date__lt=date_150_yesterday_ago)
             )
-            base = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_yesterday_ago)
+            base = Xfactor_Common.objects.exclude(user_date__lt=date_150_yesterday_ago)
             data_list = filtered_records.exclude(mac_address__in=base.values('mac_address'))
         if request.GET.get('categoryName') == '현재':
             #print('aasdasdasd')
@@ -282,13 +281,12 @@ def export(request, model):
             # print(date_150_days_ago)
             # user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_days_ago)
             filtered_records = (
-                Xfactor_Common_Cache.objects.filter(essential2=index_time)
-                    .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
-                    .filter(cache_date__gte=date_180_days_ago, cache_date__lt=date_150_days_ago)
+                Xfactor_Common.objects
+                .filter(user_date__gte=date_180_days_ago, user_date__lt=date_150_days_ago)
             )
-            base = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).exclude(cache_date__lt=date_150_days_ago)
+            base = Xfactor_Common.objects.exclude(user_date__lt=date_150_days_ago)
             data_list = filtered_records.exclude(mac_address__in=base.values('mac_address'))
-        data = Cacheserializer2(data_list, many=True).data
+        data = CommonSerializer(data_list, many=True).data
     # 전체컬럼 조회
     # 동적으로 모델에서 컬럼명 추출
     # model_class = apps.get_model('common', model)  # 앱 이름과 모델명을 지정하여 모델 클래스를 가져옵니다

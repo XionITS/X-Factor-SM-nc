@@ -1460,8 +1460,7 @@ def discoverChart(request):
         #user = Xfactor_Common_Cache.objects.filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__lt=date_150_days_ago)
         filtered_records = (
             Xfactor_Common.objects
-            .filter(user_date__gte=start_of_today, user_date__lt=end_of_today)
-            .filter(cache_date__gte=date_180_days_ago, cache_date__lt=date_150_days_ago)
+            .filter(user_date__gte=date_180_days_ago, user_date__lt=date_150_days_ago)
         )
         base = Xfactor_Common.objects.exclude(user_date__lt=date_150_days_ago)
         user = filtered_records.exclude(mac_address__in=base.values('mac_address'))
