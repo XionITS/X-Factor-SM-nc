@@ -176,7 +176,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
@@ -193,7 +193,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 4,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -201,7 +201,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 5,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -209,7 +209,7 @@ var all_asset_detail_list1 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 6,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -426,7 +426,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
@@ -443,7 +443,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 4,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -451,7 +451,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 5,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -459,7 +459,7 @@ var asset_os_detail_list1 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 6,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -674,7 +674,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
@@ -691,7 +691,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 4,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -699,7 +699,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 5,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -707,7 +707,7 @@ var asset_os_detail_list2 = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 6,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -921,7 +921,7 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
@@ -938,7 +938,7 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 4,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -946,7 +946,7 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 5,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -954,7 +954,7 @@ var oslistPieChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 6,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1169,7 +1169,7 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
@@ -1186,7 +1186,7 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 4,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1194,7 +1194,7 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 5,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1202,7 +1202,7 @@ var osVerPieChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 6,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1417,7 +1417,7 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
@@ -1434,7 +1434,7 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 4,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1442,7 +1442,7 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 5,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1450,7 +1450,7 @@ var office_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 6,
-                width: "10%",
+                width: "18%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1671,7 +1671,7 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
@@ -1688,7 +1688,7 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 4,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1696,7 +1696,7 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 5,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1704,7 +1704,7 @@ var subnet_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 6,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1924,7 +1924,7 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
@@ -1941,7 +1941,7 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 4,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1949,7 +1949,7 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 5,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -1957,7 +1957,7 @@ var hotfix_chart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 6,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     //console.log(data)
@@ -2188,7 +2188,7 @@ var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
@@ -2205,7 +2205,7 @@ var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 4,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -2213,7 +2213,7 @@ var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 5,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -2221,7 +2221,7 @@ var tcpuChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 6,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     if (data === 'True') {
@@ -2438,7 +2438,7 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 2,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     var title = row.ncdb_data && row.ncdb_data.userName || '';
@@ -2455,7 +2455,7 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 4,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -2463,7 +2463,7 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 5,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'
@@ -2471,7 +2471,7 @@ var discoverChart_list = function (categoryName, seriesName, selectedDate) {
             },
             {
                 targets: 6,
-                width: "10%",
+                width: "15%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
                     return '<span title="' + data + '" data-toggle="tooltip">' + data + '</span>'

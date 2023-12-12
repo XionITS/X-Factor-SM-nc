@@ -190,14 +190,11 @@ class Cacheserializer3(serializers.ModelSerializer):
         model = Xfactor_Common_Cache
         fields = '__all__'
     def to_representation(self, instance):
+        data = super().to_representation(instance)
         if instance.logged_name_id:
-            # If `logged_name_id` is not None, serialize `Xfactor_ncdb` using `NcdbSerializer`
             ncdb_data = NcdbSerializer(instance.logged_name_id)
-            data = super().to_representation(instance)
             data['ncdb_data'] = ncdb_data.data
         else:
-            # If `logged_name_id` is None, just use `CommonSerializer`
-            data = super().to_representation(instance)
             data['ncdb_data'] = []
         if instance.hotfix_date:
             date_strings = instance.hotfix_date.split('<br>')
@@ -208,9 +205,8 @@ class Cacheserializer3(serializers.ModelSerializer):
             # datetime 객체 중에서 가장 최근 날짜 찾기
             latest_date = max(date_objects)
             latest_date_formatted = latest_date.strftime('%Y-%m-%d')
-            data = super().to_representation(instance)
             data['hotfix_date'] = latest_date_formatted
-            return data
+        return data
 
 
 class Commonserializer2(serializers.ModelSerializer):
