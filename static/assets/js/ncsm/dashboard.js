@@ -66,10 +66,10 @@ var handleRenderChartNCOMG = function () {
         yaxis: {
             labels: {
                 style: {
-                    colors: "#fff",
+                    // colors: "#fff",
                     fontSize: "13px",
                     fontFamily: app.font.family,
-                    fontWeight: 400,
+                    fontWeight: 'bold',
                     cssClass: "apexcharts-xaxis-label",
                 },
             },
@@ -177,9 +177,17 @@ var handleRenderChartNCOMG = function () {
                 labels: {
                     style: {
                         fontSize: '13px',
+
                     },
                 },
             },
+             yaxis: {
+                 labels: {
+                     style: {
+                         colors: ["lime",'deepskyblue'],
+                     },
+                 },
+             },
             dataLabels: {
                 enabled: true,
                 enabledOnSeries: [0, 1, 2],
@@ -1922,14 +1930,14 @@ $("#datepickerD").datetimepicker({
         var isSameDay = current_time.getDate() === currentDate.getDate() && current_time.getMonth() === currentDate.getMonth() && current_time.getFullYear() === currentDate.getFullYear();
 
         // 현재 시간보다 뒤의 시간들을 숨기기 (현재 날짜일 경우에만)
-        // $(".xdsoft_time_variant .xdsoft_time").each(function(){
-        //     var hour = $(this).data('hour');
-        //     if(isSameDay && hour > currentDate.getHours()){
-        //         $(this).hide();
-        //     } else {
-        //         $(this).show();
-        //     }
-        // });
+        $(".xdsoft_time_variant .xdsoft_time").each(function(){
+            var hour = $(this).data('hour');
+            if(isSameDay && hour > currentDate.getHours()){
+                $(this).hide();
+            } else {
+                $(this).show();
+            }
+        });
 
         if(!dateTimeSelected){
             $(".xdsoft_time").on("click", function(){
@@ -1941,6 +1949,7 @@ $("#datepickerD").datetimepicker({
         if (!dp) {
             return
         }
+
         var selectedTime = dp.getTime();
         var currentTime = new Date();
         var currentValue = $input.val().replace(' ', '-').replace('시', '');

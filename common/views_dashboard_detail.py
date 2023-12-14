@@ -914,7 +914,7 @@ def office_chart(request):
             user = user.filter(query)
     if request.POST.get('categoryName') == 'Mac Office':
         #user = Xfactor_Daily.objects.filter(user_date__gte=start_of_today, essential5__in=['unconfirmed', ''])
-        user =user.filter(os_simple="Mac").exclude(essential5__in=['Office 365','Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003','오피스 없음','unconfirmed', ''])
+        user =user.exclude(essential5__startswith="Office 365").exclude(essential5__in=['Office 365','Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003','오피스 없음','unconfirmed', ''])
         if filter_text:
             query = (Q(computer_name__icontains=filter_text) |
                      Q(essential5__icontains=filter_text) |
