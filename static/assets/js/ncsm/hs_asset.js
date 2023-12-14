@@ -110,7 +110,7 @@ var hw_asset_list = function () {
                 const hw_ram = row.hw_ram;
                 const hw_disk = row.hw_disk;
                 const hw_gpu = row.hw_gpu;
-		        return '<span data-toggle="tooltip"></span><div class="hwmore swmore-font text-center new-text-truncate flex-cloumn align-middle " data-hw_cpu="' + hw_cpu + '" data-hw_mb="' + hw_mb + '"  data-hw_ram="' + hw_ram + '"  data-hw_disk="' + hw_disk + '"  data-hw_gpu="' + hw_gpu + '"data-computer_name="' + computer_name +'">더보기...</div>'}},
+		        return '<span data-toggle="tooltip"></span><div class="hwmore swmore-font text-center point flex-cloumn align-middle " data-hw_cpu="' + hw_cpu + '" data-hw_mb="' + hw_mb + '"  data-hw_ram="' + hw_ram + '"  data-hw_disk="' + hw_disk + '"  data-hw_gpu="' + hw_gpu + '"data-computer_name="' + computer_name +'">더보기...</div>'}},
 		    {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
                 var color = row.user_date === "Online" ? "lime" : "red";
                 return '<span title="'+row.user_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';
@@ -435,7 +435,7 @@ var sw_asset_list = function () {
 		        const swList = row.sw_list.replace(/\"/g, "");
                 const swVer = row.sw_ver_list.replace(/\"/g, "");
 
-		        return '<span data-toggle="tooltip"></span><div class="swmore swmore-font align-middle text-center " data-swlist="' + swList + '" data-swver="' + swVer + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
+		        return '<span data-toggle="tooltip"></span><div class="swmore swmore-font align-middle point text-center " data-swlist="' + swList + '" data-swver="' + swVer + '" data-computer_name="' + computer_name +'">더보기...</div>'}},
             {targets: 8, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
                 var color = row.user_date === "Online" ? "lime" : "red";
                 return '<span title="'+row.user_date+'" data-toggle="tooltip" style="color: ' + color + '; font-weight: bold;">'+data+'</span>';

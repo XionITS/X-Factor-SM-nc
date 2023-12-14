@@ -287,7 +287,7 @@ var sec_asset_list = function () {
                 width: "5%",
                 className: 'text-center new-text-truncate flex-cloumn align-middle',
                 render: function (data, type, row) {
-                    return '<a class="secmore swmore-font" data-cbr="' + row.security3 + '" ' +
+                    return '<a class="secmore point swmore-font" data-cbr="' + row.security3 + '" ' +
                         'data-computer_name="' + row.computer_name + '" data-cososys="' + row.security1 + '" data-cososys_ver="' + row.security1_ver + '" ' +
                         'data-symantec="' + row.security2 + '" data-symantec_ver="' + row.security2_ver + '" data-cbr_ver="' + row.security3_ver + '" data-cbc="' + row.security4 + '" ' +
                         'data-cbc_ver="' + row.security4_ver + '" data-mcafee="' + row.security5 + '" data-mcafee_ver="' + row.security5_ver + '" data-ip_address="' + row.ip_address + '" data-mac_address="' + row.mac_address + '" data-os_total="' + row.os_total + '"> 더보기 </a>'

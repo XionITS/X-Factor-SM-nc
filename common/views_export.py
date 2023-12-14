@@ -157,12 +157,12 @@ def export(request, model):
         if request.GET.get('categoryName') == 'Other':
             if request.GET.get('seriesName') == 'Other':
                 # print("asd")
-                data_list = user.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop, Notebook'])
+                data_list = user.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop', 'Notebook'])
             else:
                 data_list = user.filter(chassistype=request.GET.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
         else:
             if request.GET.get('seriesName') == 'Other':
-                data_list = user.filter(os_simple=request.GET.get('categoryName')).exclude(chassistype__in=['Desktop, Notebook'])
+                data_list = user.filter(os_simple=request.GET.get('categoryName')).exclude(chassistype__in=['Desktop', 'Notebook'])
             else:
                 data_list = user.filter(os_simple=request.GET.get('categoryName'), chassistype=request.GET.get('seriesName'))
         data = Cacheserializer(data_list, many=True).data
@@ -172,13 +172,13 @@ def export(request, model):
         columns = ["ncdb_data__deptName", "ncdb_data__userName", "computer_name", "chassistype", "ip_address", "mac_address", "os_simple", "user_date"]
         if request.GET.get('categoryName') == 'Other':
             if request.GET.get('seriesName') == 'Other':
-                data_list = cache.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop, Notebook'])
+                data_list = cache.exclude(os_simple__in=['Windows', 'Mac']).exclude(chassistype__in=['Desktop', 'Notebook'])
                 # print(data_list)
             else:
                 data_list = cache.filter(chassistype=request.GET.get('seriesName')).exclude(os_simple__in=['Windows', 'Mac'])
         else:
             if request.GET.get('seriesName') == 'Other':
-                data_list = cache.filter(os_simple=request.GET.get('categoryName')).exclude(chassistype__in=['Desktop, Notebook'])
+                data_list = cache.filter(os_simple=request.GET.get('categoryName')).exclude(chassistype__in=['Desktop', 'Notebook'])
             else:
                 data_list = cache.filter(os_simple=request.GET.get('categoryName'), chassistype=request.GET.get('seriesName'))
         data = Cacheserializer(data_list, many=True).data
@@ -191,7 +191,7 @@ def export(request, model):
         if request.GET.get('categoryName') == 'Office 365 외':
             data_list = user.filter(essential5__in=['Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003'])
         if request.GET.get('categoryName') == 'Mac Office':
-            data_list = user.exclude(essential5__in=['Office 365','Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003','오피스 없음','unconfirmed', ''])
+            data_list = user.filter(os_simple='Mac').exclude(essential5__in=['Office 365','Office 21', 'Office 19', 'Office 16','Office 15','Office 2021', 'Office 2019', 'Office 2016', 'Office 2013', 'Office 2010', 'Office 2007', 'Office 2003','오피스 없음','unconfirmed', ''])
         if request.GET.get('categoryName') == 'Office 설치 안됨':
             data_list = user.filter(essential5='오피스 없음')
         if request.GET.get('categoryName') == '미확인':
@@ -254,9 +254,9 @@ def export(request, model):
                     continue
             if date_objects:
                 latest_date = max(date_objects)
-                if latest_date < three_months_ago and request.GET.get('categoryName') == '보안패치 필요':
+                if latest_date <= three_months_ago and request.GET.get('categoryName') == '보안패치 필요':
                     filtered_user_objects.append(user['computer_id'])
-                elif latest_date >= three_months_ago and request.GET.get('categoryName') == '보안패치 불필요':
+                elif latest_date > three_months_ago and request.GET.get('categoryName') == '보안패치 불필요':
                     filtered_user_objects.append(user['computer_id'])
         data_list = Xfactor_Common_Cache.objects.filter(essential2=index_time).filter(user_date__gte=start_of_today, user_date__lt=end_of_today).filter(cache_date__gte=start_of_today, cache_date__lt=end_of_today, computer_id__in=filtered_user_objects)
         data = Cacheserializer(data_list, many=True).data

@@ -222,7 +222,7 @@ var up_asset_list = function () {
                     if (row.hotfix === 'unconfirmed') {
                         return "";
                     } else {
-                        return '<a class="upmore swmore-font" data-hotfix="' + hotfix + '" data-date="' + date + '" data-computer_name="' + computer_name + '">' + hotfix.split('<br>')[0] + '</a>'
+                        return '<a class="upmore point swmore-font" data-hotfix="' + hotfix + '" data-date="' + date + '" data-computer_name="' + computer_name + '">' + hotfix.split('<br>')[0] + '</a>'
                     }
                 }
             },

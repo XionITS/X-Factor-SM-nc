@@ -256,7 +256,7 @@ var sec_asset_list2 = function () {
                         const ext_edg_ver = row.ext_edg_ver.replace(/\"/g, "");
                         const ext_fir = row.ext_fir.replace(/\"/g, "");
                         const ext_fir_ver = row.ext_fir_ver.replace(/\"/g, "");
-                        return '<a class="extmore swmore-font" data-ext_chr="' + ext_chr + '"data-ext_chr_ver="' + ext_chr_ver + '" data-ext_edg="' + ext_edg + '" data-ext_edg_ver="' + ext_edg_ver + '"data-ext_fir="' + ext_fir + '" data-ext_fir_ver="' + ext_fir_ver + '" data-computer_name="' + row.computer_name + '" >더보기</a>'
+                        return '<a class="extmore point swmore-font" data-ext_chr="' + ext_chr + '"data-ext_chr_ver="' + ext_chr_ver + '" data-ext_edg="' + ext_edg + '" data-ext_edg_ver="' + ext_edg_ver + '"data-ext_fir="' + ext_fir + '" data-ext_fir_ver="' + ext_fir_ver + '" data-computer_name="' + row.computer_name + '" >더보기</a>'
                     }
                 }
             },
@@ -268,7 +268,7 @@ var sec_asset_list2 = function () {
                     const sw_list = row.sw_list.replace(/\"/g, "");
                     const sw_ver_list = row.sw_ver_list.replace(/\"/g, "");
                     const sw_install = row.sw_install.replace(/\"/g, "");
-                    return '<a class="swListmore swmore-font" data-computer_name="' + row.computer_name + '" data-sw_list="' + sw_list + '" data-sw_ver_list="' + sw_ver_list + '"data-sw_install="' + sw_install + '">더보기</a>'
+                    return '<a class="swListmore point swmore-font" data-computer_name="' + row.computer_name + '" data-sw_list="' + sw_list + '" data-sw_ver_list="' + sw_ver_list + '"data-sw_install="' + sw_install + '">더보기</a>'
                 }
             },
             {
@@ -279,7 +279,7 @@ var sec_asset_list2 = function () {
                     if (row.hotfix === 'not apply' || row.hotfix ==='Not available on Mac' || row.hotfix === 'unconfirmed') {
                         return "";
                     } else {
-                        return '<a class="hotmore swmore-font" ' +
+                        return '<a class="hotmore point swmore-font" ' +
                             'data-computer_name="' + row.computer_name + '" data-hotfix="' + row.hotfix + '" data-hotfix_date="' + row.hotfix_date + '">더보기</a>'
                     }
                 }

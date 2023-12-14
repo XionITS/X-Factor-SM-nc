@@ -721,7 +721,7 @@ var sw_pur_asset_list = function () {
                     const swList = row.sw_list.replace(/\"/g, "");;
                     const swVer = row.sw_ver_list.replace(/\"/g, "");;
                     const swInstall = row.sw_install.replace(/\"/g, "");;
-                    return '</span><br><div class="pur_swmore swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-swinstall="' + swInstall + '" data-computer_name="' + computer_name + '">더보기...</div>'
+                    return '</span><br><div class="pur_swmore point swmore-font" data-swlist="' + swList + '" data-swver="' + swVer + '" data-swinstall="' + swInstall + '" data-computer_name="' + computer_name + '">더보기...</div>'
                 }
             },
             {targets: 12, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {

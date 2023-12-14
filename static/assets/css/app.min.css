@@ -31271,3 +31271,8 @@ label.no-before::before {
     color: orange;
     /* 아이콘 색상을 변경하는 예시입니다. */
 }
+
+
+.point {
+    cursor: pointer;
+}

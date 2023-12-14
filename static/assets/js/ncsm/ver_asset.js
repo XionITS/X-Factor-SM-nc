@@ -226,7 +226,7 @@ var all_asset_list = function () {
                     const os_total = row.os_total;
                     const os_version = row.os_version;
                     const os_build = row.os_build;
-                    return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
+                    return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle point text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
             {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
@@ -612,7 +612,7 @@ var win_asset_list = function () {
                     const os_total = row.os_total;
                     const os_version = row.os_version;
                     const os_build = row.os_build;
-                    return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
+                    return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle point text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
             {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
@@ -997,7 +997,7 @@ var mac_asset_list = function () {
                     const os_total = row.os_total;
                     const os_version = row.os_version;
                     const os_build = row.os_build;
-                    return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
+                    return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle point text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
             {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {
@@ -1383,7 +1383,7 @@ var other_asset_list = function () {
                     const os_total = row.os_total;
                     const os_version = row.os_version;
                     const os_build = row.os_build;
-                    return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
+                    return '<span data-toggle="tooltip"></span><div class="vermore swmore-font align-middle point text-center " data-os_total="' + os_total + '" data-os_version="' + os_version + '" data-os_build="' + os_build +'" data-computer_name="' + computer_name +'">더보기...</div>'
                 }
             },
             {targets: 9, width: "10%", className: 'text-center new-text-truncate flex-cloumn align-middle', render: function(data, type, row) {

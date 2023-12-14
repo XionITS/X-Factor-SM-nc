@@ -93,7 +93,7 @@ var handleRenderChartNCOMG = function () {
             notebook[1][0]['count'] + desktop[1][0]['count'] + other[1]['count']
         ];
 
-        document.getElementById('totalDataDiv').innerHTML = `Online : ${totalData1} &nbsp;&nbsp;&nbsp;&nbsp;Total : ${totalData2}`;
+        document.getElementById('totalDataDiv').innerHTML = `<span style="color: lime">Online : ${totalData1}</span> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: deepskyblue">Total : ${totalData2}</span>`;
         window.onload = function() {
           if (document.getElementById('totalDataDiv')) {
             document.getElementById('totalDataDiv').innerHTML = `Online : ${totalData1} &nbsp;&nbsp;&nbsp;&nbsp;Total : ${totalData2}`;
@@ -176,8 +176,8 @@ var handleRenderChartNCOMG = function () {
                 categories: ['Online', 'Total'],
                 labels: {
                     style: {
-                        fontSize: '13px'
-                    }
+                        fontSize: '13px',
+                    },
                 },
             },
             dataLabels: {
