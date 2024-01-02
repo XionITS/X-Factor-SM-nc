@@ -93,8 +93,6 @@ def all_asset_paging1(request):
         # 토탈
         cache = Xfactor_Common.objects.filter(user_date__gte=start_of_day)
 
-
-
     if request.POST.get('categoryName') == 'Online':
         if request.POST.get('seriesName') == 'Other':
             #user = Xfactor_Daily.objects.filter(user_date__gte=today_collect_date).exclude(chassistype__in=['Notebook', 'Desktop'])

@@ -96,7 +96,7 @@ var handleRenderChartNCOMG = function () {
         document.getElementById('totalDataDiv').innerHTML = `<span style="color: lime">Online : ${totalData1}</span> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: deepskyblue">Total : ${totalData2}</span>`;
         window.onload = function() {
           if (document.getElementById('totalDataDiv')) {
-            document.getElementById('totalDataDiv').innerHTML = `Online : ${totalData1} &nbsp;&nbsp;&nbsp;&nbsp;Total : ${totalData2}`;
+            document.getElementById('totalDataDiv').innerHTML = `<span style="color: lime">Online : ${totalData1}</span> &nbsp;&nbsp;&nbsp;&nbsp;<span style="color: deepskyblue">Total : ${totalData2}</span>`;
           }
         };
         var asset_all_chart_options = {
@@ -1933,7 +1933,8 @@ $("#datepickerD").datetimepicker({
         $(".xdsoft_time_variant .xdsoft_time").each(function(){
             var hour = $(this).data('hour');
             if(isSameDay && hour > currentDate.getHours()){
-                $(this).hide();
+                 $(this).css('pointer-events', 'none');
+                 $(this).css('color', '#c1c1c1');
             } else {
                 $(this).show();
             }

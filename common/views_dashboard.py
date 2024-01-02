@@ -368,11 +368,9 @@ def Dashboard(unique_items, selected_date=None):
             module_time = [{'current_time': current_time, 'color': 'lime'}]
     else:
         user_date = Daily_Statistics_log.objects.filter(classification='t_cpu').values('statistics_collection_date').order_by('-statistics_collection_date').first()
-        print(user_date)
         user_date_korea = user_date['statistics_collection_date'].astimezone(korea_timezone)
         current_time_module = user_date_korea.strftime('%Y-%m-%d %H')
         current_time = user_date_korea.strftime('%Y-%m-%d %H:%M')
-        print(current_time)
         # 현재 시간 가져오기
         now_korea = dt.now().astimezone(korea_timezone)
         current_time_now = now_korea.strftime('%Y-%m-%d %H')

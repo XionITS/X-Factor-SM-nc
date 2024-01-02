@@ -48,27 +48,32 @@ def search_h(request):
                                                     xfactor_auth_id='History', auth_use='true')
     if not user_auth and not group_auth:
         return redirect('../../home/')
+
     if request.method == "POST":
-        today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
         datesource1 = request.POST.get('date1', None)
         datesource2 = request.POST.get('date2', None)
         if datesource1 == '' or datesource2 == '':
             return HttpResponse(None)
-        date1 = datetime.strptime(datesource1, "%Y-%m-%d %H시")
-        date2 = datetime.strptime(datesource2, "%Y-%m-%d %H시")
-        start_h_1 = timezone.make_aware(datetime.combine(date1.date(), datetime.min.time())) + timedelta(hours=date1.hour)
-        end_h_1 = start_h_1 + timedelta(hours=1)
-        start_h_2 = timezone.make_aware(datetime.combine(date2.date(), datetime.min.time())) + timedelta(hours=date2.hour)
-        end_h_2 = start_h_2 + timedelta(hours=1)
+        date1 = datetime.strptime(datesource1, "%Y-%m-%d %H시").strftime('%Y-%m-%d-%H')
+        date2 = datetime.strptime(datesource2, "%Y-%m-%d %H시").strftime('%Y-%m-%d-%H')
+        date3 = datetime.strptime(datetime.strptime(datesource1, "%Y-%m-%d %H시").strftime('%Y-%m-%d %H'), '%Y-%m-%d %H')
+        date4 = timezone.make_aware(date3)
+        start_of_day = date4 - timedelta(days=7)
+        # start_h_1 = timezone.make_aware(datetime.combine(date1.date(), datetime.min.time())) + timedelta(hours=date1.hour)
+        # end_h_1 = start_h_1 + timedelta(hours=1)
+        # start_h_2 = timezone.make_aware(datetime.combine(date2.date(), datetime.min.time())) + timedelta(hours=date2.hour)
+        # end_h_2 = start_h_2 + timedelta(hours=1)
+        # print(start_h_1)
+        # print(end_h_1)
         if search_text == '':
             return HttpResponse(None)
-        user1 = Xfactor_Common_Cache.objects.filter(user_date__range=(start_h_1, end_h_1)).filter(computer_name=search_text).order_by('-user_date').first()
-        user2 = Xfactor_Common_Cache.objects.filter(user_date__range=(start_h_2, end_h_2)).filter(computer_name=search_text).order_by('-user_date').first()
-        # if user1 == None or user2 == None:
-        #     return HttpResponse('None')
-        user_data1 = Cacheserializer(user1).data
-        user_data2 = Cacheserializer(user2).data
+        user1 = Xfactor_Common_Cache.objects.filter(essential2=date1, cache_date__gte=start_of_day, computer_name=search_text)
+        user2 = Xfactor_Common_Cache.objects.filter(essential2=date2, cache_date__gte=start_of_day, computer_name=search_text)
+        if not user1.exists() or not user2.exists():
+            return HttpResponse('None')
+        user_data1 = Cacheserializer(user1, many=True).data
+        user_data2 = Cacheserializer(user2, many=True).data
         # response = {
         #     'data': user_data,  # Serialized data for the current page
         # }
@@ -84,10 +89,17 @@ def search_box_h(request):
                                                     xfactor_auth_id='History', auth_use='true')
     if not user_auth and not group_auth:
         return redirect('../../home/')
+    local_tz = pytz.timezone('Asia/Seoul')
+    utc_now = datetime.utcnow().replace(tzinfo=pytz.utc)
+    now = utc_now.astimezone(local_tz)
+    start_of_today1 = now.strftime('%Y-%m-%d %H')
+    start_of_today2 = datetime.strptime(start_of_today1, '%Y-%m-%d %H')
+    start_of_today = timezone.make_aware(start_of_today2)
+    start_of_day = start_of_today - timedelta(days=7)
     if request.method == "POST":
         today_collect_date = timezone.now() - timedelta(minutes=DBSettingTime)
         search_text = request.POST.get('searchText', None)
-        user_data = Xfactor_Common.objects.filter(computer_name__icontains=search_text).values('computer_name')
+        user_data = Xfactor_Common.objects.filter(computer_name__icontains=search_text, user_date__gte=start_of_day).values('computer_name')
         #print(user_data)
         # user_data = XfactorServiceserializer(user, many=True).data
         return JsonResponse({'data': list(user_data)})

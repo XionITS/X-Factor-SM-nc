@@ -27,7 +27,7 @@
                             <td class="first-column">날짜</td>
                             <td>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="datepicker1" name="datepicker1" placeholder="select date..." autocomplete="off">
+                                    <input type="text" class="form-control" id="datepicker1" name="datepicker1" placeholder="select date..." readonly>
                                     <button class="input-group-text" id="aa" for="datepicker1">
                                         <i class="fa fa-calendar"></i>
                                     </button>
@@ -35,7 +35,7 @@
                             </td>
                             <td>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="datepicker2" name="datepicker2" placeholder="select date..." autocomplete="off">
+                                    <input type="text" class="form-control" id="datepicker2" name="datepicker2" placeholder="select date..." readonly>
                                     <button class="input-group-text" id="bb" for="datepicker2">
                                         <i class="fa fa-calendar"></i>
                                     </button>
@@ -101,9 +101,21 @@
                             <td id="asset_first_network2">-</td>
                         </tr>
                         <tr>
-                            <td class="first-column">내 컴퓨터 정보</td>
-                            <td id="asset_hw_cpu">-</td>
-                            <td id="asset_hw_cpu2">-</td>
+                            <th class="first-column">내 컴퓨터 정보</th>
+                            <td id="asset_hw_cpu">
+                                <div id="cpu1">-</div>
+                                <div id="ram1"></div>
+                                <div id="mainboard1"></div>
+                                <div id="disk1"></div>
+                                <div id="gpu1"></div>
+                            </td>
+                            <td id="asset_hw_cpu2">
+                                <div id="cpu2">-</div>
+                                <div id="ram2"></div>
+                                <div id="mainboard2"></div>
+                                <div id="disk2"></div>
+                                <div id="gpu2"></div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
