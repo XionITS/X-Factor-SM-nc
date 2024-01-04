@@ -65,7 +65,7 @@ def all_asset_paging1(request):
         end_of_today = start_of_today + timedelta(minutes=59)
         start_of_day = start_of_today - timedelta(days=7)
         index_time = start_date_naive.strftime('%Y-%m-%d-%H')
-        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+        if start_of_today.date() < datetime(2023, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
@@ -220,7 +220,7 @@ def asset_os_paging1(request):
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
         index_time = start_date_naive.strftime('%Y-%m-%d-%H')
-        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+        if start_of_today.date() < datetime(2023, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
@@ -429,7 +429,7 @@ def asset_os_paging2(request):
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
         index_time = start_date_naive.strftime('%Y-%m-%d-%H')
-        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+        if start_of_today.date() < datetime(2023, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
@@ -627,7 +627,7 @@ def oslistPieChart(request):
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
         index_time = start_date_naive.strftime('%Y-%m-%d-%H')
-        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+        if start_of_today.date() < datetime(2023, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
@@ -736,7 +736,7 @@ def osVerPieChart(request):
             ver_current = 19044
 
 
-        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+        if start_of_today.date() < datetime(2023, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
@@ -858,7 +858,7 @@ def office_chart(request):
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
         index_time = start_date_naive.strftime('%Y-%m-%d-%H')
-        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+        if start_of_today.date() < datetime(2023, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
@@ -1012,7 +1012,7 @@ def subnet_chart(request):
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
         index_time = start_date_naive.strftime('%Y-%m-%d-%H')
-        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+        if start_of_today.date() < datetime(2023, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
@@ -1311,7 +1311,7 @@ def tcpuChart(request):
         end_of_today = start_of_today + timedelta(minutes=50)
         start_of_day = start_of_today - timedelta(days=7)
         index_time = start_date_naive.strftime('%Y-%m-%d-%H')
-        if start_of_today.date() < datetime(start_of_today.year, 10, 30).date():
+        if start_of_today.date() < datetime(2023, 10, 30).date():
             start_date_naive = datetime.strptime(request.POST.get('selectedDate'), "%Y-%m-%d-%H")
             start_of_today2 = timezone.make_aware(start_date_naive) - timedelta(minutes=120)
             end_of_today2 = start_of_today + timedelta(minutes=110)
